@@ -1,18 +1,23 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import Root from './components/Root';
+import store from './store';
+import { Provider } from 'react-redux';
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+// styles
+import 'slick-carousel/slick/slick.css';
+import 'react-toastify/dist/ReactToastify.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'react-input-range/lib/css/index.css';
+import './scss/style.scss';
+
 const rootElement = document.getElementById('root');
 
-ReactDOM.render(
-  <BrowserRouter basename={baseUrl}>
-    <App />
-  </BrowserRouter>,
+ReactDOM.render((
+  <Provider store={store}>
+    <Root/>
+    </Provider>),
   rootElement);
 
-registerServiceWorker();
 
