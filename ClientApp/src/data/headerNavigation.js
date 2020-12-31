@@ -5,7 +5,31 @@ export const _path = {
 
 const menu = [{
     layout: 'clinica',
-    title: 'Facturación',
+    title: 'Admision',
+    url: '',
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Nueva Admision', url: `${_path.CLINICA}/usuarios` },
+            { title: 'Admisiones', url: `${_path.CLINICA}/roles` },
+            { title: 'Reportes', url: `${_path.CLINICA}/recursos` }
+        ],
+    },
+},{
+    layout: 'clinica',
+    title: 'Citas',
+    url: '',
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Nueva Cita', url: `${_path.CLINICA}/usuarios` },
+            { title: 'Citas', url: `${_path.CLINICA}/roles` },
+            { title: 'Reportes', url: `${_path.CLINICA}/recursos` }
+        ],
+    },
+},{
+    layout: 'clinica',
+    title: 'Servicios',
     url: `${_path.CLINICA}/facturas`
 },{
     layout: 'clinica',
@@ -26,35 +50,13 @@ const menu = [{
         ],
     },
 },
-{
-    layout: 'clinica',
-    title: 'Proveedores',
-    url: '',
-    submenu: {
-        type: 'menu',
-        menu: [
-            { title: 'Gestion de proveedores', url: `${_path.CLINICA}/libro/mayor` },
-            { 
-                title: 'Reportes', 
-                url: ``,
-                submenu : [
-                    { title: 'Reporte 1', url: `${_path.CLINICA}/reportes/1` },
-                    { title: 'Reporte 2', url: `${_path.CLINICA}/reportes/2` },
-                ]
-            },  
-        ],
-    },
-},
+
 {
     layout: 'clinica',
     title: 'Inventario',
     url: ''
 },
-{
-    layout: 'clinica',
-    title: 'Agenda',
-    url: `${_path.CLINICA}/agenda`
-},
+
 {
     layout: 'clinica',
     title: 'Ficheros',
@@ -66,21 +68,33 @@ const menu = [{
             columns: [{
                 size: 6,
                 links: [{
-                    title: 'Facturacion',
+                    title: 'Laboratorio',
                     url: '',
                     links: [
-                        { title: 'Proveedores', url: `${_path.CLINICA}/proveedores` },
-                        { title: 'Vendedores', url: `${_path.CLINICA}/agenda/vendedores` },
+                        { title: 'Procedimientos', url: `${_path.CLINICA}/proveedores` },
+                        { title: 'Examenes', url: `${_path.CLINICA}/agenda/vendedores` },
                     ],
                 },]
             },{
                 size: 6,
                 links: [{
-                    title: 'Agenda',
+                    title: 'Asegurados',
                     url: '',
                     links: [
-                        { title: 'Doctores', url: `${_path.CLINICA}/agenda/doctores` },
-                        { title: 'Actividades', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Percapita', url: `${_path.CLINICA}/config/percapita` },
+                        { title: 'Beneficiarios', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Privados', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Convenios', url: `${_path.CLINICA}/actividades` },
+                    ],
+                },]
+            },{
+                size: 6,
+                links: [{
+                    title: 'Configuraciones',
+                    url: '',
+                    links: [
+                        { title: 'Areas', url: `${_path.CLINICA}/agenda/doctores` },
+                        { title: 'Inventario', url: `${_path.CLINICA}/actividades` },
                     ],
                 },]
             }]

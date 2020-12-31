@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="en" dir="ltr">
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
@@ -11,6 +12,10 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/20.1.4/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/20.1.4/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/dx.generic.custom-scheme.css" />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -20,12 +25,66 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>AtencionClinica</title>
-  </head>
-  <body>
+    <title>Atencion Clinica</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i">
+    <script src="%PUBLIC_URL%/help.js"></script>
+</head>
+
+<body>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <div class="site-preloader">
+        <style>
+            @keyframes site-preloader-animation {
+                from {
+                    transform: rotateZ(0deg);
+                }
+                to {
+                    transform: rotateZ(360deg);
+                }
+            }
+            /* body {
+                overflow: hidden !important;
+                overflow-y: hidden !important;
+                height: 100% !important;
+            } */
+            
+            .site-preloader {
+                position: fixed;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #fff;
+                z-index: 99999;
+                opacity: 1;
+            }
+            
+            .site-preloader::before {
+                box-sizing: border-box;
+                content: '';
+                display: block;
+                position: absolute;
+                left: calc(50% - 50px);
+                top: calc(50% - 50px);
+                width: 100px;
+                height: 100px;
+                border-radius: 50px;
+                border: 3px solid rgba(0, 0, 0, .2);
+                border-top-color: rgba(0, 0, 0, .6);
+                animation-name: site-preloader-animation;
+                animation-duration: .5s;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+            }
+            
+            .site-preloader__fade {
+                transition: opacity .3s;
+                opacity: 0;
+            }
+        </style>
+    </div>
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -37,5 +96,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>
