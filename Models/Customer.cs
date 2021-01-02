@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
+
+namespace AtencionClinica.Models
+{
+    public partial class Customer
+    {
+        public Customer()
+        {
+            Beneficiaries = new HashSet<Beneficiary>();
+        }
+
+        public int Inss { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int PatronalId { get; set; }
+        public DateTime DateAdd { get; set; }
+        public int CustomerStatusId { get; set; }
+
+        public virtual CustomerStatus CustomerStatus { get; set; }
+        public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
+    }
+}

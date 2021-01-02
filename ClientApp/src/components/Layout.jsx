@@ -14,12 +14,9 @@ import MobileMenu from './mobile/MobileMenu';
 import catalogos from '../data/catalogos';
 import Catalogo from './shared/Catalogos';
 import { _path } from '../data/headerNavigation';
-import Clientes from './clientes';
 import MobileHeader from './mobile/MobileHeader';
 import PrivateRoute from './header/PrivateRouter';
-import Usuarios from './usuarios';
-import Entes from './shared/Entes';
-import Agenda from './agenda';
+import Percapita from '../views/percapita';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -50,12 +47,10 @@ function Layout(props) {
                 <div className="site__body">
                 
                     <Switch>
-                        <PrivateRoute exact path={`${match.path}`} component={HomePage} />
-                        <PrivateRoute exact path={`${_path.CLINICA}/clientes`} component={Clientes} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/usuarios`} component={Usuarios} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/agenda/doctores`} render={props => <Entes {...props} ente="Doctores" /> } />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/agenda/vendedores`} render={props => <Entes {...props} ente="Vendedores" /> } />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/agenda`} component={Agenda} />                         
+                        <PrivateRoute exact path={`${match.path}`} component={HomePage} />                              
+                        {/* <PrivateRoute exact path={`${_path.CLINICA}/agenda/doctores`} render={props => <Entes {...props} ente="Doctores" /> } />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/agenda/vendedores`} render={props => <Entes {...props} ente="Vendedores" /> } />                          */}
+                        <PrivateRoute exact path={`${_path.CLINICA}/config/percapitas`} component={Percapita} />                         
                         {PrintCatalogos}
                     </Switch>
                 </div>

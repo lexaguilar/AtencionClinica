@@ -81,7 +81,7 @@ const menu = [{
                     title: 'Asegurados',
                     url: '',
                     links: [
-                        { title: 'Percapita', url: `${_path.CLINICA}/config/percapita` },
+                        { title: 'Percapita', url: `${_path.CLINICA}/config/percapitas` },
                         { title: 'Beneficiarios', url: `${_path.CLINICA}/actividades` },
                         { title: 'Privados', url: `${_path.CLINICA}/actividades` },
                         { title: 'Convenios', url: `${_path.CLINICA}/actividades` },
