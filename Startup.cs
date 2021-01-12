@@ -23,7 +23,9 @@ namespace AtencionClinica
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                
             services.AddDbContext<ClinicaContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             // In production, the React files will be served from this directory

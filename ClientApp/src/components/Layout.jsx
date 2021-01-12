@@ -17,6 +17,12 @@ import { _path } from '../data/headerNavigation';
 import MobileHeader from './mobile/MobileHeader';
 import PrivateRoute from './header/PrivateRouter';
 import Percapita from '../views/percapita';
+import Admisiones from '../views/admision';
+import Nuevo from '../views/admision/Nuevo';
+import Beneficiarios from '../views/beneficiarios';
+import Follows from '../views/follows';
+import Subsidies from '../views/subsidies';
+import Doctores from '../views/doctores';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -51,6 +57,12 @@ function Layout(props) {
                         {/* <PrivateRoute exact path={`${_path.CLINICA}/agenda/doctores`} render={props => <Entes {...props} ente="Doctores" /> } />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/agenda/vendedores`} render={props => <Entes {...props} ente="Vendedores" /> } />                          */}
                         <PrivateRoute exact path={`${_path.CLINICA}/config/percapitas`} component={Percapita} />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/admisiones`} component={Admisiones} />                         
+                        <PrivateRoute path={`${_path.CLINICA}/admisiones/nuevo`} component={Nuevo} />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/beneficiarios`} component={Beneficiarios} />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/servicios`} component={Follows} />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/subsidios`} component={Subsidies} />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/doctores`} component={Doctores} />                         
                         {PrintCatalogos}
                     </Switch>
                 </div>

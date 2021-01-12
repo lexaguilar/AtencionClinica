@@ -15,7 +15,7 @@ const store =
         defaultModel
     ) => {
 
-        let model = {... {
+        let model = {...{
                 uri: required('uri'),
                 msgInserted: 'Registro agregado correctamente',
                 msgUpdated: 'Registro modificado correctamente',
@@ -84,6 +84,7 @@ const store =
                     .catch(() => { throw 'Data Loading Error'; });
             },
             insert: (data) => {
+                
                 return new Promise(resolve =>
                     http(model.uri.insert).asPost(data).then(result => {
                         notify(model.msgInserted);

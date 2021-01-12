@@ -228,3 +228,35 @@
     html[dir=ltr] .nav-links__item--with-submenu>a svg {
         right: 12px;
     }
+    
+    .row-elemet {
+        display: flex;
+    }
+    
+    .custome-active>div.dx-field-item-content>div.dx-show-invalid-badge>div.dx-dropdowneditor-input-wrapper>div.dx-texteditor-container>div.dx-texteditor-input-container>input.dx-texteditor-input {
+        background-color: darkgreen;
+        color: white;
+    }
+    
+    .custome-noactive>div.dx-field-item-content>div.dx-show-invalid-badge>div.dx-dropdowneditor-input-wrapper>div.dx-texteditor-container>div.dx-texteditor-input-container>input.dx-texteditor-input {
+        background-color: rgb(253, 13, 85);
+        color: white;
+    }
+    
+    .no-activo {
+        background-color: rgb(255, 210, 223);
+    }
+    
+    .text-admision {
+        font-weight: bold;
+        color: darkred;
+    }
+    
+    .text-inss {
+        font-weight: bold;
+        color: darkcyan;
+    }
+    
+    .btn-header {
+        margin: 0 5px;
+    }

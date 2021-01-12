@@ -4,7 +4,6 @@ import DateBox from 'devextreme-react/date-box';
 
 import notify from 'devextreme/ui/notify';
 import http from '../../utils/http';
-import uri from '../../utils/uri';
 
 const Nuevo = props => {
 
@@ -34,19 +33,25 @@ const Nuevo = props => {
 
     const onClick = () => {
 
-        let file = formElement.current.instance._files[0].value;
+        let files = formElement.current.instance._files;
 
-        http(`percapitas/post/file/year/${date.getFullYear()}/month/${date.getMonth() + 1}`).asFile(file).then(r => {
+        if(files.length == 0){
+            notify(`Seleccione un archivo`, 'error');
+        }else{
+            let file = files[0].value;
 
-            notify(`Su archivo ${r.name} se ha agregado correctamente`);
-            this.hideInfo({ reload: true });
+            http(`percapitas/post/file/year/${date.getFullYear()}/month/${date.getMonth() + 1}`).asFile(file).then(r => {
 
-        });
+                notify(`Su archivo ${r.name} se ha agregado correctamente`);
+                hideInfo({ reload: true });
+
+            });
+        }        
 
     }
 
     return (
-        <div id="container">
+        <div className="container">
             <Button
                 width={180}
                 text="Subir desde excel"

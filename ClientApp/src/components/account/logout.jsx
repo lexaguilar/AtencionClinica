@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { _path } from "../../data/headerNavigation";
 import { userService } from "../../services/user.service";
 
 
 function Logout(props) {
-
-    console.log(props);
 
     userService.logout();
 

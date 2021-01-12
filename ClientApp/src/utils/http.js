@@ -1,10 +1,11 @@
-import notify from "devextreme/ui/notify";
-
+import notify from 'devextreme/ui/notify';
 const root = process.env.PUBLIC_URL;
 const path = `${root}/api/`;
+
 const http = url => {
 
     let base = (url, properties) => {
+        
         return new Promise((resolve, reject) => {
 
             fetch(`${url}`, properties)
@@ -36,11 +37,10 @@ const http = url => {
 
     };
 
-
     const _url = `${path}${url}`;
 
     return {
-
+        
         asGet: (data = null) => {
 
             let params = getParameters(data);
@@ -59,7 +59,7 @@ const http = url => {
                     })
                     .then(processResponse)
                     .catch(error => reject(error))
-                    .then(response => resolve(response));
+                    .then(data => resolve(data));
             })
         },
         asDelete: (data = null) => {
@@ -76,9 +76,9 @@ const http = url => {
                         method: 'POST',
                         body: formData
                     })
-                    .then(response => response.json())
+                    .then(processResponse)
                     .then(response => resolve(response))
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => notify(error, 'error'));
             })
         },
     }

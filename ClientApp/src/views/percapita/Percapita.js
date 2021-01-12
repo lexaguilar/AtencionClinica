@@ -8,7 +8,6 @@ import {
     HeaderFilter,
     Column,
     Export,
-    Editing,
     GroupPanel,
 } from 'devextreme-react/data-grid';
 import Box, {
@@ -98,12 +97,7 @@ const Percapita = () => {
                 <Column dataField="firstName" />
                 <Column dataField="lastName" />
                 <Column dataField="adscription" />
-                <Column dataField="dateAdd" dataType="date" format='dd/MM/yyyy'  width={100}/>
-                <Editing
-                    mode="batch"
-                    allowDeleting={true}
-                >
-                </Editing>
+                <Column dataField="dateAdd" dataType="date" format='dd/MM/yyyy'  width={100}/>              
             </DataGrid>
         </div>
     );

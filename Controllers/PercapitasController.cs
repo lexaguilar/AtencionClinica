@@ -5,6 +5,8 @@ using System.Linq;
 using AtencionClinica.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -30,6 +32,11 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/percapitas/post/file/year/{year}/month/{month}")]
         public IActionResult PostFile(int year, int month, IFormFile file) 
         {
+
+            if(_db.Percapitas.Any(x => x.Year == year && x.Month == month))
+                return BadRequest($"Ya existe un percapita en la base de datos con el año {year} y mes {month}");
+            
+
             if (file.Length > 0)
             {
                 ISheet sheet;
@@ -92,10 +99,23 @@ namespace AtencionClinica.Controllers
                         }
                     }
 
-                    _db.SaveChanges();    
+                    _db.SaveChanges();   
 
-                    //TODO actualizar informacion de asegurado, dejar solo activos                        
+                    using (var cn = _db.Database.GetDbConnection())
+                    {
+                        using (var cmd = cn.CreateCommand())
+                        {
+                            cmd.CommandText = "EXEC [dbo].[GenerateCustumers] @year,@month,@returnValue";
+                            cmd.Parameters.Add(new SqlParameter("@year", SqlDbType.Int) {Value = year});
+                            cmd.Parameters.Add(new SqlParameter("@month", SqlDbType.Int) {Value = month});
+                            cmd.Parameters.Add(new SqlParameter("@returnValue", SqlDbType.Int) {Value = 0});
 
+                            cn.Open();
+                            var result = cmd.ExecuteNonQuery();
+                            cn.Close();
+
+                        }
+                    }       
                 }
             }
 

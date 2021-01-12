@@ -7,14 +7,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 // application
-import Indicator from '../header/Indicator';
 import {
     Menu18x14Svg,
-    LogoSmallSvg,
     Search20Svg,
     Cross20Svg,
-    Heart20Svg,
-    Cart20Svg,
 } from '../../svg';
 import { mobileMenuOpen } from '../../store/mobile-menu';
 import {logo} from '../../data/logo'

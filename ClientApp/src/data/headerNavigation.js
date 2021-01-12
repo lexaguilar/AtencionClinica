@@ -10,9 +10,9 @@ const menu = [{
     submenu: {
         type: 'menu',
         menu: [
-            { title: 'Nueva Admision', url: `${_path.CLINICA}/usuarios` },
-            { title: 'Admisiones', url: `${_path.CLINICA}/roles` },
-            { title: 'Reportes', url: `${_path.CLINICA}/recursos` }
+            { title: 'Nueva', url: `${_path.CLINICA}/admisiones/nuevo` },
+            { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },
+            { title: 'Reportes', url: `${_path.CLINICA}/admisiones/reportes` }
         ],
     },
 },{
@@ -30,34 +30,16 @@ const menu = [{
 },{
     layout: 'clinica',
     title: 'Servicios',
-    url: `${_path.CLINICA}/facturas`
+    url: `${_path.CLINICA}/servicios`
 },{
     layout: 'clinica',
-    title: 'Clientes',
-    url: '',
-    submenu: {
-        type: 'menu',
-        menu: [
-            { title: 'Gestion de clientes', url: `${_path.CLINICA}/clientes` },
-            { 
-                title: 'Reportes', 
-                url: ``,
-                submenu : [
-                    { title: 'Reporte 1', url: `${_path.CLINICA}/reportes/1` },
-                    { title: 'Reporte 2', url: `${_path.CLINICA}/reportes/2` },
-                ]
-            },          
-        ],
-    },
-},
-
-{
+    title: 'Subsidios',
+    url: `${_path.CLINICA}/subsidios`
+},{
     layout: 'clinica',
     title: 'Inventario',
     url: ''
-},
-
-{
+},{
     layout: 'clinica',
     title: 'Ficheros',
     url: ``,
@@ -82,7 +64,7 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Percapita', url: `${_path.CLINICA}/config/percapitas` },
-                        { title: 'Beneficiarios', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiarios` },
                         { title: 'Privados', url: `${_path.CLINICA}/actividades` },
                         { title: 'Convenios', url: `${_path.CLINICA}/actividades` },
                     ],
@@ -93,16 +75,16 @@ const menu = [{
                     title: 'Configuraciones',
                     url: '',
                     links: [
-                        { title: 'Areas', url: `${_path.CLINICA}/agenda/doctores` },
-                        { title: 'Inventario', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Areas', url: `${_path.CLINICA}/areas` },
+                        { title: 'Doctores', url: `${_path.CLINICA}/doctores` },
+                        { title: 'Especialidades', url: `${_path.CLINICA}/especialidades` },
                     ],
                 },]
             }]
         }
 
     },
-},
-{
+},{
     layout: 'clinica',
     title: 'Configuración',
     url: '',
@@ -114,8 +96,7 @@ const menu = [{
             { title: 'Recursos', url: `${_path.CLINICA}/recursos` }
         ],
     },
-}
-];
+}];
 
 
 export default menu;

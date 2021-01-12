@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace AtencionClinica.Models
 {
-    public partial class BeneficiaryType
+    public partial class Sex
     {
-        public BeneficiaryType()
+        public Sex()
         {
             Beneficiaries = new HashSet<Beneficiary>();
         }

@@ -1,0 +1,1 @@
+export const UPDATE_SUBSIDIO = 'UPDATE_SUBSIDIO';

@@ -10,11 +10,13 @@ namespace AtencionClinica.Models
         public Doctor()
         {
             Appointments = new HashSet<Appointment>();
+            Subsidies = new HashSet<Subsidy>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual ICollection<Subsidy> Subsidies { get; set; }
     }
 }

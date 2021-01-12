@@ -46,7 +46,7 @@ function Catalogo(props) {
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName="Catalogos" allowExportSelectedData={true} />
-                <Column dataField="descripcion" />
+                <Column dataField="name" />
                 <Editing
                     mode="popup"
                     allowUpdating={true}
@@ -57,8 +57,8 @@ function Catalogo(props) {
                         
                     </Popup>
                     <Form>
-                        <Item  dataField="descripcion" editorOptions={{ width:300 }} >
-                            <RequiredRule message="La descripcion es requerida"/>
+                        <Item  dataField="name" editorOptions={{ width:300 }} >
+                            <RequiredRule message="El campo es requerida"/>
                             <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
                         </Item>                    
                     </Form>

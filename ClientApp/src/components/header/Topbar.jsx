@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 // application
 import Dropdown from './Dropdown';
-import DropdownCorte from './DropdownCorte';
 
 
 function Topbar(props) {
@@ -25,11 +24,11 @@ function Topbar(props) {
         { title: 'Salir', url: '/account/logout' },
     ];
 
-    const linksList = links.map((item, index) => (
-        <div key={index} className="topbar__item topbar__item--link">
-            <Link className="topbar-link" to={item.url}>{item.title}</Link>
-        </div>
-    ));
+    // const linksList = links.map((item, index) => (
+    //     <div key={index} className="topbar__item topbar__item--link">
+    //         <Link className="topbar-link" to={item.url}>{item.title}</Link>
+    //     </div>
+    // ));
 
 
     return (

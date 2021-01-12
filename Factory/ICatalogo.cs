@@ -1,0 +1,6 @@
+namespace AtencionClinica
+{
+    interface ICatalogo{
+        
+    }
+}

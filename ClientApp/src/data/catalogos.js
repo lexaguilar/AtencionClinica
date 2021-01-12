@@ -1,23 +1,22 @@
-const catalogos = [ 'actividades' ];
+const catalogos = [ 'areas','especialidades' ];
 
 const estadoGeneric = {
-    elaborado: 1,
-    anulado: 2
+    activo: 1,
+    noActivo: 2
 }
 
-export const estadoSalida = {...estadoGeneric };
-
-export const estadoEntrada = {...estadoGeneric }; 
-
-export const estadoServicio = {...estadoGeneric }; 
-
-export const estadoCompra = {...estadoGeneric };
-
-export const etapaCompra = {...estadoGeneric, ... { recibida: 2 } };
-
-export const formaPago = { contado: 1, credito: 2 }
+export const relationships = {
+    asegurado: 1,
+    hijo: 2
+}
 
 export const tipoMovimiento = { entrada: 1, salida: 2 }
+
+export const estadoAdmision = {...estadoGeneric};
+
+export const estadoCustomer = {...estadoGeneric};
+
+export const estadoBeneficiario = {...estadoGeneric};
 
 export const monedaSymbol = {
     1: "C$",

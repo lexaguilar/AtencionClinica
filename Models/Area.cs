@@ -11,6 +11,9 @@ namespace AtencionClinica.Models
         {
             Admissions = new HashSet<Admission>();
             Appointments = new HashSet<Appointment>();
+            FollowAreaSources = new HashSet<Follow>();
+            FollowAreaTargets = new HashSet<Follow>();
+            Subsidies = new HashSet<Subsidy>();
         }
 
         public int Id { get; set; }
@@ -18,5 +21,8 @@ namespace AtencionClinica.Models
 
         public virtual ICollection<Admission> Admissions { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual ICollection<Follow> FollowAreaSources { get; set; }
+        public virtual ICollection<Follow> FollowAreaTargets { get; set; }
+        public virtual ICollection<Subsidy> Subsidies { get; set; }
     }
 }

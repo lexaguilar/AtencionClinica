@@ -14,6 +14,7 @@ import facturaReducer from './factura'
 import servicioReducer from './servicio'
 import appReducer from './app';
 import errorReducer from './errorHandler';
+import subsidioReducer from './subsidio';
 
 
 export default combineReducers({
@@ -29,5 +30,6 @@ export default combineReducers({
     factura: facturaReducer,
     servicio: servicioReducer,
     appInfo: appReducer,
-    error: errorReducer
+    error: errorReducer,
+    subsidio: subsidioReducer
 });
