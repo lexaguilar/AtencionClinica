@@ -9,8 +9,10 @@ import { createProxyBase, createStoreLocal } from '../../utils/proxy';
 import notify from 'devextreme/ui/notify';
 
 const Customer = props => {
+
+    const { clear } = props;
     
-    const [inss, setInss] = useState(props.inss);
+    const [inss, setInss] = useState('');
     const [custumer, setCustumer] = useState({...custumerDefault});
 
     const buscarAsegurado = e =>{
@@ -43,11 +45,14 @@ const Customer = props => {
         specialties: [],
     }  
 
-    const onValueChanged = e => {   
+    const onValueChanged = e =>  setInss(e.value);
+
+    useEffect(()=>{
         
-       setInss(e.value);
-      
-    }
+        setCustumer({...custumerDefault});
+        setInss('');
+        
+    },[props.clear])
 
     return (
         <div>

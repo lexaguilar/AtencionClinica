@@ -18,6 +18,9 @@ import { _path } from "../../data/headerNavigation";
 const Nuevo = props => {
     const [customer, setCustomer] = useState({inss : '',status : false});     
     const [visible, setVisible] = useState(false);     
+    const [clear, setClear] = useState(false);     
+
+    
 
     const [admision, setAdmision] = useState({
         areaId : null,
@@ -43,6 +46,8 @@ const Nuevo = props => {
                     specialtyId : null,
                     observacion : '',
                 });
+                setClear(!clear);
+
             }
         }).catch(err => {
             
@@ -88,7 +93,7 @@ const Nuevo = props => {
             >
                 <Beneficiarios></Beneficiarios>
             </Popup>
-            <Customer valueChanged={valueChanged}></Customer>
+            <Customer valueChanged={valueChanged} clear={clear}></Customer>
             <Form formData={admision}>
                 <GroupItem cssClass="second-group" colCount={3}>                    
                     <SimpleItem dataField="beneficiaryId" editorType="dxSelectBox"

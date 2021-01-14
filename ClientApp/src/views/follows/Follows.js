@@ -29,16 +29,20 @@ const Follows = () => {
     const addMenuItems =(e) => {
         
         if (e.target == "content") {
-            // e.items can be undefined
             if (!e.items) e.items = [];
  
-            // Add a custom menu item
             e.items.push({
-
+                text: 'Nueva orden de trabajo',
+                icon : 'folder',
+                onItemClick: () => 0                
+            },{
+                text: 'Nueva transferencia',
+                icon : 'chevrondoubleright',
+                onItemClick: () => 0                
+            },{
                 text: 'Ver movimientos',
                 icon : 'runner',
-                onItemClick: () => 0
-                
+                onItemClick: () => 0                
             });
         }
     }

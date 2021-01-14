@@ -16,6 +16,7 @@ const Nuevo = props => {
 
     const [subsidy, setSubsidy] = useState({});
     const [customer, setCustomer] = useState({inss : '',status : false});     
+    const [clear, setClear] = useState(false);     
 
     const dispatch = useDispatch();
     const { open } = useSelector(store => store.subsidio)
@@ -27,6 +28,7 @@ const Nuevo = props => {
     }  
 
     const closeDialog = ( load ) => {
+        setClear(!clear);
         dispatch(updateSubsidio({open : false}));
 
         if (load) {
@@ -99,7 +101,7 @@ const Nuevo = props => {
                 onHiding={onHiding}
                 visible={open}
             >
-                <Customer valueChanged={valueChanged}></Customer>
+                <Customer valueChanged={valueChanged} clear={clear}></Customer>
                 <Form formData={subsidy} ref={ref => refSubsidy = ref}>
                     
                     <GroupItem cssClass="second-group" colCount={3}>
@@ -183,6 +185,7 @@ const Nuevo = props => {
                     icon="save"
                     stylingMode="contained"
                     className="m-1"
+                    disabled={!customer.status}
                     onClick={guardarSubsidio}
                 />
             </Popup>

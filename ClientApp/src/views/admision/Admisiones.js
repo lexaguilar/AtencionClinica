@@ -41,8 +41,8 @@ const Admisiones = props => {
 
                     text: 'Anular admision',
                     icon : 'remove',
-                    onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex)
-
+                    onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex),
+                    color : 'red'
                 });
         }
     }

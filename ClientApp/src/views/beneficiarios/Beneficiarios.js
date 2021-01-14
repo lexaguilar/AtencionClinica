@@ -16,7 +16,7 @@ import {
     StringLengthRule} from 'devextreme-react/data-grid';
 import { Item } from 'devextreme-react/form';
 import { store } from '../../services/store';
-import { createStore } from '../../utils/proxy';
+import { createStore,createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
@@ -27,6 +27,12 @@ const title = 'Beneficiarios';
 
 const Beneficiarios = () => {
     const [customer, setCustomer] = useState({inss : 0,status : false ,firstName: "", lastName: ""});     
+
+    let dataGrid = React.createRef();
+
+    let storeTransient = {
+        sex: []
+    }   
 
     const valueChanged = data => {
         console.log(data);
@@ -53,12 +59,27 @@ const Beneficiarios = () => {
         }
     }
 
+    const onToolbarPreparing = (e) => {
+        if(customer.status)
+            e.toolbarOptions.items.unshift({
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    //width: 136,
+                    text: 'Agregar beneficiario',
+                    icon:'plus',
+                    onClick: () =>  dataGrid.instance.addRow()
+                }
+            });
+    }
+
     return (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />           
             <Customer valueChanged={valueChanged} ></Customer>
             <DataGrid id="gridContainer"
+                ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.beneficarios(customer.inss) })}
                 showBorders={true}
@@ -67,6 +88,7 @@ const Beneficiarios = () => {
                 allowColumnReordering={true}
                 noDataText='No se encontró ningun beneficiario'
                 onInitNewRow={onInitNewRow}
+                onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -86,7 +108,7 @@ const Beneficiarios = () => {
                 <Column dataField="lastName" caption="Apellidos"  />
                 <Column dataField="birthDate" caption="Fecha Nac." width={140} dataType="date"  format='dd/MM/yyyy'/>
                 <Column dataField="sexId" width={100} caption="Sexo">
-                    <Lookup disabled={true} dataSource={createStore('sex')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name: 'sex', local: storeTransient })} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="phoneNumber"  visible={false} caption="Telefono" width={150} />
                 <Column dataField="cellNumber"  visible={false} caption="Celular" width={150} />
@@ -103,8 +125,7 @@ const Beneficiarios = () => {
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
                 <Editing
                     mode="popup"
-                    allowUpdating={customer.status}                   
-                    allowAdding={customer.status}
+                    allowUpdating={customer.status}                       
                     useIcons={true}
                 >
                     <Popup title={title} showTitle={true} width={850} height={530}>
