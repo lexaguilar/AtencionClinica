@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
 namespace AtencionClinica
 {
@@ -51,9 +53,21 @@ namespace AtencionClinica
             {
 
                 object value = p.GetValue(this);
-                p.SetValue(this, value.ToString().ToUpper());
+                if(value != null)
+                {
+                    var newValue = ToCapitalText(value.ToString());
+                    p.SetValue(this, newValue);
+                }
 
             }
         }
+
+        private string ToCapitalText(string text){
+
+           TextInfo textInfo = new CultureInfo("en-US",false).TextInfo;
+           return textInfo.ToTitleCase(text);
+           
+        }
+        
     }
 }

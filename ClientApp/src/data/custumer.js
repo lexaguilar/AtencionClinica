@@ -1,7 +1,6 @@
 export const custumerDefault = {
     inss :'',
-    firstName : '',
-    lastName :'',
+    fullName : '',
     customerStatusId : 0,
     customerTypeId : 0,
 }

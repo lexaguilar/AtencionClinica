@@ -6,25 +6,39 @@ export const _path = {
 const menu = [{
     layout: 'clinica',
     title: 'Admision',
-    url: '',
+    url: `${_path.CLINICA}/admisiones`,
     submenu: {
         type: 'menu',
         menu: [
             { title: 'Nueva', url: `${_path.CLINICA}/admisiones/nuevo` },
             { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },
-            { title: 'Reportes', url: `${_path.CLINICA}/admisiones/reportes` }
+            { 
+                title: 'Reportes', 
+                url: ``,
+                submenu : [
+                    { title: 'Reporte 1', url: `${_path.CLINICA}/admision/reportes/1` },
+                    { title: 'Reporte 2', url: `${_path.CLINICA}/admision/reportes/2` },
+                ]
+            },   
         ],
     },
 },{
     layout: 'clinica',
     title: 'Citas',
-    url: '',
+    url: `${_path.CLINICA}/citas`,
     submenu: {
         type: 'menu',
         menu: [
-            { title: 'Nueva Cita', url: `${_path.CLINICA}/usuarios` },
-            { title: 'Citas', url: `${_path.CLINICA}/roles` },
-            { title: 'Reportes', url: `${_path.CLINICA}/recursos` }
+            { title: 'Nueva', url: `${_path.CLINICA}/citas/nuevo` },
+            { title: 'Citas', url: `${_path.CLINICA}/citas` },
+            { 
+                title: 'Reportes', 
+                url: ``,
+                submenu : [
+                    { title: 'Reporte 1', url: `${_path.CLINICA}/citas/reportes/1` },
+                    { title: 'Reporte 2', url: `${_path.CLINICA}/citas/reportes/2` },
+                ]
+            },   
         ],
     },
 },{
@@ -87,7 +101,7 @@ const menu = [{
 },{
     layout: 'clinica',
     title: 'Configuración',
-    url: '',
+    url: `${_path.CLINICA}/usuarios` ,
     submenu: {
         type: 'menu',
         menu: [

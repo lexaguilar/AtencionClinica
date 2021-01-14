@@ -65,7 +65,7 @@ const Beneficiarios = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-                noDataText='No se encontró ningun expediente'
+                noDataText='No se encontró ningun beneficiario'
                 onInitNewRow={onInitNewRow}
             >
                 <Paging defaultPageSize={20} />
@@ -100,7 +100,7 @@ const Beneficiarios = () => {
                 <Column dataField="beneficiaryStatusId" width={100} caption="Estado">
                     <Lookup disabled={true} dataSource={createStore('BeneficiaryStatus')} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField='address' visible={false}></Column>
+                <Column dataField='address' caption="Dirección" visible={false}></Column>
                 <Editing
                     mode="popup"
                     allowUpdating={customer.status}                   

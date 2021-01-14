@@ -29,21 +29,23 @@ const Subsidies = () => {
     const addMenuItems =(e) => {
         
         if (e.target == "content") {
+
             if (!e.items) e.items = [];
- 
-            e.items.push({
 
-                text: 'Re-imprimir subsidio',
-                icon : 'print',
-                onItemClick: () => 0
-                
-            },{
+            if(e.rowIndex >= 0)
+                e.items.push({
 
-                text: 'Anular subsidio',
-                icon : 'remove',
-                onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex)
+                    text: 'Re-imprimir subsidio',
+                    icon : 'print',
+                    onItemClick: () => 0
+                    
+                },{
 
-            });
+                    text: 'Anular subsidio',
+                    icon : 'remove',
+                    onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex)
+
+                });
         }
     }
 
@@ -66,8 +68,8 @@ const Subsidies = () => {
 
             if(e.column.dataField == "inss")
                 e.cellElement.classList.add('text-inss');
-            if(e.column.dataField == 'admissionId')
-                e.cellElement.classList.add('text-admision');
+            if(e.column.dataField == 'reference')
+                e.cellElement.classList.add('text-reference');
 
         }
 
@@ -87,6 +89,7 @@ const Subsidies = () => {
             </BlockHeader>
             <Nuevo onSave={reload}  />
             <DataGrid id="gridContainer"
+                ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.subsidies, remoteOperations: true })}
                 showBorders={true}
@@ -111,26 +114,28 @@ const Subsidies = () => {
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id"  width={100} />
-                <Column dataField="Reference"  width={100} caption='Boleta'/>
+                <Column dataField="id"  width={80} />
+                <Column dataField="reference"  width={90} caption='Boleta' alignment='right'/>
                 <Column dataField="inss"  width={100} />
                 <Column dataField="nombre" caption='Nombre'/>
-                <Column dataField="areaId" width={100} caption="Area procedencia">
+                <Column dataField="areaId" width={150} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="cie10Id" width={100} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore('cie10')} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="DoctorId" width={100} caption="Area procedencia">
+                <Column dataField="doctorId" width={100} caption="Doctor">
                     <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="dateStart" caption='Inicio' dataType='date'/>
-                <Column dataField="dateEnd" caption='Finaliza' dataType='date'/>
-                <Column dataField="createBy" caption='Creado por' width={120} />
-                <Column dataField="createAt" caption='Creado el' dataType='date' width={120} />
+                <Column dataField="dateStart" caption='Inicio'  width={100} dataType='date'/>
+                <Column dataField="dateEnd" caption='Finaliza'  width={100} dataType='date'/>
+                <Column dataField="days" caption='Dias' width={60} />
+                <Column dataField="createBy" caption='Creado por' visible={false} width={100} />
+                <Column dataField="createAt" caption='Creado el' dataType='date' visible={false} width={100} />
                 <Editing
                     mode="popup"                 
                     allowDeleting={true}
+                    useIcons={true}
                 ></Editing>
             </DataGrid>
         </div>

@@ -72,6 +72,12 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/subsidies/post")]
         public IActionResult Post([FromBody] Subsidy subsidy) 
         {
+
+            var existe = _db.Subsidies.Any(x => x.Reference == subsidy.Reference && x.Active);
+
+            if(existe)
+                return BadRequest($"Ya existe un subsidio con el No de bolete {subsidy.Reference}");
+
             var user = this.GetAppUser();            
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == subsidy.BeneficiaryId);

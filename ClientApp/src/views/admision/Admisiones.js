@@ -25,23 +25,25 @@ const Admisiones = props => {
     const addMenuItems =(e) => {
         
         if (e.target == "content") {
+            
             // e.items can be undefined
             if (!e.items) e.items = [];
  
             // Add a custom menu item
-            e.items.push({
+            if(e.rowIndex >= 0)
+                e.items.push({
 
-                text: 'Re-imprimir ticket admision',
-                icon : 'print',
-                onItemClick: () => 0
-                
-            },{
+                    text: 'Re-imprimir ticket admision',
+                    icon : 'print',
+                    onItemClick: () => 0
+                    
+                },{
 
-                text: 'Anular admision',
-                icon : 'remove',
-                onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex)
+                    text: 'Anular admision',
+                    icon : 'remove',
+                    onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex)
 
-            });
+                });
         }
     }
 

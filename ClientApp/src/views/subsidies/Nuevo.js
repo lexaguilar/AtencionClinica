@@ -9,6 +9,9 @@ import { estadoCustomer } from '../../data/catalogos';
 import { createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { editorOptionsSelect } from '../../data/app';
+import moment from 'moment';
+import http from '../../utils/http';
+import notify from 'devextreme/ui/notify';
 const Nuevo = props => {
 
     const [subsidy, setSubsidy] = useState({});
@@ -23,18 +26,22 @@ const Nuevo = props => {
         specialties: [],
     }  
 
-    const onHiding = ({ cancel }) => {
-
-        refSubsidy.instance.resetValues();
-
+    const closeDialog = ( load ) => {
         dispatch(updateSubsidio({open : false}));
 
-        if (cancel) {
+        if (load) {
 
             let { onSave } = props;
             onSave();
       
         }
+    }
+
+    const onHiding = ({ load }) => {
+
+        refSubsidy.instance.resetValues();
+
+        closeDialog(load);
         
     }
 
@@ -45,6 +52,42 @@ const Nuevo = props => {
             status : custumer.customerStatusId == estadoCustomer.activo
         });
 
+    }
+
+    const onDateChange = (params) => {
+        
+        const { dateStart, dateEnd } = subsidy;
+
+        
+        if(dateStart && dateEnd){
+
+            let b = moment(dateEnd);
+            let a = moment(dateStart);
+            
+            let result = b.diff(a, 'days');
+            setSubsidy({...subsidy, days : result + 1})
+
+        }
+
+    }
+
+    const guardarSubsidio = (params) => {
+
+        let result = refSubsidy.instance.validate();
+        if (result.isValid) {
+
+            http(uri.subsidies.insert).asPost(subsidy)
+            .then(resp => {
+                if(resp){
+                    notify(`Admisioin con boleta ${resp.reference} creada correctamente`);
+                    setCustomer({inss : '',status : false});
+                    setSubsidy({});
+                    closeDialog(true);
+                }
+            })
+            .catch(err => notify(err,'error'))
+
+        }
     }
 
     return (
@@ -76,18 +119,22 @@ const Nuevo = props => {
                                 dataField="dateStart"
                                 editorType="dxDateBox"
                                 editorOptions={{                      
-                                    displayFormat: "dd/MM/yyyy"
+                                    displayFormat: "dd/MM/yyyy",
+                                    onValueChanged : onDateChange
                                 }}
                             >
+                                <Label text="Fecha de inicio" />
                                 <RequiredRule message="Fecha de inicio" />
                             </SimpleItem>
                             <SimpleItem
                                 dataField="dateEnd"
                                 editorType="dxDateBox"
                                 editorOptions={{                      
-                                    displayFormat: "dd/MM/yyyy"
+                                    displayFormat: "dd/MM/yyyy",
+                                    onValueChanged : onDateChange
                                 }}
                             >
+                                <Label text="Fecha final" />
                                 <RequiredRule message="Fecha final" />
                             </SimpleItem>
                             <SimpleItem dataField="areaId" editorType="dxSelectBox" colSpan={2}
@@ -118,9 +165,11 @@ const Nuevo = props => {
                         </GroupItem>
                         <GroupItem >
 
-                            <SimpleItem dataField="reference"><Label text="Boleta" /></SimpleItem>
+                            <SimpleItem dataField="reference"><Label text="Boleta" />
+                                <RequiredRule message="El numero de la boleta" />
+                            </SimpleItem>
                         
-                            <SimpleItem dataField="days"><Label text="Dias" /></SimpleItem>
+                            <SimpleItem dataField="days" editorOptions={{disabled:true}}><Label text="Dias" /></SimpleItem>
                         </GroupItem>
                         <SimpleItem dataField="observation" colSpan={3}>
                             <Label text="Observacion" />
@@ -134,6 +183,7 @@ const Nuevo = props => {
                     icon="save"
                     stylingMode="contained"
                     className="m-1"
+                    onClick={guardarSubsidio}
                 />
             </Popup>
         </div>
