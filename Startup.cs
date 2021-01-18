@@ -1,4 +1,5 @@
 using AtencionClinica.Models;
+using AtencionClinica.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +28,8 @@ namespace AtencionClinica
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
                 
             services.AddDbContext<ClinicaContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
-
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddScoped<IUserService, UserService>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

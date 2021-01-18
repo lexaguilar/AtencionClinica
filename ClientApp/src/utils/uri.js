@@ -23,4 +23,6 @@ uri.follows = areaId => {
     return urls;
 };
 
+uri.account = 'account/auth';
+
 export default uri;

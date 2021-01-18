@@ -10,6 +10,7 @@ function Login(props) {
 
     const dispatch = useDispatch();
     const [user, setUser] = useState({ username: "", password: "" });
+    const [ loading, setLoading] = useState(false);
 
     const onValueChange = e => {
 
@@ -21,7 +22,7 @@ function Login(props) {
     }
 
     const sendUser = () => {
-
+        setLoading(true);
         userService.login(user).then(userResp => {
 
             let pathname = props?.location?.state?.from?.pathname || '/';
@@ -29,7 +30,11 @@ function Login(props) {
             dispatch(actions.updateUser({ username: userResp.username }));
             props.history.push({ pathname });
 
-        }).catch(err => notify(err, "error"));
+        }).catch(err => 
+        {
+            setLoading(false)
+            notify(err, "error")
+        });
 
     }
 
@@ -47,7 +52,9 @@ function Login(props) {
                         
                     <a href="/">Olvide mi Contraseña</a>
                     <br />
-                    <button className="btn btn-lg btn-primary btn-block" type="button" onClick={sendUser}>Login</button>
+                    <button className="btn btn-lg btn-primary btn-block" type="button" onClick={sendUser} disabled={loading} >
+                        {loading ? "Iniciando..." : "Login"}
+                    </button>
                 </form>
             </div>
             <footer className="site__footer">

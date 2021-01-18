@@ -113,6 +113,30 @@ namespace AtencionClinica.Controllers
             return Json(new { n = id });
         } 
 
+        [Route("api/admisions/get/{beneficiaryId}/last/{top}")]
+        public IActionResult Get(int beneficiaryId, int top) 
+        {
+            IQueryable<Admission> admissions = _db.Admissions
+            .Include(x => x.Area)
+            .Include(x => x.Specialty)
+            .Where(x => x.BeneficiaryId == beneficiaryId)
+            .OrderByDescending(x => x.CreateAt);
+
+            var items = admissions.Take(top).Select(x => new {
+                x.Id,
+                x.NumberOfDay,
+                x.Inss,
+                Area = x.Area.Name,
+                Especialidad = x.Specialty.Name,
+                x.CreateAt,
+                x.CreateBy,
+                x.Active
+            });
+
+            return Json(items);
+
+        }      
+
         private int getMaxAdmissionOfDay(){
 
             var max = _db.Admissions.Where(x => x.CreateAt > DateTime.Today)

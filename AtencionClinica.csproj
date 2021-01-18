@@ -7,6 +7,8 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <UserSecretsId>a6b91bc3-3907-4021-9219-3138468b1597</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

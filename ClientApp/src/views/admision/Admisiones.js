@@ -117,8 +117,8 @@ const Admisiones = props => {
             <Column dataField="specialtyId" width={150} caption="Especialidad">
                 <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
             </Column> 
-            <Column dataField="createBy" caption='Creado por' width={100} />
-            <Column dataField="createAt" caption='Creado el' dataType='date'  format='dd/MM/yyyy' width={100} />
+            <Column dataField="createBy" caption='Creado por' width={80} />
+            <Column dataField="createAt" caption='Creado el' dataType='date'  format='dd/MM/yyyy HH:MM' width={150} />
             <Editing
                     mode="popup"                 
                     allowDeleting={true}

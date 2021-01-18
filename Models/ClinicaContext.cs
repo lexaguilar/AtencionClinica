@@ -77,6 +77,10 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Motive)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.NumberOfDay).HasComment("numero de admision de ese dia");
 
                 entity.Property(e => e.Observation)
@@ -107,6 +111,12 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.CreateBy)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Admissions_Users");
+
+                entity.HasOne(d => d.Specialty)
+                    .WithMany(p => p.Admissions)
+                    .HasForeignKey(d => d.SpecialtyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Admissions_Specialties");
             });
 
             modelBuilder.Entity<Appointment>(entity =>
@@ -494,6 +504,8 @@ namespace AtencionClinica.Models
                 entity.HasIndex(e => e.BeneficiaryId, "IX_Subsidies_Beneficiary");
 
                 entity.HasIndex(e => e.Inss, "IX_Subsidies_Inss");
+
+                entity.HasIndex(e => e.Reference, "IX_Subsidies_Referencia");
 
                 entity.Property(e => e.Cie10Id)
                     .IsRequired()

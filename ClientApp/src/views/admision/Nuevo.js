@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule } from 'devextreme-react/form';
-import { createStoreLocal } from '../../utils/proxy';
+import {  createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
 import http from '../../utils/http';
 import { editorOptionsSelect } from '../../data/app';
@@ -14,11 +14,17 @@ import CustomButton from '../../components/buttons/CustomButton';
 import Beneficiarios from '../beneficiarios';
 import { Popup } from 'devextreme-react/popup';
 import { _path } from "../../data/headerNavigation";
+import Box, {
+    Item
+  } from 'devextreme-react/box';
+import Admision from '../../components/grids/Admision';
+
 
 const Nuevo = props => {
     const [customer, setCustomer] = useState({inss : '',status : false});     
     const [visible, setVisible] = useState(false);     
     const [clear, setClear] = useState(false);     
+    const [ beneficiaryId, setBeneficiaryId ] = useState(0);     
 
     
 
@@ -26,7 +32,8 @@ const Nuevo = props => {
         areaId : null,
         beneficiaryId : null,
         specialtyId : null,
-        observacion : '',
+        observaction : '',
+        motive : '',
     });
 
     const storeTransient = {
@@ -39,13 +46,17 @@ const Nuevo = props => {
         http(uri.admisions.insert).asPost(admision).then(resp => {
             if(resp){
                 notify(`Admision ${resp.numberOfDay} creada correctamente`);
+                
                 setCustomer({inss : '',status : false});
+
                 setAdmision({
                     areaId : null,
                     beneficiaryId : null,
                     specialtyId : null,
-                    observacion : '',
+                    observation : '',
+                    motive : '',
                 });
+
                 setClear(!clear);
 
             }
@@ -70,6 +81,10 @@ const Nuevo = props => {
         setVisible(false)
     }
 
+    const onValueChanged = (e) => {
+        setBeneficiaryId(e.value);
+    }
+    
     const title = 'Admision';
 
     return (
@@ -95,14 +110,14 @@ const Nuevo = props => {
             </Popup>
             <Customer valueChanged={valueChanged} clear={clear}></Customer>
             <Form formData={admision}>
-                <GroupItem cssClass="second-group" colCount={3}>                    
-                    <SimpleItem dataField="beneficiaryId" editorType="dxSelectBox"
+                <GroupItem cssClass="second-group" colCount={4}>                    
+                    <SimpleItem dataField="beneficiaryId"  colSpan={2} editorType="dxSelectBox"
                         editorOptions={{                            
                             dataSource: createStoreLocal({ name: 'beneficiary', local: storeTransient, url : uri.beneficarios(customer.inss).getAsCatalog }),                            
                             valueExpr: "id",
                             displayExpr: item => item ? `${item.relationship} - ${item.name}` : '',
-                            searchEnabled: true
-                            
+                            searchEnabled: true,
+                            onValueChanged: onValueChanged,
                         }} >
                         <Label text="Beneficiario" />
                         <RequiredRule message="Seleccione el beneficiario" />
@@ -123,8 +138,13 @@ const Nuevo = props => {
                         <Label text="Especialidad" />
                         <RequiredRule message="Seleccione el area" />
                     </SimpleItem>
-                    <SimpleItem dataField="observacion" colSpan={3}>
+                    <SimpleItem dataField="motive"  colSpan={2}>
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
+                        <Label text="Motivo de consulta" />
+                    </SimpleItem>
+                    <SimpleItem dataField="observation" colSpan={2}>
+                        <StringLengthRule max={250} message="Maximo 250 caracteres" />
+                        <Label text="Observacion" />
                     </SimpleItem>
                 </GroupItem>               
             </Form>
@@ -137,6 +157,15 @@ const Nuevo = props => {
                 disabled={!customer.status}
                 onClick={guardarAdmision}                
             />
+            <br/>
+            <Box direction="row" width="100%">
+                <Item ratio={1}>
+                    <Admision beneficiaryId={beneficiaryId}/>
+                </Item>
+                <Item ratio={1}>
+                    <Admision/>
+                </Item>              
+            </Box>
         </div>
     );
 }

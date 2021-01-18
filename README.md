@@ -16,8 +16,10 @@
     SELECT atb.Descripcion FROM  adTipoBeneficiario AS atb WHERE atb.IDTipoBeneficiario NOT IN (0,4,7)
 -Sexs No administrable
 
-
-
+#
+clinica2021
+# TODO
+Anular una admision si no tiene movientos
 
 
 --activos
