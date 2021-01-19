@@ -9,6 +9,7 @@ const uri = {
     estados: createProxyBase('estados'),
     file: createProxy('', 'percapitas/post/file'),
     subsidies: createProxyBase('subsidies'),
+    cie10: createProxyBase('cie10'),
 };
 
 uri.beneficarios = inss => {

@@ -6,12 +6,16 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import Customer from '../../components/customer';
 import { estadoCustomer } from '../../data/catalogos';
-import { createStoreLocal } from '../../utils/proxy';
+import { createStore, createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { editorOptionsSelect } from '../../data/app';
 import moment from 'moment';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
+import DropDownBox from 'devextreme-react/drop-down-box';
+import { store } from '../../services/store';
+import DataSource from "devextreme/data/data_source";
+
 const Nuevo = props => {
 
     const [subsidy, setSubsidy] = useState({});
@@ -92,6 +96,7 @@ const Nuevo = props => {
         }
     }
 
+
     return (
         <div>
             <Popup
@@ -155,10 +160,25 @@ const Nuevo = props => {
                                 }} >
                                 <Label text="Doctor" />
                                 <RequiredRule message="Seleccione el area" />
-                            </SimpleItem>
+                            </SimpleItem>                            
                             <SimpleItem dataField="cie10Id" editorType="dxSelectBox" colSpan={2}
                                 editorOptions={{
-                                    dataSource: createStoreLocal({ name: 'cie10', local: storeTransient }),
+                                    dataSource: new DataSource({
+                                        load: (loadOptions) => {
+                                            console.log(loadOptions);
+                                            let params = {};
+                                            params.skip = loadOptions.skip || 0;
+                                            params.take = loadOptions.take || 10;
+
+                                            if(loadOptions.searchValue)
+                                                params.name = loadOptions.searchValue  ;
+
+                                            return http(`cie10/get`)
+                                            .asGet(params).then(x => x.items)
+                                        },
+                                        paginate : true,
+                                        pageSize: 10
+                                    }),
                                     ...editorOptionsSelect
                                 }} >
                                 <Label text="Dianostico" />

@@ -121,9 +121,9 @@ const Subsidies = () => {
                 <Column dataField="areaId" width={150} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="cie10Id" width={100} caption="Diagnostico">
+                {/* <Column dataField="cie10Id" width={100} caption="Diagnostico">
                     <Lookup disabled={true} dataSource={createStore('cie10')} valueExpr="id" displayExpr="name" />
-                </Column> 
+                </Column>  */}
                 <Column dataField="doctorId" width={100} caption="Doctor" visible={false}>
                     <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
                 </Column> 
