@@ -19,21 +19,15 @@
 #
 clinica2021
 # TODO
-Anular una admision si no tiene movientos
-
+Reglas para beneficiarios menores de 12
+Crear catalogos de departamentos
 
 --activos
-3036004
-3054260
-3353745
-3431322
-3479267
-3603066
-3604821
+2333924
+2353281
+2362229
+2547819
+2688970
+2690331
+2880992
 
---no activos
-21087217
-21240380
-21749762
-21836844
-21959282

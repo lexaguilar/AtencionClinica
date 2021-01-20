@@ -80,14 +80,14 @@ namespace AtencionClinica.Controllers
 
                         try
                         {
-                            string PatronalId = row.GetCell(0).StringCellValue;
+                            string PatronalId = row.GetCell(0).ToString();
                             string Rason = row.GetCell(1).StringCellValue;
-                            double Inss = row.GetCell(2).NumericCellValue;
-                            string FirstName = row.GetCell(3).StringCellValue;
-                            string LastName = row.GetCell(4).StringCellValue;
-                            string Adscription = row.GetCell(5).StringCellValue;
-                            DateTime DateAdd = row.GetCell(6).DateCellValue; 
-                            string Identification = row.GetCell(7).StringCellValue; 
+                            DateTime DateAdd = row.GetCell(2).DateCellValue; 
+                            double Inss = row.GetCell(3).NumericCellValue;
+                            string FirstName = row.GetCell(4).StringCellValue;
+                            string LastName = row.GetCell(5).StringCellValue;
+                            string Identification = row.GetCell(6).StringCellValue; 
+                            string Adscription = row.GetCell(7).StringCellValue;
                             string CityString = row.GetCell(8).StringCellValue; 
                             string Address = row.GetCell(9).StringCellValue; 
                             string SexString = row.GetCell(10).StringCellValue; 

@@ -15,7 +15,7 @@ namespace AtencionClinica.Models
         public int Inss { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int PatronalId { get; set; }
+        public string PatronalId { get; set; }
         public DateTime DateAdd { get; set; }
         public int CustomerStatusId { get; set; }
         public int CustomerTypeId { get; set; }

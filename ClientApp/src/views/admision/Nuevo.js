@@ -25,8 +25,7 @@ const Nuevo = props => {
     const [visible, setVisible] = useState(false);     
     const [clear, setClear] = useState(false);     
     const [ beneficiaryId, setBeneficiaryId ] = useState(0);     
-
-    
+    const [ loading, setLoading ] = useState(false);
 
     const [admision, setAdmision] = useState({
         areaId : null,
@@ -42,9 +41,11 @@ const Nuevo = props => {
     }    
 
     const guardarAdmision = () => {
-
+        setLoading(true);
         http(uri.admisions.insert).asPost(admision).then(resp => {
             if(resp){
+
+                setLoading(false);
                 notify(`Admision ${resp.numberOfDay} creada correctamente`);
                 
                 setCustomer({inss : '',status : false});
@@ -63,7 +64,7 @@ const Nuevo = props => {
         }).catch(err => {
             
             notify(err, 'error');
-
+            setLoading(false);
         });
 
     }
@@ -151,10 +152,10 @@ const Nuevo = props => {
             <br/>
             <Button
                 width={180}
-                text="Guardar admision"
+                text= {loading ? 'Guardando...' : 'Guardar admision'}
                 type="default"
                 icon='save'
-                disabled={!customer.status}
+                disabled={!customer.status || loading}
                 onClick={guardarAdmision}                
             />
             <br/>

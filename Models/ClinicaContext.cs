@@ -332,6 +332,11 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.PatronalId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.CustomerStatus)
                     .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.CustomerStatusId)
@@ -427,7 +432,7 @@ namespace AtencionClinica.Models
                 entity.HasIndex(e => new { e.Year, e.Month }, "IX_Percapitas");
 
                 entity.Property(e => e.Address)
-                    .HasMaxLength(150)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Adscription)

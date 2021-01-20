@@ -27,6 +27,7 @@ namespace AtencionClinica.Controllers
         {
              IQueryable<Admission> admissions = _db.Admissions
              .Include(x => x.Beneficiary).ThenInclude(x => x.Relationship)
+             .Where(x => x.Active)
             .OrderByDescending(x => x.CreateAt);
 
             if (values.ContainsKey("inss"))

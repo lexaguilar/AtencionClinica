@@ -16,7 +16,7 @@ const Admision = props => {
     const title = 'Ultimas admision'
 
     return (
-        <div className="">
+        <div className="mr-10">
         <BlockHeader title={title}/>
         <DataGrid id="gridContainer"
             selection={{ mode: 'single' }}

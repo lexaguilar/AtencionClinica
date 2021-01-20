@@ -10,6 +10,7 @@ const Nuevo = props => {
     let formElement = React.createRef();
 
     const [ open, setOpen ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
 
     const [ date, setDate ] = useState(new Date());
 
@@ -38,13 +39,18 @@ const Nuevo = props => {
         if(files.length == 0){
             notify(`Seleccione un archivo`, 'error');
         }else{
+            setLoading(true);
             let file = files[0].value;
 
             http(`percapitas/post/file/year/${date.getFullYear()}/month/${date.getMonth() + 1}`).asFile(file).then(r => {
 
                 notify(`Su archivo ${r.name} se ha agregado correctamente`);
+                setLoading(false);
                 hideInfo({ reload: true });
 
+            }).catch(err =>{
+                setLoading(false);
+                notify(err, 'error');
             });
         }        
 
@@ -82,7 +88,7 @@ const Nuevo = props => {
                         onValueChanged={onChange}
                         displayFormat={"MM/yyyy"} />
                         
-                    <Button className="button" text="Subir archivo" type="success" onClick={onClick} />
+                    <Button disabled={loading} className="button" text={loading? 'Subiendo' : 'Subir archivo'} type="success" onClick={onClick} />
                 </form>
             </Popup>
         </div>

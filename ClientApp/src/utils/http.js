@@ -69,7 +69,7 @@ const http = url => {
 
         },
         asFile: (file = null) => {
-            return new Promise(resolve => {
+            return new Promise((resolve, reject) => {
                 let formData = new FormData();
                 formData.append('file', file);
                 fetch(_url, {
@@ -78,7 +78,7 @@ const http = url => {
                     })
                     .then(processResponse)
                     .then(response => resolve(response))
-                    .catch(error => notify(error, 'error'));
+                    .catch(error => reject(error));
             })
         },
     }
@@ -88,18 +88,25 @@ const processResponse = resp => {
 
     return new Promise((resolve, reject) => {
 
-        if (resp.status == 400)
+        if (resp.status == httpStatus.badRequest)
             resp.text().then(err => reject(err));
 
+        if (resp.status == httpStatus.internalServerError)
+            resp.text().then(err => reject('Error interno en la aplicacion'));
 
-        if (resp.status == 200)
+        if (resp.status == httpStatus.ok)
             resp.json().then(data => resolve(data))
 
     })
 
 }
 
-
+const httpStatus = {
+    ok : 200,
+    badRequest : 400,
+    unauthorized : 401,
+    internalServerError : 500
+}
 
 export { path };
 export default http;

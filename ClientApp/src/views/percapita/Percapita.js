@@ -54,8 +54,7 @@ const Percapita = () => {
                         <div className="dx-field-label">Fecha mes/año</div>
                         <div className="dx-field-value">
                         <DateBox defaultValue={date}
-                            placeholder="Year: 2020"
-                            showClearButton={true}
+                            placeholder="Year: 2020" 
                             useMaskBehavior={true}
                             type="date"
                             onValueChanged={onChange}
@@ -89,15 +88,15 @@ const Percapita = () => {
                 <HeaderFilter visible={true} />
                 <Export enabled={true} fileName="Percapita" allowExportSelectedData={true} />
                 <GroupPanel visible={true} />
-                <Column dataField="year" groupIndex={0}/>
-                <Column dataField="month" groupIndex={1}/>
-                <Column dataField="patronalId"  width={100}/>
+                <Column dataField="year" caption='Año' groupIndex={0}/>
+                <Column dataField="month" caption='Mes' groupIndex={1}/>
+                <Column dataField="patronalId" width={100}/>
                 <Column dataField="rason" />
-                <Column dataField="inss"  width={100}/>
-                <Column dataField="firstName" />
-                <Column dataField="lastName" />
+                <Column dataField="inss" width={100}/>
+                <Column dataField="firstName"  caption='Nombre'/>
+                <Column dataField="lastName"  caption='Apellidos'/>
                 <Column dataField="adscription" />
-                <Column dataField="dateAdd" dataType="date" format='dd/MM/yyyy'  width={100}/>              
+                <Column dataField="dateAdd" dataType="date" format='dd/MM/yyyy' caption='Fecha' width={100}/>              
             </DataGrid>
         </div>
     );
