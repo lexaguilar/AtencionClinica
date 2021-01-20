@@ -24,6 +24,7 @@ namespace AtencionClinica.Controllers
         {
              IQueryable<Subsidy> subsidies = _db.Subsidies
              .Include(x => x.Beneficiary)           
+             .Include(x => x.Cie10)           
             .OrderByDescending(x => x.Reference);
 
             if (values.ContainsKey("inss"))
@@ -51,7 +52,7 @@ namespace AtencionClinica.Controllers
                 x.BeneficiaryId,
                 Nombre = $"{x.Beneficiary.FirstName} {x.Beneficiary.LastName}",
                 x.AreaId,
-                x.Cie10Id,
+                Cie10 = x.Cie10.Name,
                 x.DoctorId,
                 x.DateStart,
                 x.DateEnd,

@@ -24,18 +24,34 @@ import BlockHeader from './BlockHeader';
 function Catalogo(props) {
 
     const { catalogo } = props;
+
+    let dataGrid = React.createRef();
+
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Crear nuevo',
+                icon:'plus',
+                onClick: () =>  dataGrid.instance.addRow()
+            }
+        });
+    }  
     
     return (
         <div className="container small">
             <Title title={catalogo}/>
             <BlockHeader title={toCapital(catalogo)}/>          
             <DataGrid id="gridContainer"
+                ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
                 dataSource={store({uri : uri[catalogo]})}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -51,7 +67,6 @@ function Catalogo(props) {
                     mode="popup"
                     allowUpdating={true}
                     allowDeleting={true}
-                    allowAdding={true}
                 >
                     <Popup title={toCapital(catalogo)} showTitle={true} width={500} height={240}>
                         

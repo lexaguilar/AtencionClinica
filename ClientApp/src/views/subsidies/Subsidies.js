@@ -20,6 +20,8 @@ import Nuevo from './Nuevo';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
+import onExporting from '../../components/grids/Importer';
+
 
 const Subsidies = () => {
 
@@ -74,8 +76,20 @@ const Subsidies = () => {
         }
 
     }
-    
+
     const title = 'Subsidios';
+
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                onClick: () =>  dataGrid.instance.exportToExcel(false)
+            }
+        });
+    }  
 
     return (
         <div className="container">
@@ -99,6 +113,8 @@ const Subsidies = () => {
                 onContextMenuPreparing={addMenuItems}
                 onCellPrepared={onCellPrepared}
                 onRowPrepared={onRowPrepared}
+                onToolbarPreparing={onToolbarPreparing}
+                onExporting={(e) => onExporting(e, title)}
                 noDataText='No se encontró ningún subsidio'
                 remoteOperations={{
                     paging: true,
@@ -113,7 +129,7 @@ const Subsidies = () => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
+                {/* <Export enabled={true}  /> */}
                 <Column dataField="id"  width={80} />
                 <Column dataField="reference"  width={90} caption='Boleta' alignment='right'/>
                 <Column dataField="inss"  width={100} />
@@ -121,15 +137,13 @@ const Subsidies = () => {
                 <Column dataField="areaId" width={150} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
                 </Column> 
-                {/* <Column dataField="cie10Id" width={100} caption="Diagnostico">
-                    <Lookup disabled={true} dataSource={createStore('cie10')} valueExpr="id" displayExpr="name" />
-                </Column>  */}
                 <Column dataField="doctorId" width={100} caption="Doctor" visible={false}>
                     <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="dateStart" caption='Inicio'  width={100} dataType='date'/>
                 <Column dataField="dateEnd" caption='Finaliza'  width={100} dataType='date'/>
                 <Column dataField="days" caption='Dias' width={60} />
+                <Column dataField="cie10" caption='Cie10' visible={false}/>
                 <Column dataField="createBy" caption='Creado por' visible={false} width={100} />
                 <Column dataField="createAt" caption='Creado el' dataType='date' visible={false} width={100} />
                 <Editing

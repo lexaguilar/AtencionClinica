@@ -22,11 +22,13 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
 import Customer from '../../components/customer';
 import { estadoAdmision,relationships,estadoBeneficiario } from '../../data/catalogos';
+import http from '../../utils/http';
 
 const title = 'Beneficiarios';
 
 const Beneficiarios = () => {
     const [customer, setCustomer] = useState({inss : 0,status : false ,firstName: "", lastName: ""});     
+    const [percapitaInfo, setPercapitaInfo] = useState({identification : '', address : '' ,sexId: "", cityId: ""});     
 
     let dataGrid = React.createRef();
 
@@ -35,13 +37,18 @@ const Beneficiarios = () => {
     }   
 
     const valueChanged = data => {
-        console.log(data);
+      
         setCustomer({
             inss : data.inss,
             status : data.customerStatusId == estadoAdmision.activo,
             firstName : data.firstName,
             lastName : data.lastName
         });
+
+        http(`percapitas/get/inss/${data.inss}`).asGet().then(resp => {
+            setPercapitaInfo({...resp})
+        });
+
     } 
 
     const onInitNewRow = (e) => {  
@@ -53,9 +60,18 @@ const Beneficiarios = () => {
 
         newData.relationshipId = value;
         if(value == relationships.asegurado)
-        {
+        {        
+
+            console.log(percapitaInfo);
             newData.firstName = customer.firstName;
-            newData.lastName = customer.lastName;
+            newData.lastName = customer.lastName;  
+
+            newData.sexId = percapitaInfo.sexId;     
+            newData.address = percapitaInfo.address;     
+            newData.identification = percapitaInfo.identification;     
+            newData.cityId = percapitaInfo.cityId;           
+            
+            
         }
     }
 
@@ -136,15 +152,15 @@ const Beneficiarios = () => {
                             <RequiredRule message="El campo es requerido" />
                         </Item>
                         <Item dataField="identification" >
-                            <StringLengthRule max={50} min={0} message="Máximo de caracteres 50 y 2 mínimo" />
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
                         <Item dataField="firstName" >
                             <RequiredRule message="El campo es requerido" />
-                            <StringLengthRule max={50} min={0} message="Máximo de caracteres 50 y 2 mínimo" />
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
                         <Item dataField="lastName" >
                             <RequiredRule message="El campo es requerido" />
-                            <StringLengthRule max={50} min={0} message="Máximo de caracteres 50 y 2 mínimo" />
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
                         <Item dataField="birthDate" >
                             <RequiredRule message="El campo es requerido" />
@@ -153,10 +169,10 @@ const Beneficiarios = () => {
                             <RequiredRule message="El campo es requerido" />
                         </Item>
                         <Item dataField="phoneNumber" >
-                            <StringLengthRule max={50} min={0} message="Máximo de caracteres 50 y 2 mínimo" />
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
                         <Item dataField="cellNumber" >
-                            <StringLengthRule max={50} min={0} message="Máximo de caracteres 50 y 2 mínimo" />
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
                         <Item dataField="regionId" >
                             <RequiredRule message="El campo es requerido" />
@@ -165,13 +181,14 @@ const Beneficiarios = () => {
                             <RequiredRule message="El campo es requerido" />
                         </Item>                        
                         <Item dataField="email" >
-                            <StringLengthRule max={50} min={0} message="Máximo de caracteres 50 y 2 mínimo" />
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
                         <Item dataField="beneficiaryStatusId" >                            
                             <RequiredRule message="El campo es requerido" />
                         </Item>    
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
+                            <StringLengthRule max={150} message="Máximo de caracteres 50" />
                         </Item>                      
                     </FromGrid>
                 </Editing>

@@ -183,7 +183,7 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.Address)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false);
 
                 entity.Property(e => e.BeneficiaryStatusId).HasComment("Estado si es activo o no");
@@ -294,7 +294,7 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(150)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
             });
 
@@ -369,9 +369,22 @@ namespace AtencionClinica.Models
 
             modelBuilder.Entity<Doctor>(entity =>
             {
+                entity.Property(e => e.Address)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MinsaCode)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
             });
 
@@ -413,6 +426,10 @@ namespace AtencionClinica.Models
             {
                 entity.HasIndex(e => new { e.Year, e.Month }, "IX_Percapitas");
 
+                entity.Property(e => e.Address)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Adscription)
                     .IsRequired()
                     .HasMaxLength(250)
@@ -425,7 +442,16 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Identification)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PatronalId)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);

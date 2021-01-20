@@ -30,7 +30,7 @@ const getToken = () => localStorage.getItem(tokenName);
  * Retorna el token guardado en memoria
  * @return {boolean}
  */
- const isLogged = () => getToken() != null;
+const isLogged = () => getToken() != null;
 
 export const userService = {
     login,

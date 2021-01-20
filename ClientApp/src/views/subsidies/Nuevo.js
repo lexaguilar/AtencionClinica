@@ -165,7 +165,7 @@ const Nuevo = props => {
                                 editorOptions={{
                                     dataSource: new DataSource({
                                         load: (loadOptions) => {
-                                            console.log(loadOptions);
+
                                             let params = {};
                                             params.skip = loadOptions.skip || 0;
                                             params.take = loadOptions.take || 10;
@@ -173,13 +173,16 @@ const Nuevo = props => {
                                             if(loadOptions.searchValue)
                                                 params.name = loadOptions.searchValue  ;
 
-                                            return http(`cie10/get`)
-                                            .asGet(params).then(x => x.items)
+                                            return http(uri.cie10.get)
+                                            .asGet(params).then(x => x.items);
+                                            
                                         },
                                         paginate : true,
                                         pageSize: 10
                                     }),
-                                    ...editorOptionsSelect
+                                    valueExpr:"id",
+                                    displayExpr: item => item ? `${item.id} - ${item.name}` : '',
+                                    searchEnabled: true
                                 }} >
                                 <Label text="Dianostico" />
                                 <RequiredRule message="Seleccione el area" />
