@@ -20,7 +20,7 @@
 clinica2021
 # TODO
 Reglas para beneficiarios menores de 12
-Crear catalogos de departamentos
+Crear catalogos de departamentos y municipios
 
 --activos
 2333924
@@ -28,6 +28,4 @@ Crear catalogos de departamentos
 2362229
 2547819
 2688970
-2690331
-2880992
 
