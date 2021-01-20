@@ -2,9 +2,9 @@ import { handleActions } from 'redux-actions'
 import { GET_APPINFO, UPDATE_APPINFO } from './appActionTypes'
 
 const app = {
-    name: 'Sora',
+    name: 'Mi Empresa',
     version: '1.0.0',
-    fullName: 'App Sora Counting',
+    fullName: 'Mi Empresa',
 
 }
 

@@ -34,6 +34,10 @@ export const cellDiff = data => {
     )
 }
 
+const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
+export const getMonthName = index => months[index-1]; 
+export const customizeText = data => getMonthName(data.value);
+
 export const phonePattern = /[-\s\./0-9]*$/g;
 export const phoneRules = { X: /[0-9]/ };
 export { getTicks }

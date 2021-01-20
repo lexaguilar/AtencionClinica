@@ -13,6 +13,7 @@ import servicioReducer from './servicio'
 import appReducer from './app';
 import errorReducer from './errorHandler';
 import subsidioReducer from './subsidio';
+import dialogReducer from './dialog';
 
 
 export default combineReducers({
@@ -27,5 +28,6 @@ export default combineReducers({
     servicio: servicioReducer,
     appInfo: appReducer,
     error: errorReducer,
-    subsidio: subsidioReducer
+    subsidio: subsidioReducer,
+    dialog: dialogReducer,
 });

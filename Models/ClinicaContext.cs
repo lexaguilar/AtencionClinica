@@ -18,6 +18,7 @@ namespace AtencionClinica.Models
         }
 
         public virtual DbSet<Admission> Admissions { get; set; }
+        public virtual DbSet<App> Apps { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
@@ -117,6 +118,44 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.SpecialtyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Admissions_Specialties");
+            });
+
+            modelBuilder.Entity<App>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CellNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Slogan)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Website)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Appointment>(entity =>

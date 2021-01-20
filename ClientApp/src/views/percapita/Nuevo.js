@@ -88,7 +88,7 @@ const Nuevo = props => {
                         onValueChanged={onChange}
                         displayFormat={"MM/yyyy"} />
                         
-                    <Button disabled={loading} className="button" text={loading? 'Subiendo' : 'Subir archivo'} type="success" onClick={onClick} />
+                    <Button disabled={loading} className="button" text={loading? 'Subiendo...' : 'Subir archivo'} type="success" onClick={onClick} />
                 </form>
             </Popup>
         </div>

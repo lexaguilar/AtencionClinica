@@ -17,6 +17,9 @@ import DateBox from 'devextreme-react/date-box';
 import Title from '../../components/shared/Title';
 import CustomStore from 'devextreme/data/custom_store';
 import http from '../../utils/http';
+import { customizeText, getMonthName } from '../../utils/common';
+import { Button } from 'devextreme-react/button';
+import Delete from './Delete';
 
 const Percapita = () => {
 
@@ -31,8 +34,6 @@ const Percapita = () => {
     const reload = function () {
         dataGrid.instance.refresh();
     }
-
-    
 
     const customStore = new CustomStore({
         load: (loadOptions) => {
@@ -61,9 +62,9 @@ const Percapita = () => {
                             displayFormat={"MM/yyyy"} />
                         </div>
                     </div>
-                </Item>                
-                <Item ratio={2}>                    
-                </Item>
+                </Item>            
+                <Item ratio={1}/>   
+                <Item ratio={1}/>    
                 <Item ratio={1}>
                     <Nuevo onSave={reload} />
                 </Item>
@@ -89,7 +90,7 @@ const Percapita = () => {
                 <Export enabled={true} fileName="Percapita" allowExportSelectedData={true} />
                 <GroupPanel visible={true} />
                 <Column dataField="year" caption='Año' groupIndex={0}/>
-                <Column dataField="month" caption='Mes' groupIndex={1}/>
+                <Column dataField="month" caption='Mes' groupIndex={1}  customizeText={customizeText}/>
                 <Column dataField="patronalId" width={100}/>
                 <Column dataField="rason" />
                 <Column dataField="inss" width={100}/>
@@ -98,6 +99,8 @@ const Percapita = () => {
                 <Column dataField="adscription" />
                 <Column dataField="dateAdd" dataType="date" format='dd/MM/yyyy' caption='Fecha' width={100}/>              
             </DataGrid>
+            <br/>
+            <Delete onDelete={reload} year={date.getFullYear()} month={date.getMonth() + 1} />           
         </div>
     );
 }

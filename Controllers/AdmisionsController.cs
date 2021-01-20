@@ -26,8 +26,7 @@ namespace AtencionClinica.Controllers
         public IActionResult Get(int skip, int take, IDictionary<string, string> values) 
         {
              IQueryable<Admission> admissions = _db.Admissions
-             .Include(x => x.Beneficiary).ThenInclude(x => x.Relationship)
-             .Where(x => x.Active)
+             .Include(x => x.Beneficiary).ThenInclude(x => x.Relationship)            
             .OrderByDescending(x => x.CreateAt);
 
             if (values.ContainsKey("inss"))
@@ -120,7 +119,7 @@ namespace AtencionClinica.Controllers
             IQueryable<Admission> admissions = _db.Admissions
             .Include(x => x.Area)
             .Include(x => x.Specialty)
-            .Where(x => x.BeneficiaryId == beneficiaryId)
+            .Where(x => x.BeneficiaryId == beneficiaryId && x.Active)
             .OrderByDescending(x => x.CreateAt);
 
             var items = admissions.Take(top).Select(x => new {
