@@ -476,6 +476,8 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Rule).HasMaxLength(350);
             });
 
             modelBuilder.Entity<Resource>(entity =>
