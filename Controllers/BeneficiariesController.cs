@@ -37,7 +37,7 @@ namespace AtencionClinica.Controllers
             
             var result = _db.Beneficiaries.Include(x => x.Relationship).Where(x => x.Inss == inss && x.BeneficiaryStatusId == 1).Select(x => new {
                 Id = x.Id,
-                Name = $"{x.FirstName} {x.LastName}",
+                Name = x.GetFullName(),
                 Relationship = x.Relationship.Name
             });
 

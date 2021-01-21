@@ -30,7 +30,7 @@ export default function FooterNewsletter() {
         {
             key: 'rss',
             url: app.author.profile_url,
-            iconClass: 'fas fa-rss',
+            iconClass: 'fa fa-rss',
         },
     ];
 

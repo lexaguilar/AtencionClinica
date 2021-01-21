@@ -1,5 +1,6 @@
 using System.Linq;
 using AtencionClinica.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AtencionClinica.Factory
 {
@@ -21,7 +22,7 @@ namespace AtencionClinica.Factory
             var pass = password.GetPasswordHashedSHA256();
 
             //TODO : agregar condicion de la pass
-            var result = db.Users.FirstOrDefault(x => x.Username == username);
+            var result = db.Users.Include(x => x.Area).FirstOrDefault(x => x.Username == username);
             
             return result;
         }

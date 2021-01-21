@@ -20,6 +20,7 @@ import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
 import { useSelector } from 'react-redux'
+import { formatDate, formatDateTime } from '../../data/app';
 
 
 const Follows = () => {
@@ -94,7 +95,7 @@ const Follows = () => {
                 <Column dataField="lastName" caption='Apellidos'/>
                 <Column dataField="areaSource" caption='Area Origen' />       
                 <Column dataField="createBy" caption='Creado por' width={120} />
-                <Column dataField="createAt" caption='Creado el' dataType='date' format='dd/MM/yyyy' width={120} />
+                <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDate} width={120} />
             </DataGrid>
         </div>
     );

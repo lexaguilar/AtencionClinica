@@ -37,6 +37,6 @@ function save() {
     }
 }
 
-store.subscribe(() => save());
+// store.subscribe(() => save());
 
 export default store;

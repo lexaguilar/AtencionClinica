@@ -20,6 +20,7 @@ import http from '../../utils/http';
 import { customizeText, getMonthName } from '../../utils/common';
 import { Button } from 'devextreme-react/button';
 import Delete from './Delete';
+import { formatDate } from '../../data/app';
 
 const Percapita = () => {
 
@@ -97,7 +98,7 @@ const Percapita = () => {
                 <Column dataField="firstName"  caption='Nombre'/>
                 <Column dataField="lastName"  caption='Apellidos'/>
                 <Column dataField="adscription" />
-                <Column dataField="dateAdd" dataType="date" format='dd/MM/yyyy' caption='Fecha' width={100}/>              
+                <Column dataField="dateAdd" dataType="date" format={formatDate} caption='Fecha' width={100}/>              
             </DataGrid>
             <br/>
             <Delete onDelete={reload} year={date.getFullYear()} month={date.getMonth() + 1} />           

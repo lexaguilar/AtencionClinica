@@ -2,6 +2,7 @@
 import React, { Component }  from 'react';
 import { connect } from 'react-redux';
 import { getAppInfo } from '../../store/app/appActions';
+import { getUser } from '../../store/user/userActions';
 
 class Footer extends Component {
     constructor(props) {
@@ -9,13 +10,14 @@ class Footer extends Component {
     }
 
     componentDidMount() {
-        let { getAppInfo } = this.props;
+        let { getAppInfo, getUser } = this.props;
         getAppInfo();
+        getUser();
     }
 
     
     render() {
-        let { app } = this.props;
+        let { app, user } = this.props;
 
         return (
             <div className="site-footer">
@@ -30,7 +32,7 @@ class Footer extends Component {
                             {app.version}
                         </div>
                         <div className="site-footer__payments">
-                            <img src="images/payments.png" alt="" />
+                        <i class="fa fa-home text-danger"></i> Area : {user.area}
                         </div>
                     </div>
                 </div>
@@ -41,10 +43,12 @@ class Footer extends Component {
 
 const mapStateToProps = (state) => ({
     app: state.appInfo,
+    user : state.user
 });
 
 const mapDispatchToPros = ({
-    getAppInfo
+    getAppInfo,
+    getUser,
 });
 
 export default connect(mapStateToProps, mapDispatchToPros)(Footer);

@@ -45,7 +45,7 @@ namespace AtencionClinica.Controllers
                 x.Id,
                 x.NumberOfDay,
                 x.Inss,
-                Nombre = $"{x.Beneficiary.FirstName} {x.Beneficiary.LastName}",
+                Nombre = x.Beneficiary.GetFullName(),
                 Tipo = $"{x.Beneficiary.Relationship.Name}",
                 x.AreaId,
                 x.SpecialtyId,

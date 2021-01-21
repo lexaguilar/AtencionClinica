@@ -23,6 +23,7 @@ import Title from '../../components/shared/Title';
 import Customer from '../../components/customer';
 import { estadoAdmision,relationships,estadoBeneficiario } from '../../data/catalogos';
 import http from '../../utils/http';
+import { formatDate } from '../../data/app';
 
 const title = 'Beneficiarios';
 
@@ -122,7 +123,7 @@ const Beneficiarios = () => {
                 <Column dataField="identification" width={140} />
                 <Column dataField="firstName" caption="Nombre"  />
                 <Column dataField="lastName" caption="Apellidos"  />
-                <Column dataField="birthDate" caption="Fecha Nac." width={140} dataType="date"  format='dd/MM/yyyy'/>
+                <Column dataField="birthDate" caption="Fecha Nac." width={140} dataType="date"  format={formatDate}/>
                 <Column dataField="sexId" width={100} caption="Sexo">
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'sex', local: storeTransient })} valueExpr="id" displayExpr="name" />
                 </Column> 

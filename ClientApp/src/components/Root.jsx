@@ -11,6 +11,7 @@ import { esMessages } from '../data/dx.messages.es';
 import PrivateRoute from './header/PrivateRouter';
 import Login from './account/login';
 import Logout from './account/logout';
+import HomePage from './home/HomePage';
 
 export default class Root extends Component {
 
@@ -52,7 +53,8 @@ export default class Root extends Component {
                         )}
                     />
                     <Route path="/account/login" component={Login} />
-                    <Route path="/account/logout" component={Logout} />
+                    <Route path="/account/logout" component={Logout} />                   
+                    <Route path="/clinica" component={HomePage} />
                     <Redirect to='/clinica'/>
                 </Switch>
             </BrowserRouter>

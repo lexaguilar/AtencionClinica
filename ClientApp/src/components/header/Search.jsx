@@ -12,7 +12,7 @@ function Search() {
                 <input
                     className="search__input"
                     name="search"
-                    placeholder="Buscar cuenta..."
+                    placeholder="Buscar asegurado..."
                     aria-label="Site search"
                     autoComplete="off"
                 />

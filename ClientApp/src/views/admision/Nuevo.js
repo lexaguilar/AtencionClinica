@@ -10,30 +10,24 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import Customer from '../../components/customer';
 import notify from 'devextreme/ui/notify';
 import { estadoAdmision } from '../../data/catalogos';
-import CustomButton from '../../components/buttons/CustomButton';
-import Beneficiarios from '../beneficiarios';
-import { Popup } from 'devextreme-react/popup';
 import { _path } from "../../data/headerNavigation";
-import Box, {
-    Item
-} from 'devextreme-react/box';
+import Box, { Item } from 'devextreme-react/box';
 import Admision from '../../components/grids/Admision';
-
+import { clearCustomer } from '../../store/customer/customerReducer';
+import PopupBeneficiary from '../../components/beneficiary/PopupBeneficiary';
+import { admisionDefault } from '../../data/admision';
+import { useDispatch, useSelector } from 'react-redux'
+import Citas from '../../components/grids/Citas';
 
 const Nuevo = props => {
-    const [customer, setCustomer] = useState({ inss: '', status: false });
-    const [visible, setVisible] = useState(false);
-    const [clear, setClear] = useState(false);
-    const [beneficiaryId, setBeneficiaryId] = useState(0);
-    const [loading, setLoading] = useState(false);
 
-    const [admision, setAdmision] = useState({
-        areaId: null,
-        beneficiaryId: null,
-        specialtyId: null,
-        observaction: '',
-        motive: '',
-    });
+    const { clear } = useSelector(store => store.customerClear);
+    const dispatch = useDispatch();
+
+    const [customer, setCustomer] = useState({ inss: '', status: false });   
+    const [loading, setLoading] = useState(false);
+    const [admision, setAdmision] = useState({...admisionDefault});
+    const [beneficiaryId, setBeneficiaryId] = useState(0);
 
     let refAdmision = React.createRef();
 
@@ -56,15 +50,9 @@ const Nuevo = props => {
 
                     setCustomer({ inss: '', status: false });
 
-                    setAdmision({
-                        areaId: null,
-                        beneficiaryId: null,
-                        specialtyId: null,
-                        observation: '',
-                        motive: '',
-                    });
+                    setAdmision({...admisionDefault});
 
-                    setClear(!clear);
+                    dispatch(clearCustomer({clear : !clear}));
 
                 }
             }).catch(err => {
@@ -84,10 +72,6 @@ const Nuevo = props => {
 
     }
 
-    const onHiding = (params) => {
-        setVisible(false)
-    }
-
     const onValueChanged = (e) => {
         setBeneficiaryId(e.value);
     }
@@ -98,24 +82,9 @@ const Nuevo = props => {
         <div className="container">
             <Title title={title} />
             <BlockHeader title='Nueva Admision' >
-                <CustomButton
-                    text="Crear beneficiario"
-                    icon='plus'
-                    onClick={() => setVisible(true)}
-                />
-            </BlockHeader>
-            <Popup
-                fullScreen={true}
-                width={850}
-                height={550}
-                onHiding={onHiding}
-                title={`Nuevo beneficiario`}
-                visible={visible}
-
-            >
-                <Beneficiarios></Beneficiarios>
-            </Popup>
-            <Customer valueChanged={valueChanged} clear={clear}></Customer>
+                <PopupBeneficiary />
+            </BlockHeader>            
+            <Customer valueChanged={valueChanged}></Customer>
             <Form formData={admision} ref={ref => refAdmision = ref}>
                 <GroupItem cssClass="second-group" colCount={4}>
                     <SimpleItem dataField="beneficiaryId" colSpan={2} editorType="dxSelectBox"
@@ -170,7 +139,7 @@ const Nuevo = props => {
                     <Admision beneficiaryId={beneficiaryId} />
                 </Item>
                 <Item ratio={1}>
-                    <Admision />
+                    <Citas beneficiaryId={beneficiaryId}/>
                 </Item>
             </Box>
         </div>

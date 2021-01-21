@@ -1,10 +1,9 @@
 import { GET_USER, UPDATE_USER } from "./userActionTypes";
 
 const user = {
-    corteId: 2,
     username: 'aaguilare',
     areaId: 1,
-    areaDescripcion: 'Bodega Central'
+    area: 'Bodega Central'
 };
 
 export default function userReducer(state = user, { type, payload }) {

@@ -12,8 +12,11 @@ namespace AtencionClinica.Controllers
     public class DoctoresController : Controller
     {      
         private GenericFactory<Doctor> factory = null;
+        private readonly ClinicaContext _db = null;
+
         public DoctoresController(ClinicaContext db)
         {
+            this._db = db;
             this.factory = new GenericFactory<Doctor>(db);
         }
 
@@ -31,6 +34,25 @@ namespace AtencionClinica.Controllers
       
         [HttpGet("api/doctores/{id}/delete")]
         public IActionResult Delete(int id) => Json(new { n = factory.DeleteAndSave(id) });
+
+        [HttpGet("api/doctores/specialties/{specialtyId}")]
+        public IActionResult DoctorsSpecialty(int specialtyId)
+        {
+            var doctors = _db.Doctors.Where(x => x.SpecialtyId == specialtyId);
+
+            return Json(doctors);
+        }
+
+        [HttpGet("api/doctores/{doctorId}/times")]
+        public IActionResult Times(int doctorId)
+        {
+            var doctors = _db.DoctorTimes.FirstOrDefault(x => x.DoctorId == doctorId);
+
+            if(doctors == null)
+                return BadRequest("El medico seleccionado no tiene horario configurado de atencion");
+
+            return Json(doctors);
+        }
     
     }
 }

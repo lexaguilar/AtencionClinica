@@ -15,6 +15,7 @@ import Title from '../shared/Title';
 import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import Nuevo from './Nuevo';
+import { formatDate } from '../../data/app';
 
 
 function TasaCambio() {
@@ -50,7 +51,7 @@ function TasaCambio() {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <Export enabled={true} fileName="TasaCambio" allowExportSelectedData={true} />
-                <Column dataField="fecha" dataType="date" format='dd/MM/yyyy'>
+                <Column dataField="fecha" dataType="date" format={formatDate}>
                     <RequiredRule/>
                 </Column>
                 <Column dataField="cambio" dataType="number">

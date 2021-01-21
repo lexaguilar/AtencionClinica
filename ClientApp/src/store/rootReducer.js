@@ -11,9 +11,10 @@ import compraReducer from './compra'
 import facturaReducer from './factura'
 import servicioReducer from './servicio'
 import appReducer from './app';
-import errorReducer from './errorHandler';
 import subsidioReducer from './subsidio';
 import dialogReducer from './dialog';
+import customerClearReducer from './customer';
+import beneficiaryDialogReducer from './beneficiary';
 
 
 export default combineReducers({
@@ -27,7 +28,8 @@ export default combineReducers({
     factura: facturaReducer,
     servicio: servicioReducer,
     appInfo: appReducer,
-    error: errorReducer,
     subsidio: subsidioReducer,
     dialog: dialogReducer,
+    customerClear : customerClearReducer,
+    beneficiaryDialog : beneficiaryDialogReducer,
 });

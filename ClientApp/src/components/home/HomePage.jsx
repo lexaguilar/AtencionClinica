@@ -10,7 +10,6 @@ export default function HomePage() {
     return (
         <React.Fragment>
             <Title title="Inicio" />
-            
         </React.Fragment>
     )
 }

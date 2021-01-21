@@ -1,16 +1,20 @@
 import { createProxy, createProxyBase } from "./proxy";
 
 const uri = {
+    appointments : createProxyBase('appointments'),
     admisions : createProxyBase('admisions'),
     areas : createProxyBase('areas'),
+    doctores : createProxyBase('doctores'),
     compras: createProxyBase('compras'),
-    doctores: createProxyBase('doctores'),  
     especialidades : createProxyBase('especialidades'),
     estados: createProxyBase('estados'),
     file: createProxy('', 'percapitas/post/file'),
     subsidies: createProxyBase('subsidies'),
     cie10: createProxyBase('cie10'),
 };
+
+uri.doctores.forSpecialty = specialtyId => `doctores/specialties/${specialtyId}`;
+uri.doctores.times = doctorId => `doctores/${doctorId}/times`;
 
 uri.beneficarios = inss => {
     let urls = createProxy(`beneficiaries/get/${inss}`,`beneficiaries/post`);

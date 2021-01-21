@@ -36,13 +36,13 @@ class IndicatorSearch extends Component {
 
         const searchDropdown = (
             <div className="drop-search">
-                <form action="" className="drop-search__form">
+                <form action="clinica/paciente" className="drop-search__form">
                     <input
                         ref={this.input}
                         onKeyDown={this.handleKeyDown}
                         className="drop-search__input"
-                        name="search"
-                        placeholder="Buscar cuenta"
+                        name="id"
+                        placeholder="Buscar paciente"
                         aria-label="Site search"
                         type="text"
                         autoComplete="off"

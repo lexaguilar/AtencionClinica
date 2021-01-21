@@ -11,6 +11,7 @@ namespace AtencionClinica.Models
         {
             Admissions = new HashSet<Admission>();
             Appointments = new HashSet<Appointment>();
+            Doctors = new HashSet<Doctor>();
         }
 
         public int Id { get; set; }
@@ -18,5 +19,6 @@ namespace AtencionClinica.Models
 
         public virtual ICollection<Admission> Admissions { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual ICollection<Doctor> Doctors { get; set; }
     }
 }

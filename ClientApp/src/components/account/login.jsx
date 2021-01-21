@@ -25,9 +25,12 @@ function Login(props) {
         setLoading(true);
         userService.login(user).then(userResp => {
 
-            let pathname = props?.location?.state?.from?.pathname || '/';
+            let pathname = (props?.location?.state?.from?.pathname || '/clinica');
 
-            dispatch(actions.updateUser({ username: userResp.username }));
+            pathname = pathname.includes('login') ? '/clinica' : pathname;
+
+            dispatch(actions.updateUser({ username: userResp.username, areaId : userResp.areaId, area : userResp.area }));
+           
             props.history.push({ pathname });
 
         }).catch(err => {

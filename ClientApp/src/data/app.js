@@ -12,3 +12,6 @@ export const cssClasses = {
     1 : 'custome-active',
     2 : 'custome-noactive',
 }
+
+export const formatDateTime = 'dd/MM/yyyy hh:mm a';
+export const formatDate = 'dd/MM/yyyy';

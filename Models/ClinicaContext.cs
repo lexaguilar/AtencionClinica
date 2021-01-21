@@ -29,6 +29,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<CustomerStatus> CustomerStatuses { get; set; }
         public virtual DbSet<CustomerType> CustomerTypes { get; set; }
         public virtual DbSet<Doctor> Doctors { get; set; }
+        public virtual DbSet<DoctorTime> DoctorTimes { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
         public virtual DbSet<Percapita> Percapitas { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
@@ -160,6 +161,14 @@ namespace AtencionClinica.Models
 
             modelBuilder.Entity<Appointment>(entity =>
             {
+                entity.HasIndex(e => e.BeneficiaryId, "IX_Appointments_Beneficiario");
+
+                entity.HasIndex(e => e.DateAppointment, "IX_Appointments_DateAppointment");
+
+                entity.HasIndex(e => e.DoctorId, "IX_Appointments_Doctors");
+
+                entity.HasIndex(e => e.Inss, "IX_Appointments_inss");
+
                 entity.Property(e => e.AreaId).HasComment("Area al que ve el paciente");
 
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
@@ -180,7 +189,6 @@ namespace AtencionClinica.Models
                 entity.HasOne(d => d.Area)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(d => d.AreaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Appointments_Areas");
 
                 entity.HasOne(d => d.Beneficiary)
@@ -430,6 +438,32 @@ namespace AtencionClinica.Models
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Specialty)
+                    .WithMany(p => p.Doctors)
+                    .HasForeignKey(d => d.SpecialtyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Doctors_Specialties");
+            });
+
+            modelBuilder.Entity<DoctorTime>(entity =>
+            {
+                entity.HasKey(e => e.DoctorId);
+
+                entity.Property(e => e.DoctorId).ValueGeneratedNever();
+
+                entity.Property(e => e.Days)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StartHour).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Doctor)
+                    .WithOne(p => p.DoctorTime)
+                    .HasForeignKey<DoctorTime>(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DoctorTimes_Doctors");
             });
 
             modelBuilder.Entity<Follow>(entity =>
@@ -651,6 +685,12 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(150)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.AreaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Users_Areas");
 
                 entity.HasOne(d => d.Rol)
                     .WithMany(p => p.Users)

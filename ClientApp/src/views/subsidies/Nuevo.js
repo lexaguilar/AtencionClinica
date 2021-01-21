@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Popup } from 'devextreme-react/popup';
 import { Button } from 'devextreme-react/button';
 import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule } from 'devextreme-react/form';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import Customer from '../../components/customer';
 import { estadoCustomer } from '../../data/catalogos';
 import { createStore, createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
-import { editorOptionsSelect } from '../../data/app';
+import { editorOptionsSelect, formatDate } from '../../data/app';
 import moment from 'moment';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
@@ -23,7 +23,7 @@ const Nuevo = props => {
     const [clear, setClear] = useState(false);     
 
     const dispatch = useDispatch();
-    const { open } = useSelector(store => store.subsidio)
+    const { open } = useSelector(store => store.subsidio);
 
     let refSubsidy = React.createRef();
     const storeTransient = {
@@ -126,7 +126,7 @@ const Nuevo = props => {
                                 dataField="dateStart"
                                 editorType="dxDateBox"
                                 editorOptions={{                      
-                                    displayFormat: "dd/MM/yyyy",
+                                    displayFormat: formatDate,
                                     onValueChanged : onDateChange
                                 }}
                             >
@@ -137,7 +137,7 @@ const Nuevo = props => {
                                 dataField="dateEnd"
                                 editorType="dxDateBox"
                                 editorOptions={{                      
-                                    displayFormat: "dd/MM/yyyy",
+                                    displayFormat: formatDate,
                                     onValueChanged : onDateChange
                                 }}
                             >
@@ -159,7 +159,7 @@ const Nuevo = props => {
                                     ...{...editorOptionsSelect, width: '100%'}
                                 }} >
                                 <Label text="Doctor" />
-                                <RequiredRule message="Seleccione el area" />
+                                <RequiredRule message="Seleccione el doctor" />
                             </SimpleItem>                            
                             <SimpleItem dataField="cie10Id" editorType="dxSelectBox" colSpan={2}
                                 editorOptions={{

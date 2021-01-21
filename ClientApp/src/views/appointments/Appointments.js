@@ -17,9 +17,10 @@ import { store } from '../../services/store';
 
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
+import onExporting from '../../components/grids/Importer';
 import { formatDateTime } from '../../data/app';
 
-const Admisiones = props => {
+const Appointments = props => {
 
     let dataGrid = React.createRef();
 
@@ -40,7 +41,7 @@ const Admisiones = props => {
                     
                 },{
 
-                    text: 'Anular admision',
+                    text: 'Anular cita',
                     icon : 'remove',
                     onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex),
                     color : 'red'
@@ -70,21 +71,33 @@ const Admisiones = props => {
 
     }
 
-    const title = 'Admisiones'
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                onClick: () =>  dataGrid.instance.exportToExcel(false)
+            }
+        });
+    }  
+
+    const title = 'Citas'
     return (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>
             <CustomButton
-                text="Nueva admision"
+                text="Nueva cita"
                 icon='plus'
-                onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/admisiones/nuevo`})}
+                onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/citas/nuevo`})}
             />
         </BlockHeader>
         <DataGrid id="gridContainer"
             ref={(ref) => dataGrid = ref}
             selection={{ mode: 'single' }}
-            dataSource={store({uri : uri.admisions, remoteOperations: true})}
+            dataSource={store({uri : uri.appointments, remoteOperations: true})}
             showBorders={true}
             showRowLines={true}
             allowColumnResizing={true}
@@ -92,7 +105,8 @@ const Admisiones = props => {
             onContextMenuPreparing={addMenuItems}
             onRowPrepared={onRowPrepared}
             onCellPrepared={onCellPrepared}
-            
+            onToolbarPreparing={onToolbarPreparing}
+            onExporting={(e) => onExporting(e, title)}
             remoteOperations={{
                 paging: true,
                 filtering: true
@@ -108,18 +122,18 @@ const Admisiones = props => {
             <ColumnChooser enabled={true} />
             <Export enabled={true} fileName={title} allowExportSelectedData={true} />
             <Column dataField="id"  width={100} />
-            <Column dataField="numberOfDay" width={90} caption='Numero' />
             <Column dataField="inss"  width={110} />
             <Column dataField="tipo"  width={110} />
             <Column dataField="nombre" />
-            <Column dataField="areaId" width={150} caption="Area">
-                <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
+            <Column dataField="doctorId" width={160} caption="Doctor">
+                <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
             </Column> 
-            <Column dataField="specialtyId" width={150} caption="Especialidad">
+            <Column dataField="specialtyId" width={160} caption="Especialidad">
                 <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
             </Column> 
-            <Column dataField="createBy" caption='Creado por' width={80} />
-            <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />
+            <Column dataField="dateAppointment" caption='Cita' dataType='date' format={formatDateTime} width={160} />
+            <Column dataField="createBy" caption='Creado por' width={80} visible={false} />
+            <Column dataField="createAt" caption='Creado el' dataType='date' visible={false} format={formatDateTime} width={150} />
             <Editing
                     mode="popup"                 
                     allowDeleting={true}
@@ -130,4 +144,4 @@ const Admisiones = props => {
     );
 }
 
-export default Admisiones;
+export default Appointments;

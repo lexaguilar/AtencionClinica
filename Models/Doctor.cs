@@ -20,6 +20,8 @@ namespace AtencionClinica.Models
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
 
+        public virtual Specialty Specialty { get; set; }
+        public virtual DoctorTime DoctorTime { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
         public virtual ICollection<Subsidy> Subsidies { get; set; }
     }

@@ -14,6 +14,7 @@ namespace AtencionClinica.Models
             FollowAreaSources = new HashSet<Follow>();
             FollowAreaTargets = new HashSet<Follow>();
             Subsidies = new HashSet<Subsidy>();
+            Users = new HashSet<User>();
         }
 
         public int Id { get; set; }
@@ -24,5 +25,6 @@ namespace AtencionClinica.Models
         public virtual ICollection<Follow> FollowAreaSources { get; set; }
         public virtual ICollection<Follow> FollowAreaTargets { get; set; }
         public virtual ICollection<Subsidy> Subsidies { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

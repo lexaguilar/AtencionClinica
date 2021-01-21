@@ -7,10 +7,11 @@ import http from '../../utils/http';
 import Form, { SimpleItem, GroupItem, Label } from 'devextreme-react/form';
 import { createProxyBase, createStoreLocal } from '../../utils/proxy';
 import notify from 'devextreme/ui/notify';
+import { useSelector } from 'react-redux'
 
 const Customer = props => {
 
-    const { clear } = props;
+    const { clear } = useSelector(store => store.customerClear);
     
     const [inss, setInss] = useState('');
     const [custumer, setCustumer] = useState({...custumerDefault});
@@ -52,7 +53,7 @@ const Customer = props => {
         setCustumer({...custumerDefault});
         setInss('');
         
-    },[props.clear])
+    },[clear])
 
     return (
         <div>
