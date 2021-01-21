@@ -21,7 +21,7 @@ const Admision = props => {
         <BlockHeader title={title}/>
         <DataGrid id="gridContainer"
             selection={{ mode: 'single' }}
-            dataSource={store({uri : createProxy(`admisions/get/${beneficiaryId}/last/${10}`) })}
+            dataSource={beneficiaryId == 0 ? [] : store({uri : createProxy(`admisions/get/${beneficiaryId}/last/${10}`) })}
             showBorders={true}
             showRowLines={true}
             allowColumnResizing={true}
@@ -37,4 +37,4 @@ const Admision = props => {
     );
 }
 
-export default Admision;
+export default React.memo(Admision);

@@ -21,7 +21,7 @@ const Citas = props => {
         <BlockHeader title={title}/>
         <DataGrid id="gridContainer"
             selection={{ mode: 'single' }}
-            dataSource={store({uri : createProxy(`appointments/get/${beneficiaryId}/last/${10}`) })}
+            dataSource={beneficiaryId == 0 ? [] : store({uri : createProxy(`appointments/get/${beneficiaryId}/last/${10}`) })}
             showBorders={true}
             showRowLines={true}
             allowColumnResizing={true}
@@ -38,4 +38,4 @@ const Citas = props => {
     );
 }
 
-export default Citas;
+export default React.memo(Citas);
