@@ -7,5 +7,6 @@ namespace AtencionClinica.ViewModel
         public string Tipo { get; set; }
         public string Nombre { get; set; }
         public DateTime Time { get; set; }
+        public bool Disabled { get; set; }
     }
 }

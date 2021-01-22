@@ -93,7 +93,7 @@ namespace AtencionClinica.Controllers
                 if(citaExistente == null)
                     listHours.Add(new ListHours { Id= i, Tipo = "", Nombre ="", Time = time});
                 else{
-                    listHours.Add(new ListHours { Id= i, Tipo = citaExistente.Tipo, Nombre = citaExistente.Nombre, Time = time});
+                    listHours.Add(new ListHours { Id= i, Tipo = citaExistente.Tipo, Nombre = citaExistente.Nombre, Time = time, Disabled = true});
                 }
 
                 time = time.AddMinutes(doctorHours.TimeMinutesForBeneficiary);
@@ -135,6 +135,11 @@ namespace AtencionClinica.Controllers
         [HttpGet("api/appointments/{id}/delete")]
         public IActionResult Delete(int id) {
             var appointment = _db.Appointments.FirstOrDefault(x => x.Id == id);
+
+            if(appointment.DateAppointment < DateTime.Today)
+            {
+                return BadRequest("No se puede cancelar una cita que ya pasó");
+            }
 
             if(appointment != null)
             {

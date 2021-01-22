@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using static AtencionClinica.Enumerators;
 
 namespace AtencionClinica.Controllers
 {  
@@ -38,7 +39,6 @@ namespace AtencionClinica.Controllers
                 return BadRequest($"No se encontró el asegurado con el inss {inss}");
 
             return Json(result);
-        }
-    
+        } 
     }
 }

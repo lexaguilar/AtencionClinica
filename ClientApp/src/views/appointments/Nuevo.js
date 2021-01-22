@@ -11,8 +11,6 @@ import Customer from '../../components/customer';
 import notify from 'devextreme/ui/notify';
 import { estadoAdmision } from '../../data/catalogos';
 import { _path } from "../../data/headerNavigation";
-import Box, { Item } from 'devextreme-react/box';
-import Calendar from 'devextreme-react/calendar';
 import { appointmentDefault } from '../../data/appointment';
 import { useDispatch, useSelector } from 'react-redux'
 import { clearCustomer } from '../../store/customer/customerReducer';
@@ -20,6 +18,8 @@ import PopupBeneficiary from '../../components/beneficiary/PopupBeneficiary';
 import { getDayInLastWeek, getWeekOfMonth, getWeeksOfMonth } from '../../utils/common';
 import List from 'devextreme-react/list';
 import moment from 'moment';
+import { RadioGroup } from 'devextreme-react/radio-group';
+import CustomCalendar from './CustomCalendar';
 
 const Nuevo = props => {
 
@@ -40,11 +40,9 @@ const Nuevo = props => {
     let refCitas = React.createRef();    
     let hour = null;
 
-    const minDateValue = new Date();
+    const minDateValue = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
     let disabledDates = (data) => data.view === 'month' && isWeekend(data.date);
-    let weeks = getWeeksOfMonth(minDateValue);    
-    let dayInLastWeek = null;
-
+    console.log('init render');
     const guardaCita = () => {
         console.log(appointment);
         let result = refCitas.instance.validate();
@@ -106,23 +104,50 @@ const Nuevo = props => {
                 doctorId : appointment.doctorId, 
                 specialtyId : appointment.specialtyId
             };
+            if(hastAppointment(e.value)){
+                
+                http('appointments/getTimes').asGet(data).then(resp => {
+                    setCitas(resp);
+                });
 
-           http('appointments/getTimes').asGet(data).then(resp => {
-               setCitas(resp);
-            });
+            } else{
+                setCitas([]);
+            }
         }
 
     }
 
     const onValueChangedDoctor = (e) => {
+
         setCitas([]);
-        if(e.value)
+
+        if(e.value){           
+
             http(uri.doctores.times(e.value)).asGet()
             .then(resp => {
                 setTime(resp);
             }).catch(err => {
                 notify(err, 'error')
             });
+            
+        }
+
+    }
+
+    const hastAppointment = date => {
+
+        const dayOfWeek = date.getDay();
+        let regDayOfWeek = /{dayOfWeek}/g;
+        let result = time.days.replace(regDayOfWeek, dayOfWeek);
+
+     
+        const day = date.getDate();
+        let regDay= /{day}/g;
+        result = result.replace(regDay, day);       
+
+        let has = eval(result);
+
+        return has;
 
     }
     
@@ -145,21 +170,36 @@ const Nuevo = props => {
     }
 
     const isWeekend = (date) => {
-        const day = date.getDay();
-        return day === 0 || day === 6;
+        console.log(date);
+        const _day = date.getDay();
+        return _day === 0 || _day === 6;
+
+
         //console.log(date);
         //return false;
         
         
-        // if(!time.doctorId) return false;
+        if(!time.doctorId) return false;
 
-        // const days = date.getDay();
-        // const week = getWeekOfMonth(date);
+        const dayOfWeek = date.getDay();
+        let regDayOfWeek = /{dayOfWeek}/g;
+        let result = time.days.replace(regDayOfWeek, dayOfWeek);
 
-        // let regDays = /{days}/g;
-        // let regWeeks = /{week}/g;
+        /** 
+         inicio 
+        */
+        const day = date.getDate();
+        let regDay= /{days}/g;
+        result = result.replace(regDay, day);
+        // console.log(date);
+        // console.log(result);
+        /** 
+         fin 
+        */
+
+
         // let regLastWeeks = /{lastWeek}/g;
-        // let result = time.days.replace(regDays, days);
+        //result = time.days.replace(regDayOfWeek, dayOfWeek);
 
         // if(time.days.includes('{week}')){
         //     if(dayInLastWeek == null){
@@ -168,7 +208,7 @@ const Nuevo = props => {
         //     result = result.replace(regWeeks, week).replace(regLastWeeks, dayInLastWeek);
         // }
 
-        // let disable = !eval(result);
+        let disable = !eval(result);
 
         // console.log(date);
         // console.log(result);
@@ -176,14 +216,14 @@ const Nuevo = props => {
         // console.log(dayInLastWeek);
         // console.log(disable);
         
-        // return disable;
+        return disable;
     }
 
     const itemRender = (item) => {
         return (
             <div className="citas-lista">              
               <div className="cita-hora">{moment(item.time).format('hh:mm a')}</div>
-              <div className="cita-beneficiary">{item.nombre == '' ? 'Disponible' : `${item.tipo} - ${item.nombre}` }</div>
+              <div className={`cita-beneficiary ${item.nombre == '' ? 'text-green' : ''}`}>{item.nombre == '' ? 'Disponible' : `${item.tipo} - ${item.nombre}` }</div>
             </div>
           );
     }
@@ -193,7 +233,6 @@ const Nuevo = props => {
             hour =new Date(e.addedItems[0].time);
         else
             hour = null;
-        console.log(hour);
     }
 
     const title = 'Citas';
@@ -239,13 +278,23 @@ const Nuevo = props => {
                     <SimpleItem dataField="observation" colSpan={2}>
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
                         <Label text="Observacion" />
-                    </SimpleItem>                   
+                    </SimpleItem>                  
+                    {/* <GroupItem cssClass="second-group" colSpan={2} caption="Calendario">       
+                        <CustomCalendar 
+                            value={appointment.dateAppointment}
+                            onValueChanged = {onValueChangedDateAppointment} 
+                            min = {minDateValue} 
+                            disabledDates = {disabledDates}
+                            doctorId={appointment.doctorId}
+                            specialtyId={appointment.specialtyId}
+                            />
+                    </GroupItem>  */}
                     <SimpleItem dataField="dateAppointment" colSpan={2} editorType="dxCalendar" 
                         editorOptions={{
                             onValueChanged : onValueChangedDateAppointment,      
                             min : minDateValue,
-                            disabledDates : disabledDates,
-                            onOptionChanged : onOptionChanged,
+                            //disabledDates : disabledDates,
+                            //onOptionChanged : onOptionChanged,
                             disabled : !appointment.doctorId || !appointment.specialtyId
                         }} >
                         <Label text="Calendario" />
@@ -259,8 +308,7 @@ const Nuevo = props => {
                             itemRender={itemRender}
                             onSelectionChanged={onOptionChangedHour}
                             >
-                        </List>
-                        
+                        </List>                        
                     </GroupItem>
                 </GroupItem>
             </Form>     

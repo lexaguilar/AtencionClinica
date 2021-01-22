@@ -13,7 +13,7 @@ const Customer = props => {
 
     const { clear } = useSelector(store => store.customerClear);
     
-    const [inss, setInss] = useState('');
+    const [inss, setInss] = useState(null);
     const [custumer, setCustumer] = useState({...custumerDefault});
 
     const buscarAsegurado = e =>{
@@ -46,7 +46,7 @@ const Customer = props => {
     useEffect(()=>{
         
         setCustumer({...custumerDefault});
-        setInss('');
+        setInss(null);
         
     },[clear])
 

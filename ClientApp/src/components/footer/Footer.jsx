@@ -32,7 +32,7 @@ class Footer extends Component {
                             {app.version}
                         </div>
                         <div className="site-footer__payments">
-                        <i class="fa fa-home text-danger"></i> Area : {user.area}
+                            <i className="fa fa-home text-danger"></i> Area : {user.area}
                         </div>
                     </div>
                 </div>
