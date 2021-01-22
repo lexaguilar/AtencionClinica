@@ -118,26 +118,26 @@ const Beneficiarios = () => {
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="inss"  width={100} />
                 <Column dataField="relationshipId" width={120} caption="Parentesco" setCellValue={setCellValue}>
-                    <Lookup disabled={true} dataSource={createStore('Relationship')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'relationship'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="identification" width={140} />
                 <Column dataField="firstName" caption="Nombre"  />
                 <Column dataField="lastName" caption="Apellidos"  />
                 <Column dataField="birthDate" caption="Fecha Nac." width={140} dataType="date"  format={formatDate}/>
                 <Column dataField="sexId" width={100} caption="Sexo">
-                    <Lookup disabled={true} dataSource={createStoreLocal({ name: 'sex', local: storeTransient })} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'sex'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="phoneNumber"  visible={false} caption="Telefono" width={150} />
                 <Column dataField="cellNumber"  visible={false} caption="Celular" width={150} />
                 <Column dataField="regionId"  visible={false} width={100} caption="Departamento">
-                    <Lookup disabled={true} dataSource={createStore('Region')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'region'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="cityId"  visible={false} width={100} caption="Ciudad">
-                    <Lookup disabled={true} dataSource={createStore('City')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'city'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="email"  visible={false} caption="Correo"/>
                 <Column dataField="beneficiaryStatusId" width={100} caption="Estado">
-                    <Lookup disabled={true} dataSource={createStore('BeneficiaryStatus')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'beneficiaryStatus'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
                 <Editing

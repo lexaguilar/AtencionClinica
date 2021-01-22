@@ -31,11 +31,6 @@ const Nuevo = props => {
 
     let refAdmision = React.createRef();
 
-    const storeTransient = {
-        areas: [],
-        specialties: [],
-    }
-
     const guardarAdmision = () => {
         let result = refAdmision.instance.validate();
         if (result.isValid) {
@@ -89,18 +84,19 @@ const Nuevo = props => {
                 <GroupItem cssClass="second-group" colCount={4}>
                     <SimpleItem dataField="beneficiaryId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'beneficiary', local: storeTransient, url: uri.beneficarios(customer.inss).getAsCatalog }),
+                            dataSource: customer.inss == '' ? [] : createStoreLocal({ name: 'beneficiary', url: uri.beneficarios(customer.inss).getAsCatalog }),
                             valueExpr: "id",
                             displayExpr: item => item ? `${item.relationship} - ${item.name}` : '',
                             searchEnabled: true,
                             onValueChanged: onValueChanged,
+                            noDataText : customer.inss == ''? 'Busque un asegurado primero' : 'No hay beneficiarios agregado'
                         }} >
                         <Label text="Beneficiario" />
                         <RequiredRule message="Seleccione el beneficiario" />
                     </SimpleItem>
                     <SimpleItem dataField="areaId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'area', local: storeTransient }),
+                            dataSource: createStoreLocal({ name: 'area' }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Area" />
@@ -108,7 +104,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="specialtyId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'specialty', local: storeTransient }),
+                            dataSource: createStoreLocal({ name: 'specialty' }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Especialidad" />

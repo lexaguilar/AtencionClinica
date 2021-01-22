@@ -116,7 +116,7 @@ namespace AtencionClinica.Controllers
             && x.Active);
             
             if(existe)
-                return BadRequest($"El beneficiario ya tiene una cita activa el dia {appointment.DateAppointment.ToString("dd/mm/yyyy")}");
+                return BadRequest($"El beneficiario ya tiene una cita activa el dia {appointment.DateAppointment.ToString("dd/MM/yyyy")}");
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == appointment.BeneficiaryId);
             

@@ -1,5 +1,7 @@
 // react
 import React from 'react';
+import { useDispatch } from "react-redux";
+import { getCatalogs } from '../../store/catalogs/catalogReducer';
 
 // application
 import NavPanel from './NavPanel';
@@ -7,6 +9,10 @@ import Topbar from './Topbar';
 
 
 function Header(props) {
+    
+    const dispatch = useDispatch();
+    dispatch(getCatalogs());
+
     const { layout } = props;    
 
     return (

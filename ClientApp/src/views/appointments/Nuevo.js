@@ -40,11 +40,6 @@ const Nuevo = props => {
     let refCitas = React.createRef();    
     let hour = null;
 
-    const storeTransient = {
-        areas: [],
-        specialties: [],
-    }
-
     const minDateValue = new Date();
     let disabledDates = (data) => data.view === 'month' && isWeekend(data.date);
     let weeks = getWeeksOfMonth(minDateValue);    
@@ -214,17 +209,18 @@ const Nuevo = props => {
                 <GroupItem cssClass="second-group" colCount={4}>
                     <SimpleItem dataField="beneficiaryId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'beneficiary', local: storeTransient, url: uri.beneficarios(customer.inss).getAsCatalog }),
+                            dataSource: customer.inss == '' ? [] : createStoreLocal({ name: 'beneficiary', url: uri.beneficarios(customer.inss).getAsCatalog }),
                             valueExpr: "id",
                             displayExpr: item => item ? `${item.relationship} - ${item.name}` : '',
                             searchEnabled: true,
+                            noDataText : customer.inss == ''? 'Busque un asegurado primero' : 'No hay beneficiarios agregado'
                         }} >
                         <Label text="Beneficiario" />
                         <RequiredRule message="Seleccione el beneficiario" />
                     </SimpleItem>                  
                     <SimpleItem dataField="specialtyId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'specialty', local: storeTransient }),
+                            dataSource: createStoreLocal({ name: 'specialty'}),
                             ...editorOptionsSelect,
                             onValueChanged: onValueChangedSpecialty,
                         }} >
@@ -233,7 +229,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="doctorId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'doctor', local: storeTransient, url: uri.doctores.forSpecialty(appointment.specialtyId) }),
+                            dataSource: createStoreLocal({ name: 'doctor', url: uri.doctores.forSpecialty(appointment.specialtyId) }),
                             ...editorOptionsSelect,
                             onValueChanged:onValueChangedDoctor
                         }} >

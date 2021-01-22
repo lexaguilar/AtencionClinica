@@ -1,7 +1,7 @@
 import { GET_APPINFO, UPDATE_APPINFO } from './appActionTypes';
 import { createAction } from 'redux-actions';
-import http from '../../utils/http'
-import { handleError } from '../errorHandler/errorActions';
+import http from '../../utils/http';
+
 
 const getAppInfoSuccess = createAction(GET_APPINFO);
 export const getAppInfo = () => dispatch => {

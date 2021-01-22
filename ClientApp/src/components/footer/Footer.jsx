@@ -11,7 +11,7 @@ class Footer extends Component {
 
     componentDidMount() {
         let { getAppInfo, getUser } = this.props;
-        getAppInfo();
+        getAppInfo();        
         getUser();
     }
 

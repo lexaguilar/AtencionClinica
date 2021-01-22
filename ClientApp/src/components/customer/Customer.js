@@ -41,11 +41,6 @@ const Customer = props => {
         
     }
 
-    const storeTransient = {
-        areas: [],
-        specialties: [],
-    }  
-
     const onValueChanged = e =>  setInss(e.value);
 
     useEffect(()=>{
@@ -80,14 +75,14 @@ const Customer = props => {
                     </SimpleItem>                 
                     <SimpleItem dataField="customerTypeId" editorType="dxSelectBox"
                         editorOptions={{                           
-                            dataSource: createStoreLocal({ name: 'CustomerType', local: storeTransient }),
+                            dataSource: createStoreLocal({ name: 'customerType' }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Tipo" />
                     </SimpleItem>
                     <SimpleItem dataField="customerStatusId" editorType="dxSelectBox" cssClass={cssClasses[custumer.customerStatusId]}
                         editorOptions={{                           
-                            dataSource: createStoreLocal({ name: 'customerStatus', local: storeTransient }),    
+                            dataSource: createStoreLocal({ name: 'customerStatus' }),    
                             ...editorOptionsSelect
                         }} >
                         <Label text="Estado" />

@@ -25,11 +25,7 @@ const Nuevo = props => {
     const dispatch = useDispatch();
     const { open } = useSelector(store => store.subsidio);
 
-    let refSubsidy = React.createRef();
-    const storeTransient = {
-        areas: [],
-        specialties: [],
-    }  
+    let refSubsidy = React.createRef(); 
 
     const closeDialog = ( load ) => {
         setClear(!clear);
@@ -113,11 +109,11 @@ const Nuevo = props => {
                         <GroupItem colSpan={2} colCount={2}>
                             <SimpleItem dataField="beneficiaryId" editorType="dxSelectBox" colSpan={2}
                                 editorOptions={{                            
-                                    dataSource: createStoreLocal({ name: 'beneficiary', local: storeTransient, url : uri.beneficarios(customer.inss).getAsCatalog }),                            
+                                    dataSource: customer.inss == '' ? [] : createStoreLocal({ name: 'beneficiary', url : uri.beneficarios(customer.inss).getAsCatalog }),                            
                                     valueExpr: "id",
                                     displayExpr: item => item ? `${item.relationship} - ${item.name}` : '',
-                                    searchEnabled: true
-                                    
+                                    searchEnabled: true,
+                                    noDataText : customer.inss == ''? 'Busque un asegurado primero' : 'No hay beneficiarios agregado'
                                 }} >
                                 <Label text="Beneficiario" />
                                 <RequiredRule message="Seleccione el beneficiario" />
@@ -146,7 +142,7 @@ const Nuevo = props => {
                             </SimpleItem>
                             <SimpleItem dataField="areaId" editorType="dxSelectBox" colSpan={2}
                                 editorOptions={{
-                                    dataSource: createStoreLocal({ name: 'area', local: storeTransient }),
+                                    dataSource: createStoreLocal({ name: 'area'}),
                                     ...editorOptionsSelect
                                 }} >
                                 <Label text="Area" />
@@ -155,7 +151,7 @@ const Nuevo = props => {
                         
                             <SimpleItem dataField="doctorId" editorType="dxSelectBox" colSpan={2} 
                                 editorOptions={{
-                                    dataSource: createStoreLocal({ name: 'doctor', local: storeTransient }),
+                                    dataSource: createStoreLocal({ name: 'doctor' }),
                                     ...{...editorOptionsSelect, width: '100%'}
                                 }} >
                                 <Label text="Doctor" />

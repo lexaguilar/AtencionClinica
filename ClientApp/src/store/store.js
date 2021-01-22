@@ -23,7 +23,7 @@ function load() {
     return state || undefined;
 }
 
-const store = createStore(rootReducer, load(), compose(
+const store = createStore(rootReducer, undefined, compose(
     applyMiddleware(thunk),
     // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ));

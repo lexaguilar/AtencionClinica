@@ -15,6 +15,7 @@ import subsidioReducer from './subsidio';
 import dialogReducer from './dialog';
 import customerClearReducer from './customer';
 import beneficiaryDialogReducer from './beneficiary';
+import catalogReducer from './catalogs';
 
 
 export default combineReducers({
@@ -32,4 +33,5 @@ export default combineReducers({
     dialog: dialogReducer,
     customerClear : customerClearReducer,
     beneficiaryDialog : beneficiaryDialogReducer,
+    catalog : catalogReducer,
 });

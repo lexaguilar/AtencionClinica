@@ -11,7 +11,7 @@ const app = {
 export default handleActions({
     [GET_APPINFO]: (state, action) => {
         return action.payload
-    },
+    },   
     [UPDATE_APPINFO]: (state, action) => {
         return action.payload
     }
