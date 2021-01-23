@@ -5,6 +5,25 @@ export const _path = {
 
 const menu = [{
     layout: 'clinica',
+    title: 'Caja',
+    url: `${_path.CLINICA}/facturas`,
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Nueva', url: `${_path.CLINICA}/facturas/nuevo` },
+            { title: 'Facturas', url: `${_path.CLINICA}/facturas` },
+            { 
+                title: 'Reportes', 
+                url: ``,
+                submenu : [
+                    { title: 'Reporte 1', url: `${_path.CLINICA}/admision/reportes/1` },
+                    { title: 'Reporte 2', url: `${_path.CLINICA}/admision/reportes/2` },
+                ]
+            },   
+        ],
+    },
+},{
+    layout: 'clinica',
     title: 'Admision',
     url: `${_path.CLINICA}/admisiones`,
     submenu: {
@@ -44,7 +63,14 @@ const menu = [{
 },{
     layout: 'clinica',
     title: 'Servicios',
-    url: `${_path.CLINICA}/servicios`
+    url: `${_path.CLINICA}/servicios`,
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Asegurados', url: `${_path.CLINICA}/servicios` },
+            { title: 'Privados', url: `${_path.CLINICA}/servicios-privados` },           
+        ],
+    },
 },{
     layout: 'clinica',
     title: 'Subsidios',
@@ -64,11 +90,12 @@ const menu = [{
             columns: [{
                 size: 6,
                 links: [{
-                    title: 'Laboratorio',
+                    title: 'Procedimientos',
                     url: '',
                     links: [
-                        { title: 'Procedimientos', url: `${_path.CLINICA}/proveedores` },
-                        { title: 'Examenes', url: `${_path.CLINICA}/agenda/vendedores` },
+                        { title: 'Procedimientos', url: `${_path.CLINICA}/procedimeintos` },
+                        { title: 'Perfiles', url: `${_path.CLINICA}/perfiles/procedimeintos` },
+                        { title: 'Procedimientos por area', url: `${_path.CLINICA}/area/procedimeintos` },
                     ],
                 },]
             },{
@@ -79,7 +106,7 @@ const menu = [{
                     links: [
                         { title: 'Percapita', url: `${_path.CLINICA}/config/percapitas` },
                         { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiarios` },
-                        { title: 'Privados', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Privados', url: `${_path.CLINICA}/privados` },
                         { title: 'Convenios', url: `${_path.CLINICA}/actividades` },
                     ],
                 },]

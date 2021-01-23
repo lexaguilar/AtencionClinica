@@ -26,6 +26,9 @@ import Doctores from '../views/doctores';
 import Appointments from '../views/appointments';
 import * as AppointmentsNuevo from '../views/appointments/Nuevo';
 import Paciente from './search/Paciente';
+import Bills, { BillNuevo } from '../views/bills';
+import Privados from '../views/privados';
+import Procedimientos from '../views/procedimientos/Procedimientos';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -63,11 +66,15 @@ function Layout(props) {
                         <PrivateRoute exact path={`${_path.CLINICA}/citas`} component={Appointments} />                         
                         <PrivateRoute path={`${_path.CLINICA}/citas/nuevo`} component={AppointmentsNuevo.default} />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/beneficiarios`} component={Beneficiarios} />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/privados`} component={Privados} />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/servicios`} component={Follows} />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/subsidios`} component={Subsidies} />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/doctores`} component={Doctores} />   
                         <PrivateRoute exact path={`${_path.CLINICA}/paciente/:id`} component={Paciente} />                      
                         {PrintCatalogos}
+                        <PrivateRoute exact path={`${_path.CLINICA}/facturas`} component={Bills} />                         
+                        <PrivateRoute path={`${_path.CLINICA}/facturas/nuevo`} component={BillNuevo} />    
+                        <PrivateRoute exact path={`${_path.CLINICA}/procedimeintos`} component={Procedimientos} />   
                     </Switch>
                 </div>
 

@@ -85,28 +85,37 @@ const store =
             },
             insert: (data) => {
                 
-                return new Promise(resolve =>
+                return new Promise((resolve,reject) =>
                     http(model.uri.insert).asPost(data).then(result => {
                         notify(model.msgInserted);
                         resolve(result);
+                    }).catch(err => {
+                        notify(err, 'error');
+                        reject(err);                        
                     })
                 )
             },
             update: (data, dataModificada) => {
 
-                return new Promise(resolve =>
+                return new Promise((resolve,reject) =>
                     http(model.uri.insert).asPost({...data, ...dataModificada }).then(result => {
                         notify(model.msgUpdated);
                         resolve(result);
+                    }).catch(err => {
+                        notify(err, 'error');
+                        reject(err);                        
                     })
 
                 )
             },
             remove: catalogo => {
-                return new Promise(resolve =>
+                return new Promise((resolve,reject) =>
                     http(model.uri.remove(catalogo.id)).asGet().then(result => {
                         notify(model.msgDeleted, 'error');
                         resolve(result);
+                    }).catch(err => {
+                        notify(err, 'error');
+                        reject(err);                        
                     })
                 )
             },

@@ -14,92 +14,50 @@ import {
     Form as FromGrid, 
     RequiredRule,
     StringLengthRule} from 'devextreme-react/data-grid';
-import { Item } from 'devextreme-react/form';
+import { EmptyItem, Item } from 'devextreme-react/form';
 import { store } from '../../services/store';
 import { createStore,createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import Customer from '../../components/customer';
 import { estadoAdmision,relationships,estadoBeneficiario } from '../../data/catalogos';
 import http from '../../utils/http';
 import { formatDate } from '../../data/app';
 
-const title = 'Beneficiarios';
 
-const Beneficiarios = () => {
-    const [customer, setCustomer] = useState({inss : 0,status : false ,firstName: "", lastName: ""});     
-    const [percapitaInfo, setPercapitaInfo] = useState({identification : '', address : '' ,sexId: "", cityId: ""});     
 
-    let dataGrid = React.createRef();
+const Privados = () => {
 
-    const valueChanged = data => {
-      
-        setCustomer({
-            inss : data.inss,
-            status : data.customerStatusId == estadoAdmision.activo,
-            firstName : data.firstName,
-            lastName : data.lastName
-        });
-
-        http(`percapitas/get/inss/${data.inss}`).asGet().then(resp => {
-            setPercapitaInfo({...resp})
-        });
-
-    } 
-
-    const onInitNewRow = (e) => {  
-        e.data.inss = customer.inss;  
-        e.data.beneficiaryStatusId = estadoBeneficiario.activo;
-    } 
-
-    const setCellValue = (newData, value, currentRowData) => {
-
-        newData.relationshipId = value;
-        if(value == relationships.asegurado)
-        {        
- 
-            newData.firstName = customer.firstName;
-            newData.lastName = customer.lastName;  
-
-            newData.sexId = percapitaInfo.sexId;     
-            newData.address = percapitaInfo.address;     
-            newData.identification = percapitaInfo.identification;     
-            newData.cityId = percapitaInfo.cityId;           
-            
-            
-        }
-    }
-
+    let dataGrid = React.createRef();    
+    
     const onToolbarPreparing = (e) => {
-        if(customer.status)
-            e.toolbarOptions.items.unshift({
-                location: 'before',
-                widget: 'dxButton',
-                options: {
-                    //width: 136,
-                    text: 'Agregar beneficiario',
-                    icon:'plus',
-                    onClick: () =>  dataGrid.instance.addRow()
-                }
-            });
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                //width: 136,
+                text: 'Agregar paciente',
+                icon:'plus',
+                onClick: () =>  dataGrid.instance.addRow()
+            }
+        });
     }
+
+    const title = 'Pacientes privados';
 
     return (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />           
-            <Customer valueChanged={valueChanged} ></Customer>
             <DataGrid id="gridContainer"
                 ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
-                dataSource={store({ uri: uri.beneficarios(customer.inss) })}
+                dataSource={store({ uri: uri.privateCustomers(), remoteOperations: true })}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-                noDataText='No se encontró ningun beneficiario'
-                onInitNewRow={onInitNewRow}
+                noDataText='No se encontró ningun paciente privado'
                 onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={20} />
@@ -111,10 +69,7 @@ const Beneficiarios = () => {
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="inss"  width={100} />
-                <Column dataField="relationshipId" width={120} caption="Parentesco" setCellValue={setCellValue}>
-                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'relationship'})} valueExpr="id" displayExpr="name" />
-                </Column> 
+                <Column dataField="id"  width={80} />
                 <Column dataField="identification" width={140} />
                 <Column dataField="firstName" caption="Nombre"  />
                 <Column dataField="lastName" caption="Apellidos"  />
@@ -131,25 +86,23 @@ const Beneficiarios = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'city'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="email"  visible={false} caption="Correo"/>
-                <Column dataField="beneficiaryStatusId" width={100} caption="Estado">
-                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'beneficiaryStatus'})} valueExpr="id" displayExpr="name" />
+                <Column dataField="privateCustomerStatusId" width={100} caption="Estado">
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'privateCustomerStat'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
                 <Editing
                     mode="popup"
-                    allowUpdating={customer.status}                       
+                    allowUpdating={true}                       
                     useIcons={true}
                 >
                     <Popup title={title} showTitle={true} width={850} height={530}>
 
                     </Popup>
-                    <FromGrid>
-                        <Item dataField="relationshipId" >
-                            <RequiredRule message="El campo es requerido" />
-                        </Item>
+                    <FromGrid>                      
                         <Item dataField="identification" >
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
+                        <EmptyItem/>
                         <Item dataField="firstName" >
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
@@ -179,9 +132,10 @@ const Beneficiarios = () => {
                         <Item dataField="email" >
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
-                        <Item dataField="beneficiaryStatusId" >                            
+                        <Item dataField="privateCustomerStatusId" >                            
                             <RequiredRule message="El campo es requerido" />
-                        </Item>    
+                        </Item>   
+                         
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />
@@ -193,4 +147,4 @@ const Beneficiarios = () => {
     );
 }
 
-export default Beneficiarios;
+export default Privados;

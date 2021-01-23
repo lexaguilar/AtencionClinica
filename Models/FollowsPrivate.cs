@@ -5,24 +5,18 @@ using System.Collections.Generic;
 
 namespace AtencionClinica.Models
 {
-    public partial class Follow
+    public partial class FollowsPrivate
     {
-        public Follow()
-        {
-            WorkOrders = new HashSet<WorkOrder>();
-        }
-
         public int Id { get; set; }
-        public int AdmissionId { get; set; }
+        public int BillId { get; set; }
         public int AreaSourceId { get; set; }
         public int AreaTargetId { get; set; }
         public string Observation { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
 
-        public virtual Admission Admission { get; set; }
         public virtual Area AreaSource { get; set; }
         public virtual Area AreaTarget { get; set; }
-        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
+        public virtual Bill Bill { get; set; }
     }
 }

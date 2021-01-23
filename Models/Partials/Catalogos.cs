@@ -11,4 +11,7 @@ namespace AtencionClinica.Models
     public partial class Cie10 : ICatalogo {  }
     public partial class Sex : ICatalogo {  }
     public partial class Doctor : ICatalogo {  }
+    public partial class PrivateCustomerStat : ICatalogo {  }
+    public partial class BillType : ICatalogo {  }
+    public partial class Service : ICatalogo {  }
 }

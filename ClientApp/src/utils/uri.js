@@ -3,6 +3,7 @@ import { createProxy, createProxyBase } from "./proxy";
 const uri = {
     appointments : createProxyBase('appointments'),
     admisions : createProxyBase('admisions'),
+    bill : createProxyBase('bill'),
     areas : createProxyBase('areas'),
     doctores : createProxyBase('doctores'),
     compras: createProxyBase('compras'),
@@ -11,8 +12,13 @@ const uri = {
     file: createProxy('', 'percapitas/post/file'),
     subsidies: createProxyBase('subsidies'),
     cie10: createProxyBase('cie10'),
+    services: createProxyBase('services'),
 };
-
+uri.privateCustomers = () => {
+    let urls = createProxyBase('privateCustomers');
+    urls.getAsCatalog = `privateCustomers/get/catalog`
+    return urls;
+}
 uri.doctores.forSpecialty = specialtyId => `doctores/specialties/${specialtyId}`;
 uri.doctores.times = doctorId => `doctores/${doctorId}/times`;
 
