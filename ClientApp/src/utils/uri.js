@@ -5,7 +5,9 @@ const uri = {
     admisions : createProxyBase('admisions'),
     bill : createProxyBase('bill'),
     areas : createProxyBase('areas'),
+    areaServices : areaId => createProxyBase(`area/${areaId}/services`),
     doctores : createProxyBase('doctores'),
+    doctoresTimes : createProxyBase('doctoresTimes'),
     compras: createProxyBase('compras'),
     especialidades : createProxyBase('especialidades'),
     estados: createProxyBase('estados'),
@@ -13,12 +15,14 @@ const uri = {
     subsidies: createProxyBase('subsidies'),
     cie10: createProxyBase('cie10'),
     services: createProxyBase('services'),
+
 };
 uri.privateCustomers = () => {
     let urls = createProxyBase('privateCustomers');
     urls.getAsCatalog = `privateCustomers/get/catalog`
     return urls;
 }
+
 uri.doctores.forSpecialty = specialtyId => `doctores/specialties/${specialtyId}`;
 uri.doctores.times = doctorId => `doctores/${doctorId}/times`;
 
@@ -28,11 +32,7 @@ uri.beneficarios = inss => {
     return urls;
 };
 
-
-uri.follows = areaId => {
-    let urls = createProxy(`follows/get/${areaId}`,`follows/post`);
-    return urls;
-};
+uri.follows = areaId =>  createProxy(`follows/get/${areaId}`,`follows/post`);
 
 uri.account = 'account/auth';
 

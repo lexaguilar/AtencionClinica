@@ -36,6 +36,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<DoctorTime> DoctorTimes { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
         public virtual DbSet<FollowsPrivate> FollowsPrivates { get; set; }
+        public virtual DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<Percapita> Percapitas { get; set; }
         public virtual DbSet<PrivateCustomer> PrivateCustomers { get; set; }
         public virtual DbSet<PrivateCustomerStat> PrivateCustomerStats { get; set; }
@@ -642,6 +643,20 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.BillId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FollowsPrivates_Bills");
+            });
+
+            modelBuilder.Entity<Parameter>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Percapita>(entity =>

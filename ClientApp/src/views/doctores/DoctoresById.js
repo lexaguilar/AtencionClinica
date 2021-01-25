@@ -20,10 +20,11 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
+import { formatDateTime } from '../../data/app';
 
-const Doctores = (props) => {
+const DoctoresById = () => {
 
-    const title = 'Doctores';
+    const title = 'Horario de Doctores';
 
     let dataGrid = React.createRef();
 
@@ -36,14 +37,6 @@ const Doctores = (props) => {
                 icon:'plus',
                 onClick: () =>  dataGrid.instance.addRow()
             }
-        },{
-            location: 'before',
-            widget: 'dxButton',
-            options: {
-                text: 'Ver horarios',
-                icon:'far fa-calendar-alt',
-                onClick: () =>  props.history.push({ pathname : '/clinica/doctores/horarios' })
-            }
         });
     }  
 
@@ -54,7 +47,7 @@ const Doctores = (props) => {
         <DataGrid id="gridContainer"
             ref={(ref) => dataGrid = ref}
             selection={{ mode: 'single' }}
-            dataSource={store({uri : uri.doctores})}
+            dataSource={store({uri : uri.doctoresTimes})}
             showBorders={true}
             showRowLines={true}
             allowColumnResizing={true}
@@ -70,45 +63,51 @@ const Doctores = (props) => {
             <HeaderFilter visible={true} />
             <ColumnChooser enabled={true} />
             <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-            <Column dataField="name" caption='Nombre' />
-            <Column dataField="minsaCode" caption='Cod Minsa' />
-            <Column dataField="specialtyId" width={150} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
+            <Column dataField="doctorId" width={180} caption="Doctor">              
+                <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
             </Column> 
-            <Column dataField="phoneNumber" caption='Telefono' />
-            <Column dataField="address" caption='Direccion' />
+            <Column dataField="days" caption='Regla de dias' >
+            </Column>
+            <Column dataField="startHour" caption='Inicio' width={120} dataType ='datetime' format="hh:mm a">
+            </Column>
+            <Column dataField="countBeneficiarios" width={150} caption='Pacientes atendidos' >
+            </Column>
+            <Column dataField="timeMinutesForBeneficiary" width={150} caption='Tiempo de atencion' >
+            </Column>
             <Editing
                 mode="popup"
                 allowUpdating={true}
                 allowDeleting={true}
                 useIcons={true}
-            >
-                <Popup title={title} showTitle={true} width={500} height={380}>
-                    
+            >       
+                <Popup title={title} showTitle={true} width={450} height={400}>                    
                 </Popup>
                 <Form>
-                    <Item  dataField="name" colSpan={2}>
+                    <Item dataField="doctorId" colSpan={2}>
                         <RequiredRule message="El campo es requerido"/>
-                        <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
+                        <StringLengthRule max={50} message="Máximo de caracteres 50"/>
                     </Item>
-                    <Item  dataField="specialtyId" colSpan={2}>
+                    <Item  dataField="days" colSpan={2}>
                         <RequiredRule message="El campo es requerido"/>
                     </Item>
-                    <Item  dataField="minsaCode" >
+                    <Item  dataField="startHour" editorType="dxDateBox" editorOptions={{
+                        type:"time",
+                        displayFormat: 'hh:mm a'
+                    }} colSpan={2}>
                         <RequiredRule message="El campo es requerido"/>
-                        <StringLengthRule max={10} message="Máximo de caracteres 10"/>
-                    </Item>                    
-                    <Item  dataField="phoneNumber" >
-                        <StringLengthRule max={10} message="Máximo de caracteres 10"/>
                     </Item>
-                    <Item  dataField="address" editorType="dxTextArea" colSpan={2}>
-                        <StringLengthRule max={250} message="Máximo de caracteres 250"/>
+                    <Item  dataField="countBeneficiarios" colSpan={2}>
+                        <RequiredRule message="El campo es requerido"/>
                     </Item>
-                </Form>
+                    <Item  dataField="timeMinutesForBeneficiary" colSpan={2}>
+                        <RequiredRule message="El campo es requerido"/>
+                    </Item>
+                </Form>            
             </Editing>
+
         </DataGrid>
     </div>
     );
 }
 
-export default Doctores;
+export default DoctoresById;

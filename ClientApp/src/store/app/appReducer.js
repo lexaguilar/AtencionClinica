@@ -4,8 +4,7 @@ import { GET_APPINFO, UPDATE_APPINFO } from './appActionTypes'
 const app = {
     name: 'Mi Empresa',
     version: '1.0.0',
-    fullName: 'Mi Empresa',
-
+    fullName: 'Mi Empresa'
 }
 
 export default handleActions({
@@ -15,4 +14,4 @@ export default handleActions({
     [UPDATE_APPINFO]: (state, action) => {
         return action.payload
     }
-}, app)
+}, app);

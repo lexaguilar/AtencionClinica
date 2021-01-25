@@ -23,12 +23,16 @@ import Beneficiarios from '../views/beneficiarios';
 import Follows from '../views/follows';
 import Subsidies from '../views/subsidies';
 import Doctores from '../views/doctores';
+import DoctoresById from '../views/doctores/DoctoresById';
 import Appointments from '../views/appointments';
 import * as AppointmentsNuevo from '../views/appointments/Nuevo';
 import Paciente from './search/Paciente';
 import Bills, { BillNuevo } from '../views/bills';
 import Privados from '../views/privados';
 import Procedimientos from '../views/procedimientos/Procedimientos';
+import ProcedimientosXarea from '../views/procedimientos/ProcedimientosXarea';
+import AreaProcedimientos from '../views/procedimientos/AreaProcedimientos';
+import Parameters from '../views/condig/Parameters';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -70,11 +74,14 @@ function Layout(props) {
                         <PrivateRoute exact path={`${_path.CLINICA}/servicios`} component={Follows} />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/subsidios`} component={Subsidies} />                         
                         <PrivateRoute exact path={`${_path.CLINICA}/doctores`} component={Doctores} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/paciente/:id`} component={Paciente} />                      
+                        <PrivateRoute exact path={`${_path.CLINICA}/doctores/horarios`} component={DoctoresById} />   
+                        <PrivateRoute exact path={`${_path.CLINICA}/paciente/:id`} component={Paciente} />
                         {PrintCatalogos}
                         <PrivateRoute exact path={`${_path.CLINICA}/facturas`} component={Bills} />                         
                         <PrivateRoute path={`${_path.CLINICA}/facturas/nuevo`} component={BillNuevo} />    
-                        <PrivateRoute exact path={`${_path.CLINICA}/procedimeintos`} component={Procedimientos} />   
+                        <PrivateRoute exact path={`${_path.CLINICA}/procedimientos`} component={Procedimientos} />   
+                        <PrivateRoute exact path={`${_path.CLINICA}/area/procedimientos`} component={AreaProcedimientos} />   
+                        <PrivateRoute exact path={`${_path.CLINICA}/config/parameters`} component={Parameters} />   
                     </Switch>
                 </div>
 

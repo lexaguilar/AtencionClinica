@@ -16,7 +16,7 @@ import {
     StringLengthRule} from 'devextreme-react/data-grid';
 import { Item } from 'devextreme-react/form';
 import { store } from '../../services/store';
-import { createStore,createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';

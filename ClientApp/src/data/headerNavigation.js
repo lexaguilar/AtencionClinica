@@ -93,9 +93,9 @@ const menu = [{
                     title: 'Procedimientos',
                     url: '',
                     links: [
-                        { title: 'Procedimientos', url: `${_path.CLINICA}/procedimeintos` },
-                        { title: 'Perfiles', url: `${_path.CLINICA}/perfiles/procedimeintos` },
-                        { title: 'Procedimientos por area', url: `${_path.CLINICA}/area/procedimeintos` },
+                        { title: 'Procedimientos', url: `${_path.CLINICA}/procedimientos` },
+                        { title: 'Procedimientos por area', url: `${_path.CLINICA}/area/procedimientos` },
+                        { title: 'Perfiles', url: `${_path.CLINICA}/perfiles/procedimientos` }
                     ],
                 },]
             },{
@@ -118,6 +118,7 @@ const menu = [{
                     links: [
                         { title: 'Areas', url: `${_path.CLINICA}/areas` },
                         { title: 'Doctores', url: `${_path.CLINICA}/doctores` },
+                        { title: 'Doctores Horario', url: `${_path.CLINICA}/doctores/horarios` },
                         { title: 'Especialidades', url: `${_path.CLINICA}/especialidades` },
                     ],
                 },]
@@ -134,7 +135,8 @@ const menu = [{
         menu: [
             { title: 'Usuarios', url: `${_path.CLINICA}/usuarios` },
             { title: 'Roles', url: `${_path.CLINICA}/roles` },
-            { title: 'Recursos', url: `${_path.CLINICA}/recursos` }
+            { title: 'Recursos', url: `${_path.CLINICA}/recursos` },
+            { title: 'Parametros', url: `${_path.CLINICA}/config/parameters` }
         ],
     },
 }];
