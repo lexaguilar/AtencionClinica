@@ -137,6 +137,7 @@ const Nuevo = props => {
                         <Label text="Paciente" />
                         <RequiredRule message="Seleccione el area" />
                     </SimpleItem>                   
+                    <EmptyItem/>
                     <SimpleItem dataField="billTypeId" editorType="dxSelectBox"
                         editorOptions={{
                             dataSource: createStoreLocal({ name: 'billType' }),
@@ -145,6 +146,7 @@ const Nuevo = props => {
                         <Label text="Tipo Ingreso" />
                         <RequiredRule message="Seleccione la especialidad" />
                     </SimpleItem>
+                    <EmptyItem/>
                     <SimpleItem dataField="areaId" editorType="dxSelectBox"
                         editorOptions={{
                             dataSource: createStoreLocal({ name: 'area' }),
@@ -154,11 +156,12 @@ const Nuevo = props => {
                         <Label text="Area" />
                         <RequiredRule message="Seleccione el area" />
                     </SimpleItem>
-                    <SimpleItem dataField="observation" colSpan={2}>
+                    <EmptyItem/>
+                    <SimpleItem dataField="observation">
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
                         <Label text="Observacion" />
                     </SimpleItem>
-                  
+                    <EmptyItem/>
                     <GroupItem cssClass="second-group" colCount={2}>
                         <DataGrid id="gridContainer"
                             ref={(ref) => dataGrid = ref}

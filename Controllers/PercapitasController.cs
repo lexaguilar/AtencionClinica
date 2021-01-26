@@ -143,7 +143,7 @@ namespace AtencionClinica.Controllers
         {
             var newestDate = new DateTime(year, month, 1).AddMonths(1);
             if (_db.Percapitas.Any(x => x.Year == newestDate.Year && x.Month == newestDate.Month))
-                return BadRequest("No se puede eliminar porque hay un percapita mas reciente p posterior a este");
+                return BadRequest("No se puede eliminar porque hay un percapita mas reciente o posterior a este");
 
             var result = _db.Percapitas.Where(x => x.Year == year && x.Month == month);
             if (result != null)

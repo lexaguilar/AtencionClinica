@@ -56,7 +56,7 @@ const Nuevo = props => {
                     appointment.dateAppointment.getDate(),  
                     hour.getHours(),          
                     hour.getMinutes()          
-                )).format('YYYY-MM-DD hh:mm');
+                )).format('YYYY-MM-DD HH:mm');
                 
                 setLoading(true);
                 http(uri.appointments.insert).asPost(appointment).then(resp => {
