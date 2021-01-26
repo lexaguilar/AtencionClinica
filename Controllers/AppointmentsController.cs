@@ -27,6 +27,12 @@ namespace AtencionClinica.Controllers
              .Where(x => x.Active)          
             .OrderByDescending(x => x.DateAppointment);
 
+            if (values.ContainsKey("id"))
+            {
+                var id = Convert.ToInt32(values["id"]);
+                appointments = appointments.Where(x => x.Id == id);
+            }
+
             if (values.ContainsKey("inss"))
             {
                 var inss = Convert.ToInt32(values["inss"]);
@@ -37,6 +43,12 @@ namespace AtencionClinica.Controllers
             {
                 var doctorId = Convert.ToInt32(values["doctorId"]);
                 appointments = appointments.Where(x => x.DoctorId == doctorId);
+            }
+
+            if (values.ContainsKey("specialtyId"))
+            {
+                var specialtyId = Convert.ToInt32(values["specialtyId"]);
+                appointments = appointments.Where(x => x.SpecialtyId == specialtyId);
             }
 
             if (values.ContainsKey("dateAppointment"))
