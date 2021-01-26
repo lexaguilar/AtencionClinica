@@ -30,6 +30,8 @@ const store =
         const customStore = new CustomStore({
             load: (loadOptions) => {
 
+                console.log(loadOptions);
+
                 let params = {};
                 params.skip = loadOptions.skip || 0;
                 params.take = loadOptions.take || 10;
@@ -40,22 +42,53 @@ const store =
                 if (loadOptions.filter) {
                     if (typeof loadOptions.filter[0] == 'object') {
 
-                        for (var filter in loadOptions.filter) {
-                            if (loadOptions.filter.hasOwnProperty(filter)) {
-                                const element = loadOptions.filter[filter];
-                                if (typeof element == 'object') {
-                                    if (typeof element[0] == 'object') {
-                                        var t = element[0];
-                                        if (!params[t[0]])
-                                            params[t[0]] = t[2];
-                                    } else {
-                                        if (!params[element[0]])
-                                            params[element[0]] = element[2];
-                                    }
+                        let moreParams = {};
 
+                        const dataFilter = filters =>{
+                            
+                            for (var filter in filters) {
+                                if (filters.hasOwnProperty(filter)) {
+
+                                    if(['columnIndex','filterValue'].includes(filter)) continue;
+
+                                    const element = filters[filter]
+                                    
+                                    if(['!=','==','<','>','<=','>=','and','or'].includes(element)) continue;
+                                    
+                                    if (typeof element == 'object') {
+                                        dataFilter(element);
+                                    }else{
+                                        if(moreParams[filters[0]])
+                                        moreParams[`${filters[0]}End` ] = filters[2];
+                                        else
+                                        moreParams[filters[0]] = filters[2];
+                                        break;
+                                    }
                                 }
                             }
-                        }
+
+                        };
+
+                        dataFilter(loadOptions.filter);
+                        
+                        params = { ...params, ...moreParams}
+
+                        // for (var filter in loadOptions.filter) {
+                        //     if (loadOptions.filter.hasOwnProperty(filter)) {
+                        //         const element = loadOptions.filter[filter];
+                        //         if (typeof element == 'object') {
+                        //             if (typeof element[0] == 'object') {
+                        //                 var t = element[0];
+                        //                 if (!params[t[0]])
+                        //                     params[t[0]] = t[2];
+                        //             } else {
+                        //                 if (!params[element[0]])
+                        //                     params[element[0]] = element[2];
+                        //             }
+
+                        //         }
+                        //     }
+                        // }
                     } else {
                         params[loadOptions.filter[0]] = loadOptions.filter[2];
                     }

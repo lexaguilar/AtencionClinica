@@ -42,7 +42,12 @@ namespace AtencionClinica.Controllers
             if (values.ContainsKey("dateAppointment"))
             {
                 var dateAppointment = Convert.ToDateTime(values["dateAppointment"]);
-                appointments = appointments.Where(x => x.DateAppointment > dateAppointment && x.DateAppointment < dateAppointment.AddDays(1));
+                if (values.ContainsKey("dateAppointmentEnd")){
+                    var dateAppointmentEnd = Convert.ToDateTime(values["dateAppointmentEnd"]);
+                    appointments = appointments.Where(x => x.DateAppointment > dateAppointment && x.DateAppointment < dateAppointmentEnd);                
+                }
+                else
+                    appointments = appointments.Where(x => x.DateAppointment > dateAppointment && x.DateAppointment < dateAppointment.AddDays(1));
             }
 
             if (values.ContainsKey("createAt"))

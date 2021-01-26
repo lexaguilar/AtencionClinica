@@ -106,21 +106,21 @@ const Appointments = props => {
             onRowPrepared={onRowPrepared}
             onCellPrepared={onCellPrepared}
             onToolbarPreparing={onToolbarPreparing}
-            onExporting={(e) => onExporting(e, title)}
+            //onExporting={(e) => onExporting(e, title)}
             remoteOperations={{
                 paging: true,
                 filtering: true
             }}
         >
-            <Paging defaultPageSize={20} />
+            <Paging defaultPageSize={5} />
             <Pager
                 showPageSizeSelector={true}
-                allowedPageSizes={[10, 20, 50]}
+                allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
             />
             <FilterRow visible={true} />
             <HeaderFilter visible={true} />
             <ColumnChooser enabled={true} />
-            <Export enabled={true} fileName={title} allowExportSelectedData={true} />
+            <Export enabled={false} fileName={title} allowExportSelectedData={true} />
             <Column dataField="id"  width={100} />
             <Column dataField="inss"  width={110} />
             <Column dataField="tipo"  width={110} />
