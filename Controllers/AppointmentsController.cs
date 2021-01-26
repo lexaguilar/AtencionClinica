@@ -33,6 +33,12 @@ namespace AtencionClinica.Controllers
                 appointments = appointments.Where(x => x.Inss == inss);
             }
 
+            if (values.ContainsKey("doctorId"))
+            {
+                var doctorId = Convert.ToInt32(values["doctorId"]);
+                appointments = appointments.Where(x => x.DoctorId == doctorId);
+            }
+
             if (values.ContainsKey("dateAppointment"))
             {
                 var dateAppointment = Convert.ToDateTime(values["dateAppointment"]);
