@@ -18,6 +18,7 @@ import { store } from '../../services/store';
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
 import { formatDateTime } from '../../data/app';
+import { cellRender, formatToMoney } from '../../utils/common';
 
 const Bills = props => {
 
@@ -102,12 +103,13 @@ const Bills = props => {
                 <Lookup disabled={true} dataSource={createStore('billType')} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="total" width={150}/>
+            <Column dataField="total" width={150} cellRender={cellRender} />
             <Column dataField="createBy" caption='Creado por' width={100} />
             <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180} />
             <Editing
-                    mode="popup"                 
-                    allowDeleting={true}
-                    useIcons={true}
+                mode="popup"                 
+                allowDeleting={true}
+                useIcons={true}
             ></Editing>
         </DataGrid>
     </div>

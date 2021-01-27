@@ -67,7 +67,7 @@ namespace AtencionClinica.Controllers
             
             //admission.Inss = bene.Inss;
             bill.Active = true;
-            bill.Total = 0;
+            bill.Total = bill.BillDetails.Sum(x => x.Total);
             bill.CreateAt = DateTime.Now;
             bill.CreateBy = user.Username;
             _db.Bills.Add(bill);    

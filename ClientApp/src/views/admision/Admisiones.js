@@ -107,7 +107,7 @@ const Admisiones = props => {
             <HeaderFilter visible={true} />
             <ColumnChooser enabled={true} />
             <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-            <Column dataField="id"  width={100} />
+            <Column dataField="id"  width={80} />
             <Column dataField="numberOfDay" width={90} caption='Numero' />
             <Column dataField="inss"  width={110} />
             <Column dataField="tipo"  width={110} />
@@ -120,6 +120,7 @@ const Admisiones = props => {
             </Column> 
             <Column dataField="createBy" caption='Creado por' width={80} />
             <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />
+            <Column dataField="active" caption='Estado' width={80} visible={false} />
             <Editing
                     mode="popup"                 
                     allowDeleting={true}

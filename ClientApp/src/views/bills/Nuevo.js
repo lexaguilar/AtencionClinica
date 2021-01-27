@@ -31,10 +31,10 @@ const Nuevo = props => {
     const guardarFactura = () => {
         let result = refBill.instance.validate();
         if (result.isValid) {
-
+            console.log(procedimientos);
 
             setLoading(true);
-            http(uri.bill.insert).asPost(bill).then(resp => {
+            http(uri.bill.insert).asPost({...bill, billDetails : procedimientos.map(x => ({...x, ...{serviceId : x.id, id: 0}  }))}).then(resp => {
                 if (resp) {
 
                     setLoading(false);
