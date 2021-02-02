@@ -1,6 +1,6 @@
 // react
 import React, { Component } from 'react';
-
+import { withRouter} from 'react-router-dom';
 // application
 import Indicator from './Indicator';
 import { Cross20Svg, Search20Svg } from '../../svg';
@@ -12,6 +12,7 @@ class IndicatorSearch extends Component {
 
         this.input = React.createRef();
         this.indicator = React.createRef();
+        this.onSubmit = this.onSubmit.bind(this); 
     }
 
     handleOpen = () => {
@@ -26,6 +27,11 @@ class IndicatorSearch extends Component {
         }
     };
 
+    onSubmit(e){
+        e.preventDefault();
+        this.props.history.push({ pathname : `/clinica/paciente/${this.input.current.value}`})
+    }
+
     render() {
         const searchIcon = (
             <React.Fragment>
@@ -36,7 +42,7 @@ class IndicatorSearch extends Component {
 
         const searchDropdown = (
             <div className="drop-search">
-                <form action="clinica/paciente" className="drop-search__form">
+                <form action="clinica/paciente" className="drop-search__form" onSubmit={this.onSubmit}>
                     <input
                         ref={this.input}
                         onKeyDown={this.handleKeyDown}
@@ -65,4 +71,4 @@ class IndicatorSearch extends Component {
     }
 }
 
-export default IndicatorSearch;
+export default withRouter(IndicatorSearch);

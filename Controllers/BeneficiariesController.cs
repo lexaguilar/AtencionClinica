@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using NPOI.HSSF.UserModel;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
+
 
 namespace AtencionClinica.Controllers
 {  
@@ -85,6 +82,90 @@ namespace AtencionClinica.Controllers
 
             return Json(beneficiario);
 
+        }
+
+        [Route("api/beneficiaries/search/{id}")]
+        public async Task<IActionResult> Search(string id) 
+        {
+            //Buscar por inss
+            var inss = 0;
+            var success = Int32.TryParse(id, out inss);
+
+            if(success){
+
+                var resultInss = _db.Beneficiaries
+                .Include(x => x.Relationship)
+                .Include(x => x.Sex)
+                .Include(x => x.BeneficiaryStatus)
+                .Where(x => x.Inss == inss)
+                .Select(x => new {
+                    inss=x.Inss,
+                    sex = x.Sex.Name,
+                    relationship = x.Relationship.Name,
+                    identification = x.Identification,  
+                    x.FirstName,
+                    x.LastName,
+                    x.BirthDate,
+                    x.PhoneNumber,
+                    x.CellNumber,
+                    x.Email,
+                    x.Address,
+                    beneficiaryStatus = x.BeneficiaryStatus.Name
+                });
+
+                return Json(resultInss);
+            }
+
+
+            //Buscar por cédula
+            var reg = new Regex(@"\d{3}?-");
+
+            if(reg.IsMatch(id))
+            {
+                var result2 = _db.Beneficiaries
+                .Include(x => x.Relationship)
+                .Include(x => x.Sex)
+                .Include(x => x.BeneficiaryStatus)
+                .Where(x => x.Identification.StartsWith(id))
+                .Select(x => new {
+                    inss=x.Inss,
+                    sex = x.Sex.Name,
+                    relationship = x.Relationship.Name,
+                    identification = x.Identification,  
+                    x.FirstName,
+                    x.LastName,
+                    x.BirthDate,
+                    x.PhoneNumber,
+                    x.CellNumber,
+                    x.Email,
+                    x.Address,
+                    beneficiaryStatus = x.BeneficiaryStatus.Name
+                });
+                return Json(result2);
+            }
+
+            //Buscar por nombre
+
+            var result = _db.Beneficiaries
+            .Include(x => x.Relationship)
+            .Include(x => x.Sex)
+            .Include(x => x.BeneficiaryStatus)
+            .Where(x => x.FirstName.StartsWith(id) || x.LastName.StartsWith(id))
+            .Select(x => new {
+                    inss=x.Inss,
+                    sex = x.Sex.Name,
+                    relationship = x.Relationship.Name,
+                    identification = x.Identification,  
+                    x.FirstName,
+                    x.LastName,
+                    x.BirthDate,
+                    x.PhoneNumber,
+                    x.CellNumber,
+                    x.Email,
+                    x.Address,
+                    beneficiaryStatus = x.BeneficiaryStatus.Name
+                });
+            return Json(result);
         }
     }
 }
