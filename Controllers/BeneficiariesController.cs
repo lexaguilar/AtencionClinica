@@ -113,7 +113,8 @@ namespace AtencionClinica.Controllers
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
 
-                return Json(resultInss);
+
+                return Json(await resultInss.ToArrayAsync());
             }
 
 
@@ -122,7 +123,7 @@ namespace AtencionClinica.Controllers
 
             if(reg.IsMatch(id))
             {
-                var result2 = _db.Beneficiaries
+                var resultCedula = _db.Beneficiaries
                 .Include(x => x.Relationship)
                 .Include(x => x.Sex)
                 .Include(x => x.BeneficiaryStatus)
@@ -141,7 +142,7 @@ namespace AtencionClinica.Controllers
                     x.Address,
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
-                return Json(result2);
+                return Json(await resultCedula.ToArrayAsync());
             }
 
             //Buscar por nombre
@@ -165,7 +166,7 @@ namespace AtencionClinica.Controllers
                     x.Address,
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
-            return Json(result);
+            return Json(await result.ToArrayAsync());
         }
     }
 }
