@@ -51,14 +51,14 @@ const Bills = props => {
 
     const onRowPrepared = (e) => {
         if (e.rowType == 'data') {
-            console.log(e);
             if (!e.data.active) 
                 e.rowElement.classList.add('no-activo');
             
         }
     }
 
-    const title = 'Facturas'
+    const title = 'Facturas';
+
     return (
         <div className="container">
         <Title title={title}/>
