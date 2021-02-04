@@ -19,6 +19,7 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
 import { formatDateTime } from '../../data/app';
 import { cellRender, formatToMoney } from '../../utils/common';
+import urlReport from '../../services/reportServices';
 
 const Bills = props => {
 
@@ -35,9 +36,12 @@ const Bills = props => {
             if(e.rowIndex >= 0)
                 e.items.push({
 
-                    text: 'Re-imprimir ticket',
+                    text: 'Re-imprimir factura',
                     icon : 'print',
-                    onItemClick: () => 0
+                    onItemClick: () => {
+                        const report = urlReport();
+                        report.print(`${report.billTicket(e.row.data.id)}`);
+                    }
                     
                 },{
 

@@ -18,6 +18,7 @@ import { store } from '../../services/store';
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
 import { formatDateTime } from '../../data/app';
+import urlReport from '../../services/reportServices';
 
 const Admisiones = props => {
 
@@ -36,7 +37,10 @@ const Admisiones = props => {
 
                     text: 'Re-imprimir ticket admision',
                     icon : 'print',
-                    onItemClick: () => 0
+                    onItemClick: () => {
+                        const report = urlReport();
+                        report.print(`${report.admisionTicket(e.row.data.id)}`);
+                    }
                     
                 },{
 

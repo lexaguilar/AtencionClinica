@@ -15,11 +15,12 @@ import PopupPrivado from '../../components/beneficiary/PopupPrivado';
 import DataSource from "devextreme/data/data_source";
 import DataGrid, { Column, Editing, Lookup, Summary, TotalItem} from 'devextreme-react/data-grid';
 import { cellRender, cellRenderBold, formatToMoney } from '../../utils/common';
+import urlReport from '../../services/reportServices';
 
 const Nuevo = props => {
 
     const dispatch = useDispatch();
-
+    
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState({...billDefault});
     const [procedimientos, setProcedimientos] = useState([]);
@@ -40,7 +41,10 @@ const Nuevo = props => {
                     setLoading(false);
                     notify(`Factura ${resp.id} creada correctamente`);
 
-                    setBill({...billDefault});                   
+                    setBill({...billDefault});      
+                    
+                    const report = urlReport();
+                    report.print(`${report.billTicket(resp.id)}`);
 
                 }
             }).catch(err => {

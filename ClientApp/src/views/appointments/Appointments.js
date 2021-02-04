@@ -19,6 +19,7 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
 import onExporting from '../../components/grids/Importer';
 import { formatDateTime } from '../../data/app';
+import urlReport from '../../services/reportServices';
 
 const Appointments = props => {
 
@@ -35,9 +36,12 @@ const Appointments = props => {
             if(e.rowIndex >= 0)
                 e.items.push({
 
-                    text: 'Re-imprimir ticket admision',
+                    text: 'Re-imprimir cita',
                     icon : 'print',
-                    onItemClick: () => 0
+                    onItemClick: () => {
+                        const report = urlReport();
+                        report.print(`${report.appointment(e.row.data.id)}`);
+                    }
                     
                 },{
 

@@ -20,6 +20,7 @@ import List from 'devextreme-react/list';
 import moment from 'moment';
 import { RadioGroup } from 'devextreme-react/radio-group';
 import CustomCalendar from './CustomCalendar';
+import urlReport from '../../services/reportServices';
 
 const Nuevo = props => {
 
@@ -72,6 +73,9 @@ const Nuevo = props => {
                         setCitas([]);
                         
                         dispatch(clearCustomer({clear : !clear}));
+
+                        const report = urlReport();
+                        report.print(`${report.appointment(resp.id)}`);
                     
                     }
                 }).catch(err => {

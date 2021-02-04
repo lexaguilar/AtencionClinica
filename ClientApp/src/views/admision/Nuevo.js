@@ -18,8 +18,9 @@ import PopupBeneficiary from '../../components/beneficiary/PopupBeneficiary';
 import { admisionDefault } from '../../data/admision';
 import { useDispatch, useSelector } from 'react-redux'
 import Citas from '../../components/grids/Citas';
+import urlReport from '../../services/reportServices';
 
-const Nuevo = props => {
+const Nuevo = props => {    
 
     const { clear } = useSelector(store => store.customerClear);
     const dispatch = useDispatch();
@@ -48,6 +49,9 @@ const Nuevo = props => {
                     setAdmision({...admisionDefault});
 
                     dispatch(clearCustomer({clear : !clear}));
+
+                    const report = urlReport();
+                    report.print(`${report.admisionTicket(resp.id)}`);
 
                 }
             }).catch(err => {
