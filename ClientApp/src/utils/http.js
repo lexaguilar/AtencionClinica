@@ -1,4 +1,3 @@
-import notify from 'devextreme/ui/notify';
 const root = process.env.PUBLIC_URL;
 const path = `${root}/api/`;
 
