@@ -77,6 +77,10 @@ const Follows = () => {
                 onCellPrepared={onCellPrepared}
                 onContextMenuPreparing={addMenuItems}
                 noDataText='No se encontró ninguna transferencia'
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}     
             >
                 <Paging defaultPageSize={20} />
                 <Pager

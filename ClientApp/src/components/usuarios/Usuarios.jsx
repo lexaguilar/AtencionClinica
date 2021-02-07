@@ -70,7 +70,7 @@ class Usuarios extends Component {
                     <Column dataField="nombre" allowFiltering={false} />
                     <Column dataField="correo" allowFiltering={false} />
                     <Column dataField="rolId" width={260} caption="Permisos">
-                        <Lookup disabled={true} dataSource={createStore('role')} valueExpr="id" displayExpr="nombre" />
+                        <Lookup disabled={true} dataSource={createStore({name:'role'})} valueExpr="id" displayExpr="nombre" />
                     </Column>               
                 </DataGrid>
             </div>

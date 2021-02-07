@@ -155,7 +155,7 @@ const menu = [{
         menu: [
             { title: 'Usuarios', url: `${_path.CLINICA}/usuarios` },
             { title: 'Roles', url: `${_path.CLINICA}/roles` },
-            { title: 'Recursos', url: `${_path.CLINICA}/recursos` },
+            { title: 'Recursos', url: `${_path.CLINICA}/permisos` },
             { title: 'Parametros', url: `${_path.CLINICA}/config/parameters` }
         ],
     },

@@ -21,6 +21,8 @@ import { customizeText, getMonthName } from '../../utils/common';
 import { Button } from 'devextreme-react/button';
 import Delete from './Delete';
 import { formatDate } from '../../data/app';
+import uri from '../../utils/uri';
+import { store } from '../../services/store';
 
 const Percapita = () => {
 
@@ -35,12 +37,6 @@ const Percapita = () => {
     const reload = function () {
         dataGrid.instance.refresh();
     }
-
-    const customStore = new CustomStore({
-        load: (loadOptions) => {
-            return http(`percapitas/get/year/${date.getFullYear()}/month/${date.getMonth() + 1}`).asGet();
-        }
-    })
 
     return (
         
@@ -74,12 +70,22 @@ const Percapita = () => {
                     
                 ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
-                dataSource={customStore}
+                //dataSource={customStore}
+                dataSource={store({ uri : 
+                    {
+                        get : `percapitas/get/year/${date.getFullYear()}/month/${date.getMonth() + 1}`
+                    }, 
+                    remoteOperations : true 
+                })}
                 hoverStateEnabled={true}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}     
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -89,15 +95,16 @@ const Percapita = () => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <Export enabled={true} fileName="Percapita" allowExportSelectedData={true} />
-                <GroupPanel visible={true} />
+                {/* <GroupPanel visible={true} />
                 <Column dataField="year" caption='Año' groupIndex={0}/>
-                <Column dataField="month" caption='Mes' groupIndex={1}  customizeText={customizeText}/>
+                <Column dataField="month" caption='Mes' groupIndex={1}  customizeText={customizeText}/> */}
                 <Column dataField="patronalId" width={100}/>
-                <Column dataField="rason" />
+                <Column dataField="rason" visible={false}/>
                 <Column dataField="inss" width={100}/>
+                <Column dataField="identification" width={150}/>
                 <Column dataField="firstName"  caption='Nombre'/>
                 <Column dataField="lastName"  caption='Apellidos'/>
-                <Column dataField="adscription" />
+                <Column dataField="adscription" visible={false}/>
                 <Column dataField="dateAdd" dataType="date" format={formatDate} caption='Fecha' width={100}/>              
             </DataGrid>
             <br/>

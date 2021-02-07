@@ -64,7 +64,7 @@ const DoctoresById = () => {
             <ColumnChooser enabled={true} />
             <Export enabled={true} fileName={title} allowExportSelectedData={true} />
             <Column dataField="doctorId" width={180} caption="Doctor">              
-                <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name :'doctor'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="days" caption='Regla de dias' >
             </Column>

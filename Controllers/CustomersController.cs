@@ -46,12 +46,12 @@ namespace AtencionClinica.Controllers
                 return Json(result);
             }else{
 
-                var beneficiaries = _db.Beneficiaries.FirstOrDefault(x => x.Identification == inss);
+                var customer = _db.Customers.FirstOrDefault(x => x.Identification == inss);
 
-                if(beneficiaries != null)
-                    id = beneficiaries.Inss;
+                if(customer != null)
+                    id = customer.Inss;
                 else
-                     return BadRequest($"No se encontró el asegurado con el identificador {inss}");
+                    return BadRequest($"No se encontró el asegurado con el identificador {inss}");
 
                 var result = _db.Customers.FirstOrDefault(x => x.Inss == id);                   
 

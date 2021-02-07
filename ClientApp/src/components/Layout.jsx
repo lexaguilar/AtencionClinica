@@ -36,6 +36,9 @@ import Parameters from '../views/condig/Parameters';
 import OutPutProducts from '../views/movimientos/outPutProducts';
 import InPutProducts from '../views/movimientos/inPutProducts';
 import Products from '../views/products';
+import Users from '../views/users';
+import Roles from '../views/roles';
+import Resources from '../views/resources';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -88,6 +91,10 @@ function Layout(props) {
                         <PrivateRoute exact path={`${_path.CLINICA}/movimientos/salidas`} component={OutPutProducts} />   
                         <PrivateRoute exact path={`${_path.CLINICA}/movimientos/entradas`} component={InPutProducts} />   
                         <PrivateRoute exact path={`${_path.CLINICA}/productos`} component={Products} />   
+
+                        <PrivateRoute exact path={`${_path.CLINICA}/usuarios`} component={Users} />   
+                        <PrivateRoute exact path={`${_path.CLINICA}/roles`} component={Roles} />   
+                        <PrivateRoute exact path={`${_path.CLINICA}/permisos`} component={Resources} />   
                     </Switch>
                 </div>
 

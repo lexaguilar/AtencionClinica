@@ -55,7 +55,7 @@ function Entes(props) {
                 <Column dataField="direccion" />
                 <Column dataField="observacion" visible={false} />
                 <Column dataField="estadoId" width={100} caption="Estado">
-                    <Lookup disabled={true} dataSource={createStore('estado')} valueExpr="id" displayExpr="nombre" />
+                    <Lookup disabled={true} dataSource={createStore({name: 'estado'})} valueExpr="id" displayExpr="nombre" />
                 </Column>  
                 <Editing
                     mode="popup"

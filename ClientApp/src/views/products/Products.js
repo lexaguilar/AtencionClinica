@@ -55,11 +55,16 @@ const Products = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}     
             >
                 <Paging defaultPageSize={20} />
                 <Pager
                     showPageSizeSelector={true}
                     allowedPageSizes={[10, 20, 50]}
+                    showInfo={true} 
                 />
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />

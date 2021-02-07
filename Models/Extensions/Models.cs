@@ -7,4 +7,5 @@ namespace AtencionClinica.Models{
     public partial class Family : ModelExtension<Product>  {  }
     public partial class Presentation : ModelExtension<Presentation>  {  }
     public partial class UnitOfMeasure : ModelExtension<UnitOfMeasure>  {  }
+    public partial class User : ModelExtension<User>  {  }
 }

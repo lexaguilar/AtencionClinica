@@ -144,14 +144,14 @@ class App extends React.Component {
                                         </SimpleItem>
                                         <SimpleItem dataField="areaId" editorType="dxSelectBox"
                                             editorOptions={{
-                                                dataSource: createStore('areas'), valueExpr: "id", displayExpr: "descripcion",
+                                                dataSource: createStore({name:'areas'}), valueExpr: "id", displayExpr: "descripcion",
                                             }}>
                                             <RequiredRule message="El area es requerida" />
                                             <Label text="Area Inicial" />
                                         </SimpleItem>
                                         <SimpleItem dataField="monedaId" editorType="dxSelectBox"
                                             editorOptions={{
-                                                dataSource: createStore('moneda'), valueExpr: "id", displayExpr: "descripcion", showClearButton:true
+                                                dataSource: createStore({name:'moneda'}), valueExpr: "id", displayExpr: "descripcion", showClearButton:true
                                             }}>
                                             <Label text="Moneda" />
                                         </SimpleItem>

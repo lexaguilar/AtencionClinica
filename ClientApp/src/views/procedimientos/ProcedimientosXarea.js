@@ -43,7 +43,7 @@ const ProcedimientosXarea = ({areaId}) => {
             <HeaderFilter visible={true} />         
             <Column dataField="areaId" visible={false}/>
             <Column dataField="serviceId" width={180} caption="Procedimiento">              
-                <Lookup disabled={true} dataSource={createStore('service')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name:'service'})} valueExpr="id" displayExpr="name" />
             </Column>             
             <Editing
                 mode="cell"

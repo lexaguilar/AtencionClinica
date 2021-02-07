@@ -59,6 +59,10 @@ const Privados = () => {
                 allowColumnReordering={true}
                 noDataText='No se encontró ningun paciente privado'
                 onToolbarPreparing={onToolbarPreparing}
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}
             >
                 <Paging defaultPageSize={20} />
                 <Pager

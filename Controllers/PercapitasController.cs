@@ -22,11 +22,29 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/percapitas/get/year/{year}/month/{month}")]
-        public IActionResult Get(int year, int month)
+        public IActionResult Get(int year, int month,int skip, int take, IDictionary<string, string> values)
         {
             var result = _db.Percapitas.Where(x => x.Year == year && x.Month == month);
+            
+            if (values.ContainsKey("inss"))
+            {
+                var inss = Convert.ToInt32(values["inss"]);
+                result = result.Where(x => x.Inss == inss);
+            }
 
-            return Json(result);
+            if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                result = result.Where(x => x.Identification == identification);
+            }
+
+            var items = result.Skip(skip).Take(take);
+
+            return Json(new
+            {
+                items,
+                totalCount = result.Count()
+            });
         }
 
         [Route("api/percapitas/get/inss/{inss}")]
