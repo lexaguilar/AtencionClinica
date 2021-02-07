@@ -78,7 +78,27 @@ const menu = [{
 },{
     layout: 'clinica',
     title: 'Inventario',
-    url: ''
+    url: `${_path.CLINICA}/productos`,
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Productos', url: `${_path.CLINICA}/productos` },           
+            { title: 'Familias', url: `${_path.CLINICA}/familias` },
+            { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
+            { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
+        ],
+    },
+},{
+    layout: 'clinica',
+    title: 'Movimientos',
+    url: `${_path.CLINICA}/movimientos`,
+    submenu: {
+        type: 'menu',
+        menu: [
+            { title: 'Entradas', url: `${_path.CLINICA}/movimientos/entradas` },           
+            { title: 'Salidas', url: `${_path.CLINICA}/movimientos/salidas` },
+        ],
+    },
 },{
     layout: 'clinica',
     title: 'Ficheros',

@@ -50,7 +50,7 @@ namespace AtencionClinica.Controllers
         [Route("api/services/area/{areaId}/get")]
         public IActionResult Get(int areaId)
         {
-           var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId).Select(x => x.Service);
+           var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId && x.Service.Active).Select(x => x.Service);
 
            return Json(result);
 

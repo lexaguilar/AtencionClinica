@@ -43,9 +43,9 @@ const Nuevo = props => {
 
     const minDateValue = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())
     let disabledDates = (data) => data.view === 'month' && isWeekend(data.date);
-    console.log('init render');
+ 
     const guardaCita = () => {
-        console.log(appointment);
+      
         let result = refCitas.instance.validate();
 
         if (result.isValid) {
@@ -263,7 +263,7 @@ const Nuevo = props => {
                     </SimpleItem>                  
                     <SimpleItem dataField="specialtyId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'specialty'}),
+                            dataSource: createStoreLocal({ name: 'specialty', active: true}),
                             ...editorOptionsSelect,
                             onValueChanged: onValueChangedSpecialty,
                         }} >
@@ -272,7 +272,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="doctorId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'doctor', url: uri.doctores.forSpecialty(appointment.specialtyId) }),
+                            dataSource: createStoreLocal({ name: 'doctor', url: uri.doctores.forSpecialty(appointment.specialtyId), active: true }),
                             ...editorOptionsSelect,
                             onValueChanged:onValueChangedDoctor
                         }} >

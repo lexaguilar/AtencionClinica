@@ -18,7 +18,14 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/areas/get")]
-        public IActionResult Get() => Json(factory.GetAll());       
+        public IActionResult Get(bool active){
+
+            if(active)
+                return Json(factory.GetAll(x => x.Active));
+            
+            return Json(factory.GetAll());
+            
+        } 
 
         [HttpPost("api/areas/post")]
         public IActionResult Post([FromBody] Area area)
@@ -30,7 +37,12 @@ namespace AtencionClinica.Controllers
         }
       
         [HttpGet("api/areas/{id}/delete")]
-        public IActionResult Delete(int id) => Json(new { n = factory.DeleteAndSave(id) });
+         public IActionResult Delete(int id) {
+            var model = factory.GetById(id);
+            model.Active = false;
+            factory.Save();
+            return Json(new { n = id});
+        }
     
     }
 }

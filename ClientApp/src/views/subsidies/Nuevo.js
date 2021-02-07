@@ -81,7 +81,7 @@ const Nuevo = props => {
             http(uri.subsidies.insert).asPost(subsidy)
             .then(resp => {
                 if(resp){
-                    notify(`Admisioin con boleta ${resp.reference} creada correctamente`);
+                    notify(`Subsidio con boleta ${resp.reference} creada correctamente`);
                     setCustomer({inss : '',status : false});
                     setSubsidy({});
                     closeDialog(true);
@@ -142,7 +142,7 @@ const Nuevo = props => {
                             </SimpleItem>
                             <SimpleItem dataField="areaId" editorType="dxSelectBox" colSpan={2}
                                 editorOptions={{
-                                    dataSource: createStoreLocal({ name: 'area'}),
+                                    dataSource: createStoreLocal({ name: 'area', active : true}),
                                     ...editorOptionsSelect
                                 }} >
                                 <Label text="Area" />
@@ -151,7 +151,7 @@ const Nuevo = props => {
                         
                             <SimpleItem dataField="doctorId" editorType="dxSelectBox" colSpan={2} 
                                 editorOptions={{
-                                    dataSource: createStoreLocal({ name: 'doctor' }),
+                                    dataSource: createStoreLocal({ name: 'doctor', active : true }),
                                     ...{...editorOptionsSelect, width: '100%'}
                                 }} >
                                 <Label text="Doctor" />

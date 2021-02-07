@@ -20,10 +20,11 @@ import toCapital from '../../utils/common';
 import { store } from '../../services/store';
 import Title from './Title';
 import BlockHeader from './BlockHeader';
+import { createProxyBase } from '../../utils/proxy';
 
 function Catalogo(props) {
 
-    const { catalogo } = props;
+    const { name, url, caption } = props;
 
     let dataGrid = React.createRef();
 
@@ -41,12 +42,12 @@ function Catalogo(props) {
     
     return (
         <div className="container small">
-            <Title title={catalogo}/>
-            <BlockHeader title={toCapital(catalogo)}/>          
+            <Title title={caption||name}/>
+            <BlockHeader title={toCapital(caption||name)}/>          
             <DataGrid id="gridContainer"
                 ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
-                dataSource={store({uri : uri[catalogo]})}
+                dataSource={store({uri : createProxyBase(url)})}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
@@ -60,22 +61,24 @@ function Catalogo(props) {
                 />
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
-                <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName="Catalogos" allowExportSelectedData={true} />
+                <Export enabled={true} fileName={name} allowExportSelectedData={true} />
                 <Column dataField="name" />
+                <Column dataField="active" caption="Activo" dataType="boolean" width={100} />
                 <Editing
                     mode="popup"
                     allowUpdating={true}
-                    allowDeleting={true}
+                    useIcons={true}
                 >
-                    <Popup title={toCapital(catalogo)} showTitle={true} width={500} height={240}>
+                    <Popup title={toCapital(name)} showTitle={true} width={450} height={250}>
                         
                     </Popup>
                     <Form>
-                        <Item  dataField="name" editorOptions={{ width:300 }} >
+                        <Item  dataField="name" editorOptions={{ width:300 }} colSpan={2} >
                             <RequiredRule message="El campo es requerida"/>
                             <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
-                        </Item>                    
+                        </Item>
+                        <Item  dataField="active" editorOptions={{ width:300 }}  colSpan={2}>
+                        </Item>  
                     </Form>
                 </Editing>
             </DataGrid>

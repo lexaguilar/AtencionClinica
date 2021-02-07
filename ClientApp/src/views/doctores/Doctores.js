@@ -73,10 +73,11 @@ const Doctores = (props) => {
             <Column dataField="name" caption='Nombre' />
             <Column dataField="minsaCode" caption='Cod Minsa' />
             <Column dataField="specialtyId" width={150} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="phoneNumber" caption='Telefono' />
             <Column dataField="address" caption='Direccion' />
+            <Column dataField="active" dataType="boolean" width={100} />
             <Editing
                 mode="popup"
                 allowUpdating={true}
@@ -103,6 +104,8 @@ const Doctores = (props) => {
                     </Item>
                     <Item  dataField="address" editorType="dxTextArea" colSpan={2}>
                         <StringLengthRule max={250} message="Máximo de caracteres 250"/>
+                    </Item>
+                    <Item  dataField="active" editorType="dxCheckBox">
                     </Item>
                 </Form>
             </Editing>

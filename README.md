@@ -15,17 +15,20 @@
     INSERT INTO ClinicalCare.dbo.Relationships(	NAME )
     SELECT atb.Descripcion FROM  adTipoBeneficiario AS atb WHERE atb.IDTipoBeneficiario NOT IN (0,4,7)
 -Sexs No administrable
+-OutPutProductTypes  No administrable
+-OutPutProductStates No administrable
+-InPutProductTypes No administrable
+-InPutProductStates No administrable
+-ProductStates No administrable
 
 #
 clinica2021
 # TODO
 Reglas para beneficiarios menores de 12
 Crear catalogos de departamentos y municipios
-
---activos
-2333924
-2353281
-2362229
-2547819
-2688970
-
+Obtener catalog activos para crear y todos para editar
+-Tablas
+    Products
+    Families
+    Presentations
+    

@@ -74,7 +74,8 @@ const Admisiones = props => {
 
     }
 
-    const title = 'Admisiones'
+    const title = 'Admisiones';
+
     return (
         <div className="container">
         <Title title={title}/>
@@ -117,10 +118,10 @@ const Admisiones = props => {
             <Column dataField="tipo"  width={110} />
             <Column dataField="nombre" />
             <Column dataField="areaId" width={150} caption="Area">
-                <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'area' })} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="specialtyId" width={150} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="createBy" caption='Creado por' width={80} />
             <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />

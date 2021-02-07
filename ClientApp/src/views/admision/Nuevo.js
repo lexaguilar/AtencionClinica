@@ -100,7 +100,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="areaId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'area' }),
+                            dataSource: createStoreLocal({ name: 'area', active: true }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Area" />
@@ -108,7 +108,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="specialtyId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'specialty' }),
+                            dataSource: createStoreLocal({ name: 'specialty',active: true }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Especialidad" />

@@ -1,4 +1,20 @@
-const catalogos = [ 'areas','especialidades' ];
+const catalogos = [{
+    name : 'areas',
+    url : 'areas'
+},{
+    name : 'especialidades',
+    url : 'especialidades'
+},{
+    name : 'familias',
+    url : 'familias'
+},{
+    name : 'presentaciones',
+    url : 'presentaciones'
+},{
+    name : 'unidadmedida',
+    caption : 'Unidad de Medida',
+    url : 'ums'
+}];
 
 const estadoGeneric = {
     activo: 1,

@@ -34,9 +34,7 @@ function CuentasConfig(){
     };
 
     const save = () =>{
-        console.log(data);
         http('app/config/set-info').asPost(data).then(resp => {
-            console.log(resp);
             notify('Configuracion de cuentas guardado');
         });
     }

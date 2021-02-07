@@ -19,7 +19,6 @@ export const setAppInfo = data => async(dispatch) => {
                 dispatch(setAppInfoSuccess(setData(data, resp)));
                 resolve();
             }).catch(err => {
-                console.log(err)
                 reject(err);
             });
     });

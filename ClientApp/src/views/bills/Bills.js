@@ -62,7 +62,7 @@ const Bills = props => {
     }
 
     const title = 'Facturas';
-
+    const active = true;
     return (
         <div className="container">
         <Title title={title}/>
@@ -101,10 +101,10 @@ const Bills = props => {
             <Column dataField="id"  width={100} />          
             <Column dataField="nombre" />
             <Column dataField="areaId" width={170} caption="Area">
-                <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'area'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="billTypeId" width={170} caption="Tipo Ingreso">
-                <Lookup disabled={true} dataSource={createStore('billType')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'billType'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="total" width={150}/>
             <Column dataField="total" width={150} cellRender={cellRender} />

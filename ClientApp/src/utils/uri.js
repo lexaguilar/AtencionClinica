@@ -15,6 +15,8 @@ const uri = {
     subsidies: createProxyBase('subsidies'),
     cie10: createProxyBase('cie10'),
     services: createProxyBase('services'),
+    inPutProducts: createProxyBase('inPutProducts'),
+    products: createProxyBase('products'),
 
 };
 uri.privateCustomers = () => {
@@ -25,6 +27,7 @@ uri.privateCustomers = () => {
 
 uri.doctores.forSpecialty = specialtyId => `doctores/specialties/${specialtyId}`;
 uri.doctores.times = doctorId => `doctores/${doctorId}/times`;
+uri.products.getAsCatalog = `products/get/catalog`;
 
 uri.beneficarios = inss => {
     let urls = createProxy(`beneficiaries/get/${inss}`,`beneficiaries/post`);

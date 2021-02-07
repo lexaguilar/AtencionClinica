@@ -16,7 +16,8 @@ import dialogReducer from './dialog';
 import customerClearReducer from './customer';
 import beneficiaryDialogReducer from './beneficiary';
 import catalogReducer from './catalogs';
-
+import inPutProductDialogReducer from './inPutProduct';
+import productDialogReducer from './product';
 
 export default combineReducers({
     currency: currencyReducer,
@@ -33,5 +34,7 @@ export default combineReducers({
     dialog: dialogReducer,
     customerClear : customerClearReducer,
     beneficiaryDialog : beneficiaryDialogReducer,
+    inPutProductDialog : inPutProductDialogReducer,
+    productDialog : productDialogReducer,
     catalog : catalogReducer,
 });

@@ -31,8 +31,7 @@ const Nuevo = props => {
 
     const guardarFactura = () => {
         let result = refBill.instance.validate();
-        if (result.isValid) {
-            console.log(procedimientos);
+        if (result.isValid) {            
 
             setLoading(true);
             http(uri.bill.insert).asPost({...bill, billDetails : procedimientos.map(x => ({...x, ...{serviceId : x.id, id: 0}  }))}).then(resp => {
@@ -65,7 +64,7 @@ const Nuevo = props => {
     }
 
     const loadServices = (areaId) => {
-        http(`services/area/${bill.areaId}/get`).asGet().then(resp => setServices(resp))
+        http(`services/area/${bill.areaId}/get`).asGet({active:true}).then(resp => setServices(resp))
     }
 
     const onToolbarPreparing = (e) => {  
@@ -100,8 +99,7 @@ const Nuevo = props => {
     }
 
     const onRowInserted = (e) => {
-        console.log(e);    
-        console.log(procedimientos);
+        
     }
 
 
@@ -144,7 +142,7 @@ const Nuevo = props => {
                     <EmptyItem/>
                     <SimpleItem dataField="billTypeId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'billType' }),
+                            dataSource: createStoreLocal({ name: 'billType', active: true }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Tipo Ingreso" />
@@ -153,7 +151,7 @@ const Nuevo = props => {
                     <EmptyItem/>
                     <SimpleItem dataField="areaId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'area' }),
+                            dataSource: createStoreLocal({ name: 'area', active: true }),
                             ...editorOptionsSelect,
                             onValueChanged: onValueChangedArea,
                         }} >
