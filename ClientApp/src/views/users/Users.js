@@ -14,7 +14,8 @@ import {
     Form,
     RequiredRule,
     StringLengthRule,
-    EmailRule
+    EmailRule,
+    ToolbarItem
 }
     from 'devextreme-react/data-grid';
 import { DataGrid } from 'devextreme-react';
@@ -90,8 +91,11 @@ class Users extends Component {
                     <ColumnChooser enabled={true} />
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                     <Column dataField="username" width={150} />
-                    <Column dataField="fullName" caption="Nombre completo" />
+                    <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />
+                    <Column dataField="areaId" width={150} caption="Area">
+                        <Lookup disabled={true} dataSource={createStore({name :'area'})} valueExpr="id" displayExpr="name" />
+                    </Column>
                     <Column dataField="rolId" width={150} caption="Permisos">
                         <Lookup disabled={true} dataSource={createStore({name :'rol'})} valueExpr="id" displayExpr="name" />
                     </Column>
@@ -103,10 +107,9 @@ class Users extends Component {
                         useIcons={true}
                         
                     >
-                        <Popup title={title} showTitle={true} width={650} height={320}>
-
+                        <Popup title={title} showTitle={true} width={400} height={390}>                           
                         </Popup>
-                        <Form>
+                        <Form colCount={1}>
                             <Item dataField="username" >
                                 <RequiredRule message="El nombre de usuario es requerido" />
                                 <StringLengthRule max={50} min={5} message="Máximo de caracteres 100 y 2 mínimo" />
@@ -120,6 +123,9 @@ class Users extends Component {
                                 <EmailRule ></EmailRule>
                                 <StringLengthRule max={50} min={5} message="Máximo de caracteres 50 y 5 mínimo" />
                             </Item>                          
+                            <Item dataField="areaId" >
+                                <RequiredRule message="El area es requerida" />
+                            </Item>
                             <Item dataField="rolId" >
                                 <RequiredRule message="El rol es requerido" />
                             </Item>

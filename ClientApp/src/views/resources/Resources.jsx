@@ -4,7 +4,11 @@ import { Item } from "devextreme-react/box";
 import http from "../../utils/http";
 import uri from "../../utils/uri";
 import { store } from "../../services/store";
-import { Column, Editing, Popup } from "devextreme-react/data-grid";
+import { Column, Editing, Popup, Form,
+    RequiredRule,
+    StringLengthRule } from "devextreme-react/data-grid";
+import Title from "../../components/shared/Title";
+import BlockHeader from "../../components/shared/BlockHeader";
 
 
 
@@ -28,11 +32,15 @@ const Resources = props => {
         setRolId(e.value ?? 0);
     }
 
+    const title ='Recursos'
+
     return (
         <div className="container medium">
-
+            <Title title={title} />
+            <BlockHeader title={title} />
             <Box direction="row" width="100%" height={75}>
                 <Item ratio={0} baseSize="260px">
+                    <label>Seleccione un rol:</label>
                     <SelectBox items={roles}
                         placeholder="Selecciona un Rol"
                         showClearButton={true} valueExpr="id" displayExpr="name" onValueChanged={changeHandler} />
@@ -41,6 +49,7 @@ const Resources = props => {
             <Box direction="row" width="100%" height={75}>
 
                 <Item ratio={1}>
+                    <label>Acceso a recursos</label>
                     <DataGrid
                         dataSource={store({ uri: { get: uri.resources(rolId), insert: uri.resources(rolId) } })}
                         showBorders={true}
@@ -54,11 +63,17 @@ const Resources = props => {
                             useIcons={true}
 
                         >
-                            <Popup width={800} height={480}>
+                            <Popup title="Configuracion" width={300} height={350}>
 
                             </Popup>
+                            <Form colCount={1}>
+                                <Item dataField="name"/>                                             
+                                <Item dataField="canRead"/>                                             
+                                <Item dataField="canCreate"/>                                             
+                                <Item dataField="canUpdate"/>                                             
+                                <Item dataField="canDelete"/>                                             
+                            </Form>
                         </Editing>
-                        <Column dataField="resourceId" caption="Id" width={60} visible={false} allowEditing={false}/>
                         <Column dataField="name" caption="Recurso" width={200} allowEditing={false} />
                         <Column dataField="canRead" caption="Leer" allowFiltering={false} width={160} />
                         <Column dataField="canCreate" caption="Crear" allowFiltering={false} width={160} />

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace AtencionClinica.Controllers
 {  
@@ -17,9 +18,11 @@ namespace AtencionClinica.Controllers
     {      
         
         private ClinicaContext _db = null;
-        public UsersController(ClinicaContext db)
+        private readonly AppSettings _appSettings;
+        public UsersController(ClinicaContext db, IOptions<AppSettings> appSettings)
         {
             this._db = db;
+            this._appSettings = appSettings.Value;
         }
 
         [HttpGet("[action]")]
@@ -27,13 +30,14 @@ namespace AtencionClinica.Controllers
         {
 
             
-            var items = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId }).Skip(skip).Take(take != 0 ? take : 10).ToArray();
+            var items = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId, x.AreaId }).Skip(skip).Take(take != 0 ? take : 10).ToArray();
             return new JsonResult(new
             {
                 items,
                 totalCount = items.Count()
             });
         }
+        
         [HttpPost("[action]")]
         public IActionResult Post([FromBody] User user)
         {
@@ -42,13 +46,12 @@ namespace AtencionClinica.Controllers
             if(dbusr==null)
             {
                 _db.Users.Add(user);
-                string pwd = UserHelpers.GenerateRndPwd();
-                user.Password = UserHelpers.GetPasswordHashedSHA256(pwd);
+                user.Password = UserHelpers.GetPasswordHashedSHA256(_appSettings.PassWord);
                 dbusr = user;
             }
             else
             {
-                dbusr.CopyFrom(user, x => new { x.Password });
+                dbusr.CopyFrom(user, x => new { x.AreaId, x.Email, x.FullName });
             }
             _db.SaveChanges();
             dbusr.Password = null;
