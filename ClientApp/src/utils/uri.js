@@ -13,12 +13,14 @@ const uri = {
     especialidades : createProxyBase('especialidades'),
     estados: createProxyBase('estados'),
     file: createProxy('', 'percapitas/post/file'),
+    fileRates: createProxy('', 'rates/post/file'),
     inPutProducts: createProxyBase('inPutProducts'),
     subsidies: createProxyBase('subsidies'),
     services: createProxyBase('services'),
     products: createProxyBase('products'),
     roles:createProxyBase('roles'),
     users:createProxyBase('users'),
+    rates:createProxyBase('rates'),
 
 };
 uri.privateCustomers = () => {
