@@ -101,8 +101,7 @@ class Users extends Component {
                     </Column>
                     <Editing
                         mode="popup"
-                        allowUpdating={true}
-                        allowDeleting={true}
+                        allowUpdating={true}                        
                         allowAdding={true}
                         useIcons={true}
                         
@@ -110,7 +109,7 @@ class Users extends Component {
                         <Popup title={title} showTitle={true} width={400} height={390}>                           
                         </Popup>
                         <Form colCount={1}>
-                            <Item dataField="username" >
+                            <Item dataField="username" disabled={true}>
                                 <RequiredRule message="El nombre de usuario es requerido" />
                                 <StringLengthRule max={50} min={5} message="Máximo de caracteres 100 y 2 mínimo" />
                             </Item>
@@ -120,7 +119,7 @@ class Users extends Component {
                             </Item>
                             <Item dataField="email" >
                                 <RequiredRule message="El email es requerido" />
-                                <EmailRule ></EmailRule>
+                                <EmailRule />
                                 <StringLengthRule max={50} min={5} message="Máximo de caracteres 50 y 5 mínimo" />
                             </Item>                          
                             <Item dataField="areaId" >

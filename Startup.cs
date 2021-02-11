@@ -31,6 +31,7 @@ namespace AtencionClinica
             services.AddDbContext<ClinicaContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IUserService, UserService>();
+            services.AddInPutProductServices();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

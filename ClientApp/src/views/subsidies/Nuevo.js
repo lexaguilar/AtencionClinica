@@ -200,7 +200,7 @@ const Nuevo = props => {
                 <Button
                     width={120}
                     text="Guardar"
-                    type="default"
+                    type="success"
                     icon="save"
                     stylingMode="contained"
                     className="m-1"

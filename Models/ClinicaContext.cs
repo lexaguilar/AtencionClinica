@@ -69,6 +69,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VwFollow> VwFollows { get; set; }
         public virtual DbSet<VwFollowsPrivate> VwFollowsPrivates { get; set; }
+        public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
 
@@ -508,8 +509,7 @@ namespace AtencionClinica.Models
                 entity.HasKey(e => e.Inss)
                     .HasName("PK_Customers_1");
 
-                entity.HasIndex(e => e.Inss, "IX_Customers")
-                    .IsUnique();
+                entity.HasIndex(e => e.Identification, "IX_Customers_Identification");
 
                 entity.Property(e => e.Inss).ValueGeneratedNever();
 
@@ -521,6 +521,10 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Identification)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -1404,6 +1408,30 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwProductInfo>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwProductInfo");
+
+                entity.Property(e => e.Cost).HasColumnType("money");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Presentation)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Um)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);

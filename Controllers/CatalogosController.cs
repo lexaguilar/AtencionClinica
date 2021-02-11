@@ -33,6 +33,12 @@ namespace AtencionClinica.Controllers
             var region = db.Regions.ToArray();
             var relationship = db.Relationships.ToArray();
             var sex = db.Sexs.ToArray();
+            var inPutProductState = db.InPutProductStates.ToArray();
+            var outPutProductState = db.OutPutProductStates.ToArray();
+            var InPutProductType = db.InPutProductTypes.ToArray();
+            var outPutProductType = db.OutPutProductTypes.ToArray();
+            var productState = db.ProductStates.ToArray();
+            var area = db.Areas.ToArray();
 
             return Json(new {
                 beneficiaryStatus,
@@ -42,6 +48,12 @@ namespace AtencionClinica.Controllers
                 region,
                 relationship,
                 sex,
+                inPutProductState,
+                InPutProductType,
+                outPutProductState,
+                outPutProductType,
+                productState,
+                area
             });
 
         }

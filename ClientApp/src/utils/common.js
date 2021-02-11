@@ -35,6 +35,30 @@ export const cellDiff = data => {
     )
 }
 
+export const customCell = data => {
+        
+    return (
+      <div>
+
+        <div className="item-descripcion">
+            <div className="item-numero">{data.id}</div>
+            <div className="item-nombre">{data.name}</div>
+        </div>           
+        <div className="item-values">
+            
+            <div className={data.existencias > 0 ? "stock" : "item-stock-zero"}>
+                Stock: 0
+            </div>
+            <div className="item-label">
+                Precio: <span className="item-price">{formatToMoney(data.precio)}</span>
+            </div>
+        </div>
+      
+      </div>
+    );
+  }
+
+
 const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
 export const getMonthName = index => months[index-1]; 
 export const customizeText = data => getMonthName(data.value);

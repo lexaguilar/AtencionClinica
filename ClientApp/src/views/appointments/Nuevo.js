@@ -319,7 +319,7 @@ const Nuevo = props => {
             <Button
                 width={180}
                 text={loading ? 'Guardando...' : 'Guardar cita'}
-                type="default"
+                type="success"
                 icon='save'
                 disabled={!customer.status || loading}
                 onClick={guardaCita}

@@ -24,22 +24,48 @@ namespace AtencionClinica.Controllers
         {
             var result = _db.Products.FirstOrDefault(x => x.Id == id);
 
-            if(result == null)
+            if (result == null)
                 return NotFound("No se encontro el producto");
 
             return Json(result);
 
         }
 
-        [Route("api/products/get/catalog")]
-        public IActionResult GetCatalog(bool active)
-        {
-            IQueryable<Product> result = _db.Products;
+        // [Route("api/products/get/catalog")]
+        // public IActionResult GetCatalog(bool active)
+        // {
+        //     IQueryable<Product> result = _db.Products;
 
-            if(active)
-                result = result.Where(x => x.StateId == 1);        
+        //     if(active)
+        //         result = result.Where(x => x.StateId == 1);        
+
+        //     return Json(result);
+
+        // }
+
+        [Route("api/products/getbyarea/{areaId}")]
+        public IActionResult GetCatalog(int areaId, bool active,int skip, int take, IDictionary<string, string> values)
+        {
+            var result = _db.VwProductInfos.Where(x => x.AreaId == areaId);
+
+            if (active)
+                result = result.Where(x => x.StateId == 1);
 
             return Json(result);
+
+            // if (values.ContainsKey("name"))
+            // {
+            //     var name = Convert.ToString(values["name"]);
+            //     result = result.Where(x => x.Name.StartsWith(name));
+            // }
+
+            // var items = result.Skip(skip).Take(take);
+
+            // return Json(new
+            // {
+            //     items,
+            //     totalCount = result.Count()
+            // });
 
         }
 
@@ -91,7 +117,7 @@ namespace AtencionClinica.Controllers
 
         [HttpPost("api/products/post")]
         public IActionResult Post([FromBody] Product product)
-        {            
+        {
 
             var user = this.GetAppUser();
 
@@ -111,8 +137,8 @@ namespace AtencionClinica.Controllers
                     x.HasIva,
                 });
 
-                 oldProduct.LastModificationBy = user.Username;
-                 oldProduct.LastDateModificationAt = DateTime.Now;
+                oldProduct.LastModificationBy = user.Username;
+                oldProduct.LastDateModificationAt = DateTime.Now;
 
                 _db.SaveChanges();
             }
@@ -128,7 +154,7 @@ namespace AtencionClinica.Controllers
 
                 product.CreateAt = DateTime.Now;
                 product.LastDateModificationAt = DateTime.Now;
-              
+
                 _db.Products.Add(product);
                 _db.SaveChanges();
             }

@@ -40,6 +40,7 @@ const InPutProducts = () => {
             <Title title={title}/>
             <BlockHeader title={title} >
                 <CustomButton
+                    stylingMode='outlined'                    
                     text="Crear entrada"
                     icon='plus'
                     onClick={()=>dispatch(dialogInputProduct({open : true}))}
@@ -50,7 +51,7 @@ const InPutProducts = () => {
                 <div className="widget-container">
                     <div>Tipo de entradas:</div>
                     <SelectBox
-                        dataSource={createStore({name: 'InPutProductType'})}
+                        dataSource={createStoreLocal({name: 'inPutProductType'})}
                         displayExpr="name"
                         valueExpr="id"
                     />
@@ -81,10 +82,10 @@ const InPutProducts = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="typeId" caption="Tipo" width={160}>
-                    <Lookup disabled={true} dataSource={createStore({name: 'inPutProductType'})} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductType'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="stateId" caption="Estado" width={150}>
-                    <Lookup disabled={true} dataSource={createStore({name: 'inPutProductState'})} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductState'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="sourceId" caption='Origen' />
                 <Column dataField="createAt" caption='Creando el' visible={false} />

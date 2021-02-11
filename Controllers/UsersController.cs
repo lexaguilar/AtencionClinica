@@ -45,6 +45,8 @@ namespace AtencionClinica.Controllers
             var dbusr=_db.Users.FirstOrDefault(x => x.Username == user.Username);
             if(dbusr==null)
             {
+                user.Username = user.Email.Split("@")[0];
+                user.ToUpperCase();
                 _db.Users.Add(user);
                 user.Password = UserHelpers.GetPasswordHashedSHA256(_appSettings.PassWord);
                 dbusr = user;

@@ -19,7 +19,6 @@ const uri = {
     products: createProxyBase('products'),
     roles:createProxyBase('roles'),
     users:createProxyBase('users'),
-    users:createProxyBase('users'),
 
 };
 uri.privateCustomers = () => {
@@ -30,7 +29,7 @@ uri.privateCustomers = () => {
 uri.resources= roleId => `roles/${roleId}/resources`;
 uri.doctores.forSpecialty = specialtyId => `doctores/specialties/${specialtyId}`;
 uri.doctores.times = doctorId => `doctores/${doctorId}/times`;
-uri.products.getAsCatalog = `products/get/catalog`;
+uri.products.getByArea = areaId => `products/getbyarea/${areaId}`;
 
 uri.beneficarios = inss => {
     let urls = createProxy(`beneficiaries/get/${inss}`,`beneficiaries/post`);

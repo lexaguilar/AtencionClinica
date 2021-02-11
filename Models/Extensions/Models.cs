@@ -8,4 +8,6 @@ namespace AtencionClinica.Models{
     public partial class Presentation : ModelExtension<Presentation>  {  }
     public partial class UnitOfMeasure : ModelExtension<UnitOfMeasure>  {  }
     public partial class User : ModelExtension<User>  {  }
+    public partial class InPutProduct : ModelExtension<InPutProduct>  {  }
+    public partial class OutPutProduct : ModelExtension<OutPutProduct>  {  }
 }

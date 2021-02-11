@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using AtencionClinica.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -14,9 +15,11 @@ namespace AtencionClinica.Controllers
     public class InPutProductsController : Controller
     {
         private ClinicaContext _db = null;
-        public InPutProductsController(ClinicaContext db)
+        private IInPutProductServices _service;
+        public InPutProductsController(ClinicaContext db, IInPutProductServices service)
         {
             this._db = db;
+            _service = service;
         }
 
         [Route("api/inputproducts/get")]
@@ -69,44 +72,30 @@ namespace AtencionClinica.Controllers
         }
 
         [HttpPost("api/inputproducts/post")]
-        public IActionResult Post([FromBody] Service service)
-        {
-
-            
+        public IActionResult Post([FromBody] InPutProduct inPutProduct)
+        {            
 
             var user = this.GetAppUser();
 
-            if (service.Id > 0)
+
+            if (inPutProduct.Id == 0)
             {
-                var oldService = _db.Services.FirstOrDefault(x => x.Id == service.Id);
 
-                oldService.CopyFrom(service, x => new
-                {
-                    x.Name,
-                    x.Price,
-                    x.PriceCalculate,
-                    x.Active
-                });
+                inPutProduct.CreateBy = user.Username;                
 
-                _db.SaveChanges();
+                _service.Create(inPutProduct);
+
+                
             }
             else
             {
-                var existe = _db.Services.Any(x => x.Name == service.Name);
-
-                if (existe)
-                    return BadRequest($"Ya existe un servicio con el nombre {service.Name}");
-
-                service.Active = true;
-                _db.Services.Add(service);
-                _db.SaveChanges();
+                
             }
 
-            return Json(service);
+            return Json(inPutProduct);
 
         }
-
-        //TODO no podes eliminar un servicio si ya tiene movimientos
+        
         [HttpGet("api/inputproducts/{id}/delete")]
         public IActionResult Delete(int id)
         {

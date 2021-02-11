@@ -62,7 +62,7 @@ const Customer = props => {
                         <Button
                             width={120}
                             text="Buscar"
-                            type="success"
+                            type="default"
                             icon='search'
                             onClick={buscarAsegurado}
                         />

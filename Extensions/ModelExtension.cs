@@ -47,14 +47,14 @@ namespace AtencionClinica
         internal void ToUpperCase()
         {
             var type = this.GetType();
-            var properties = type.GetProperties().Where(x => x.PropertyType.FullName == "System.String");
+            var properties = type.GetProperties().Where(x => x.PropertyType.FullName == "System.String" && x.Name != "Email" && x.Name != "Username");
 
             foreach (var p in properties)
             {
 
                 object value = p.GetValue(this);
                 if(value != null)
-                {
+                {                   
                     var newValue = ToCapitalText(value.ToString());
                     p.SetValue(this, newValue);
                 }

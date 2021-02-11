@@ -9,9 +9,12 @@ import DataGrid, {
     SearchPanel,
 } from 'devextreme-react/data-grid';
 import DropDownBox from 'devextreme-react/drop-down-box';
-import { formatToMoney } from '../../utils/common';
-
-const dropDownOptions = { width: 500 };
+import { cellRender, formatToMoney } from '../../utils/common';
+import uri from '../../utils/uri';
+import { store } from '../../services/store';
+import CustomStore from 'devextreme/data/custom_store';
+import http from '../../utils/http';
+const dropDownOptions = { width: 650 };
 
 export default class ProductDDBComponent extends React.Component {
     constructor(props) {
@@ -32,6 +35,7 @@ export default class ProductDDBComponent extends React.Component {
             <div className="item-descripcion">
                 <div className="item-numero">{cellData.data.id}</div>
                 <div className="item-nombre">{cellData.data.name}</div>
+                <div className="item-nombre">{cellData.data.name}</div>
             </div>           
             <div className="item-values">
                 
@@ -45,14 +49,78 @@ export default class ProductDDBComponent extends React.Component {
           
           </div>
         );
-      }
+    }
+
+    customStore(url){
+        return new CustomStore({
+            key:"id",
+            load: (loadOptions) => {
+    
+                let params = {};
+                params.skip = loadOptions.skip || 0;
+                params.take = loadOptions.take || 10;    
+              
+                if (loadOptions.filter) {
+                    if (typeof loadOptions.filter[0] == 'object') {
+    
+                        let moreParams = {};
+    
+                        const dataFilter = filters =>{
+                            
+                            for (var filter in filters) {
+                                if (filters.hasOwnProperty(filter)) {
+    
+                                    if(['columnIndex','filterValue'].includes(filter)) continue;
+    
+                                    const element = filters[filter]
+                                    
+                                    if(['!=','==','<','>','<=','>=','and','or'].includes(element)) continue;
+                                    
+                                    if (typeof element == 'object') {
+                                        dataFilter(element);
+                                    }else{
+                                        if(moreParams[filters[0]])
+                                        moreParams[`${filters[0]}End` ] = filters[2];
+                                        else
+                                        moreParams[filters[0]] = filters[2];
+                                        break;
+                                    }
+                                }
+                            }
+    
+                        };
+    
+                        dataFilter(loadOptions.filter);                    
+                        params = { ...params, ...moreParams};
+    
+                    } else {
+                        params[loadOptions.filter[0]] = loadOptions.filter[2];
+                    }
+                }
+    
+                return http(url)
+                    .asGet(params)
+                    .then((data) => {
+
+                        return {
+                            data:data.items,
+                            totalCount: data.totalCount,
+                        };
+
+                    })
+                    .catch(() => { throw 'Data Loading Error'; });
+            },
+            byKey: id => http(`products/get/${id}`).asGet()
+        })
+    }
+   
 
     contentRender() {
         return (
             <DataGrid
+                //dataSource={this.customStore(uri.products.getByArea(1))}
                 dataSource={this.props.data.column.lookup.dataSource}
-                remoteOperations={true}
-                keyExpr="id"
+                keyExpr="id"                
                 height={280}
                 selectedRowKeys={[this.state.currentValue]}
                 hoverStateEnabled={true}
@@ -60,12 +128,18 @@ export default class ProductDDBComponent extends React.Component {
                 focusedRowEnabled={true}
                 defaultFocusedRowKey={this.state.currentValue}
                 rowAlternationEnabled={true}
+                allowColumnResizing={true}
             >
-                <SearchPanel visible={true} width={250} placeholder="Buscar producto" />
-                {/* <FilterRow visible={true} />
-                <HeaderFilter visible={true} /> */}
-                <Column dataField="name" caption="Producto" cellRender={this.customCell} />
-                <Paging enabled={true} pageSize={10} />
+                {/* <SearchPanel visible={true} width={350} placeholder="Buscar producto" /> */}
+                <FilterRow visible={true} />
+                {/* <HeaderFilter visible={true} /> */}
+                {/* <Column dataField="name" caption="Producto" cellRender={this.customCell} /> */}
+                <Column dataField="id" caption="Codigo" width={80}></Column>
+                <Column dataField="name" caption="Nombre" width={300}></Column>
+                <Column dataField="presentation" caption="Presentacion"></Column>
+                <Column dataField="um" caption="UM"></Column>
+                <Column dataField="cost" caption="Costo" cellRender={cellRender}></Column>
+                {/* <Paging enabled={true} pageSize={10} /> */}
                 <Scrolling mode="virtual" />
                 <Selection mode="single" />
             </DataGrid>
@@ -86,7 +160,9 @@ export default class ProductDDBComponent extends React.Component {
         return (
             <DropDownBox
                 ref={this.dropDownBoxRef}
+                key="id"
                 dropDownOptions={dropDownOptions}
+                //dataSource={this.customStore(uri.products.getByArea(1))}
                 dataSource={this.props.data.column.lookup.dataSource}
                 value={this.state.currentValue}
                 displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
