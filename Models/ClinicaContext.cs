@@ -1156,7 +1156,8 @@ namespace AtencionClinica.Models
 
             modelBuilder.Entity<Rate>(entity =>
             {
-                entity.HasKey(e => e.Date);
+                entity.HasIndex(e => e.Date, "IX_Rates")
+                    .IsUnique();
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
