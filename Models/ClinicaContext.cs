@@ -55,6 +55,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<PrivateCustomerStat> PrivateCustomerStats { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductState> ProductStates { get; set; }
+        public virtual DbSet<Rate> Rates { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Relationship> Relationships { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
@@ -1151,6 +1152,15 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Rate>(entity =>
+            {
+                entity.HasKey(e => e.Date);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Value).HasColumnType("money");
             });
 
             modelBuilder.Entity<Region>(entity =>
