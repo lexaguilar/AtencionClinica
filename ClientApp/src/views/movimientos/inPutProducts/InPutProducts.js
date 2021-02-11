@@ -69,6 +69,7 @@ const InPutProducts = () => {
             >
                 <Paging defaultPageSize={20} />
                 <Pager
+                    showInfo={true}
                     showPageSizeSelector={true}
                     allowedPageSizes={[10, 20, 50]}
                 />

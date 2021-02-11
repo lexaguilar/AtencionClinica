@@ -118,6 +118,7 @@ const Appointments = props => {
         >
             <Paging defaultPageSize={5} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
             />

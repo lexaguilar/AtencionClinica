@@ -45,9 +45,36 @@ namespace AtencionClinica.Controllers
 
             return Json(result);
 
-        }   
+        } 
 
-        [HttpPost("api/tasaCambio/post/file")]  
+        [HttpPost("api/rates/post")]
+        public IActionResult Post([FromBody] Rate rate)
+        {
+
+            if (rate.Id > 0)
+            {
+                 _db.Rates.Attach(rate);
+                _db.Entry(rate).State = EntityState.Modified;
+            }
+            else
+            {
+
+                var result = _db.Rates.FirstOrDefault(x => x.Date == rate.Date);
+                if(result != null){
+                    return BadRequest($"Ya existe una tasa de cambio con la fecha {rate.Date}");
+                }
+
+                _db.Rates.Add(rate);
+                
+            }
+
+            _db.SaveChanges();
+
+            return Json(rate);
+
+        }  
+
+        [HttpPost("api/rates/post/file")]  
         public IActionResult Post(IFormFile file)
         {
            

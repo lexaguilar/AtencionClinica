@@ -145,6 +145,7 @@ const menu = [{
                         { title: 'Familias', url: `${_path.CLINICA}/familias` },
                         { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
                         { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
+                        { title: 'Tasa de cambio', url: `${_path.CLINICA}/tasa-de-cambio` },
                     ],
                 },]
             },{
