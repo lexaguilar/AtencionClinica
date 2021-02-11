@@ -56,7 +56,7 @@ const Rates = () => {
                     <RequiredRule/>
                 </Column>
                 <Editing
-                    mode="row"
+                    mode="cell"
                     allowUpdating={true}
                     allowDeleting={true}
                     allowAdding={true}
