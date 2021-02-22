@@ -27,9 +27,11 @@ const createStoreLocal = ({ name = required('name'), url = '', active = false })
                     let existe = catalogs?.[name]?.length;
 
                     if(existe){    
-                        let arr = catalogs[name]; 
+                        let arr = catalogs[name];
 
-                        if(active)
+                        let first = arr[0];
+
+                        if(first.active && active)
                             resolve(arr.filter(x => x.active))
                         else
                             resolve(arr);

@@ -14,4 +14,5 @@ const PrivateRoute = routeProps => {
       } />)
 };
 
+
 export default PrivateRoute;

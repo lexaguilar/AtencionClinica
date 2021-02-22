@@ -2,6 +2,7 @@ import http from "../utils/http"
 import uri from "../utils/uri"
 
 const tokenName = 'token';
+const user = 'user';
 
 /**
  * Logea un usuario y guarda el token
@@ -18,7 +19,15 @@ const logout = () => localStorage.removeItem(tokenName);
  * @param {string} token -  token que se va guardar
  * @return {object} - Objeto del usuario
  */
-const setToken = resp => (localStorage.setItem(tokenName, resp.token), resp);
+const setToken = resp => 
+{
+    localStorage.setItem(tokenName, resp.token);
+    localStorage.setItem(user, JSON.stringify(buildUser(resp)));
+
+    return resp;
+}
+
+const buildUser = ({token, ...rest}) => rest;
 
 /**
  * Retorna el token guardado en memoria
@@ -27,7 +36,13 @@ const setToken = resp => (localStorage.setItem(tokenName, resp.token), resp);
 const getToken = () => localStorage.getItem(tokenName);
 
 /**
- * Retorna el token guardado en memoria
+ * Retorna el usuario guardado en memoria
+ * @return {{ resources : []}} token
+ */
+const getUser = () => JSON.parse(localStorage.getItem(user));
+
+/**
+ * Verificar si el usuario esta logeado
  * @return {boolean}
  */
 const isLogged = () => getToken() != null;
@@ -36,5 +51,6 @@ export const userService = {
     login,
     logout,
     getToken,
+    getUser,
     isLogged
 }

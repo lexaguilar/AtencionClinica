@@ -5,7 +5,6 @@ const CustomButton = ({text, icon, onClick, type='default',stylingMode="containe
     return (        
             <Button
                 className ='btn-header'
-                width={180}
                 type={type}
                 text={text}
                 icon={icon}

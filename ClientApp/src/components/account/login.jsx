@@ -23,7 +23,8 @@ function Login(props) {
 
     const sendUser = () => {
         setLoading(true);
-        userService.login(user).then(userResp => {
+        userService.login(user)
+        .then(userResp => {
 
             let pathname = (props?.location?.state?.from?.pathname || '/clinica');
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule, EmptyItem } from 'devextreme-react/form';
 import { createStore, createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
@@ -14,12 +14,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import PopupPrivado from '../../components/beneficiary/PopupPrivado';
 import DataSource from "devextreme/data/data_source";
 import DataGrid, { Column, Editing, Lookup, Summary, TotalItem} from 'devextreme-react/data-grid';
-import { cellRender, cellRenderBold, formatToMoney } from '../../utils/common';
+import { cellRender, cellRenderBold, formatToMoney, obtenerTasaCambio } from '../../utils/common';
 import urlReport from '../../services/reportServices';
+import Resumen from '../../components/footer/Resumen';
 
 const Nuevo = props => {
-
-    const dispatch = useDispatch();
     
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState({...billDefault});
@@ -50,6 +49,7 @@ const Nuevo = props => {
 
                 notify(err, 'error');
                 setLoading(false);
+
             });
         }
     }
@@ -75,33 +75,68 @@ const Nuevo = props => {
                 options: {
                     text: 'Agregar Procedimiento',
                     icon:'plus',
+                    type:'default',
+                    stylingMode:"outlined",
                     onClick: () =>  dataGrid.instance.addRow()
                 }
             });
     }  
 
+    const getPriceByCurrency = (currencyId, rate) => service => {
+       
+        let price = 0;
+
+        if(currencyId == service.currencyId)
+            price = service.price;
+        else
+            if(currencyId == 1)
+                price = service.price * rate;
+            else
+                price = service.price / rate;
+
+        return price;
+         
+    }
+
     const setCellValue = (newData, value, currentRowData) => {
 
         const service = services.find(x => x.id == value);
+
+        const price = getPriceByCurrency(bill.currencyId, bill.rate)(service);
       
         newData.id = value;
       
         newData.quantity = 1;     
-        newData.price = service.price;     
-        newData.total = service.price * newData.quantity;  
+        newData.price = price;
+        newData.subTotal = price * newData.quantity;  
+        newData.total = newData.subTotal;  
       
     }
 
     const setCellValueCant = (newData, value, currentRowData) => {
+
         newData.quantity = value;
         newData.price = currentRowData.price;     
-        newData.total = currentRowData.price * newData.quantity;  
+        newData.subTotal = currentRowData.price * newData.quantity;  
+        newData.total = newData.subTotal;  
+
     }
 
-    const onRowInserted = (e) => {
-        
+    const onValueChangedCurrency = (e) => {
+        setBill({...bill, currencyId : e.value});    
+        setProcedimientos([]);
     }
 
+    useEffect(() => {
+        obtenerTasaCambio(new Date()).then(rate =>{
+            if(rate)
+                setBill({...bill, rate : rate.value});
+        });
+    }, [0]);
+
+    const updateBills = (e) => {
+        setProcedimientos([...procedimientos]);
+    } 
 
     const title = 'Factura';
 
@@ -159,6 +194,16 @@ const Nuevo = props => {
                         <RequiredRule message="Seleccione el area" />
                     </SimpleItem>
                     <EmptyItem/>
+                    <SimpleItem dataField="currencyId" editorType="dxSelectBox"
+                        editorOptions={{
+                            dataSource: createStoreLocal({ name: 'Currency', active: true }),
+                            ...editorOptionsSelect,
+                            onValueChanged: onValueChangedCurrency
+                        }} >
+                        <Label text="Moneda" />
+                        <RequiredRule message="Seleccione el area" />
+                    </SimpleItem>
+                    <EmptyItem/>
                     <SimpleItem dataField="observation">
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
                         <Label text="Observacion" />
@@ -171,13 +216,14 @@ const Nuevo = props => {
                             selection={{ mode: 'single' }}
                             showBorders={true}
                             showRowLines={true}
-                            allowColumnResizing={true}
+                            allowColumnResizing={ true}
                             allowColumnReordering={true}    
-                            onToolbarPreparing={onToolbarPreparing}    
-                            onRowInserted={onRowInserted}
-                            >                                   
-                               
-                                <Column dataField="id" caption="Area" setCellValue={setCellValue}>
+                            onToolbarPreparing={onToolbarPreparing} 
+                            onRowUpdated={updateBills}
+                            onRowRemoved={updateBills}
+                            onRowInserted={updateBills}
+                            >                                    
+                                <Column dataField="id" caption="Procedimiento" setCellValue={setCellValue}>
                                     <Lookup 
                                         disabled={true} 
                                         dataSource={services} 
@@ -185,8 +231,8 @@ const Nuevo = props => {
                                     />
                                 </Column>
                                 <Column dataField="quantity" caption='Cant' width={70} setCellValue={setCellValueCant}/>                             
-                                <Column dataField="price" allowEditing={false} caption='Precio' width={100}  cellRender={cellRender}/>                             
-                                <Column dataField="total" allowEditing={false} width={120}  cellRender={cellRenderBold}/>
+                                <Column dataField="price" allowEditing={false} caption='Precio' width={100}  cellRender={cellRender(bill.currencyId)}/>                             
+                                <Column dataField="total" allowEditing={false} width={120}  cellRender={cellRenderBold(bill.currencyId)}/>
                                 <Editing
                                     mode="cell"
                                     selectTextOnEditStart={true}
@@ -194,13 +240,10 @@ const Nuevo = props => {
                                     allowUpdating={true}        
                                     useIcons={true}  
                                 ></Editing>
-                                <Summary>                                   
-                                    <TotalItem
-                                        column="total"
-                                        summaryType="sum" 
-                                        customizeText={cellRender} />
-                                </Summary>
                         </DataGrid>
+                    </GroupItem>
+                    <GroupItem colCount={1}>
+                        <Resumen arr={procedimientos} currencyId={bill.currencyId} />                       
                     </GroupItem>
                 </GroupItem>
             </Form>

@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace AtencionClinica
-{   
+{    
+    public enum InputType { Compras = 1, AjusteEntrada = 2, SaldoInicial = 3, Traslado = 4 }
+    public enum OutputType { Facturacion = 1, AjusteSalida = 2, FarmaciaServicios = 3, Traslado = 4 }
+    public enum AreaRestrict { Bodega =1, Farmacia = 7 }
     public enum Roles {None, Administrador }
 
     public enum Resource { Ninguno, Usuarios, Catalogos, Facturacion, Clientes, Agenda, Inventario, Graduaciones, SMS }

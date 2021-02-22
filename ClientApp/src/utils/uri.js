@@ -9,16 +9,21 @@ const uri = {
     compras: createProxyBase('compras'),
     cie10: createProxyBase('cie10'),
     doctores : createProxyBase('doctores'),
+    providers : createProxyBase('providers'),
     doctoresTimes : createProxyBase('doctoresTimes'),
     especialidades : createProxyBase('especialidades'),
     estados: createProxyBase('estados'),
     file: createProxy('', 'percapitas/post/file'),
-    inPutProducts: createProxyBase('inPutProducts'),
+    fileRates: createProxy('', 'rates/post/file'),
+    inPutProducts: createProxyBase('inPutProducts'),  
+    traslates: createProxyBase('traslates'),  
+    workOrders: createProxyBase('workOrders'),  
     subsidies: createProxyBase('subsidies'),
     services: createProxyBase('services'),
     products: createProxyBase('products'),
     roles:createProxyBase('roles'),
     users:createProxyBase('users'),
+    rates:createProxyBase('rates'),
 
 };
 uri.privateCustomers = () => {
@@ -34,6 +39,7 @@ uri.products.getByArea = areaId => `products/getbyarea/${areaId}`;
 uri.beneficarios = inss => {
     let urls = createProxy(`beneficiaries/get/${inss}`,`beneficiaries/post`);
     urls.getAsCatalog = `beneficiaries/get/${inss}/catalog`
+    urls.getInfo = beneficiaryId => `beneficiaries/get/${beneficiaryId}/information`
     return urls;
 };
 

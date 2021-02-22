@@ -243,6 +243,16 @@ html[dir=ltr] .nav-links__item--with-submenu>a svg {
     color: white;
 }
 
+.custome-active>div.dx-field-item-content>div.dx-show-invalid-badge>div.dx-texteditor-container>div.dx-texteditor-input-container>input.dx-texteditor-input {
+    background-color: darkgreen;
+    color: white;
+}
+
+.custome-noactive>div.dx-field-item-content>div.dx-show-invalid-badge>div.dx-texteditor-container>div.dx-texteditor-input-container>input.dx-texteditor-input {
+    background-color: rgb(253, 13, 85);
+    color: white;
+}
+
 .no-activo {
     background-color: rgb(255, 210, 223);
 }
@@ -275,6 +285,14 @@ html[dir=ltr] .nav-links__item--with-submenu>a svg {
 
 .ml-10 {
     margin-left: 10px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-25 {
+    margin-top: 25px;
 }
 
 .imglog {

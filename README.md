@@ -1,4 +1,5 @@
 # AtencionClinica
+-Admisionar solo desde el area admision
 
 # Catalogos Inciados
 -Areas dBSAHME --Admision debe ser la 1
@@ -22,7 +23,7 @@
 -ProductStates No administrable
 
 #
-clinica2021
+Clinica2021*
 # TODO
 Reglas para beneficiarios menores de 12
 Crear catalogos de departamentos y municipios

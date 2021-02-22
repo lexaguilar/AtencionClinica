@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'devextreme-react/button';
 
-const ButtonForm = ({saving, textSaving, onClick}) => {
+const ButtonForm = ({saving, textSaving, onClick, visible=true}) => {
     return (
         <Button
             text={`${saving?'Guardando...': textSaving}`}
@@ -11,6 +11,7 @@ const ButtonForm = ({saving, textSaving, onClick}) => {
             className="m-1"
             disabled={saving}
             onClick={onClick}
+            visible={visible}
         />      
     );
 }

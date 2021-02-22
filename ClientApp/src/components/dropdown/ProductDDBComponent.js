@@ -138,7 +138,7 @@ export default class ProductDDBComponent extends React.Component {
                 <Column dataField="name" caption="Nombre" width={300}></Column>
                 <Column dataField="presentation" caption="Presentacion"></Column>
                 <Column dataField="um" caption="UM"></Column>
-                <Column dataField="cost" caption="Costo" cellRender={cellRender}></Column>
+                <Column dataField="cost" caption="Costo" cellRender={cellRender()}></Column>
                 {/* <Paging enabled={true} pageSize={10} /> */}
                 <Scrolling mode="virtual" />
                 <Selection mode="single" />

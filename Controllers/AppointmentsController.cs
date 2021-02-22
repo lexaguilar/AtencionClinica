@@ -6,11 +6,13 @@ using AtencionClinica.Extensions;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using AtencionClinica.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtencionClinica.Controllers
 {
+    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly ClinicaContext _db = null;

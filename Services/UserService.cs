@@ -14,6 +14,10 @@ using System.Text;
 
 namespace AtencionClinica.Services
 {
+     public class AppClaimTypes
+    {
+        internal const string AreaId = "AreaId";
+    }
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
@@ -41,13 +45,14 @@ namespace AtencionClinica.Services
             var user = userFactory.Auth(model.Username, model.Password);
 
             // return null if user not found
-            if (user == null) return null;
+            if (user == null) return null;            
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
             return new AuthenticateResponse(user, token);
         }
+       
 
         public User GetById(string username)
         {
@@ -63,12 +68,23 @@ namespace AtencionClinica.Services
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("username", user.Username) }),
+                Subject = CreateClaims(user),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        private ClaimsIdentity CreateClaims(User user)
+        {
+            //Crear identidad principal
+            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, user.Username) });
+
+            //Agregar resursos
+            identity.AddClaim(new Claim(AppClaimTypes.AreaId, user.AreaId.ToString()));
+
+            return identity;
         }
     }
 }

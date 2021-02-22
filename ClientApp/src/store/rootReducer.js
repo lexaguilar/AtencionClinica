@@ -18,6 +18,8 @@ import beneficiaryDialogReducer from './beneficiary';
 import catalogReducer from './catalogs';
 import inPutProductDialogReducer from './inPutProduct';
 import productDialogReducer from './product';
+import workOrderDialogReducer from './workOrder';
+import workOrdersDialogReducer from './workOrders';
 
 export default combineReducers({
     currency: currencyReducer,
@@ -35,6 +37,8 @@ export default combineReducers({
     customerClear : customerClearReducer,
     beneficiaryDialog : beneficiaryDialogReducer,
     inPutProductDialog : inPutProductDialogReducer,
+    workOrderDialog : workOrderDialogReducer,
+    workOrdersDialog : workOrdersDialogReducer,
     productDialog : productDialogReducer,
     catalog : catalogReducer,
 });

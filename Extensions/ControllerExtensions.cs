@@ -1,4 +1,6 @@
 using System;
+using System.Security.Claims;
+using AtencionClinica.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AtencionClinica.Extensions
@@ -8,9 +10,23 @@ namespace AtencionClinica.Extensions
         internal static AppUser GetAppUser(this Controller controller)
         {
             AppUser usr = new AppUser();
-            //TODO Cargar desde los claims
-            usr.AreaId = 1;
-            usr.Username = "Admin";
+            var identity = controller.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                foreach (var c in identity.Claims)
+                {
+                    switch (c.Type)
+                    {
+                        case ClaimTypes.NameIdentifier:
+                            usr.Username = c.Value;
+                            break;                    
+                        case AppClaimTypes.AreaId:
+                            usr.AreaId = Convert.ToInt32(c.Value);
+                            break;
+                    }
+                }
+            }
+
             return usr;
         }
     }

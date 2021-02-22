@@ -14,15 +14,18 @@ import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
-import { formatDateTime } from '../../data/app';
+import { formatDateTime, resources, dataAccess } from '../../data/app';
 import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Admisiones = props => {
 
     let dataGrid = React.createRef();
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.admision, dataAccess.access ]);
+    
 
     const addMenuItems =(e) => {
         
@@ -76,7 +79,9 @@ const Admisiones = props => {
 
     const title = 'Admisiones';
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>
@@ -105,6 +110,7 @@ const Admisiones = props => {
         >
             <Paging defaultPageSize={20} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[10, 20, 50]}
             />
@@ -134,6 +140,11 @@ const Admisiones = props => {
         </DataGrid>
     </div>
     );
+
+    
 }
 
+
 export default Admisiones;
+
+

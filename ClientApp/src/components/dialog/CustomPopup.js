@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { closeDialogBeneficiary, openDialogBeneficiary } from '../../store/beneficiary/beneficiaryDialogReducer';
 import CustomButton from '../buttons/CustomButton';
 
-const CustomPopup = ({title, children}) => {
+const CustomPopup = ({title, children }) => {
 
     const { open } = useSelector(store => store.beneficiaryDialog);
     const dispatch = useDispatch();

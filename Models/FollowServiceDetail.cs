@@ -13,5 +13,6 @@ namespace AtencionClinica.Models
         public decimal Quantity { get; set; }
 
         public virtual FollowService FollowService { get; set; }
+        public virtual Service Service { get; set; }
     }
 }

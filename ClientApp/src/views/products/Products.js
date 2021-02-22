@@ -83,7 +83,10 @@ const Products = () => {
                     <Lookup disabled={true} dataSource={createStore({name: 'UnitOfMeasure'})} valueExpr="id" displayExpr="name" />
                 </Column>
                 <Column dataField="stateId" caption="Estado" width={100}>
-                    <Lookup disabled={true} dataSource={createStore({name: 'ProductState'})} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStore({name: 'productState'})} valueExpr="id" displayExpr="name" />
+                </Column>
+                <Column dataField="currencyId" caption="Moneda" width={100}>
+                    <Lookup disabled={true} dataSource={createStore({name: 'currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
                 <Column dataField="hasIva" caption='IVA ?' type="boolean" width={80} dataType="boolean"/>
                 <Column dataField="stockMin" caption='Stock' type="number" width={80}/>

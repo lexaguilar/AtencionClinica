@@ -5,12 +5,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     public class BeneficiariesController : Controller
     {      
         private ClinicaContext _db = null;
@@ -39,6 +41,26 @@ namespace AtencionClinica.Controllers
             });
 
             return Json(result);
+        }
+
+        [Route("api/beneficiaries/get/{beneficiaryId}/information")]
+        public IActionResult GetInformation(int beneficiaryId) 
+        {
+            
+            var bene = _db.Beneficiaries.Include(x => x.Relationship)
+            .FirstOrDefault(x => x.Id == beneficiaryId);
+
+            var customer = _db.Customers.Include(x => x.CustomerStatus).FirstOrDefault(x => x.Inss == bene.Inss);
+
+            return Json(new {
+
+                Type = bene.Relationship.Name,
+                Name = bene.GetFullName(),
+                StatusId = customer.CustomerStatusId,
+                Status = customer.CustomerStatus.Name,
+                Nace = bene.BirthDate
+
+            });
         }
 
         [Route("api/beneficiaries/post")]
@@ -113,10 +135,9 @@ namespace AtencionClinica.Controllers
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
 
-
                 return Json(await resultInss.ToArrayAsync());
-            }
 
+            }
 
             //Buscar por cédula
             var reg = new Regex(@"\d{3}?-");
@@ -142,7 +163,9 @@ namespace AtencionClinica.Controllers
                     x.Address,
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
+
                 return Json(await resultCedula.ToArrayAsync());
+
             }
 
             //Buscar por nombre

@@ -34,6 +34,8 @@ const Doctores = (props) => {
             options: {
                 text: 'Agregar nuevo',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         },{
@@ -63,6 +65,7 @@ const Doctores = (props) => {
         >
             <Paging defaultPageSize={20} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[10, 20, 50]}
             />

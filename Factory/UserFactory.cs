@@ -22,7 +22,10 @@ namespace AtencionClinica.Factory
             var pass = password.GetPasswordHashedSHA256();
 
             //TODO : agregar condicion de la pass
-            var result = db.Users.Include(x => x.Area).FirstOrDefault(x => x.Username == username);
+            var result = db.Users.Include(x => x.Area)
+            .Include(x => x.Rol)
+            .ThenInclude(x => x.RolResources)
+            .FirstOrDefault(x => x.Username == username && x.Password == pass);
             
             return result;
         }

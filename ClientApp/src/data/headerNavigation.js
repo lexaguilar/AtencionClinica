@@ -122,6 +122,7 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Momivientos de entrada', url: `${_path.CLINICA}/movimientos/entradas` },    
+                        { title: 'Traslados', url: `${_path.CLINICA}/movimientos/traslados` },    
                         { title: 'Compras', url: `${_path.CLINICA}/movimientos/compras` },
                         { title: 'Inventario Inicial', url: `${_path.CLINICA}/movimientos/inv-inicial` },
                     ],
@@ -133,6 +134,7 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Momivientos de salida', url: `${_path.CLINICA}/movimientos/salidas` },
+                        { title: 'Despacho', url: `${_path.CLINICA}/movimientos/despacho` },    
                     ],
                 },]
             },{
@@ -145,6 +147,8 @@ const menu = [{
                         { title: 'Familias', url: `${_path.CLINICA}/familias` },
                         { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
                         { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
+                        { title: 'Proveedores', url: `${_path.CLINICA}/proveedores` },
+                        { title: 'Tasa de cambio', url: `${_path.CLINICA}/tasa-de-cambio` },
                     ],
                 },]
             },{

@@ -2,6 +2,7 @@
 using System.Linq;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,15 +21,16 @@ namespace AtencionClinica.Controllers
         [Route("api/about/get-info")]
         public IActionResult Get()
         {
+
             App app = db.Apps.FirstOrDefault();
 
-            if(app==null)
+            if (app == null)
                 return BadRequest("Los valores iniciales de la aplicacion no estan establecidos");
 
-            app.Version =  Program.version.ToString();
+            app.Version = Program.version.ToString();            
 
-            return Json(app);  
-        }      
-       
+            return Json(app);
+        }
+
     }
 }

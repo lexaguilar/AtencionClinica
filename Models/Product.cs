@@ -12,6 +12,7 @@ namespace AtencionClinica.Models
             AreaProductStocks = new HashSet<AreaProductStock>();
             InPutProductDetails = new HashSet<InPutProductDetail>();
             OutPutProductDetails = new HashSet<OutPutProductDetail>();
+            TraslateDetails = new HashSet<TraslateDetail>();
         }
 
         public int Id { get; set; }
@@ -27,7 +28,9 @@ namespace AtencionClinica.Models
         public string CreateBy { get; set; }
         public DateTime LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
+        public int CurrencyId { get; set; }
 
+        public virtual Currency Currency { get; set; }
         public virtual Family Family { get; set; }
         public virtual Presentation Presentation { get; set; }
         public virtual ProductState State { get; set; }
@@ -35,5 +38,6 @@ namespace AtencionClinica.Models
         public virtual ICollection<AreaProductStock> AreaProductStocks { get; set; }
         public virtual ICollection<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }
+        public virtual ICollection<TraslateDetail> TraslateDetails { get; set; }
     }
 }

@@ -1,11 +1,14 @@
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using AtencionClinica.ViewModel;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -14,12 +17,8 @@ using System.Text;
 
 namespace AtencionClinica.Services
 {
-    public interface IInPutProductServices
-    {
-        ModelValidationSource<InPutProduct> Create(InPutProduct inPutProduct);
-
-    }
-    public class InPutProductServices : IInPutProductServices
+   
+    public class InPutProductServices : IProductServices<InPutProduct>
     {
         private readonly ClinicaContext _db;
         public InPutProductServices(ClinicaContext db)
@@ -29,53 +28,127 @@ namespace AtencionClinica.Services
         }
         public ModelValidationSource<InPutProduct> Create(InPutProduct inPutProduct)
         {
-            var area = _db.Areas.FirstOrDefault(x => x.Id == inPutProduct.AreaId);
-            var model = inPutProduct.Validate(area);
+            
+            inPutProduct.Init(_db);   
+
+            var model = inPutProduct.Validate(_db);
             
             if (!model.IsValid)
                 return model;
 
-            inPutProduct.Init();
-
-
-
-
-            // var oldinPutProduct = _db.InPutProducts.FirstOrDefault(x => x.Id == inPutProduct.Id);
-
-            // oldinPutProduct.CopyFrom(inPutProduct, x => new
-            // {
-            //     x.Date,
-            //     x.Observation,
-            //     x.AreaId,
-            //     x.TypeId
-            // });
-
-            // var details = _db.InPutProductDetails.Where(x => x.InPutProductId == inPutProduct.Id);
-            // _db.InPutProductDetails.RemoveRange(details);
-
-          
-
             _db.InPutProducts.Add(inPutProduct);
 
-            // foreach (var item in inPutProduct.InPutProductDetails)
-            // {
-            //     var detail = new InPutProductDetail();
-            //     detail.CopyAllFromExcept(item, x => new { x.Id });
-            //     _db.InPutProductDetails.Add(detail);
-            // }
+            foreach (var item in inPutProduct.InPutProductDetails)
+            {                
+                var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == inPutProduct.AreaId && x.ProductId == item.ProductId);
 
-            _db.SaveChanges();
+                if(stock == null)
+                {
+                    var areaProductStock = new AreaProductStock{
+                        AreaId = inPutProduct.AreaId,
+                        ProductId = item.ProductId,
+                        Stock = item.Quantity,
+                        CostAvg = item.Cost,
+                        CostReal = item.Cost,
+                        Min = 0,
+                        Price = item.Price
+                    };
+
+                    item.CostAvg = item.Cost;
+                    item.Stocks = item.Quantity;
+
+                    _db.AreaProductStocks.Add(areaProductStock);
+                }else{
+                    var costoPromedioAnt = stock.CostAvg;
+                    var existencias = stock.Stock;
+
+                    stock.Price = item.Price;
+                    stock.Stock +=  item.Quantity;
+                    stock.CostReal = item.Cost;
+                    stock.CostAvg = ((costoPromedioAnt * Convert.ToDecimal(existencias)) + (Convert.ToDecimal(item.Quantity) * item.Cost)) / (Convert.ToDecimal(item.Quantity) + Convert.ToDecimal(existencias));
+
+                    item.CostAvg = stock.CostAvg;
+                    item.Stocks = stock.Stock;
+
+                }
+            }         
+
+            //_db.SaveChanges();
 
             return model;
         }
-    }
 
-    static class AuthUserServiceCollectionExtensions
-    {
-        public static void AddInPutProductServices(this IServiceCollection services)
+        public ModelValidationSource<InPutProduct> CreateFrom(Traslate traslate)
         {
+            var items = new List<InPutProductDetail>();
+            foreach (var item in traslate.TraslateDetails)
+            {
+                items.Add(new InPutProductDetail{
+                    ProductId = item.ProductId,
+                    Quantity = item.QuantityResponse,
+                    Cost = item.Cost,
+                    Price = item.Price,
+                    Discount = item.Discount
+                });
+            } 
 
-            services.AddScoped<IInPutProductServices, InPutProductServices>();
+            var inPutProduct = new InPutProduct{
+                AreaId = traslate.AreaTargetId,
+                TypeId = (int)InputType.Traslado,
+                Date = DateTime.Today,               
+                Observation = "Entrada por traslado",
+                CreateBy = traslate.CreateBy,
+                Reference = traslate.Id.ToString(),                
+                InPutProductDetails = items
+            };
+
+            return this.Create(inPutProduct);
+
+        }
+
+        public ModelValidationSource<InPutProduct> Revert(InPutProduct inPutProduct)
+        {
+           
+
+            var model = inPutProduct.ValidateRevert(_db);
+
+            inPutProduct.Revert();  
+
+            foreach (var item in inPutProduct.InPutProductDetails)
+            { 
+
+                var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == inPutProduct.AreaId && x.ProductId == item.ProductId); 
+
+                var lastInput = _db.InPutProductDetails
+                .Include(x => x.InPutProduct).OrderByDescending(x => x.InPutProductId)
+                .FirstOrDefault(x => x.ProductId == item.ProductId && x.InPutProduct.StateId == 1 && x.InPutProductId < inPutProduct.Id);
+
+                if(lastInput == null){
+
+                    _db.AreaProductStocks.Remove(stock);
+
+                } else{
+                    stock.Stock = lastInput.Stocks;
+                    stock.CostAvg =  lastInput.CostAvg;
+                    stock.CostReal =  lastInput.Cost;
+                    stock.Price =  lastInput.Price;
+                }
+                
+            } 
+
+            if (!model.IsValid)
+                return model;            
+
+            return model;
+
+
+        }
+
+        public ModelValidationSource<InPutProduct> Update(InPutProduct model)
+        {
+            throw new NotImplementedException();
         }
     }
+
+    
 }

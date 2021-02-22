@@ -5,6 +5,7 @@ using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
 using AtencionClinica.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -12,11 +13,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AtencionClinica.Controllers
 {
+    [Authorize]
     public class InPutProductsController : Controller
     {
         private ClinicaContext _db = null;
-        private IInPutProductServices _service;
-        public InPutProductsController(ClinicaContext db, IInPutProductServices service)
+        private IProductServices<InPutProduct> _service;
+        public InPutProductsController(ClinicaContext db, IProductServices<InPutProduct> service)
         {
             this._db = db;
             _service = service;
@@ -26,13 +28,7 @@ namespace AtencionClinica.Controllers
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
         {
             IQueryable<InPutProduct> inPutProducts = _db.InPutProducts
-           .OrderByDescending(x => x.Number);
-
-            if (values.ContainsKey("number"))
-            {
-                var number = Convert.ToInt32(values["number"]);
-                inPutProducts = inPutProducts.Where(x => x.Number == number);
-            }
+           .OrderByDescending(x => x.Id);            
 
             if (values.ContainsKey("areaId"))
             {
@@ -46,10 +42,10 @@ namespace AtencionClinica.Controllers
                 inPutProducts = inPutProducts.Where(x => x.TypeId == typeId);
             }
 
-            if (values.ContainsKey("sourceId"))
+            if (values.ContainsKey("reference"))
             {
-                var sourceId = Convert.ToInt32(values["sourceId"]);
-                inPutProducts = inPutProducts.Where(x => x.SourceId == sourceId);
+                var reference = Convert.ToString(values["reference"]);
+                inPutProducts = inPutProducts.Where(x => x.Reference == reference);
             }
 
             var items = inPutProducts.Skip(skip).Take(take);
@@ -77,20 +73,26 @@ namespace AtencionClinica.Controllers
 
             var user = this.GetAppUser();
 
-
             if (inPutProduct.Id == 0)
             {
 
                 inPutProduct.CreateBy = user.Username;                
 
-                _service.Create(inPutProduct);
+                var result = _service.Create(inPutProduct);
 
+                if(!result.IsValid)
+                    return BadRequest(result.Error);
                 
             }
             else
             {
-                
+                var result = _service.Update(inPutProduct);
+
+                if(!result.IsValid)
+                    return BadRequest(result.Error);
             }
+
+            _db.SaveChanges();
 
             return Json(inPutProduct);
 
@@ -99,13 +101,11 @@ namespace AtencionClinica.Controllers
         [HttpGet("api/inputproducts/{id}/delete")]
         public IActionResult Delete(int id)
         {
-            var service = _db.Services.FirstOrDefault(x => x.Id == id);
+            var inPutProduct = _db.InPutProducts.Include(x => x.InPutProductDetails).FirstOrDefault(x => x.Id == id);            
 
-            if (service != null)
-            {
-                service.Active = false;
-                _db.SaveChanges();
-            }
+            _service.Revert(inPutProduct);
+
+            _db.SaveChanges();            
 
             return Json(new { n = id });
         }

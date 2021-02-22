@@ -19,6 +19,7 @@ namespace AtencionClinica.Models
         public string Password { get; set; }
         public int RolId { get; set; }
         public int AreaId { get; set; }
+        public bool Active { get; set; }
 
         public virtual Area Area { get; set; }
         public virtual Rol Rol { get; set; }

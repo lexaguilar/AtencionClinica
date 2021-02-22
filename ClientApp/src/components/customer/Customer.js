@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { custumerDefault } from '../../data/custumer';
 import { NumberBox } from 'devextreme-react/number-box';
 import { Button } from 'devextreme-react/button';
@@ -17,7 +17,7 @@ const Customer = props => {
     const [inss, setInss] = useState(null);
     const [custumer, setCustumer] = useState({...custumerDefault});
 
-    const buscarAsegurado = e =>{
+    const buscarAsegurado = e =>{        
 
         const { valueChanged } = props;
 

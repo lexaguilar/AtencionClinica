@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,7 +14,8 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     public class Cie10Controller : Controller
     {      
         private ClinicaContext _db = null;

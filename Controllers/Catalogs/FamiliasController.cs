@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace AtencionClinica.Controllers
 {  
+    [Authorize]
     public class FamiliasController : Controller
     {      
         private GenericFactory<Family> factory = null;

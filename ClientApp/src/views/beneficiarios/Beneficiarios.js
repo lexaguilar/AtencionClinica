@@ -77,9 +77,10 @@ const Beneficiarios = () => {
                 location: 'before',
                 widget: 'dxButton',
                 options: {
-                    //width: 136,
                     text: 'Agregar beneficiario',
                     icon:'plus',
+                    type:'success',
+                    stylingMode:"outlined",
                     onClick: () =>  dataGrid.instance.addRow()
                 }
             });
