@@ -9,14 +9,20 @@ import { Column, Editing, Popup, Form,
     StringLengthRule, } from "devextreme-react/data-grid";
 import Title from "../../components/shared/Title";
 import BlockHeader from "../../components/shared/BlockHeader";
+import { dataAccess, resources } from "../../data/app";
+import useAuthorization from "../../hooks/useAuthorization";
 
 
 
 const Roles = props => {
 
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+
     const title ='Roles'
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container small">
             <Title title={title} />
             <BlockHeader title={title} />

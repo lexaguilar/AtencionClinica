@@ -20,8 +20,12 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 const Doctores = (props) => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const title = 'Doctores';
 
@@ -49,7 +53,9 @@ const Doctores = (props) => {
         });
     }  
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}/>          

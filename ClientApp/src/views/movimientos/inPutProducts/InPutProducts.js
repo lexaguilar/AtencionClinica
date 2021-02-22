@@ -16,19 +16,23 @@ import DataGrid, {
 import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
-import { formatDate, formatDateTime } from '../../../data/app';
+import { dataAccess, formatDate, formatDateTime, resources } from '../../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
+import useAuthorization from '../../../hooks/useAuthorization';
 
 const InPutProducts = (
+
+    
     { 
         title= "Entrada de inventario", 
         btnAddText= "Crear entrada",
         typeId= null,
         Component= Nuevo
     }) => {
+        const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -37,7 +41,9 @@ const InPutProducts = (
         dataGrid.current.instance.refresh();
     }
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >

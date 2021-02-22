@@ -20,11 +20,14 @@ import http from '../../utils/http';
 import { customizeText, getMonthName } from '../../utils/common';
 import { Button } from 'devextreme-react/button';
 import Delete from './Delete';
-import { formatDate } from '../../data/app';
+import { dataAccess, formatDate, resources } from '../../data/app';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Percapita = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const [ date, setDate ] = useState(new Date());
 
@@ -38,7 +41,9 @@ const Percapita = () => {
         dataGrid.instance.refresh();
     }
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         
         <div className="container">
             <Title title="Tasa de cambio" />

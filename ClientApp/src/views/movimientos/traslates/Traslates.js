@@ -16,14 +16,18 @@ import DataGrid, {
 import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
-import { formatDate, formatDateTime } from '../../../data/app';
+import { dataAccess, formatDate, formatDateTime, resources } from '../../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
 import { typeTraslate } from '../../../data/catalogos';
+import useAuthorization from '../../../hooks/useAuthorization';
 
 const Traslates = (props) => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
+    
 
     const {  areaId } = useSelector(store => store.user); 
 
@@ -38,7 +42,9 @@ const Traslates = (props) => {
 
     let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >

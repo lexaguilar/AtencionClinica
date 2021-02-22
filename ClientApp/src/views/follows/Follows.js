@@ -19,12 +19,15 @@ import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { formatDate, formatDateTime } from '../../data/app';
+import { dataAccess, formatDate, formatDateTime, resources } from '../../data/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Follows = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.servicios, dataAccess.access ]);
     
     const {  areaId } = useSelector(store => store.user); 
     const dispatch = useDispatch();
@@ -71,7 +74,9 @@ const Follows = () => {
     
     const title = 'Servicios';
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />       

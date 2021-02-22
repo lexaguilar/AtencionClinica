@@ -20,9 +20,13 @@ import { useDispatch } from 'react-redux'
 import { dialogProduct } from '../../store/product/productDialogReducer';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Nuevo from './Nuevo';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 
 const Products = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.inventarios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -36,7 +40,9 @@ const Products = () => {
     const title = "Inventario";
     const active = true;
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >

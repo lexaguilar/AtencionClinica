@@ -21,9 +21,14 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import onExporting from '../../components/grids/Importer';
+import { Resources } from 'devextreme-react/gantt';
+import { dataAccess, resources } from '../../data/app';
+import useAuthorization from '../../hooks/useAuthorization';
 
 
 const Subsidies = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.subsidios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -93,7 +98,9 @@ const Subsidies = () => {
         });
     }  
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} >

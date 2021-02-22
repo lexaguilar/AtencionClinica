@@ -22,11 +22,14 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
 import { estadoAdmision,relationships,estadoBeneficiario } from '../../data/catalogos';
 import http from '../../utils/http';
-import { formatDate } from '../../data/app';
+import { dataAccess, formatDate, resources } from '../../data/app';
+import useAuthorization from '../../hooks/useAuthorization';
 
 
 
 const Privados = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();    
     
@@ -46,7 +49,9 @@ const Privados = () => {
 
     const title = 'Pacientes privados';
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />           

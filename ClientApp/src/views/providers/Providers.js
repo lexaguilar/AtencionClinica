@@ -20,8 +20,13 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 const Providers = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+
     const title = 'Proveedores';
 
     let dataGrid = React.createRef();
@@ -40,7 +45,9 @@ const Providers = () => {
         });
     }
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />

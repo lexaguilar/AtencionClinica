@@ -17,11 +17,14 @@ import { store } from '../../services/store';
 
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
 import { cellRender, formatToMoney } from '../../utils/common';
 import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Bills = props => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.caja, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -63,7 +66,9 @@ const Bills = props => {
 
     const title = 'Facturas';
     const active = true;
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>

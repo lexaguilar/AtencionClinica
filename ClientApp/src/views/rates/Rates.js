@@ -7,9 +7,13 @@ import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import Nuevo from './Nuevo';
 import BlockHeader from '../../components/shared/BlockHeader';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 
 const Rates = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -17,7 +21,9 @@ const Rates = () => {
 
     const title="Tasa de cambio";
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container small">
             <Title title={title}/>
             <BlockHeader title={title} />

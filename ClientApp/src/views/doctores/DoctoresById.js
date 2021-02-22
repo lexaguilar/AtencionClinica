@@ -20,9 +20,12 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const DoctoresById = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const title = 'Horario de Doctores';
 
@@ -42,7 +45,9 @@ const DoctoresById = () => {
         });
     }  
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}/>          

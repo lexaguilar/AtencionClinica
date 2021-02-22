@@ -21,10 +21,14 @@ import { store } from '../../services/store';
 import Title from './Title';
 import BlockHeader from './BlockHeader';
 import { createProxyBase } from '../../utils/proxy';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 function Catalogo(props) {
 
     const { name, url, caption } = props;
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -42,7 +46,9 @@ function Catalogo(props) {
         });
     }  
     
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container small">
             <Title title={caption||name}/>
             <BlockHeader title={toCapital(caption||name)}/>          
