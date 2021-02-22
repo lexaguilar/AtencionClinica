@@ -22,8 +22,10 @@ import Title from '../../components/shared/Title';
 import { dataAccess, formatDate, formatDateTime, resources } from '../../data/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
+import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
 import useAuthorization from '../../hooks/useAuthorization';
+import Transfer from '../../components/workOrder/Transfer';
 
 const Follows = () => {
 
@@ -50,7 +52,12 @@ const Follows = () => {
                 },{
                     text: 'Nueva transferencia',
                     icon : 'chevrondoubleright',
-                    onItemClick: () => 0                
+                    onItemClick: () => {
+
+                        let { id, beneficiaryId } = e.row.data;
+                        dispatch(dialogTransfer({open : true, id}));
+
+                    }              
                 },{
                     text: 'Ver movimientos',
                     icon : 'runner',
@@ -79,8 +86,10 @@ const Follows = () => {
     : (
         <div className="container">
             <Title title={title} />
-            <BlockHeader title={title} />       
+            <BlockHeader title={title} />   
+
             <PopupWorkOrder />  
+            <Transfer />  
             <DataGrid id="gridContainer"
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.follows(areaId), remoteOperations: true })}

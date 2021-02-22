@@ -20,6 +20,7 @@ import inPutProductDialogReducer from './inPutProduct';
 import productDialogReducer from './product';
 import workOrderDialogReducer from './workOrder';
 import workOrdersDialogReducer from './workOrders';
+import transferDialogReducer from './transfer';
 
 export default combineReducers({
     currency: currencyReducer,
@@ -41,4 +42,5 @@ export default combineReducers({
     workOrdersDialog : workOrdersDialogReducer,
     productDialog : productDialogReducer,
     catalog : catalogReducer,
+    transfer : transferDialogReducer
 });
