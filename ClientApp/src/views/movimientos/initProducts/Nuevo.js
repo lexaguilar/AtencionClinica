@@ -22,7 +22,7 @@ const Nuevo = props => {
 
     const { inPutProductDialog : { open }, user } = useSelector(store => store);
 
-    const { products, isLoading } = useProducts(user.areaId);
+    const { products } = useProducts(user.areaId);
     const [ inPutProduct, setInPutProduct ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);

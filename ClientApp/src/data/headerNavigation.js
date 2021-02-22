@@ -157,7 +157,7 @@ const menu = [{
                     title: 'Reportes',
                     url: '',
                     links: [
-                        { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/karex` },
+                        { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/kardex` },
                         { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/karex` },
                     ],
                 },]
