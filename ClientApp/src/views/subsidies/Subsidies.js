@@ -86,6 +86,8 @@ const Subsidies = () => {
             options: {
                 text: 'Exportar a excel',
                 icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.exportToExcel(false)
             }
         });

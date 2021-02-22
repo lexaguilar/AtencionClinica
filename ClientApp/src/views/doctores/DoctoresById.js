@@ -35,6 +35,8 @@ const DoctoresById = () => {
             options: {
                 text: 'Agregar nuevo',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         });

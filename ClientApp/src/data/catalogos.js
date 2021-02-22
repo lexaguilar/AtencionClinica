@@ -39,4 +39,9 @@ export const monedaSymbol = {
     2: "$"
 }
 
+export const typeTraslate = {
+    create: 'create',
+    update: 'update'
+}
+
 export default catalogos;

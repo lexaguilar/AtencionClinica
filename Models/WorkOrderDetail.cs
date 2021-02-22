@@ -12,7 +12,7 @@ namespace AtencionClinica.Models
         public int? ServiceId { get; set; }
         public int? ProductId { get; set; }
         public bool IsService { get; set; }
-        public decimal Quantity { get; set; }
+        public double Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal Total { get; set; }
 

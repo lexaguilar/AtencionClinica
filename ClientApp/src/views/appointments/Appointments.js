@@ -17,11 +17,13 @@ import { store } from '../../services/store';
 
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
-import onExporting from '../../components/grids/Importer';
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
 import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Appointments = props => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([ resources.citas, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -82,13 +84,17 @@ const Appointments = props => {
             options: {
                 text: 'Exportar a excel',
                 icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.exportToExcel(false)
             }
         });
     }  
 
     const title = 'Citas'
-    return (
+    return !isAuthorization ?
+    <Unauthorized/> :
+    (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>

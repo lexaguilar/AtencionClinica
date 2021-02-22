@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,7 +14,8 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     public class AdmisionsController : Controller
     {      
         private ClinicaContext _db = null;
@@ -81,14 +83,14 @@ namespace AtencionClinica.Controllers
             admission.CreateBy = user.Username;
             _db.Admissions.Add(admission);    
 
-             _db.SaveChanges();      
+            //_db.SaveChanges();
 
             var follow = new Follow{
-                AdmissionId = admission.Id,
-                AreaSourceId = 1, //admision
+                Admission = admission,
+                AreaSourceId = 2, //admision
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
-                CreateAt = DateTime.Today,
+                CreateAt = DateTime.Now,
                 CreateBy = user.Username                
             };
 
@@ -121,7 +123,7 @@ namespace AtencionClinica.Controllers
             .Include(x => x.Specialty)
             .Where(x => x.BeneficiaryId == beneficiaryId && x.Active)
             .OrderByDescending(x => x.CreateAt);
-
+            //TODO verificar si no hay descargue de inventario para poder anular
             var items = admissions.Take(top).Select(x => new {
                 x.Id,
                 x.NumberOfDay,

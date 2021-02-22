@@ -23,4 +23,9 @@ namespace AtencionClinica.Models
     public partial class UnitOfMeasure : ICatalogo {  }
     public partial class ProductState : ICatalogo {  }
     public partial class Rol : ICatalogo {  }
+    public partial class Currency : ICatalogo {  }
+    public partial class ProviderState : ICatalogo {  }
+    public partial class Provider : ICatalogo {  }
+    public partial class TraslateState : ICatalogo {  }
+    public partial class TraslateStage : ICatalogo {  }
 }

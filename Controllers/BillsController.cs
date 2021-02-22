@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,7 +14,8 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     public class BillsController : Controller
     {      
         private ClinicaContext _db = null;
@@ -35,6 +37,12 @@ namespace AtencionClinica.Controllers
                 bills = bills.Where(x => x.PrivateCustomer.FirstName.StartsWith(name) || x.PrivateCustomer.LastName.StartsWith(name));
             }
 
+            if (values.ContainsKey("currencyId"))
+            {
+                var currencyId = Convert.ToInt32(values["currencyId"]);
+                bills = bills.Where(x => x.CurrencyId == currencyId);
+            }
+
             if (values.ContainsKey("createAt"))
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
@@ -49,7 +57,8 @@ namespace AtencionClinica.Controllers
                 x.CreateAt,
                 x.CreateBy,
                 x.Active,
-                x.Total
+                x.Total,
+                x.CurrencyId
             });
 
             return Json(new
@@ -72,11 +81,11 @@ namespace AtencionClinica.Controllers
             bill.CreateBy = user.Username;
             _db.Bills.Add(bill);    
 
-             _db.SaveChanges();      
+            _db.SaveChanges();      
 
             var follow = new FollowsPrivate{
                 BillId = bill.Id,
-                AreaSourceId = 2, //caja
+                AreaSourceId = 3, //caja
                 AreaTargetId = bill.AreaId,
                 Observation = "Tranferencia automatica desde caja",
                 CreateAt = DateTime.Today,
@@ -94,7 +103,7 @@ namespace AtencionClinica.Controllers
         [HttpGet("api/bill/{id}/delete")]
         public IActionResult Delete(int id) {
             var bill = _db.Bills.FirstOrDefault(x => x.Id == id);
-            //TODO
+            //TODO verificar si no hay descargue de inventario para poder anular
             if(bill != null)
             {
                 bill.Active = false;

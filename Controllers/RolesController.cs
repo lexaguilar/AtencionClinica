@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace AtencionClinica.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class RolesController : ControllerBase

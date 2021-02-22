@@ -35,6 +35,8 @@ const Procedimientos = () => {
             options: {
                 text: 'Agregar nuevo',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         });
@@ -53,6 +55,10 @@ const Procedimientos = () => {
             allowColumnResizing={true}
             allowColumnReordering={true}
             onToolbarPreparing={onToolbarPreparing}
+            remoteOperations={{
+                paging: true,
+                filtering: true
+            }}
         >
             <Paging defaultPageSize={20} />
             <Pager
@@ -68,6 +74,9 @@ const Procedimientos = () => {
             <Column dataField="name" caption='Nombre' />
             <Column dataField="price" caption='Precio' width={120} allowFiltering={false} cellRender={cellRender}/>          
             <Column dataField="priceCalculate" caption='Precio Calculado' width={200} allowFiltering={false} />
+            <Column dataField="currencyId" caption="Moneda" width={100}>
+                <Lookup disabled={true} dataSource={createStore({name: 'Currency'})} valueExpr="id" displayExpr="name" />
+            </Column>
             <Column dataField="active" caption='Activo' allowFiltering={false}  width={100}/>
             <Editing
                 mode="popup"
@@ -75,7 +84,7 @@ const Procedimientos = () => {
                 allowDeleting={true}
                 useIcons={true}
             >
-                <Popup title={title} showTitle={true} width={450} height={370}>
+                <Popup title={title} showTitle={true} width={450} height={410}>
                     
                 </Popup>
                 <Form>
@@ -88,6 +97,9 @@ const Procedimientos = () => {
                     </Item>
                     <Item  dataField="priceCalculate" editorType="dxTextArea" colSpan={2}>
                         <StringLengthRule max={250} message="Máximo de caracteres 250"/>
+                    </Item>
+                    <Item  dataField="currencyId" colSpan={2}>
+                        <RequiredRule message="El campo es requerido"/>
                     </Item>
                     <Item  dataField="active" colSpan={2}>
                     </Item>

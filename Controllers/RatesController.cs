@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -14,6 +15,7 @@ using NPOI.XSSF.UserModel;
 
 namespace AtencionClinica.Controllers
 {  
+    [Authorize]
     public class RatesController : Controller
     {      
         private ClinicaContext _db = null;
@@ -24,8 +26,16 @@ namespace AtencionClinica.Controllers
 
 
         [Route("api/rates/get")]
-        public IActionResult Get(int skip, int take){
-            var result = _db.Rates;
+        public IActionResult Get(int skip, int take,IDictionary<string, string> values){
+
+             IQueryable<Rate> result = _db.Rates;
+
+            if (values.ContainsKey("date"))
+            {
+                var date = Convert.ToDateTime(values["date"]).Date;
+                result = result.Where(x => x.Date == date);
+            }
+
             var items = result.Skip(skip).Take(take);
 
             return Json(new
@@ -40,7 +50,7 @@ namespace AtencionClinica.Controllers
         public IActionResult Get(long tickts) 
         {
 
-            var fecha = new DateTime(tickts).Date;
+            var fecha = new DateTime(tickts);
             var result = _db.Rates.FirstOrDefault(x => x.Date == fecha);
 
             return Json(result);

@@ -12,6 +12,7 @@ namespace AtencionClinica.Models
         public int ServiceId { get; set; }
         public decimal Quantity { get; set; }
         public decimal Price { get; set; }
+        public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
 
         public virtual Bill Bill { get; set; }

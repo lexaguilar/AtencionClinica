@@ -9,7 +9,7 @@ import {
     Column, 
     Lookup,
     Export, Editing} from 'devextreme-react/data-grid';
-import { createStore } from '../../utils/proxy';
+import { createStore, createStoreLocal } from '../../utils/proxy';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
@@ -102,13 +102,15 @@ const Bills = props => {
             <Column dataField="id"  width={100} />          
             <Column dataField="nombre" />
             <Column dataField="areaId" width={170} caption="Area">
-                <Lookup disabled={true} dataSource={createStore({name : 'area'})} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStoreLocal({name : 'area'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="billTypeId" width={170} caption="Tipo Ingreso">
-                <Lookup disabled={true} dataSource={createStore({name : 'billType'})} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStoreLocal({name : 'billType'})} valueExpr="id" displayExpr="name" />
             </Column> 
-            <Column dataField="total" width={150}/>
-            <Column dataField="total" width={150} cellRender={cellRender} />
+            <Column dataField="currencyId" caption="Moneda" width={100}>
+                <Lookup disabled={true} dataSource={createStoreLocal({name: 'currency'})} valueExpr="id" displayExpr="name" />
+            </Column>
+            <Column dataField="total" width={100} cellRender={cellRender()} />
             <Column dataField="createBy" caption='Creado por' width={100} />
             <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180} />
             <Editing

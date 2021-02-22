@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AtencionClinica.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private ClinicaContext _db = null;
@@ -44,12 +46,15 @@ namespace AtencionClinica.Controllers
         // }
 
         [Route("api/products/getbyarea/{areaId}")]
-        public IActionResult GetCatalog(int areaId, bool active,int skip, int take, IDictionary<string, string> values)
+        public IActionResult GetCatalog(int areaId, bool active, bool exists,int skip, int take, IDictionary<string, string> values)
         {
             var result = _db.VwProductInfos.Where(x => x.AreaId == areaId);
 
             if (active)
                 result = result.Where(x => x.StateId == 1);
+
+            if (exists)
+                result = result.Where(x => x.Exists);
 
             return Json(result);
 
@@ -123,7 +128,15 @@ namespace AtencionClinica.Controllers
 
             if (product.Id > 0)
             {
-                var oldProduct = _db.Products.FirstOrDefault(x => x.Id == product.Id);
+                var oldProduct = _db.Products
+                .Include(x => x.InPutProductDetails)
+                .ThenInclude(x => x.InPutProduct)
+                .FirstOrDefault(x => x.Id == product.Id);
+
+                if(oldProduct.CurrencyId != product.CurrencyId)
+                    if(oldProduct.InPutProductDetails.Any()){
+                        return BadRequest("No se puede editar la moneda de este producto porque ya tiene movimientos");
+                    }
 
                 oldProduct.CopyFrom(product, x => new
                 {
@@ -135,6 +148,7 @@ namespace AtencionClinica.Controllers
                     x.StockMin,
                     x.StateId,
                     x.HasIva,
+                    x.CurrencyId
                 });
 
                 oldProduct.LastModificationBy = user.Username;

@@ -10,6 +10,7 @@ namespace AtencionClinica.Models
         public int Id { get; set; }
         public int AdmissionId { get; set; }
         public int Inss { get; set; }
+        public int BeneficiaryId { get; set; }
         public string Relationship { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

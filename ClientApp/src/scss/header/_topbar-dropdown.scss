@@ -19,7 +19,7 @@ $local-button-padding: 10px;
     position: relative;
     transition: all .1s;
     background: $topbar-dropdown-bg;
-    color: $topbar-dropdown-font-color;
+    color: #fff; //$topbar-dropdown-font-color;
     fill: $topbar-dropdown-arrow-color;
     @include direction {
         #{$padding-inline-start}: $local-button-padding;

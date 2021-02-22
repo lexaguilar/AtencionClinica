@@ -24,12 +24,14 @@ namespace AtencionClinica.Models
         public decimal Total { get; set; }
         public decimal Rate { get; set; }
         public string Observation { get; set; }
-        public int? SourceId { get; set; }
+        public int CurrencyId { get; set; }
         public int StateId { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
+        public string Reference { get; set; }
 
         public virtual Area Area { get; set; }
+        public virtual Currency Currency { get; set; }
         public virtual OutPutProductState State { get; set; }
         public virtual OutPutProductType Type { get; set; }
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }

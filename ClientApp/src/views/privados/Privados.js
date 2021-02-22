@@ -35,9 +35,10 @@ const Privados = () => {
             location: 'before',
             widget: 'dxButton',
             options: {
-                //width: 136,
                 text: 'Agregar paciente',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         });

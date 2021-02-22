@@ -26,6 +26,8 @@ import Title from "../../components/shared/Title";
 import { store } from "../../services/store";
 import { Item } from "devextreme-react/form";
 import uri from "../../utils/uri";
+import http from "../../utils/http";
+import notify from "devextreme/ui/notify";
 
 class Users extends Component {
 
@@ -34,14 +36,48 @@ class Users extends Component {
 
         this.store = null
         this.dataGrid = null;
+        this.addMenuItems = this.addMenuItems.bind(this);
+        this.reload = this.reload.bind(this);
     }
 
     reload() {
         this.dataGrid.instance.refresh();
     }
 
+    addMenuItems(e) {
+
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+
+            let { username, active } = e.row.data;
+ 
+            e.items.push({
+                text: `${active ? 'Anular' : 'Activar'} usuario`,
+                icon :  active ? 'remove' : 'check',
+                onItemClick: () => {                    
+
+                    http('users/update').asGet({username, active: !active}).then(resp => {
+                        this.reload();
+                        notify("Usuario actualizado correctamente");
+                    });                    
+
+                }
+            });
+        }
+    }
+
     onToolbarPreparing = (e) => {
         e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Nuevo usuario',
+                icon: 'add',
+                type: 'default',
+                stylingMode: "outlined",
+                onClick: () => this.dataGrid.instance.addRow()
+            }
+        },{
             location: 'before',
             widget: 'dxButton',
             options: {
@@ -78,6 +114,7 @@ class Users extends Component {
                     allowColumnResizing={true}
                     allowColumnReordering={true}
                     hoverStateEnabled={true}
+                    onContextMenuPreparing={this.addMenuItems}
                     remoteOperations={{
                         paging: true,
                         filtering: true
@@ -87,35 +124,32 @@ class Users extends Component {
                     <Pager allowedPageSizes={[10, 15, 30, 50]} showPageSizeSelector={true} showInfo={true} />
                     <Paging defaultPageSize={15} />
                     <SearchPanel visible={true} width={250} />
-                    <FilterRow visible={true} />
-                    <ColumnChooser enabled={true} />
+                    <FilterRow visible={true} />                 
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                    <Column dataField="username" width={150} />
+                    <Column dataField="username" width={120} allowEditing={false} />
                     <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />
                     <Column dataField="areaId" width={150} caption="Area">
                         <Lookup disabled={true} dataSource={createStore({name :'area'})} valueExpr="id" displayExpr="name" />
                     </Column>
-                    <Column dataField="rolId" width={150} caption="Permisos">
+                    <Column dataField="rolId" width={130} caption="Permisos">
                         <Lookup disabled={true} dataSource={createStore({name :'rol'})} valueExpr="id" displayExpr="name" />
                     </Column>
+                    <Column dataField="active" caption="Activo" dataType="boolean"  width={90}/>
                     <Editing
                         mode="popup"
-                        allowUpdating={true}                        
-                        allowAdding={true}
-                        useIcons={true}
-                        
+                        allowUpdating={true}    
+                        useIcons={true}                        
                     >
                         <Popup title={title} showTitle={true} width={400} height={390}>                           
                         </Popup>
                         <Form colCount={1}>
                             <Item dataField="username" disabled={true}>
-                                <RequiredRule message="El nombre de usuario es requerido" />
-                                <StringLengthRule max={50} min={5} message="Máximo de caracteres 100 y 2 mínimo" />
+                                
                             </Item>
                             <Item dataField="fullName" >
                                 <RequiredRule message="El nombre es requerido" />
-                                <StringLengthRule max={150} min={10} message="Máximo de caracteres 150 y 10 mínimo" />
+                                <StringLengthRule max={150} min={5} message="Máximo de caracteres 150 y 5 mínimo" />
                             </Item>
                             <Item dataField="email" >
                                 <RequiredRule message="El email es requerido" />

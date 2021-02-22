@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace AtencionClinica.Controllers
 {  
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -30,7 +32,7 @@ namespace AtencionClinica.Controllers
         {
 
             
-            var items = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId, x.AreaId }).Skip(skip).Take(take != 0 ? take : 10).ToArray();
+            var items = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId, x.AreaId, x.Active }).Skip(skip).Take(take != 0 ? take : 10).ToArray();
             return new JsonResult(new
             {
                 items,
@@ -47,18 +49,33 @@ namespace AtencionClinica.Controllers
             {
                 user.Username = user.Email.Split("@")[0];
                 user.ToUpperCase();
+                user.Active = true;
                 _db.Users.Add(user);
                 user.Password = UserHelpers.GetPasswordHashedSHA256(_appSettings.PassWord);
                 dbusr = user;
             }
             else
             {
-                dbusr.CopyFrom(user, x => new { x.AreaId, x.Email, x.FullName });
+                dbusr.CopyFrom(user, x => new { x.AreaId, x.Email, x.FullName, x.RolId });
             }
             _db.SaveChanges();
             dbusr.Password = null;
             return new JsonResult(user);
 
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult Update(string username, bool active)
+        {            
+            var user = _db.Users.FirstOrDefault(x => x.Username == username);
+
+            user.Active = active;
+
+            _db.SaveChanges();
+
+            return new JsonResult(new {
+                user.Username, user.Email, user.FullName, user.RolId, user.AreaId, user.Active
+            });
         }
 
     }

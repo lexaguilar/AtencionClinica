@@ -35,6 +35,8 @@ function Catalogo(props) {
             options: {
                 text: 'Crear nuevo',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         });

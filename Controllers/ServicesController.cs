@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AtencionClinica.Controllers
 {
+    [Authorize]
     public class ServicesController : Controller
     {
         private ClinicaContext _db = null;
@@ -68,12 +70,32 @@ namespace AtencionClinica.Controllers
             {
                 var oldService = _db.Services.FirstOrDefault(x => x.Id == service.Id);
 
+                if(oldService.CurrencyId != service.CurrencyId){
+
+                    //Verificar que no tenga movimientos en facturas
+                    var hasBills = _db.BillDetails.Any(x => x.ServiceId == service.Id);
+                    if(hasBills)
+                        return BadRequest("No se puede editar la moneda de este servicio porque ya tiene facturas");
+
+                    //Verificar que no tenga movimientos en facturas
+                    var hasWorkOrders = _db.WorkOrderDetails.Any(x => x.ServiceId == service.Id);
+                    if(hasWorkOrders)
+                        return BadRequest("No se puede editar la moneda de este servicio porque ya tiene ordenes de trabajo");
+
+                    //Verificar que no tenga movimientos en facturas
+                    var hasFollowServices = _db.FollowServiceDetails.Any(x => x.ServiceId == service.Id);
+                    if(hasFollowServices)
+                        return BadRequest("No se puede editar la moneda de este servicio porque ya tiene descargues de trabajo");
+
+                }
+
                 oldService.CopyFrom(service, x => new
                 {
                     x.Name,
                     x.Price,
                     x.PriceCalculate,
-                    x.Active
+                    x.Active,
+                    x.CurrencyId
                 });
 
                 _db.SaveChanges();

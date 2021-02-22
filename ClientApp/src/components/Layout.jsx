@@ -5,13 +5,14 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import HomePage from './home/HomePage';
+import { resources } from '../data/app';
 
 // application
 import Footer from './footer';
 import Header from './header';
 import MobileMenu from './mobile/MobileMenu';
 
-import catalogos from '../data/catalogos';
+import catalogos, { typeTraslate } from '../data/catalogos';
 import Catalogo from './shared/Catalogos';
 import { _path } from '../data/headerNavigation';
 import MobileHeader from './mobile/MobileHeader';
@@ -40,6 +41,10 @@ import Users from '../views/users';
 import Roles from '../views/roles';
 import Resources from '../views/resources';
 import Rates from '../views/rates';
+import initProduct from '../views/movimientos/initProducts/initProduct';
+import initPurchases from '../views/movimientos/initProducts/initPurchases';
+import Providers from '../views/providers/Providers';
+import Traslates from '../views/movimientos/traslates';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -49,8 +54,43 @@ function Layout(props) {
                     <Catalogo {...props} {...c} />
         )} />
     });
-    
 
+    let prop = (path, component) => ({exact:true, path : `${_path.CLINICA}/${path}`, component });
+
+    const builRoute = (path, component) => <PrivateRoute {...prop(path, component) } /> ;
+
+    const routes = [
+        builRoute('', HomePage)
+        ,builRoute('admisiones', Admisiones)
+        ,builRoute('admisiones/nuevo', Nuevo)
+        ,builRoute('config/percapitas', Percapita)
+        ,builRoute('citas', Appointments)
+        ,builRoute('citas/nuevo', AppointmentsNuevo.default)
+        ,builRoute('beneficiarios', Beneficiarios)
+        ,builRoute('privados', Privados)
+        ,builRoute('servicios', Follows)
+        ,builRoute('subsidios', Subsidies)
+        ,builRoute('doctores', Doctores)
+        ,builRoute('doctores/horarios', DoctoresById)
+        ,builRoute('paciente/:id', Paciente)
+        ,builRoute('facturas', Bills)
+        ,builRoute('facturas/nuevo', BillNuevo)
+        ,builRoute('procedimientos', Procedimientos)
+        ,builRoute('area/procedimientos', AreaProcedimientos)
+        ,builRoute('config/parameters', Parameters)
+        ,builRoute('movimientos/salidas', OutPutProducts)
+        ,builRoute('movimientos/entradas', InPutProducts)
+        ,builRoute('movimientos/inv-inicial', initProduct)
+        ,builRoute('movimientos/compras', initPurchases)
+        // ,builRoute('movimientos/traslados', <TraslatesCreate />)
+        // ,builRoute('movimientos/despacho', <Traslates />)
+        ,builRoute('productos', Products)
+        ,builRoute('tasa-de-cambio', Rates)
+        ,builRoute('proveedores', Providers)
+        ,builRoute('usuarios', Users)
+        ,builRoute('roles', Roles)
+        ,builRoute('permisos', Resources)
+    ];
     return (
         <React.Fragment>          
 
@@ -70,33 +110,10 @@ function Layout(props) {
                 <div className="site__body">
                 
                     <Switch>
-                        {PrintCatalogos}
-                        <PrivateRoute exact path={`${match.path}`} component={HomePage} />                              
-                        <PrivateRoute exact path={`${_path.CLINICA}/config/percapitas`} component={Percapita} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/admisiones`} component={Admisiones} />                         
-                        <PrivateRoute path={`${_path.CLINICA}/admisiones/nuevo`} component={Nuevo} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/citas`} component={Appointments} />                         
-                        <PrivateRoute path={`${_path.CLINICA}/citas/nuevo`} component={AppointmentsNuevo.default} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/beneficiarios`} component={Beneficiarios} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/privados`} component={Privados} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/servicios`} component={Follows} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/subsidios`} component={Subsidies} />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/doctores`} component={Doctores} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/doctores/horarios`} component={DoctoresById} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/paciente/:id`} component={Paciente} />
-                        <PrivateRoute exact path={`${_path.CLINICA}/facturas`} component={Bills} />                         
-                        <PrivateRoute path={`${_path.CLINICA}/facturas/nuevo`} component={BillNuevo} />    
-                        <PrivateRoute exact path={`${_path.CLINICA}/procedimientos`} component={Procedimientos} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/area/procedimientos`} component={AreaProcedimientos} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/config/parameters`} component={Parameters} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/movimientos/salidas`} component={OutPutProducts} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/movimientos/entradas`} component={InPutProducts} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/productos`} component={Products} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/tasa-de-cambio`} component={Rates} />   
-
-                        <PrivateRoute exact path={`${_path.CLINICA}/usuarios`} component={Users} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/roles`} component={Roles} />   
-                        <PrivateRoute exact path={`${_path.CLINICA}/permisos`} component={Resources} />   
+                        {PrintCatalogos}    
+                        {routes}   
+                        <PrivateRoute exact path={`${_path.CLINICA}/movimientos/traslados`} render={props => <Traslates {...props} type={typeTraslate.create} /> } />                         
+                        <PrivateRoute exact path={`${_path.CLINICA}/movimientos/despacho`} render={props => <Traslates {...props} type={typeTraslate.update}/> } />                         
                     </Switch>
                 </div>
 
