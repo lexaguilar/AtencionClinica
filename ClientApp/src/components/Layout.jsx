@@ -45,6 +45,7 @@ import initProduct from '../views/movimientos/initProducts/initProduct';
 import initPurchases from '../views/movimientos/initProducts/initPurchases';
 import Providers from '../views/providers/Providers';
 import Traslates from '../views/movimientos/traslates';
+import Kardex from '../views/reports/kardex';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -90,6 +91,7 @@ function Layout(props) {
         ,builRoute('usuarios', Users)
         ,builRoute('roles', Roles)
         ,builRoute('permisos', Resources)
+        ,builRoute('inventario/reportes/kardex', Kardex)
     ];
     return (
         <React.Fragment>          
