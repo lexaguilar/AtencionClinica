@@ -14,7 +14,8 @@ import uri from '../../utils/uri';
 import { store } from '../../services/store';
 import CustomStore from 'devextreme/data/custom_store';
 import http from '../../utils/http';
-const dropDownOptions = { width: 650 };
+
+const dropDownOptions = { width: 790 };
 
 export default class ProductDDBComponent extends React.Component {
     constructor(props) {
@@ -118,10 +119,9 @@ export default class ProductDDBComponent extends React.Component {
     contentRender() {
         return (
             <DataGrid
-                //dataSource={this.customStore(uri.products.getByArea(1))}
                 dataSource={this.props.data.column.lookup.dataSource}
                 keyExpr="id"                
-                height={280}
+                height={350}               
                 selectedRowKeys={[this.state.currentValue]}
                 hoverStateEnabled={true}
                 onSelectionChanged={this.onSelectionChanged}
@@ -129,17 +129,15 @@ export default class ProductDDBComponent extends React.Component {
                 defaultFocusedRowKey={this.state.currentValue}
                 rowAlternationEnabled={true}
                 allowColumnResizing={true}
+                columnAutoWidth={true}
             >
-                {/* <SearchPanel visible={true} width={350} placeholder="Buscar producto" /> */}
                 <FilterRow visible={true} />
-                {/* <HeaderFilter visible={true} /> */}
-                {/* <Column dataField="name" caption="Producto" cellRender={this.customCell} /> */}
                 <Column dataField="id" caption="Codigo" width={80}></Column>
-                <Column dataField="name" caption="Nombre" width={300}></Column>
-                <Column dataField="presentation" caption="Presentacion"></Column>
-                <Column dataField="um" caption="UM"></Column>
-                <Column dataField="cost" caption="Costo" cellRender={cellRender()}></Column>
-                {/* <Paging enabled={true} pageSize={10} /> */}
+                <Column dataField="name" caption="Nombre" ></Column>
+                <Column dataField="presentation" caption="Presentacion" width={120}></Column>
+                <Column dataField="um" caption="UM" width={100}></Column>
+                <Column dataField="cost" caption="Costo" cellRender={cellRender()} width={100}></Column>
+                <Column dataField="stock" caption="Cant" width={80}></Column>                
                 <Scrolling mode="virtual" />
                 <Selection mode="single" />
             </DataGrid>
@@ -156,13 +154,14 @@ export default class ProductDDBComponent extends React.Component {
 
     }
 
+    
+
     render() {
         return (
             <DropDownBox
                 ref={this.dropDownBoxRef}
                 key="id"
                 dropDownOptions={dropDownOptions}
-                //dataSource={this.customStore(uri.products.getByArea(1))}
                 dataSource={this.props.data.column.lookup.dataSource}
                 value={this.state.currentValue}
                 displayExpr={item => item ? `${item.id} - ${item.name}` : ''}

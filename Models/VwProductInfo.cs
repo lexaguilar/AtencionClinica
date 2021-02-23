@@ -17,5 +17,6 @@ namespace AtencionClinica.Models
         public int CurrencyId { get; set; }
         public double? Stock { get; set; }
         public bool Exists { get; set; }
+        public decimal? Price { get; set; }
     }
 }

@@ -62,14 +62,15 @@ namespace AtencionClinica.Services
                     Quantity = item.QuantityResponse,
                     Cost = item.Cost,
                     Price = item.Price,
-                    Discount = item.Discount
+                    Discount = item.Discount,
+                    CostAvg = item.Cost,
                 });
             } 
 
             var outPutProduct = new OutPutProduct{
                 AreaId = traslate.AreaSourceId,
                 TypeId = (int)InputType.Traslado,
-                Date = DateTime.Today,               
+                Date = traslate.Date,               
                 Observation = "Salida por traslado",
                 CreateBy = traslate.CreateBy,
                 Reference = traslate.Id.ToString(),                
@@ -89,7 +90,7 @@ namespace AtencionClinica.Services
             foreach (var item in work.WorkOrderDetails.Where(x => !x.IsService))
             {
 
-                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaSourceId && x.ProductId == item.ProductId);
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaTargetId && x.ProductId == item.ProductId);
 
                 items.Add(new OutPutProductDetail{
                     ProductId = item.ProductId.Value,
@@ -102,9 +103,9 @@ namespace AtencionClinica.Services
             } 
 
             var outPutProduct = new OutPutProduct{
-                AreaId = follow.AreaSourceId,
+                AreaId = follow.AreaTargetId,
                 TypeId = (int)InputType.Traslado,
-                Date = DateTime.Today,               
+                Date = work.Date,               
                 Observation = "Despacho por servicios",
                 CreateBy = work.CreateBy,
                 Reference = work.Reference,                

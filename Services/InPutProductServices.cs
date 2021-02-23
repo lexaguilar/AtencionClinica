@@ -95,7 +95,7 @@ namespace AtencionClinica.Services
             var inPutProduct = new InPutProduct{
                 AreaId = traslate.AreaTargetId,
                 TypeId = (int)InputType.Traslado,
-                Date = DateTime.Today,               
+                Date = traslate.Date,               
                 Observation = "Entrada por traslado",
                 CreateBy = traslate.CreateBy,
                 Reference = traslate.Id.ToString(),                

@@ -32,7 +32,7 @@ namespace AtencionClinica.Models{
                     
             }                
 
-            var bene = _db.Beneficiaries.FirstOrDefault(x => x.Inss == admision.BeneficiaryId);
+            var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admision.BeneficiaryId);
             if(bene.BeneficiaryStatusId != 1)
                 return modelValidation.AsError($"El beneficiario no esta activo");
 
@@ -62,7 +62,7 @@ namespace AtencionClinica.Models{
 
             foreach (var item in this.WorkOrderDetails)
             {
-                if(item.IsService){
+                if(!item.IsService){
 
                     var product = _db.Products.FirstOrDefault(x => x.Id == item.ProductId);
 

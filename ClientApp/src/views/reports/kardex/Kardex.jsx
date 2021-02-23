@@ -124,8 +124,8 @@ const Kardex = () => {
                         </Column>   
                         <Column caption="Existencias" alignment="center">
                             <Column dataField="stocks" caption="Existencia"  width={75} />
-                            <Column dataField="costAVG" caption="Costo Prom" cellRender={cellRender()} width={100} alignment="right"/>
-                            <Column dataField="costAVG" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
+                            <Column dataField="costAvg" caption="Costo Prom" cellRender={cellRender()} width={100} alignment="right"/>
+                            <Column dataField="costPromOut" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
                         </Column>                     
                     </DataGrid>
                 </Item>

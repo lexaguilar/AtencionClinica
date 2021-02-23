@@ -1715,6 +1715,8 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.CostOut).HasColumnType("decimal(22, 4)");
 
+                entity.Property(e => e.CostPromOut).HasColumnType("decimal(18, 0)");
+
                 entity.Property(e => e.CostTotalIn).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.CostTotalOut).HasColumnType("decimal(18, 0)");
@@ -1748,6 +1750,8 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.Um)
                     .IsRequired()
@@ -1792,6 +1796,8 @@ namespace AtencionClinica.Models
                 entity.HasIndex(e => e.ServiceId, "IX_WorkOrderDetails_Service");
 
                 entity.HasIndex(e => e.WorkOrderId, "IX_WorkOrderDetails_WorkOrder");
+
+                entity.Property(e => e.Costo).HasColumnType("money");
 
                 entity.Property(e => e.Price).HasColumnType("money");
 

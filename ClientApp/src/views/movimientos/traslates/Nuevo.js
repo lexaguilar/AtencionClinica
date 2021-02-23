@@ -181,29 +181,39 @@ const Nuevo = props => {
     const textCreating = 'Guardar traslado';
     const textEditing = 'Despachar traslado';
 
-    console.log(open);
+    var itemHTML = isCreate ?  <SimpleItem dataField="areaSourceId" editorType="dxSelectBox"
+                                        editorOptions={{
+                                            dataSource: createStoreLocal({ name: 'area'}),
+                                            ...editorOptionsSelect,
+                                            onValueChanged: onValueChangedArea
+                                        }} >
+                                        <Label text="Bodega" />
+                                        <RequiredRule message="Seleccione la bodega" />
+                                </SimpleItem> 
+                                :
+                                <SimpleItem dataField="areaTargetId" editorType="dxSelectBox"
+                                    editorOptions={{
+                                        dataSource: createStoreLocal({ name: 'area'}),
+                                        ...editorOptionsSelect,
+                                    }} >
+                                    <Label text="Area solicitante" />
+                                    <RequiredRule message="Seleccione la bodega" />
+                                </SimpleItem>
 
     return (
         <div>
              <Popup
                 width={950}
                 height={550}
-                title={`Nueva solicitud de traslado`}
+                title={isCreate  ? `Nueva solicitud de traslado` : `Despachar solicitud ${id}`}
                 onHiding={onHiding}
                 onShowing={onShowing}
                 visible={open}                
             >
                 <Form formData={traslate} ref={refForm} readOnly={!isCreate}>
                     <GroupItem colCount={3}>                       
-                        <SimpleItem dataField="areaSourceId" editorType="dxSelectBox"
-                            editorOptions={{
-                                dataSource: createStoreLocal({ name: 'area'}),
-                                ...editorOptionsSelect,
-                                 onValueChanged: onValueChangedArea
-                            }} >
-                            <Label text="Bodega" />
-                            <RequiredRule message="Seleccione la bodega" />
-                        </SimpleItem>
+                        {itemHTML}
+                    
                         <SimpleItem dataField="date" editorType="dxDateBox"
                             editorOptions={{
                                 displayFormat : 'dd/MM/yyyy',

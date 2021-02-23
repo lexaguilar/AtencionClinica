@@ -44,8 +44,8 @@ const Nuevo = props => {
     }, [open]);
 
     const dispatch = useDispatch();
-    const onToolbarPreparing = gridsHelper(refGridServices, { text : 'Agregar productos', icon:'plus' });
-    const onToolbarPreparingProducts = gridsHelper(refGridProducts, { text : 'Agregar procedimientos', icon:'plus' });
+    const onToolbarPreparing = gridsHelper(refGridServices, { text : 'Agregar procedimientos', icon:'plus' });
+    const onToolbarPreparingProducts = gridsHelper(refGridProducts, { text : 'Agregar productos', icon:'plus' });
 
     const closeDialog = ( load ) => {
 
@@ -73,12 +73,14 @@ const Nuevo = props => {
         if (result.isValid) {
 
             setSaving(true);
-            let data = {...workOrder, details:[...details] };
+            let data = {...workOrder, followId,  WorkOrderDetails:[...details] };
 
             http(uri.workOrders.insert).asPost(data).then(resp => {
+
                 setSaving(false);
                 notify('Orden de trabajo registrada correctamente');
                 closeDialog(true);
+
             }).catch(err => {
                 setSaving(false);
                 notify(err, 'error', 5000);
@@ -96,14 +98,15 @@ const Nuevo = props => {
             let info = products.find(x => x.id == value);
             newData['presentation'] = info.presentation;
             newData['um'] = info.um
-            newData['cost'] = info.cost;        
-            newData['quantityResponse'] = 0;  
-            !currentRowData['quantityRequest'] && (newData['quantityRequest'] = 1);
+            newData['cost'] = info.cost;
+            newData['price'] = info.price;
+            newData['quantity'] = 1;
+            newData['serviceId'] = null;
             !currentRowData['total'] &&( newData['total'] = info.cost);
 
         }
         
-        if(prop == 'quantityRequest' && (+value) >= 0)
+        if(prop == 'quantity' && (+value) >= 0)
             newData['total'] = currentRowData['cost'] * value;
 
     }    
@@ -118,6 +121,8 @@ const Nuevo = props => {
       
         newData.quantity = 1;     
         newData.price = price;
+        newData.productId = null;
+        newData.cost = 0;
         newData.subTotal = price * newData.quantity;  
         newData.total = newData.subTotal;  
       
@@ -140,8 +145,6 @@ const Nuevo = props => {
     }, [0]);
 
     const text = 'Guardar orden';  
-    
-    console.log(beneficiaryId);
 
     return (
         <div>
@@ -151,13 +154,14 @@ const Nuevo = props => {
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
                 visible={open}    
+                showCloseButton={!saving}
 
             >
                  <ToolbarItem 
                     widget="dxButton" 
                     location="after" 
                     options={{
-                        text: text,
+                        text: saving ? 'Guardando...' : text,
                         icon : 'save',
                         disabled : saving,
                         type:"success",
@@ -189,6 +193,59 @@ const Nuevo = props => {
                             <StringLengthRule max={500} message="Maximo 500 caracteres" />
                         </SimpleItem>
                         
+                    </GroupItem>
+                    <GroupItem>
+                        <DataGrid id="gridDetails"
+                            ref={refGridProducts}
+                            selection={{ mode: 'single' }}
+                            dataSource={details}
+                            showBorders={true}
+                            showRowLines={true}
+                            allowColumnResizing={true}
+                            allowColumnReordering={true}
+                            height={200}
+                            onToolbarPreparing={onToolbarPreparingProducts}
+                        >
+                            <Column dataField="productId" caption="Producto"
+                                setCellValue={setCellValue.bind(null,"productId")}
+                                editCellComponent={ProductDDBComponent}>
+                                    <Lookup 
+                                        dataSource={products}
+                                        valueExpr="id" 
+                                        displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
+                                    
+                                    />
+                                    <RuleRequired />
+                            </Column>                          
+                            <Column dataField="presentation" caption="Presentacion" width={120} allowEditing={false}>
+                                <RuleRequired />
+                            </Column>
+                            <Column dataField="um" caption="Um" width={120} allowEditing={false}>
+                                <RuleRequired />
+                            </Column>
+                            <Column dataField="quantity" 
+                                caption="Cantidad" 
+                                dataType="number" width={80}                               
+                                setCellValue={setCellValue.bind(null,"quantity")}>
+                                <RuleRequired />
+                            </Column>                         
+                            <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
+                                <RuleRequired />
+                            </Column>
+                            <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
+                                <RuleRequired />
+                            </Column>                          
+                            <Column type="buttons" width={50}>
+                                <ButtonGrid name="delete" />                            
+                            </Column>
+                            <Editing
+                                mode="cell"
+                                allowDeleting={true}                               
+                                allowUpdating={true}
+                                selectTextOnEditStart={true}
+                                useIcons={true}
+                            ></Editing>
+                        </DataGrid>
                     </GroupItem>
                     <GroupItem>
                         <DataGrid id="gridDetailsServices"
@@ -229,59 +286,7 @@ const Nuevo = props => {
                             ></Editing>
                         </DataGrid>
                     </GroupItem>
-                    <GroupItem>
-                        <DataGrid id="gridDetails"
-                            ref={refGridProducts}
-                            selection={{ mode: 'single' }}
-                            dataSource={details}
-                            showBorders={true}
-                            showRowLines={true}
-                            allowColumnResizing={true}
-                            allowColumnReordering={true}
-                            height={200}
-                            onToolbarPreparing={onToolbarPreparingProducts}
-                        >
-                            <Column dataField="productId" caption="Producto"
-                                setCellValue={setCellValue.bind(null,"productId")}
-                                editCellComponent={ProductDDBComponent}>
-                                    <Lookup 
-                                        dataSource={products}
-                                        valueExpr="id" 
-                                        displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
-                                    
-                                    />
-                                    <RuleRequired />
-                            </Column>                          
-                            <Column dataField="presentation" caption="Presentacion" width={120} allowEditing={false}>
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="um" caption="Um" width={120} allowEditing={false}>
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="quantity" 
-                                caption="Cantidad" 
-                                dataType="number" width={80}                               
-                                setCellValue={setCellValue.bind(null,"quantity")}>
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
-                                <RuleRequired />
-                            </Column>                          
-                            <Column type="buttons" width={50}>
-                                <ButtonGrid name="delete" />                            
-                            </Column>
-                            <Editing
-                                mode="cell"
-                                allowDeleting={true}                               
-                                allowUpdating={true}
-                                selectTextOnEditStart={true}
-                                useIcons={true}
-                            ></Editing>
-                        </DataGrid>
-                    </GroupItem>
+                    
                 </Form>               
             </Popup>
         </div>

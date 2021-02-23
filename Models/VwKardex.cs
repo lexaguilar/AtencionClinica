@@ -17,6 +17,7 @@ namespace AtencionClinica.Models
         public decimal? CostTotalOut { get; set; }
         public decimal CostAvg { get; set; }
         public double Stocks { get; set; }
+        public decimal? CostPromOut { get; set; }
         public int ProductId { get; set; }
         public int AreaId { get; set; }
         public string Reference { get; set; }

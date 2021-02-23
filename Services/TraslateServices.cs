@@ -49,9 +49,12 @@ namespace AtencionClinica.Services
 
         public ModelValidationSource<Traslate> Update(Traslate traslate)
         {
+
+            var model =  traslate.ValidatePrev(_db);
+            
             traslate.Update(_db);
 
-            var model = traslate.ValidateUpdate(_db);
+            traslate.ValidateUpdate(_db);
 
             if (!model.IsValid)
                 return model;
