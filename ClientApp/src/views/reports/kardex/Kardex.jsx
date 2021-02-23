@@ -25,10 +25,8 @@ const Kardex = () => {
     const [kardex, setKardex] = useState([]);
 
     const changeHandler = (e) => {
-
+        setGridBoxValue(e.value);
     }
-
-    const gridColumns = ['id','name', 'presentation', 'um'];
 
     const dataGrid_onSelectionChanged = (e) => {        
         setGridBoxValue(e.selectedRowKeys[0].id);
@@ -95,7 +93,7 @@ const Kardex = () => {
                         displayExpr={item => item ? `${item.id} - ${item.name}` : ''} 
                         value = {gridBoxValue}              
                         onValueChanged={changeHandler} 
-                        contentRender={dataGridRender}
+                        contentRender={dataGridRender}                        
                     />
                 </Item>
                 <Item ratio={1}></Item>

@@ -10,6 +10,7 @@ const useProducts = (areaId, exists=false) => {
     const callApi = async () => {
 
         const data = await http(`products/getbyarea/${areaId}`).asGet({ exists });        
+
         setProducts(data);
         setIsLoading(false);
 

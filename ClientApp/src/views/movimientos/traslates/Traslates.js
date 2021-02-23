@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SelectBox from 'devextreme-react/select-box';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import Title from '../../../components/shared/Title';
@@ -26,14 +26,13 @@ import useAuthorization from '../../../hooks/useAuthorization';
 
 const Traslates = (props) => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
-    
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.requisas, dataAccess.access ]);    
 
     const {  areaId } = useSelector(store => store.user); 
 
     const { type } = props;
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
     const dispatch = useDispatch();
 
     const reload = (params) => dataGrid.current.instance.refresh();    

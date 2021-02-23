@@ -122,7 +122,7 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Momivientos de entrada', url: `${_path.CLINICA}/movimientos/entradas` },    
-                        { title: 'Traslados', url: `${_path.CLINICA}/movimientos/traslados` },    
+                        { title: 'Traslados o requisas', url: `${_path.CLINICA}/movimientos/traslados` },    
                         { title: 'Compras', url: `${_path.CLINICA}/movimientos/compras` },
                         { title: 'Inventario Inicial', url: `${_path.CLINICA}/movimientos/inv-inicial` },
                     ],

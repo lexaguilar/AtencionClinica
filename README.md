@@ -1,5 +1,7 @@
 # AtencionClinica
 -Admisionar solo desde el area admision
+-Reglas para beneficiarios menores de 12
+-Poner fecha de incio para kardex y traer saldo anterior
 
 # Catalogos Inciados
 -Areas dBSAHME --Admision debe ser la 1

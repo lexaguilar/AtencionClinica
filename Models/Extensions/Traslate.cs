@@ -5,6 +5,8 @@ namespace AtencionClinica.Models{
     public partial class Traslate : ModelExtension<Traslate>  {
         public void Init(ClinicaContext _db){
 
+            
+
             var app = _db.Apps.FirstOrDefault();
 
             this.CurrencyId = app.DefaultCurrency;
@@ -18,12 +20,15 @@ namespace AtencionClinica.Models{
 
             foreach (var item in this.TraslateDetails)
             {
+
+                var product = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == this.AreaSourceId && x.ProductId == item.ProductId);
                 
                 item.SubTotal = Math.Round((Convert.ToDecimal(item.QuantityRequest) * item.Cost), 6);
                 item.Discount = 0;
                 item.QuantityResponse = 0;
                 item.Import = item.SubTotal - item.Discount;
                 item.Total =  item.Import + item.Iva;
+                item.Price = product.Price;
 
             }
 
