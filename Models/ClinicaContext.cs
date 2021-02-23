@@ -1707,7 +1707,23 @@ namespace AtencionClinica.Models
 
                 entity.ToView("vwKardex");
 
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.CostIn).HasColumnType("decimal(22, 4)");
+
+                entity.Property(e => e.CostOut).HasColumnType("decimal(22, 4)");
+
+                entity.Property(e => e.CostTotalIn).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.CostTotalOut).HasColumnType("decimal(18, 0)");
+
                 entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Type)
                     .IsRequired()

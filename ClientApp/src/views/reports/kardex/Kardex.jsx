@@ -109,22 +109,22 @@ const Kardex = () => {
                         showBorders={true}
                         showRowLines={true}
                     >                       
-                        <Column dataField="type" caption="Tipo" width={150} />
-                        <Column dataField="id" caption="Documento" width={150} />
-                        <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={120} />
-                        <Column dataField="reference" caption="Referencia" width={120} />
-                        <Column caption="Entradas">
-                            <Column dataField="quantityIn" caption="Cantidad"  width={120} />
+                        <Column dataField="type" caption="Tipo" width={120} />
+                        <Column dataField="id" caption="Documento" width={100} />
+                        <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
+                        <Column dataField="reference" caption="Referencia" width={90} />
+                        <Column caption="Entradas" alignment="center">
+                            <Column dataField="quantityIn" caption="Cantidad"  width={80} />
                             <Column dataField="costIn" caption="Costo" cellRender={cellRender()} width={100} />
                             <Column dataField="costTotalIn" caption="Total" cellRender={cellRender()} width={120} />
                         </Column>                        
-                        <Column caption="Salidas">
-                            <Column dataField="quantityOut" caption="Cantidad"  width={120} />
+                        <Column caption="Salidas" alignment="center">
+                            <Column dataField="quantityOut" caption="Cantidad"  width={80} />
                             <Column dataField="costOut" caption="Costo" cellRender={cellRender()} width={100} />
                             <Column dataField="costTotalOut" caption="Total" cellRender={cellRender()} width={120} />
                         </Column>   
-                        <Column caption="Existencias">
-                            <Column dataField="stocks" caption="Existencia"  width={120} />
+                        <Column caption="Existencias" alignment="center">
+                            <Column dataField="stocks" caption="Existencia"  width={90} />
                             <Column dataField="costAVG" caption="Costo Promedio" cellRender={cellRender()} width={120} />
                             <Column dataField="costAVG" caption="Total" cellRender={cellRender()} width={120} />
                         </Column>                     
