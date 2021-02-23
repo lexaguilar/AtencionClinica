@@ -27,14 +27,11 @@ namespace AtencionClinica.Controllers
         [Route("api/inputproducts/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
         {
-            IQueryable<InPutProduct> inPutProducts = _db.InPutProducts
-           .OrderByDescending(x => x.Id);            
 
-            if (values.ContainsKey("areaId"))
-            {
-                var areaId = Convert.ToInt32(values["areaId"]);
-                inPutProducts = inPutProducts.Where(x => x.AreaId == areaId);
-            }
+            var user = this.GetAppUser();
+
+            IQueryable<InPutProduct> inPutProducts = _db.InPutProducts.Where(x => x.AreaId == user.AreaId)
+           .OrderByDescending(x => x.Id);            
 
             if (values.ContainsKey("typeId"))
             {

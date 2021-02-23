@@ -28,7 +28,10 @@ namespace AtencionClinica.Controllers
         [Route("api/traslates/get")]
         public IActionResult Get(int areaId, int skip, int take, IDictionary<string, string> values)
         {
-            IQueryable<Traslate> inPutProducts = _db.Traslates.Where(x => x.AreaTargetId == areaId)
+
+            var user = this.GetAppUser();
+
+            IQueryable<Traslate> inPutProducts = _db.Traslates.Where(x => x.AreaTargetId ==  user.AreaId)
            .OrderByDescending(x => x.Id);
 
             if (values.ContainsKey("id"))
@@ -43,11 +46,7 @@ namespace AtencionClinica.Controllers
                 inPutProducts = inPutProducts.Where(x => x.AreaSourceId == areaSourceId);
             }
 
-            if (values.ContainsKey("areaTargetId"))
-            {
-                var areaTargetId = Convert.ToInt32(values["areaTargetId"]);
-                inPutProducts = inPutProducts.Where(x => x.AreaTargetId == areaTargetId);
-            }
+            
 
             if (values.ContainsKey("stateId"))
             {

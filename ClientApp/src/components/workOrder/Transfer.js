@@ -2,16 +2,19 @@
 import React, { useRef, useState } from 'react';
 import { Popup  } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
-import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule } from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule, StringLengthRule } from 'devextreme-react/form';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import useAreas from '../../hooks/useAreas';
 import { Button, SelectBox } from 'devextreme-react';
 import { editorOptionsSelect } from '../../data/app';
 import { createStoreLocal } from '../../utils/proxy';
+import http from '../../utils/http';
+import uri from '../../utils/uri';
+import notify from 'devextreme/ui/notify';
 
 const Transfer = () => {
 
-    const { open } = useSelector(store => store.transfer);
+    const { open, id } = useSelector(store => store.transfer);
     const dispatch = useDispatch();
     const onHiding = () => dispatch(dialogTransfer({open :  false, id : 0}));
     const [transfer] = useState({});
@@ -21,7 +24,20 @@ const Transfer = () => {
     const { areas } = useAreas();
 
     const transferir = () => {
-        refForm.current.instance.validate();
+        
+        var result = refForm.current.instance.validate();
+        if(result){
+           
+            http(uri.follows(0).insert).asPost({...transfer, admissionId : id}).then(resp => {
+                notify("Se realizo la transferencia con éxito");
+                refForm.current.instance.resetValues();
+                onHiding();
+            }).catch(err => {
+                notify(err, 'error')
+            })
+
+        }
+
     }
 
     const active = true;
@@ -30,20 +46,24 @@ const Transfer = () => {
     return (
         <div>           
             <Popup
-                width={300}
-                height={220}
+                width={350}
+                height={240}
                 onHiding={onHiding}
                 title={title}
                 visible={open}
             >   
                 <Form formData={transfer} ref={refForm}>  
-                    <SimpleItem dataField="areaId" editorType="dxSelectBox"
+                    <SimpleItem dataField="areaTargetId" editorType="dxSelectBox"
                         editorOptions={{
                             dataSource: createStoreLocal({name: 'Area', active}),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Area" />
                         <RequiredRule message="Seleccione el area" />
+                    </SimpleItem>
+                    <SimpleItem dataField="observation" editorType="dxTextArea">
+                        <Label text="Observacion" />
+                        <StringLengthRule max={150} message="Maximo 150 caracteres" />
                     </SimpleItem>
                 </Form>    
                 <br />

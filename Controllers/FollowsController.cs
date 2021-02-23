@@ -59,14 +59,18 @@ namespace AtencionClinica.Controllers
         }      
 
         [HttpPost("api/follows/post")]
-        public IActionResult Post([FromBody] Admission admission) 
+        public IActionResult Post([FromBody] Follow follow) 
         {
             var user = this.GetAppUser();
+            follow.AreaSourceId = user.AreaId;
+            follow.CreateAt = DateTime.Now;
+            follow.CreateBy = user.Username;
 
+            _db.Follows.Add(follow);
          
-            //_db.SaveChanges();
+            _db.SaveChanges();
 
-            return Json(admission);
+            return Json(follow);
 
         }
     

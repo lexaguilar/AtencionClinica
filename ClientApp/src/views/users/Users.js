@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import {
     Column,
     ColumnChooser,
@@ -28,23 +28,20 @@ import { Item } from "devextreme-react/form";
 import uri from "../../utils/uri";
 import http from "../../utils/http";
 import notify from "devextreme/ui/notify";
+import { dataAccess, resources } from "../../data/app";
+import useAuthorization from "../../hooks/useAuthorization";
 
-class Users extends Component {
+const Users = () => {
 
-    constructor(props) {
-        super(props)
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
-        this.store = null
-        this.dataGrid = null;
-        this.addMenuItems = this.addMenuItems.bind(this);
-        this.reload = this.reload.bind(this);
+    const dataGrid = useRef();
+
+    const reload = () => {
+        dataGrid.current.instance.refresh();
     }
 
-    reload() {
-        this.dataGrid.instance.refresh();
-    }
-
-    addMenuItems(e) {
+    const addMenuItems = (e) => {
 
         if (e.target == "content") {
             if (!e.items) e.items = [];
@@ -66,7 +63,7 @@ class Users extends Component {
         }
     }
 
-    onToolbarPreparing = (e) => {
+    const onToolbarPreparing = (e) => {
         e.toolbarOptions.items.unshift({
             location: 'before',
             widget: 'dxButton',
@@ -75,7 +72,7 @@ class Users extends Component {
                 icon: 'add',
                 type: 'default',
                 stylingMode: "outlined",
-                onClick: () => this.dataGrid.instance.addRow()
+                onClick: () => dataGrid.current.instance.addRow()
             }
         },{
             location: 'before',
@@ -85,41 +82,44 @@ class Users extends Component {
                 icon: 'xlsxfile',
                 type: 'success',
                 stylingMode: "outlined",
-                onClick: () => this.dataGrid.instance.exportToExcel(false)
+                onClick: () => dataGrid.current.instance.exportToExcel(false)
             }
         });
     }
 
-    render() {
-        let remoteOperations = true;
-        this.store = store(
-            {
-                uri: uri.users,
-                msgInserted: 'Usuario agregado correctamente',
-                msgUpdated: 'Usuario modificado correctamente',
-                msgDeleted: 'Usuario eliminado correctamente',
-                remoteOperations: remoteOperations
-            });
-        const title = "Usuarios";
-        return (
-            <div className="container medium">
+    let remoteOperations = true;
+    const _store = store(
+        {
+            uri: uri.users,
+            msgInserted: 'Usuario agregado correctamente',
+            msgUpdated: 'Usuario modificado correctamente',
+            msgDeleted: 'Usuario eliminado correctamente',
+            remoteOperations: remoteOperations
+        });
+
+    const title = "Usuarios";
+
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
+        <div className="container medium">
                 <Title title={title} />
                 <BlockHeader title={title} />
                 <DataGrid
-                    ref={(ref) => this.dataGrid = ref}
-                    dataSource={this.store}
+                    ref={dataGrid}
+                    dataSource={_store}
                     selection={{ mode: 'single' }}
                     showBorders={true}
                     showRowLines={true}
                     allowColumnResizing={true}
                     allowColumnReordering={true}
                     hoverStateEnabled={true}
-                    onContextMenuPreparing={this.addMenuItems}
+                    onContextMenuPreparing={addMenuItems}
                     remoteOperations={{
                         paging: true,
                         filtering: true
                     }}
-                    onToolbarPreparing={this.onToolbarPreparing}
+                    onToolbarPreparing={onToolbarPreparing}
                 >
                     <Pager allowedPageSizes={[10, 15, 30, 50]} showPageSizeSelector={true} showInfo={true} />
                     <Paging defaultPageSize={15} />
@@ -167,10 +167,8 @@ class Users extends Component {
                     </Editing>
                 </DataGrid>
             </div>
-        )
-    }
-
+    );
 }
 
-
 export default Users;
+

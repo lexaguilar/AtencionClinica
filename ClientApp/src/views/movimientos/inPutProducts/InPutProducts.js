@@ -23,16 +23,15 @@ import { useDispatch } from 'react-redux'
 import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
 import useAuthorization from '../../../hooks/useAuthorization';
 
-const InPutProducts = (
-
-    
+const InPutProducts = (    
     { 
         title= "Entrada de inventario", 
         btnAddText= "Crear entrada",
         typeId= null,
         Component= Nuevo
     }) => {
-        const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();

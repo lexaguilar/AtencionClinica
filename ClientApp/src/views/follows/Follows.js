@@ -54,8 +54,10 @@ const Follows = () => {
                     icon : 'chevrondoubleright',
                     onItemClick: () => {
 
-                        let { id, beneficiaryId } = e.row.data;
-                        dispatch(dialogTransfer({open : true, id}));
+                        console.log(e);
+
+                        let { admissionId } = e.row.data;
+                        dispatch(dialogTransfer({open : true, id : admissionId}));
 
                     }              
                 },{
