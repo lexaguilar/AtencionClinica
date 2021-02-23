@@ -121,8 +121,11 @@ namespace AtencionClinica.Controllers
         [HttpGet("api/traslates/{id}/delete")]
         public IActionResult Delete(int id)
         {
-            var inPutProducts = _db.InPutProducts.Include(x => x.InPutProductDetails).FirstOrDefault(x => x.Id == id);
+            var inPutProducts = _db.InPutProducts.FirstOrDefault(x => x.Id == id);
 
+            if(inPutProducts.StateId != 1)
+                return BadRequest("No se puede anular el traslado");
+                
             if (inPutProducts != null)
             {
                 inPutProducts.StateId = 2;

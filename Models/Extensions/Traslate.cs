@@ -100,6 +100,9 @@ namespace AtencionClinica.Models{
 
             var modelValidation = this.Validate(_db);
 
+            if(this.StateId == 2)
+                return modelValidation.AsError($"No se puede editar el traslado porque esta anulado");
+
             foreach (var item in this.TraslateDetails)
             {
                 var product = _db.Products.FirstOrDefault(x => x.Id == item.ProductId);

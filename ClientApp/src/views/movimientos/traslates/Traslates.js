@@ -12,6 +12,7 @@ import DataGrid, {
     Lookup,
     Pager,
     Paging,
+    Button 
   } from 'devextreme-react/data-grid';
 import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
@@ -96,8 +97,14 @@ const Traslates = (props) => {
                 </Column> 
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
                 <Column dataField="createBy" caption='Creado Por'/>
+                <Column type="buttons">
+                    <Button name="delete" />
+                    <Button name="edit" text="Despachar" onClick={e => dispatch(dialogInputProduct({open : true, id : e.row.data.id}))}/>
+                    {/* <Button name="modificar" text="Editar" onClick={e => dispatch(dialogInputProduct({open : true, id : e.row.data.id}))}/> */}
+                </Column>
                 <Editing
                     mode="popup"
+                    allowUpdating={type == typeTraslate.update}
                     allowDeleting={true}
                     useIcons={true}
                 >
