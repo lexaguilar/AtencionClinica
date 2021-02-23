@@ -6,7 +6,7 @@ import uri from "../../../utils/uri";
 import { store } from "../../../services/store";
 import { Column, Editing, Popup, Form,
     Selection,
-    Paging, FilterRow, Scrolling  } from "devextreme-react/data-grid";
+    Paging, FilterRow, Scrolling, Export  } from "devextreme-react/data-grid";
 import Title from "../../../components/shared/Title";
 import BlockHeader from "../../../components/shared/BlockHeader";
 import useProducts from "../../../hooks/useProducts";
@@ -41,7 +41,7 @@ const Kardex = () => {
             hoverStateEnabled={true}
             selectedRowKeys={gridBoxValue}
             onSelectionChanged={dataGrid_onSelectionChanged}
-            height="100%">
+            height="100%">            
             <Selection mode="single" />
             <Scrolling mode="infinite" />
             <Paging enabled={true} pageSize={10} />
@@ -69,7 +69,7 @@ const Kardex = () => {
     const title ='Recursos';    
 
     return (
-        <div className="container">
+        <div className="container big">
             <Title title={title} />
             <BlockHeader title={title} />
             <Box direction="row" width="100%" height={75}>
@@ -107,24 +107,25 @@ const Kardex = () => {
                         showBorders={true}
                         showRowLines={true}
                     >                       
+                        <Export enabled={false} fileName={title} allowExportSelectedData={true} />
                         <Column dataField="type" caption="Tipo" width={120} />
                         <Column dataField="id" caption="Documento" width={100} />
                         <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
                         <Column dataField="reference" caption="Referencia" width={90} />
                         <Column caption="Entradas" alignment="center">
-                            <Column dataField="quantityIn" caption="Cantidad"  width={80} />
-                            <Column dataField="costIn" caption="Costo" cellRender={cellRender()} width={100} />
-                            <Column dataField="costTotalIn" caption="Total" cellRender={cellRender()} width={120} />
+                            <Column dataField="quantityIn" caption="Cantidad"  width={75} />
+                            <Column dataField="costIn" caption="Costo" cellRender={cellRender()} width={100} alignment="right" />
+                            <Column dataField="costTotalIn" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
                         </Column>                        
                         <Column caption="Salidas" alignment="center">
-                            <Column dataField="quantityOut" caption="Cantidad"  width={80} />
-                            <Column dataField="costOut" caption="Costo" cellRender={cellRender()} width={100} />
-                            <Column dataField="costTotalOut" caption="Total" cellRender={cellRender()} width={120} />
+                            <Column dataField="quantityOut" caption="Cantidad"  width={75} />
+                            <Column dataField="costOut" caption="Costo" cellRender={cellRender()} width={100} alignment="right"/>
+                            <Column dataField="costTotalOut" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
                         </Column>   
                         <Column caption="Existencias" alignment="center">
-                            <Column dataField="stocks" caption="Existencia"  width={90} />
-                            <Column dataField="costAVG" caption="Costo Promedio" cellRender={cellRender()} width={120} />
-                            <Column dataField="costAVG" caption="Total" cellRender={cellRender()} width={120} />
+                            <Column dataField="stocks" caption="Existencia"  width={75} />
+                            <Column dataField="costAVG" caption="Costo Prom" cellRender={cellRender()} width={100} alignment="right"/>
+                            <Column dataField="costAVG" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
                         </Column>                     
                     </DataGrid>
                 </Item>
