@@ -12,7 +12,12 @@ const login = user => http(uri.account).asPost(user).then(resp => setToken(resp)
 /**
  * Eliminar el token guardado en memoria
  */
-const logout = () => localStorage.removeItem(tokenName);
+const logout = () => {
+
+    localStorage.removeItem(tokenName);
+    localStorage.removeItem(user);
+    
+} 
 
 /**
  * Guarda el token en memoria

@@ -25,7 +25,7 @@ namespace AtencionClinica.Factory
             var result = db.Users.Include(x => x.Area)
             .Include(x => x.Rol)
             .ThenInclude(x => x.RolResources)
-            .FirstOrDefault(x => x.Username == username && x.Password == pass);
+            .FirstOrDefault(x => x.Username == username && x.Password == pass && x.Active);
             
             return result;
         }
