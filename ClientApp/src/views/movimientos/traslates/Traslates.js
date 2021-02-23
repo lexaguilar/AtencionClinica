@@ -41,6 +41,8 @@ const Traslates = (props) => {
 
     let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
 
+    console.log(extraParameter);
+
     return !isAuthorization 
     ?  <Unauthorized />  
     : (
