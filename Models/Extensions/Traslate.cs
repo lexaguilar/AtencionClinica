@@ -29,6 +29,7 @@ namespace AtencionClinica.Models{
                 item.Import = item.SubTotal - item.Discount;
                 item.Total =  item.Import + item.Iva;
                 item.Price = product.Price;
+                item.CostAvg = item.Cost; 
 
             }
 
@@ -102,6 +103,9 @@ namespace AtencionClinica.Models{
 
             if(this.StateId == 2)
                 return modelValidation.AsError($"No se puede editar el traslado porque esta anulado");
+
+             if(this.StageId == 3)
+                return modelValidation.AsError($"No se puede ejecutar la accion porque el traslado esta ya esta procesado");
 
             foreach (var item in this.TraslateDetails)
             {

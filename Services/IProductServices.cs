@@ -22,6 +22,8 @@ namespace AtencionClinica.Services
         ModelValidationSource<T> Create(T model);
         ModelValidationSource<T> Update(T model);
         ModelValidationSource<T> Revert(T model);
+        T GetById(int id);
+        int Delete(int id);
         
     }
 }

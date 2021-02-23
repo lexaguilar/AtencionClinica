@@ -27,11 +27,11 @@ namespace AtencionClinica.Services
         }
         public ModelValidationSource<Traslate> Create(Traslate traslate)
         {
-            
+
             traslate.Init(_db);
 
             var model = traslate.Validate(_db);
-            
+
             if (!model.IsValid)
                 return model;
 
@@ -58,12 +58,13 @@ namespace AtencionClinica.Services
 
             var oldTraslate = _db.Traslates.Include(x => x.TraslateDetails).FirstOrDefault(x => x.Id == traslate.Id);
 
-            oldTraslate.CopyFrom(traslate, x => new {
+            oldTraslate.CopyFrom(traslate, x => new
+            {
                 x.StageId,
                 x.LastDateModificationAt,
                 x.LastModificationBy
             });
-           
+
             foreach (var item in oldTraslate.TraslateDetails)
             {
                 var currentSend = traslate.TraslateDetails.FirstOrDefault(x => x.ProductId == item.ProductId);
@@ -72,17 +73,28 @@ namespace AtencionClinica.Services
 
             //Crear entrada            
             var inPutProductServices = new InPutProductServices(_db);
-            var modelInPutProducts =  inPutProductServices.CreateFrom(traslate);
+            var modelInPutProducts = inPutProductServices.CreateFrom(traslate);
             if (!modelInPutProducts.IsValid)
                 return new ModelValidationSource<Traslate>(traslate).AsError(modelInPutProducts.Error);
 
             //Crear salida          
             var outPutProductServices = new OutPutProductServices(_db);
-            var modelOnPutProducts =  outPutProductServices.CreateFrom(traslate);
+            var modelOnPutProducts = outPutProductServices.CreateFrom(traslate);
             if (!modelOnPutProducts.IsValid)
                 return new ModelValidationSource<Traslate>(traslate).AsError(modelOnPutProducts.Error);
 
             return model;
+        }
+
+        public Traslate GetById(int id)
+        {
+            var result = _db.Traslates.Include(x => x.TraslateDetails).FirstOrDefault(x => x.Id == id);
+            return result;
+        }
+
+        public int Delete(int id)
+        {
+            throw new NotImplementedException(); 
         }
     }
 }

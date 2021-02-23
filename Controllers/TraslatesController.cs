@@ -73,10 +73,19 @@ namespace AtencionClinica.Controllers
 
         }
 
-        [Route("api/traslates/area/{areaId}/get")]
-        public IActionResult Get(int areaId)
+        // [Route("api/traslates/area/{areaId}/get")]
+        // public IActionResult Get(int areaId)
+        // {
+        //    var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId).Select(x => x.Service);
+
+        //    return Json(result);
+
+        // }
+
+        [Route("api/traslates/get/{id}")]
+        public IActionResult GetById(int id)
         {
-           var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId).Select(x => x.Service);
+           var result = _service.GetById(id);
 
            return Json(result);
 
@@ -88,7 +97,6 @@ namespace AtencionClinica.Controllers
 
             var user = this.GetAppUser();
 
-
             if (traslate.Id == 0)
             {
 
@@ -99,7 +107,6 @@ namespace AtencionClinica.Controllers
 
                 if(!result.IsValid)
                    return BadRequest(result.Error);
-
                 
             }
             else
@@ -121,14 +128,17 @@ namespace AtencionClinica.Controllers
         [HttpGet("api/traslates/{id}/delete")]
         public IActionResult Delete(int id)
         {
-            var inPutProducts = _db.InPutProducts.FirstOrDefault(x => x.Id == id);
+            var traslate = _db.Traslates.FirstOrDefault(x => x.Id == id);
 
-            if(inPutProducts.StateId != 1)
+            if(traslate.StateId != 1)
                 return BadRequest("No se puede anular el traslado");
-                
-            if (inPutProducts != null)
+
+             if(traslate.StageId != 1)
+                return BadRequest("No se puede anular el traslado");
+
+            if (traslate != null)
             {
-                inPutProducts.StateId = 2;
+                traslate.StateId = 2;
                 _db.SaveChanges();
             }
 

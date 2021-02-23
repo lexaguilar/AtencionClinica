@@ -23,6 +23,7 @@ const useProducts = (areaId, exists=false) => {
 
     return {
         products, 
+        setProducts,
         isLoading
     }
 }

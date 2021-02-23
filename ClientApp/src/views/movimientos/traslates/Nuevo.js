@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Popup } from 'devextreme-react/popup';
 import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule, StringLengthRule} from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
-import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
+import { closeDialog } from '../../../store/customDialog/customDialogReducer';
 import { createStoreLocal } from '../../../utils/proxy';
 import { editorOptionsSelect } from '../../../data/app';
 import { DataGrid } from 'devextreme-react';
@@ -23,7 +23,9 @@ const Nuevo = props => {
 
     const  {stageId, type}  = props;
 
-    const { inPutProductDialog : { open }, user } = useSelector(store => store);
+    const isCreate = type == typeTraslate.create;
+
+    const { customDialog : { open, id }, user } = useSelector(store => store);
 
     const [ areaSourceId, setAreaSourceId ] = useState(0);
     const { products, setProducts } = useProducts(areaSourceId , exists);
@@ -42,19 +44,22 @@ const Nuevo = props => {
     const dispatch = useDispatch();
     const onToolbarPreparing = areaSourceId > 0 ? gridsHelper(refGrid, { text : 'Agregar items', icon:'plus' }) : undefined;
 
-    const closeDialog = ( load ) => {
+    const close = ( load ) => {
+
         refForm.current.instance.resetValues();  
         refGrid.current.instance.cancelEditData();
-        dispatch(dialogInputProduct({open : false}));
+        dispatch(closeDialog());
         if (load) {
             let { onSave } = props;
             onSave();      
-        }        
+        }     
+
     }
 
     const onHiding = ({ load }) => {
        
-        closeDialog(load);
+        close(load);
+
     }
 
     const crearTraslado = (e) => {
@@ -67,12 +72,16 @@ const Nuevo = props => {
             let data = {...traslate, traslateDetails:[...details] };
 
             http(uri.traslates.insert).asPost(data).then(resp => {
+
                 setSaving(false);
-                notify('Traslado registrado correctamente');
-                closeDialog(true);
+                notify('Soliictud de traslado registrado correctamente');
+                close(true);
+
             }).catch(err => {
+
                 setSaving(false);
                 notify(err, 'error', 5000);
+
             });
 
         }
@@ -80,7 +89,23 @@ const Nuevo = props => {
     }
 
     const despacharTraslado = (e) => {
+
+        setSaving(true);
+            let data = {...traslate, traslateDetails:[...details] };
         
+        http(uri.traslates.insert).asPost(data).then(resp => {
+
+            setSaving(false);
+            notify('Traslado registrado correctamente');
+            close(true);
+
+        }).catch(err => {
+
+            setSaving(false);
+            notify(err, 'error', 5000);
+
+        });
+
     }
 
     const setCellValue = (prop, newData, value, currentRowData) => {
@@ -103,13 +128,60 @@ const Nuevo = props => {
 
     }
 
+    const setCellValueForResponse = (prop, newData, value, currentRowData) => {
+
+        newData[prop] = value || 0;
+        if(prop == 'quantityResponse' && (+value) >= 0)
+            newData['total'] = currentRowData['cost'] * value;
+
+    }
+
     const onValueChangedArea = (e) => {
         setAreaSourceId(e.value);
         setDetails([]);
     }
 
+    const onShowing = e =>{
+
+        if(id > 0){
+
+            http(uri.traslates.getById(id)).asGet().then(resp =>{
+
+                //setAreaSourceId(resp.areaSourceId);
+
+                setTraslate({ ...withOutDetaill(resp) });
+
+                http(`products/getbyarea/${resp.areaSourceId}`).asGet({ exists }).then(data =>{
+                    
+                    setProducts(data);
+
+                    let arr = resp.traslateDetails.map(prod => {
+
+                        let info = data.find(x => x.id == prod.productId);
+
+                        prod['presentation'] = info.presentation;
+                        prod['um'] = info.um;
+
+                        return prod;
+                    })
+
+                    setDetails(arr);
+
+                })        
+
+
+            });
+
+        }
+
+    }
+
+    const withOutDetaill = ({traslateDetails,...rest}) => rest;
+
     const textCreating = 'Guardar traslado';
     const textEditing = 'Despachar traslado';
+
+    console.log(open);
 
     return (
         <div>
@@ -118,9 +190,10 @@ const Nuevo = props => {
                 height={550}
                 title={`Nueva solicitud de traslado`}
                 onHiding={onHiding}
+                onShowing={onShowing}
                 visible={open}                
             >
-                <Form formData={traslate} ref={refForm}>
+                <Form formData={traslate} ref={refForm} readOnly={!isCreate}>
                     <GroupItem colCount={3}>                       
                         <SimpleItem dataField="areaSourceId" editorType="dxSelectBox"
                             editorOptions={{
@@ -164,7 +237,7 @@ const Nuevo = props => {
                             allowColumnResizing={true}
                             allowColumnReordering={true}
                             height={320}
-                            onToolbarPreparing={onToolbarPreparing}
+                            onToolbarPreparing={isCreate ? onToolbarPreparing : undefined}
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}
@@ -184,17 +257,17 @@ const Nuevo = props => {
                                 <RuleRequired />
                             </Column>
                             <Column dataField="quantityRequest" 
-                                caption="Cantidad" 
-                                dataType="number" width={80} 
-                                visible={type == typeTraslate.create}
+                                caption="Cantidad Solic" 
+                                dataType="number" width={80}                
+                                allowEditing={isCreate}                 
                                 setCellValue={setCellValue.bind(null,"quantityRequest")}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="quantityResponse" 
                                 caption="Cantidad" 
                                 dataType="number" width={80} 
-                                visible={type == typeTraslate.update}
-                                setCellValue={setCellValue.bind(null,"quantityResponse")}>
+                                visible={!isCreate}
+                                setCellValue={setCellValueForResponse.bind(null,"quantityResponse")}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
@@ -220,12 +293,12 @@ const Nuevo = props => {
                 <ButtonForm 
                     saving={saving} 
                     textSaving={textCreating} 
-                    visible={type == typeTraslate.create} 
+                    visible={isCreate} 
                     onClick={crearTraslado}/>
                 <ButtonForm 
                     saving={saving} 
                     textSaving={textEditing} 
-                    visible={type == typeTraslate.update} 
+                    visible={!isCreate} 
                     onClick={despacharTraslado}/>
                
             </Popup>

@@ -106,6 +106,16 @@ namespace AtencionClinica.Services
 
         }
 
+        public int Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public InPutProduct GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public ModelValidationSource<InPutProduct> Revert(InPutProduct inPutProduct)
         {
            

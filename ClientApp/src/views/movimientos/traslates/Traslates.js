@@ -21,7 +21,7 @@ import { dataAccess, formatDate, formatDateTime, resources } from '../../../data
 import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
-import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
+import { openDialog } from '../../../store/customDialog/customDialogReducer';
 import { typeTraslate } from '../../../data/catalogos';
 import useAuthorization from '../../../hooks/useAuthorization';
 
@@ -53,7 +53,7 @@ const Traslates = (props) => {
                 {type==typeTraslate.create && <CustomButton                                       
                     text='Nueva requisa'
                     icon='plus'
-                    onClick={()=>dispatch(dialogInputProduct({open : true}))}
+                    onClick={()=>dispatch(openDialog({id : 0}))}
                 />}
             </BlockHeader>
             <Nuevo onSave={reload} stageId={1} type={type}/> 
@@ -99,8 +99,7 @@ const Traslates = (props) => {
                 <Column dataField="createBy" caption='Creado Por'/>
                 <Column type="buttons">
                     <Button name="delete" />
-                    <Button name="edit" text="Despachar" onClick={e => dispatch(dialogInputProduct({open : true, id : e.row.data.id}))}/>
-                    {/* <Button name="modificar" text="Editar" onClick={e => dispatch(dialogInputProduct({open : true, id : e.row.data.id}))}/> */}
+                    <Button name="edit" text="Despachar" onClick={e => dispatch(openDialog({id : e.row.data.id}))}/>
                 </Column>
                 <Editing
                     mode="popup"

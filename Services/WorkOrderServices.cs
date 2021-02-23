@@ -46,6 +46,16 @@ namespace AtencionClinica.Services
             return model;
         }
 
+        public int Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public WorkOrder GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public ModelValidationSource<WorkOrder> Revert(WorkOrder model)
         {
             throw new NotImplementedException();

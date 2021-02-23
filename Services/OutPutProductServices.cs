@@ -44,7 +44,7 @@ namespace AtencionClinica.Services
                 
                 var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == outPutProduct.AreaId && x.ProductId == item.ProductId);                                      
                   
-                stock.Stock +=  item.Quantity;
+                stock.Stock -=  item.Quantity;
                 item.Stocks = stock.Stock;
                 
             }         
@@ -113,6 +113,16 @@ namespace AtencionClinica.Services
 
             return this.Create(outPutProduct);
             
+        }
+
+        public int Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public OutPutProduct GetById(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public ModelValidationSource<OutPutProduct> Revert(OutPutProduct model)
