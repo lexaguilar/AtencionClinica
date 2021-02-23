@@ -48,7 +48,8 @@ namespace AtencionClinica.Services
             if (user == null) return null;            
 
             // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
+            var hours = _appSettings.Hours;
+            var token = generateJwtToken(user, hours);
 
             return new AuthenticateResponse(user, token);
         }
@@ -61,7 +62,7 @@ namespace AtencionClinica.Services
 
         // helper methods
 
-        private string generateJwtToken(User user)
+        private string generateJwtToken(User user, double time)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -69,7 +70,7 @@ namespace AtencionClinica.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = CreateClaims(user),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(time),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
