@@ -71,11 +71,14 @@ const WorkOrders = (props) => {
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" caption='Numero' width={100}/>
-                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />               
+                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={120} />               
                 <Column dataField="reference" caption='Referencia' width={100} />               
+                <Column dataField="doctorId" caption='Medico' width={250} >
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'Doctor'})} valueExpr="id" displayExpr="name" />
+                </Column>               
                 <Column dataField="observation" caption='Observacion' />
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
-                <Column dataField="createBy" caption='Creado Por'width={150}/>
+                <Column dataField="createBy" caption='Creado Por'width={130}/>
                 <Editing
                     mode="popup"
                     allowDeleting={true}

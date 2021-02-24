@@ -9,7 +9,7 @@
 -Todo lo que es date, mandarlo formateado a 00:00 horas
 -Historial de medicamentos
 -Llenar sabana de datos
--Poner el doctor en la farmacia
+
 
 
 # Listos
@@ -17,6 +17,8 @@
 -Reglas para beneficiarios menores de 12
 -Poner Home Page
 -Opcion de reset password
+-Poner el doctor en la farmacia
+
 
 # Nice to Have
 -Color en las col editables
