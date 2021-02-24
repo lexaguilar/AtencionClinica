@@ -75,15 +75,17 @@ namespace AtencionClinica.Controllers
                 return BadRequest("El beneficiario ya tiene una admision activa el dia de hoy");
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admission.BeneficiaryId);
-            
+
+            if(bene.RelationshipId == 2) //Hijo
+                if( (bene.BirthDate - DateTime.Today).Days/365 >= 12)
+                    return BadRequest("Solo se permiten admisiones para los hijos edad igual 12 años o menor");
+
             admission.Inss = bene.Inss;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
             admission.CreateAt = DateTime.Now;
             admission.CreateBy = user.Username;
             _db.Admissions.Add(admission);    
-
-            //_db.SaveChanges();
 
             var follow = new Follow{
                 Admission = admission,
