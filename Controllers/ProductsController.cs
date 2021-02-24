@@ -169,6 +169,8 @@ namespace AtencionClinica.Controllers
                 product.CreateAt = DateTime.Now;
                 product.LastDateModificationAt = DateTime.Now;
 
+                product.CurrencyId = 1;
+
                 _db.Products.Add(product);
                 _db.SaveChanges();
             }

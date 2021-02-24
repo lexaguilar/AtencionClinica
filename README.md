@@ -7,6 +7,8 @@
 -Validar costos promedios
 -Poner cantidad al momento de descargar inventario
 -Todo lo que es date, mandarlo formateado a 00:00 horas
+-Opcion de reset password
+
 
 # Listos
 -Admisionar solo desde el area admision
@@ -14,7 +16,7 @@
 -Poner Home Page
 
 # Catalogos Inciados
--Areas dBSAHME --Admision debe ser la 1
+-Areas dBSAHME --Admision debe ser la 2
 -Specialties dBSAHME
 -BeneficiaryStatus No administrable
 -CustomerStatus No administrable
