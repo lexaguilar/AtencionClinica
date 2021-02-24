@@ -113,6 +113,14 @@ namespace AtencionClinica.Controllers
         public IActionResult Delete(int id) {
             var admision = _db.Admissions.FirstOrDefault(x => x.Id == id);
 
+            var follow = _db.Follows.Include(x => x.WorkOrders).Where(x => x.AdmissionId == id);
+            foreach (var item in follow)
+            {
+                if(item.WorkOrders.Count > 0)
+                return BadRequest("No se puede anular la admision porque ya tiene ordenes de trabajo")
+            }
+
+
             if(admision != null)
             {
                 admision.Active = false;

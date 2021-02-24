@@ -53,6 +53,8 @@ const Nuevo = props => {
                     const report = urlReport();
                     report.print(`${report.admisionTicket(resp.id)}`);
 
+                    refAdmision.instance.resetValues();
+
                 }
             }).catch(err => {
 
