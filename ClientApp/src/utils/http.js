@@ -1,5 +1,4 @@
 import { userService } from "../services/user.service";
-import { useHistory  } from "react-router-dom";
 
 const root = process.env.PUBLIC_URL;
 const path = `${root}/api/`;
@@ -110,9 +109,7 @@ const processResponse = resp => {
 
         if (resp.status == httpStatus.unauthorized)
         {
-            const history = useHistory();
-            let pathname = '/account/login';
-            history.push({ pathname });
+            window.location.href = '/account/login';
         }
 
         if (resp.status == httpStatus.ok)

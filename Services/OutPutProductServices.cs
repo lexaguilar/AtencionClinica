@@ -105,10 +105,10 @@ namespace AtencionClinica.Services
             var outPutProduct = new OutPutProduct{
                 AreaId = follow.AreaTargetId,
                 TypeId = (int)OutputType.FarmaciaServicios,
-                Date = work.Date,               
+                Date = work.Date,
                 Observation = "Despacho por servicios",
                 CreateBy = work.CreateBy,
-                Reference = work.Reference,                
+                Reference = work.Reference,
                 OutPutProductDetails = items
             };
 

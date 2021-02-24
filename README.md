@@ -7,17 +7,21 @@
 -Validar costos promedios
 -Poner cantidad al momento de descargar inventario
 -Todo lo que es date, mandarlo formateado a 00:00 horas
--Opcion de reset password
 -Historial de medicamentos
 -Llenar sabana de datos
 -Poner el doctor en la farmacia
--
+
 
 # Listos
 -Admisionar solo desde el area admision
 -Reglas para beneficiarios menores de 12
 -Poner Home Page
--
+-Opcion de reset password
+
+# Nice to Have
+-Color en las col editables
+
+
 
 # Catalogos Inciados
 -Areas dBSAHME --Admision debe ser la 2
