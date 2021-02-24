@@ -30,9 +30,27 @@ namespace AtencionClinica.Controllers
             var response = _userService.Authenticate(model);
 
             if (response == null)
-                return BadRequest("Username or password is incorrect");
+                return BadRequest("El usario o contraseña es incorrecta");
 
             return Ok(response);
+        }
+
+        [HttpPost("api/account/changepassword")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordRequest model)
+        {
+
+            if(model.NewPassword != model.RepeatPassword)
+                return BadRequest("Las nuevas contraseñas no coninciden");
+
+            if(model.NewPassword.Length < 5)
+                return BadRequest("La nueva contraseña debe tener al menos 5 caracteres");
+
+            var user = _userService.ChangePassword(model);
+
+            if (user == null)
+                return BadRequest("El usario o contraseña es incorrecta");
+
+            return Ok(user);
         }
     }
 }

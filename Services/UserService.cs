@@ -21,6 +21,7 @@ namespace AtencionClinica.Services
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
+        User ChangePassword(ChangePasswordRequest model);
         User GetById(string username);
     }
 
@@ -87,5 +88,17 @@ namespace AtencionClinica.Services
 
             return identity;
         }
+
+        public User ChangePassword(ChangePasswordRequest model)
+        {
+            
+            var user = userFactory.ChangePassword(model);
+
+            if (user == null) return null;
+
+            return user;
+
+        }
+        
     }
 }

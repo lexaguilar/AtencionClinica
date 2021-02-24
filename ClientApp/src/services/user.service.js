@@ -9,6 +9,8 @@ const user = 'user';
  */
 const login = user => http(uri.account).asPost(user).then(resp => setToken(resp));
 
+
+const changePassword = user => http(uri.changepassword).asPost(user);
 /**
  * Eliminar el token guardado en memoria
  */
@@ -54,6 +56,7 @@ const isLogged = () => getToken() != null;
 
 export const userService = {
     login,
+    changePassword,
     logout,
     getToken,
     getUser,

@@ -1,5 +1,6 @@
 using System.Linq;
 using AtencionClinica.Models;
+using AtencionClinica.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtencionClinica.Factory
@@ -21,7 +22,6 @@ namespace AtencionClinica.Factory
         {
             var pass = password.GetPasswordHashedSHA256();
 
-            //TODO : agregar condicion de la pass
             var result = db.Users.Include(x => x.Area)
             .Include(x => x.Rol)
             .ThenInclude(x => x.RolResources)
@@ -29,6 +29,24 @@ namespace AtencionClinica.Factory
             
             return result;
         }
+
+        public User ChangePassword(ChangePasswordRequest model)
+        {
+            var pass = model.OldPassword.GetPasswordHashedSHA256();
+            
+            var result = db.Users.FirstOrDefault(x => x.Username == model.Username && x.Password == pass && x.Active);
+
+            if(result == null)
+                return null;
+
+            var newPass = model.NewPassword.GetPasswordHashedSHA256();
+            result.Password = newPass;
+
+            db.SaveChanges();
+            
+            return result;
+        }
+
 
         
     }
