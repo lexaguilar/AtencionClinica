@@ -61,10 +61,10 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/services/post")]
         public IActionResult Post([FromBody] Service service)
         {
-
             
-
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if (service.Id > 0)
             {

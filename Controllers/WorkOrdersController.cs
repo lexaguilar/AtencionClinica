@@ -45,8 +45,9 @@ namespace AtencionClinica.Controllers
         public IActionResult Post([FromBody] WorkOrder workOrder)
         {            
 
-            var user = this.GetAppUser();
-
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if (workOrder.Id == 0)
             {

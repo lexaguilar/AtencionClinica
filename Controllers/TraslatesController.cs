@@ -95,7 +95,9 @@ namespace AtencionClinica.Controllers
         public IActionResult Post([FromBody] Traslate traslate)
         {            
 
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if (traslate.Id == 0)
             {

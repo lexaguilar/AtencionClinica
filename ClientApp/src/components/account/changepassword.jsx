@@ -37,13 +37,9 @@ function ChangePassword(props) {
         userService.changePassword(user)
         .then(userResp => {
 
-            let pathname = (props?.location?.state?.from?.pathname || '/clinica');
-
-            pathname = pathname.includes('login') ? '/clinica' : pathname;
-
-            dispatch(actions.updateUser({ username: userResp.username, areaId : userResp.areaId, area : userResp.area }));
+            let pathname = '/account/login';
            
-            props.history.push({ pathname });
+            props.history.push({ pathname }, {username : currenteUser.username});
 
         }).catch(err => {
             setLoading(false)

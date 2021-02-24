@@ -28,7 +28,9 @@ namespace AtencionClinica.Controllers
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
         {
 
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             IQueryable<InPutProduct> inPutProducts = _db.InPutProducts.Where(x => x.AreaId == user.AreaId)
            .OrderByDescending(x => x.Id);            
@@ -68,7 +70,9 @@ namespace AtencionClinica.Controllers
         public IActionResult Post([FromBody] InPutProduct inPutProduct)
         {            
 
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if (inPutProduct.Id == 0)
             {

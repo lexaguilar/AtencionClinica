@@ -72,7 +72,9 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/bill/post")]
         public IActionResult Post([FromBody] Bill bill) 
         {
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
             
             //admission.Inss = bene.Inss;
             bill.Active = true;

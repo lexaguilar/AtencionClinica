@@ -24,13 +24,17 @@ namespace AtencionClinica.Models{
 
             if(follow.AreaTargetId == (int)AreaRestrict.Farmacia){
 
-                if(admision.CreateAt.Date != DateTime.Today)                
-                    return modelValidation.AsError($"No se puede despachar sin una admision previe de hoy");
+                if(admision.CreateAt.Date != DateTime.Today)
+                    return modelValidation.AsError($"No se puede despachar sin una admision previa de hoy");
             
                 if(string.IsNullOrEmpty(this.Reference))
                     return modelValidation.AsError($"La referencia de la receta es necesaria");
                     
-            }                
+            }          
+
+            var doctor = _db.Doctors.FirstOrDefault(x => x.Id == this.DoctorId);
+            if(!doctor.Active)
+                return modelValidation.AsError($"El doctor {doctor.Name} no esta activo");
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admision.BeneficiaryId);
             if(bene.BeneficiaryStatusId != 1)

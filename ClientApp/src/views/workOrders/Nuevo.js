@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule, EmptyItem} from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
+import ScrollView from 'devextreme-react/scroll-view';
 import { dialogInputProduct } from '../../store/inPutProduct/inPutProductDialogReducer';
-import { DataGrid } from 'devextreme-react';
+import { Button, DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import uri from '../../utils/uri';
@@ -16,6 +17,8 @@ import { cellRenderBold } from '../../utils/common';
 import useProducts from '../../hooks/useProducts';
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
 import Information from '../../components/beneficiary/Information';
+import { createStore, createStoreLocal } from '../../utils/proxy';
+import { editorOptionsSelect } from '../../data/app';
 
 const Nuevo = props => {   
     
@@ -144,12 +147,22 @@ const Nuevo = props => {
         });
     }, [0]);
 
+    const onCellPrepared = e => {
+        
+        if (e.rowType == 'data') {
+
+            if(e.column.dataField == "quantity")
+                e.cellElement.classList.add('quantity-text');
+        }
+
+    }
+
     const text = 'Guardar orden';  
 
     return (
         <div>
              <Popup
-                width={950}
+                width={1000}
                 height={660}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
@@ -157,137 +170,146 @@ const Nuevo = props => {
                 showCloseButton={!saving}
 
             >
-                 <ToolbarItem 
-                    widget="dxButton" 
-                    location="after" 
-                    options={{
-                        text: saving ? 'Guardando...' : text,
-                        icon : 'save',
-                        disabled : saving,
-                        type:"success",
-                        onClick: crearOrdenTrabajo
-                    }}>
-                </ToolbarItem>
-                <Information beneficiaryId={beneficiaryId}/>
-                <br />
-                <Form formData={workOrder} ref={refForm}>
-                    <GroupItem colCount={3}>                      
-                        
-                        <SimpleItem dataField="date" editorType="dxDateBox"
-                            editorOptions={{
-                                displayFormat : 'dd/MM/yyyy',
-                                openOnFieldClick:true,
-                            }} >
-                            <Label text="Fecha" />
-                            <RequiredRule message="Seleccione la fecha" />
-                        </SimpleItem>
-                        <SimpleItem dataField="reference">
-                            <Label text="Referencia" />
-                            <RequiredRule message="Ingrese una referencia" />
-                            <StringLengthRule max={20} message="Maximo 20 caracteres" />
-                        </SimpleItem>
-                        <EmptyItem />
-                        <SimpleItem dataField="observation" colSpan={3}>
-                            <Label text="Observacion" />
-                            <RequiredRule message="Ingrese una observacion" />
-                            <StringLengthRule max={500} message="Maximo 500 caracteres" />
-                        </SimpleItem>
-                        
-                    </GroupItem>
-                    <GroupItem>
-                        <DataGrid id="gridDetails"
-                            ref={refGridProducts}
-                            selection={{ mode: 'single' }}
-                            dataSource={details}
-                            showBorders={true}
-                            showRowLines={true}
-                            allowColumnResizing={true}
-                            allowColumnReordering={true}
-                            height={200}
-                            onToolbarPreparing={onToolbarPreparingProducts}
-                        >
-                            <Column dataField="productId" caption="Producto"
-                                setCellValue={setCellValue.bind(null,"productId")}
-                                editCellComponent={ProductDDBComponent}>
-                                    <Lookup 
-                                        dataSource={products}
-                                        valueExpr="id" 
-                                        displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
-                                    
-                                    />
+                <ScrollView id="scrollview">                    
+                    <Information beneficiaryId={beneficiaryId}/>
+                    <br />
+                    <Form formData={workOrder} ref={refForm}>
+                        <GroupItem colCount={3}>                      
+                            
+                            <SimpleItem dataField="date" editorType="dxDateBox"
+                                editorOptions={{
+                                    displayFormat : 'dd/MM/yyyy',
+                                    openOnFieldClick:true,
+                                }} >
+                                <Label text="Fecha" />
+                                <RequiredRule message="Seleccione la fecha" />
+                            </SimpleItem>
+                            <SimpleItem dataField="doctorId" colSpan={2} editorType="dxSelectBox"
+                                editorOptions={{
+                                    dataSource: createStoreLocal({name: 'Doctor', active : true}),
+                                    ...editorOptionsSelect
+                                }} >
+                                <Label text="Doctor" />
+                                <RequiredRule message="Seleecione el medico" />
+                            </SimpleItem>
+                            <SimpleItem dataField="reference">
+                                <Label text="Referencia" />
+                                <RequiredRule message="Ingrese una referencia" />
+                                <StringLengthRule max={20} message="Maximo 20 caracteres" />
+                            </SimpleItem>                           
+                            <SimpleItem dataField="observation" colSpan={2}>
+                                <Label text="Observacion" />
+                                <RequiredRule message="Ingrese una observacion" />
+                                <StringLengthRule max={500} message="Maximo 500 caracteres" />
+                            </SimpleItem>
+                            
+                        </GroupItem>
+                        <GroupItem>
+                            <DataGrid id="gridDetails"
+                                ref={refGridProducts}
+                                selection={{ mode: 'single' }}
+                                dataSource={details}
+                                showBorders={true}
+                                showRowLines={true}
+                                allowColumnResizing={true}
+                                allowColumnReordering={true}
+                                height={200}
+                                onToolbarPreparing={onToolbarPreparingProducts}
+                                onCellPrepared={onCellPrepared}
+                            >
+                                <Column dataField="productId" caption="Producto"
+                                    setCellValue={setCellValue.bind(null,"productId")}
+                                    editCellComponent={ProductDDBComponent}>
+                                        <Lookup 
+                                            dataSource={products}
+                                            valueExpr="id" 
+                                            displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
+                                        
+                                        />
+                                        <RuleRequired />
+                                </Column>                          
+                                <Column dataField="presentation" caption="Presentacion" width={120} allowEditing={false}>
                                     <RuleRequired />
-                            </Column>                          
-                            <Column dataField="presentation" caption="Presentacion" width={120} allowEditing={false}>
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="um" caption="Um" width={120} allowEditing={false}>
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="quantity" 
-                                caption="Cantidad" 
-                                dataType="number" width={80}                               
-                                setCellValue={setCellValue.bind(null,"quantity")}>
-                                <RuleRequired />
-                            </Column>                         
-                            <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
-                                <RuleRequired />
-                            </Column>                          
-                            <Column type="buttons" width={50}>
-                                <ButtonGrid name="delete" />                            
-                            </Column>
-                            <Editing
-                                mode="cell"
-                                allowDeleting={true}                               
-                                allowUpdating={true}
-                                selectTextOnEditStart={true}
-                                useIcons={true}
-                            ></Editing>
-                        </DataGrid>
-                    </GroupItem>
-                    <GroupItem>
-                        <DataGrid id="gridDetailsServices"
-                            ref={refGridServices}
-                            selection={{ mode: 'single' }}
-                            dataSource={detailsServices}
-                            showBorders={true}
-                            showRowLines={true}
-                            allowColumnResizing={true}
-                            allowColumnReordering={true}
-                            height={200}
-                            onToolbarPreparing={onToolbarPreparing}
-                        >
-                            <Column dataField="id" caption="Procedimiento" setCellValue={setCellValueServices}>
-                                <Lookup 
-                                    disabled={true} 
-                                    dataSource={services} 
-                                    valueExpr="id" displayExpr="name" 
-                                />
-                            </Column>                          
-                            <Column dataField="quantity" 
-                                caption="Cantidad" 
-                                dataType="number" width={120}                               
-                                setCellValue={setCellValueCantServices}>
-                                <RuleRequired />
-                            </Column>
-                            <Column dataField="price" allowEditing={false} caption='Precio' width={100}  cellRender={cellRender()}/>
-                            <Column dataField="total" allowEditing={false} width={120}  cellRender={cellRenderBold()}/>
-                            <Column type="buttons" width={50}>
-                                <ButtonGrid name="delete" />                            
-                            </Column>
-                            <Editing
-                                mode="cell"
-                                allowDeleting={true}                               
-                                allowUpdating={true}
-                                selectTextOnEditStart={true}
-                                useIcons={true}
-                            ></Editing>
-                        </DataGrid>
-                    </GroupItem>
-                    
-                </Form>               
+                                </Column>
+                                <Column dataField="um" caption="Um" width={120} allowEditing={false}>
+                                    <RuleRequired />
+                                </Column>
+                                <Column dataField="quantity" 
+                                    caption="Cantidad" 
+                                    dataType="number" width={80}                               
+                                    setCellValue={setCellValue.bind(null,"quantity")}>
+                                    <RuleRequired />
+                                </Column>                         
+                                <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
+                                    <RuleRequired />
+                                </Column>
+                                <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
+                                    <RuleRequired />
+                                </Column>                          
+                                <Column type="buttons" width={50}>
+                                    <ButtonGrid name="delete" />                            
+                                </Column>
+                                <Editing
+                                    mode="cell"
+                                    allowDeleting={true}                               
+                                    allowUpdating={true}
+                                    selectTextOnEditStart={true}
+                                    useIcons={true}
+                                ></Editing>
+                            </DataGrid>
+                        </GroupItem>
+                        <GroupItem>
+                            <DataGrid id="gridDetailsServices"
+                                ref={refGridServices}
+                                selection={{ mode: 'single' }}
+                                dataSource={detailsServices}
+                                showBorders={true}
+                                showRowLines={true}
+                                allowColumnResizing={true}
+                                allowColumnReordering={true}
+                                height={200}
+                                onToolbarPreparing={onToolbarPreparing}
+                                onCellPrepared={onCellPrepared}
+                            >
+                                <Column dataField="id" caption="Procedimiento" setCellValue={setCellValueServices}>
+                                    <Lookup 
+                                        disabled={true} 
+                                        dataSource={services} 
+                                        valueExpr="id" displayExpr="name" 
+                                    />
+                                </Column>                          
+                                <Column dataField="quantity" 
+                                    caption="Cantidad" 
+                                    dataType="number" width={120}                               
+                                    setCellValue={setCellValueCantServices}>
+                                    <RuleRequired />
+                                </Column>
+                                <Column dataField="price" allowEditing={false} caption='Precio' width={100}  cellRender={cellRender()}/>
+                                <Column dataField="total" allowEditing={false} width={120}  cellRender={cellRenderBold()}/>
+                                <Column type="buttons" width={50}>
+                                    <ButtonGrid name="delete" />                            
+                                </Column>
+                                <Editing
+                                    mode="cell"
+                                    allowDeleting={true}                               
+                                    allowUpdating={true}
+                                    selectTextOnEditStart={true}
+                                    useIcons={true}
+                                ></Editing>
+                            </DataGrid>
+                        </GroupItem>
+                        
+                    </Form>    
+                    <Button                    
+                        text={`${saving?'Guardando...':text}`}
+                        type="success"
+                        icon="save"
+                        stylingMode="contained"
+                        className="m-1"
+                        disabled={saving}
+                        onClick={crearOrdenTrabajo}
+                    /> 
+                </ScrollView>
             </Popup>
         </div>
     );

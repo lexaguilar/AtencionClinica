@@ -65,10 +65,10 @@ namespace AtencionClinica.Controllers
 
         [Route("api/beneficiaries/post")]
         public IActionResult Post([FromBody] Beneficiary beneficiario) 
-        {
-            
-
-            var user = this.GetAppUser();
+        {           
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
             
             if(beneficiario.Id > 0){
                 var oldBeneficiario = _db.Beneficiaries.FirstOrDefault(x => x.Id == beneficiario.Id);

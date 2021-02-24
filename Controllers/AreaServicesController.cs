@@ -35,7 +35,9 @@ namespace AtencionClinica.Controllers
         public IActionResult Post([FromBody] AreaService areaService)
         {
 
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if (areaService.Id > 0)
             {

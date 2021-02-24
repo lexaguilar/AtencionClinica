@@ -81,7 +81,9 @@ namespace AtencionClinica.Controllers
             if(existe)
                 return BadRequest($"Ya existe un subsidio con el No de bolete {subsidy.Reference}");
 
-            var user = this.GetAppUser();            
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == subsidy.BeneficiaryId);
             

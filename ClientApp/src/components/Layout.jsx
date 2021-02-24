@@ -101,9 +101,9 @@ function Layout(props) {
             <MobileMenu layout={headerLayout}/>
 
             <div className="site">
-                <header className="site__header d-lg-none">
+                {/* <header className="site__header d-lg-none">
                     <MobileHeader />
-                </header>
+                </header> */}
 
                 <header className="site__header d-lg-block d-none">
                     <Header layout={headerLayout} />

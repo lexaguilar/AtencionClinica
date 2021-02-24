@@ -55,7 +55,9 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/followsprivate/post")]
         public IActionResult Post([FromBody] Admission admission) 
         {
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
          
             //_db.SaveChanges();

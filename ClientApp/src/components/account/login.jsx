@@ -8,8 +8,12 @@ import Footer from "../footer";
 
 function Login(props) {
 
+    console.log(props);
+
+    let username = props.location.state?.username;
+
     const dispatch = useDispatch();
-    const [user, setUser] = useState({ username: "", password: "" });
+    const [user, setUser] = useState({ username: username ? username : "", password: "" });
     const [loading, setLoading] = useState(false);
 
     const onValueChange = e => {

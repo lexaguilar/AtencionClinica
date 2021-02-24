@@ -61,7 +61,10 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/follows/post")]
         public IActionResult Post([FromBody] Follow follow) 
         {
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+                
             follow.AreaSourceId = user.AreaId;
             follow.CreateAt = DateTime.Now;
             follow.CreateBy = user.Username;

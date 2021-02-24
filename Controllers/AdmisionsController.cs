@@ -67,7 +67,7 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/admisions/post")]
         public IActionResult Post([FromBody] Admission admission) 
         {
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
 
             if(user.AreaId != (int)AreaRestrict.Admision)
                 return BadRequest("Solo se permite admisionar desde el area de Admision");

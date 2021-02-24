@@ -132,7 +132,9 @@ namespace AtencionClinica.Controllers
        [HttpPost("api/appointments/post")]
         public IActionResult Post([FromBody] Appointment appointment) 
         {
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             var appDate = new DateTime(appointment.DateAppointment.Year,appointment.DateAppointment.Month,appointment.DateAppointment.Day);
 

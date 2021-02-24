@@ -85,7 +85,9 @@ namespace AtencionClinica.Controllers
         public IActionResult Post([FromBody] PrivateCustomer privateCustomer) 
         {           
 
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
             
             if(privateCustomer.Id > 0){
                 var oldprivateCustomer = _db.PrivateCustomers.FirstOrDefault(x => x.Id == privateCustomer.Id);
