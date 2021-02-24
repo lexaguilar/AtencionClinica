@@ -68,6 +68,8 @@ namespace AtencionClinica.Controllers
         public IActionResult Post([FromBody] Admission admission) 
         {
             var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if(user.AreaId != (int)AreaRestrict.Admision)
                 return BadRequest("Solo se permite admisionar desde el area de Admision");

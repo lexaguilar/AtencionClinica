@@ -36,7 +36,9 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/providers/post")]
         public IActionResult Post([FromBody] Provider provider)
         {
-             var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
              
             provider.ToUpperCase();
 
