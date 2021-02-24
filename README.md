@@ -1,13 +1,18 @@
 # AtencionClinica
--Admisionar solo desde el area admision
--Reglas para beneficiarios menores de 12
+
+# Pedientes
 -Poner fecha de incio para kardex y traer saldo anterior
 -Registrar descargue de inventario y procedimientos en la ultima admision o cita
 -Validar lotes
 -Validar costos promedios
 -Poner cantidad al momento de descargar inventario
 -Todo lo que es date, mandarlo formateado a 00:00 horas
+
+# Listos
+-Admisionar solo desde el area admision
+-Reglas para beneficiarios menores de 12
 -Poner Home Page
+
 # Catalogos Inciados
 -Areas dBSAHME --Admision debe ser la 1
 -Specialties dBSAHME

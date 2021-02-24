@@ -69,6 +69,9 @@ namespace AtencionClinica.Controllers
         {
             var user = this.GetAppUser();
 
+            if(user.AreaId != (int)AreaRestrict.Admision)
+                return BadRequest("Solo se permite admisionar desde el area de Admision");
+
             var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active);
             
             if(existe)
