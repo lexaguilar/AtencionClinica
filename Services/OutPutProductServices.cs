@@ -104,7 +104,7 @@ namespace AtencionClinica.Services
 
             var outPutProduct = new OutPutProduct{
                 AreaId = follow.AreaTargetId,
-                TypeId = (int)InputType.Traslado,
+                TypeId = (int)OutputType.FarmaciaServicios,
                 Date = work.Date,               
                 Observation = "Despacho por servicios",
                 CreateBy = work.CreateBy,
