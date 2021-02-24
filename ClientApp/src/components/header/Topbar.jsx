@@ -19,7 +19,6 @@ function Topbar(props) {
     ];
 
     const accountLinks = [
-        { title: 'Editar Perfil', url: '/account/profile' },
         { title: 'Password', url: '/account/password' },
         { title: 'Salir', url: '/account/logout' },
     ];
