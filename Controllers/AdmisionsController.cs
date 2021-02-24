@@ -117,7 +117,7 @@ namespace AtencionClinica.Controllers
             foreach (var item in follow)
             {
                 if(item.WorkOrders.Count > 0)
-                return BadRequest("No se puede anular la admision porque ya tiene ordenes de trabajo")
+                return BadRequest("No se puede anular la admision porque ya tiene ordenes de trabajo");
             }
 
 
