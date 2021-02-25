@@ -22,10 +22,17 @@ namespace AtencionClinica.Models{
             var follow = _db.Follows.FirstOrDefault(x => x.Id == this.FollowId);
             var admision = _db.Admissions.FirstOrDefault(x => x.Id == follow.AdmissionId);
 
+            if(!admision.Active)
+                return modelValidation.AsError($"La admisión no esta activa");
+
+            var existeMasReciente = _db.Admissions.Any(x => x.Id > follow.AdmissionId && x.BeneficiaryId == admision.BeneficiaryId && x.Active);
+            if(existeMasReciente)
+                return modelValidation.AsError($"Existe una admisión mas reciente de paciente, ésta ya no es válida");
+
             if(follow.AreaTargetId == (int)AreaRestrict.Farmacia){
 
                 if(admision.CreateAt.Date != DateTime.Today)
-                    return modelValidation.AsError($"No se puede despachar sin una admision previa de hoy");
+                    return modelValidation.AsError($"No se puede despachar sin una admisión previa de hoy");
             
                 if(string.IsNullOrEmpty(this.Reference))
                     return modelValidation.AsError($"La referencia de la receta es necesaria");

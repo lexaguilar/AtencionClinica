@@ -1,7 +1,7 @@
 # AtencionClinica
 
 # Pedientes
--Poner fecha de incio para kardex y traer saldo anterior
+
 -Registrar descargue de inventario y procedimientos en la ultima admision o cita
 -Validar lotes
 -Validar costos promedios
@@ -18,7 +18,7 @@
 -Poner Home Page
 -Opcion de reset password
 -Poner el doctor en la farmacia
-
+-Poner fecha de incio para kardex y traer saldo anterior
 
 # Nice to Have
 -Color en las col editables
