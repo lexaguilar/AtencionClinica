@@ -37,7 +37,7 @@ namespace AtencionClinica.Models{
                 if(string.IsNullOrEmpty(this.Reference))
                     return modelValidation.AsError($"La referencia de la receta es necesaria");
                     
-            }          
+            }
 
             var doctor = _db.Doctors.FirstOrDefault(x => x.Id == this.DoctorId);
             if(!doctor.Active)

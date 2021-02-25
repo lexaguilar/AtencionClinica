@@ -2,7 +2,7 @@
 
 # Pedientes
 
--Registrar descargue de inventario y procedimientos en la ultima admision o cita
+
 -Validar lotes
 -Validar costos promedios
 -Poner cantidad al momento de descargar inventario
@@ -13,6 +13,7 @@
 
 
 # Listos
+-Registrar descargue de inventario y procedimientos en la ultima admision o cita
 -Admisionar solo desde el area admision
 -Reglas para beneficiarios menores de 12
 -Poner Home Page
@@ -22,7 +23,6 @@
 
 # Nice to Have
 -Color en las col editables
-
 
 
 

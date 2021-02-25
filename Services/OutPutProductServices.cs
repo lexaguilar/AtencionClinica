@@ -96,6 +96,7 @@ namespace AtencionClinica.Services
                     ProductId = item.ProductId.Value,
                     Quantity = item.Quantity,
                     Cost = areaProducto.CostAvg,
+                    CostAvg = areaProducto.CostAvg,
                     Price = item.Price,
                     Discount = 0
                 });
