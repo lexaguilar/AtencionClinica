@@ -11,9 +11,9 @@ const createProxyBase = root => createProxy(`${root}/get`, `${root}/post`, id =>
  * returna una url despues del prefijo api/catalogsCustom/ 
  * @param {name} name -  nombre de la accion
  */
-const createStore = name => createCustomStore(`catalogos/${toCapital(name)}`)();
+const createStore = ({ name, active }) => createCustomStore({url : `catalogos/${toCapital(name)}`, active})();
 
-const createStoreLocal = ({ name = required('name'), url = '' }) => {
+const createStoreLocal = ({ name = required('name'), url = '', active = false }) => {
     return {
         store: new CustomStore({
             key: "id",
@@ -26,12 +26,19 @@ const createStoreLocal = ({ name = required('name'), url = '' }) => {
 
                     let existe = catalogs?.[name]?.length;
 
-                    if(existe){                        
-                        resolve(catalogs[name]);
+                    if(existe){    
+                        let arr = catalogs[name];
+
+                        let first = arr[0];
+
+                        if(first.active && active)
+                            resolve(arr.filter(x => x.active))
+                        else
+                            resolve(arr);
                     }
                     else
                         http(endPoint)
-                        .asGet()
+                        .asGet({active})
                         .then(r => {
                             resolve(r);
                         });
@@ -50,7 +57,7 @@ const required = name => new Error(`El parametro ${name} es requerido`);
  * @param {String} url -  nombre de la accion
  * @param {Function} myStore -  nombre de la accion
  */
-const createCustomStore = url => myStore => {
+const createCustomStore = ({url, active = false}) => myStore => {
 
     return {
         store: new CustomStore({
@@ -59,7 +66,7 @@ const createCustomStore = url => myStore => {
             load: function() {
                 return new Promise(resolve => {
                     http(url)
-                        .asGet()
+                        .asGet({active})
                         .then(r => resolve(typeof myStore == 'function' ? myStore(r) : r))
                 });
             }

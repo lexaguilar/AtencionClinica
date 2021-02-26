@@ -30,8 +30,6 @@ const store =
         const customStore = new CustomStore({
             load: (loadOptions) => {
 
-                console.log(loadOptions);
-
                 let params = {};
                 params.skip = loadOptions.skip || 0;
                 params.take = loadOptions.take || 10;

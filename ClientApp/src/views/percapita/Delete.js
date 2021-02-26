@@ -8,8 +8,6 @@ import { getMonthName } from '../../utils/common';
 
 const Delete = props => {
 
-    console.log(props);
-
     const { month, year } = props;
 
     const [ open, setOpen ] = useState(false);

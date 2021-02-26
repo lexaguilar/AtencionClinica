@@ -15,5 +15,9 @@ namespace AtencionClinica.Models
         public string PhoneNumber { get; set; }
         public string CellNumber { get; set; }
         public string Website { get; set; }
+        public int DefaultCurrency { get; set; }
+        public int? Decimals { get; set; }
+        public bool ValidatePriceGreaterCost { get; set; }
+        public int AreaMainId { get; set; }
     }
 }

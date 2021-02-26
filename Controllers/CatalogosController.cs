@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     [Route("api/catalogos")]
     public class CatalogosController : Controller
     {      
@@ -33,6 +35,17 @@ namespace AtencionClinica.Controllers
             var region = db.Regions.ToArray();
             var relationship = db.Relationships.ToArray();
             var sex = db.Sexs.ToArray();
+            var inPutProductState = db.InPutProductStates.ToArray();
+            var outPutProductState = db.OutPutProductStates.ToArray();
+            var InPutProductType = db.InPutProductTypes.ToArray();
+            var outPutProductType = db.OutPutProductTypes.ToArray();
+            var productState = db.ProductStates.ToArray();
+            var area = db.Areas.ToArray();
+            var currency = db.Currencies.ToArray();
+            var billType = db.BillTypes.ToArray();
+            var privateCustomerStat = db.PrivateCustomerStats.ToArray();
+            var traslateState = db.TraslateStates.ToArray();
+            var traslateStage = db.TraslateStages.ToArray();
 
             return Json(new {
                 beneficiaryStatus,
@@ -42,6 +55,17 @@ namespace AtencionClinica.Controllers
                 region,
                 relationship,
                 sex,
+                inPutProductState,
+                InPutProductType,
+                outPutProductState,
+                outPutProductType,
+                productState,
+                area,
+                currency,
+                billType,
+                privateCustomerStat,
+                traslateState,
+                traslateStage
             });
 
         }

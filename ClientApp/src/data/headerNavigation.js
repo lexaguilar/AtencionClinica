@@ -76,9 +76,95 @@ const menu = [{
     title: 'Subsidios',
     url: `${_path.CLINICA}/subsidios`
 },{
+//     layout: 'clinica',
+//     title: 'Inventario',
+//     url: `${_path.CLINICA}/productos`,
+//     submenu: {
+//         type: 'menu',
+//         menu: [
+//             { title: 'Productos', url: `${_path.CLINICA}/productos` },           
+//             { title: 'Familias', url: `${_path.CLINICA}/familias` },
+//             { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
+//             { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
+//             { 
+//                 title: 'Movimientos', 
+//                 url: `${_path.CLINICA}/movimientos`,
+//                 submenu : [
+//                     { title: 'Entradas', url: `${_path.CLINICA}/movimientos/entradas` },           
+//                     { title: 'Salidas', url: `${_path.CLINICA}/movimientos/salidas` },
+//                     { title: 'Compras', url: `${_path.CLINICA}/movimientos/compras` },
+//                     { title: 'Requisas', url: `${_path.CLINICA}/movimientos/requisas` },
+//                     { title: 'Inventario Inicial', url: `${_path.CLINICA}/movimientos/inv-inicial` },
+//                 ]
+//             },
+//             { 
+//                 title: 'Reportes', 
+//                 url: ``,
+//                 submenu : [
+//                     { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/karex` },
+//                     { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/karex` },
+//                 ]
+//             },   
+//         ],
+//     },
+// },{
     layout: 'clinica',
     title: 'Inventario',
-    url: ''
+    url: `${_path.CLINICA}/productos`,
+    submenu: {
+        type: 'megamenu',
+        menu: {
+            size: 'nl',
+            columns: [{
+                size: 6,
+                links: [{
+                    title: 'Entradas',
+                    url: '',
+                    links: [
+                        { title: 'Momivientos de entrada', url: `${_path.CLINICA}/movimientos/entradas` },    
+                        { title: 'Traslados o requisas', url: `${_path.CLINICA}/movimientos/traslados` },    
+                        { title: 'Compras', url: `${_path.CLINICA}/movimientos/compras` },
+                        { title: 'Inventario Inicial', url: `${_path.CLINICA}/movimientos/inv-inicial` },
+                    ],
+                },]
+            },{
+                size: 6,
+                links: [{
+                    title: 'Salidas',
+                    url: '',
+                    links: [
+                        { title: 'Momivientos de salida', url: `${_path.CLINICA}/movimientos/salidas` },
+                        { title: 'Despacho', url: `${_path.CLINICA}/movimientos/despacho` },    
+                    ],
+                },]
+            },{
+                size: 6,
+                links: [{
+                    title: 'Catalogo',
+                    url: '',
+                    links: [
+                        { title: 'Productos', url: `${_path.CLINICA}/productos` },           
+                        { title: 'Familias', url: `${_path.CLINICA}/familias` },
+                        { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
+                        { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
+                        { title: 'Proveedores', url: `${_path.CLINICA}/proveedores` },
+                        { title: 'Tasa de cambio', url: `${_path.CLINICA}/tasa-de-cambio` },
+                    ],
+                },]
+            },{
+                size: 6,
+                links: [{
+                    title: 'Reportes',
+                    url: '',
+                    links: [
+                        { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/kardex` },
+                        { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/karex` },
+                    ],
+                },]
+            }]
+        }
+
+    },
 },{
     layout: 'clinica',
     title: 'Ficheros',
@@ -135,7 +221,7 @@ const menu = [{
         menu: [
             { title: 'Usuarios', url: `${_path.CLINICA}/usuarios` },
             { title: 'Roles', url: `${_path.CLINICA}/roles` },
-            { title: 'Recursos', url: `${_path.CLINICA}/recursos` },
+            { title: 'Recursos', url: `${_path.CLINICA}/permisos` },
             { title: 'Parametros', url: `${_path.CLINICA}/config/parameters` }
         ],
     },

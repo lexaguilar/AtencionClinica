@@ -3,13 +3,15 @@ import React from 'react';
 
 // third-party
 import { Helmet } from 'react-helmet';
+import { logoHome } from '../../data/logo';
 import Title from '../shared/Title';
 
 export default function HomePage() {
     
     return (
-        <React.Fragment>
+        <div className="container text-center mt-50">
             <Title title="Inicio" />
-        </React.Fragment>
+            {logoHome}     
+        </div>
     )
 }

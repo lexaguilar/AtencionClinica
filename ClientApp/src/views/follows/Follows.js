@@ -19,32 +19,50 @@ import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { useSelector } from 'react-redux'
-import { formatDate, formatDateTime } from '../../data/app';
-
+import { dataAccess, formatDate, formatDateTime, resources } from '../../data/app';
+import { useDispatch, useSelector } from 'react-redux';
+import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
+import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
+import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
+import useAuthorization from '../../hooks/useAuthorization';
+import Transfer from '../../components/workOrder/Transfer';
 
 const Follows = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.servicios, dataAccess.access ]);
     
     const {  areaId } = useSelector(store => store.user); 
+    const dispatch = useDispatch();
 
     const addMenuItems =(e) => {
-        
+
         if (e.target == "content") {
             if (!e.items) e.items = [];
- 
-            e.items.push({
-                text: 'Nueva orden de trabajo',
-                icon : 'folder',
-                onItemClick: () => 0                
-            },{
-                text: 'Nueva transferencia',
-                icon : 'chevrondoubleright',
-                onItemClick: () => 0                
-            },{
-                text: 'Ver movimientos',
-                icon : 'runner',
-                onItemClick: () => 0                
-            });
+            
+            if(e.row?.data)
+                e.items.push({
+                    text: 'Nueva orden de trabajo',
+                    icon : 'folder',
+                    onItemClick: () => {
+                                               
+                        let { id, beneficiaryId } = e.row.data;
+                        dispatch(dialogWorkOrders({open : true, id, beneficiaryId : beneficiaryId}));
+
+                    }
+                },{
+                    text: 'Nueva transferencia',
+                    icon : 'chevrondoubleright',
+                    onItemClick: () => {
+
+                        let { admissionId } = e.row.data;
+                        dispatch(dialogTransfer({open : true, id : admissionId}));
+
+                    }              
+                },{
+                    text: 'Ver movimientos',
+                    icon : 'runner',
+                    onItemClick: () => 0                
+                });
         }
     }
 
@@ -63,10 +81,15 @@ const Follows = () => {
     
     const title = 'Servicios';
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title} />
-            <BlockHeader title={title} />         
+            <BlockHeader title={title} />   
+
+            <PopupWorkOrder />  
+            <Transfer />  
             <DataGrid id="gridContainer"
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.follows(areaId), remoteOperations: true })}
@@ -77,9 +100,14 @@ const Follows = () => {
                 onCellPrepared={onCellPrepared}
                 onContextMenuPreparing={addMenuItems}
                 noDataText='No se encontró ninguna transferencia'
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}     
             >
                 <Paging defaultPageSize={20} />
                 <Pager
+                    showInfo={true}
                     showPageSizeSelector={true}
                     allowedPageSizes={[10, 20, 50]}
                 />
@@ -95,7 +123,7 @@ const Follows = () => {
                 <Column dataField="lastName" caption='Apellidos'/>
                 <Column dataField="areaSource" caption='Area Origen' />       
                 <Column dataField="createBy" caption='Creado por' width={120} />
-                <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDate} width={120} />
+                <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDateTime} width={150} />
             </DataGrid>
         </div>
     );

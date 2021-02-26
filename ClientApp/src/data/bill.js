@@ -4,5 +4,7 @@ export const billDefault = {
     privateCustomerId: null,
     billTypeId: null,
     observaction: '',
+    currencyId: 1,
+    rate : 0
 
 }

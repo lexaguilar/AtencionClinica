@@ -19,6 +19,7 @@ namespace AtencionClinica.Models
         public int SpecialtyId { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
+        public bool Active { get; set; }
 
         public virtual Specialty Specialty { get; set; }
         public virtual DoctorTime DoctorTime { get; set; }

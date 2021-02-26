@@ -21,7 +21,6 @@ const BeneficiaryDDBComponent = props => {
 
         if (e.selectedRowKeys.length > 0) {
 
-            console.log(e.selectedRowsData[0]);
             this.dropDownBoxRef.current.instance.close();
 
         }

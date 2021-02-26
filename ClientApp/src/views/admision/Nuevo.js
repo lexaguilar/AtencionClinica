@@ -18,8 +18,9 @@ import PopupBeneficiary from '../../components/beneficiary/PopupBeneficiary';
 import { admisionDefault } from '../../data/admision';
 import { useDispatch, useSelector } from 'react-redux'
 import Citas from '../../components/grids/Citas';
+import urlReport from '../../services/reportServices';
 
-const Nuevo = props => {
+const Nuevo = props => {    
 
     const { clear } = useSelector(store => store.customerClear);
     const dispatch = useDispatch();
@@ -48,6 +49,11 @@ const Nuevo = props => {
                     setAdmision({...admisionDefault});
 
                     dispatch(clearCustomer({clear : !clear}));
+
+                    const report = urlReport();
+                    report.print(`${report.admisionTicket(resp.id)}`);
+
+                    refAdmision.instance.resetValues();
 
                 }
             }).catch(err => {
@@ -96,7 +102,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="areaId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'area' }),
+                            dataSource: createStoreLocal({ name: 'area', active: true }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Area" />
@@ -104,7 +110,7 @@ const Nuevo = props => {
                     </SimpleItem>
                     <SimpleItem dataField="specialtyId" editorType="dxSelectBox"
                         editorOptions={{
-                            dataSource: createStoreLocal({ name: 'specialty' }),
+                            dataSource: createStoreLocal({ name: 'specialty',active: true }),
                             ...editorOptionsSelect
                         }} >
                         <Label text="Especialidad" />
@@ -124,7 +130,7 @@ const Nuevo = props => {
             <Button
                 width={180}
                 text={loading ? 'Guardando...' : 'Guardar admision'}
-                type="default"
+                type="success"
                 icon='save'
                 disabled={!customer.status || loading}
                 onClick={guardarAdmision}

@@ -20,9 +20,12 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const DoctoresById = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const title = 'Horario de Doctores';
 
@@ -35,12 +38,16 @@ const DoctoresById = () => {
             options: {
                 text: 'Agregar nuevo',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         });
     }  
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}/>          
@@ -64,7 +71,7 @@ const DoctoresById = () => {
             <ColumnChooser enabled={true} />
             <Export enabled={true} fileName={title} allowExportSelectedData={true} />
             <Column dataField="doctorId" width={180} caption="Doctor">              
-                <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name :'doctor'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="days" caption='Regla de dias' >
             </Column>

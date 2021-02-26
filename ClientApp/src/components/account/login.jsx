@@ -5,11 +5,14 @@ import { useDispatch } from "react-redux";
 import * as actions from '../../store/user/userActions';
 import { ToastContainer } from "react-toastify";
 import Footer from "../footer";
+import { Link } from 'react-router-dom';
 
 function Login(props) {
 
+    let username = props.location.state?.username;
+
     const dispatch = useDispatch();
-    const [user, setUser] = useState({ username: "", password: "" });
+    const [user, setUser] = useState({ username: username ? username : "", password: "" });
     const [loading, setLoading] = useState(false);
 
     const onValueChange = e => {
@@ -21,9 +24,11 @@ function Login(props) {
 
     }
 
-    const sendUser = () => {
+    const sendUser = e => {
+        e.preventDefault();
         setLoading(true);
-        userService.login(user).then(userResp => {
+        userService.login(user)
+        .then(userResp => {
 
             let pathname = (props?.location?.state?.from?.pathname || '/clinica');
 
@@ -44,21 +49,24 @@ function Login(props) {
         <React.Fragment>
             <ToastContainer autoClose={5000} hideProgressBar />
             <div className="wrapper-login">
-                <form className="form-signin">
+                <form className="form-signin" onSubmit={sendUser}>
                     <div className="imglog">
                         <img className="nav-panel-logo" width={200} src={require('../../svg/logoclinica.png')} />
                     </div>
                     <div style={{ paddingTop: 50 }}>
                         <h4>Iniciar sesión</h4>
-                        <input value={user.username} onChange={onValueChange} type="text" className="form-control" name="username" placeholder="Usuario" required="" autoFocus={true} />
-                        <input value={user.password} onChange={onValueChange} type="password" className="form-control" name="password" placeholder="Contraseña" required="" />
+                        <input value={user.username} onChange={onValueChange} type="text" className="form-control" name="username" placeholder="Usuario" required autoFocus={true} />
+                        <input value={user.password} onChange={onValueChange} type="password" className="form-control" name="password" placeholder="Contraseña" required />
                     </div>
 
-                    <a href="/">Olvide mi Contraseña</a>
+                    <Link to={'/account/resetpassword'} >Olvide mi Contraseña</Link>
+
                     <br />
-                    <button className="btn btn-lg btn-primary btn-block" type="button" onClick={sendUser} disabled={loading} >
-                        {loading ? "Iniciando..." : "Login"}
-                    </button>
+                    <input
+                        className="btn btn-lg btn-primary btn-block" 
+                        type="submit" 
+                        value={loading ? "Iniciando..." : "Login"}                         
+                        disabled={loading}/>
                 </form>
             </div>
             <footer className="site__footer">

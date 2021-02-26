@@ -21,9 +21,14 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import onExporting from '../../components/grids/Importer';
+import { Resources } from 'devextreme-react/gantt';
+import { dataAccess, resources } from '../../data/app';
+import useAuthorization from '../../hooks/useAuthorization';
 
 
 const Subsidies = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.subsidios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -86,12 +91,16 @@ const Subsidies = () => {
             options: {
                 text: 'Exportar a excel',
                 icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.exportToExcel(false)
             }
         });
     }  
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} >
@@ -135,10 +144,10 @@ const Subsidies = () => {
                 <Column dataField="inss"  width={100} />
                 <Column dataField="nombre" caption='Nombre'/>
                 <Column dataField="areaId" width={150} caption="Area procedencia">
-                    <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStore({name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="doctorId" width={100} caption="Doctor" visible={false}>
-                    <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStore({name: 'doctor'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="dateStart" caption='Inicio'  width={100} dataType='date'/>
                 <Column dataField="dateEnd" caption='Finaliza'  width={100} dataType='date'/>

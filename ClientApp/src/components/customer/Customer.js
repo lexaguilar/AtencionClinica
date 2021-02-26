@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { custumerDefault } from '../../data/custumer';
 import { NumberBox } from 'devextreme-react/number-box';
 import { Button } from 'devextreme-react/button';
@@ -8,6 +8,7 @@ import Form, { SimpleItem, GroupItem, Label } from 'devextreme-react/form';
 import { createProxyBase, createStoreLocal } from '../../utils/proxy';
 import notify from 'devextreme/ui/notify';
 import { useSelector } from 'react-redux'
+import { TextBox } from 'devextreme-react';
 
 const Customer = props => {
 
@@ -16,7 +17,7 @@ const Customer = props => {
     const [inss, setInss] = useState(null);
     const [custumer, setCustumer] = useState({...custumerDefault});
 
-    const buscarAsegurado = e =>{
+    const buscarAsegurado = e =>{        
 
         const { valueChanged } = props;
 
@@ -55,13 +56,13 @@ const Customer = props => {
             
             <div className="dx-field">
                 <div className="dx-field-label">
-                    <label>Número de Inss</label>
+                    <label>Número de Inss o cédula</label>
                     <div className="row-elemet">
-                        <NumberBox placeholder="Ingrese el numero INSS" value={inss} defaultValue={inss} onValueChanged={onValueChanged} />
+                        <TextBox placeholder="Ingrese el numero INSS" value={inss} defaultValue={inss} onValueChanged={onValueChanged} />
                         <Button
                             width={120}
                             text="Buscar"
-                            type="success"
+                            type="default"
                             icon='search'
                             onClick={buscarAsegurado}
                         />

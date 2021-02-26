@@ -15,8 +15,12 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import ProcedimientosXarea from './ProcedimientosXarea';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 const AreaProcedimientos = () => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const [areaId, setAreaId] = useState(0);
 
@@ -31,7 +35,9 @@ const AreaProcedimientos = () => {
         }
     }
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}/>

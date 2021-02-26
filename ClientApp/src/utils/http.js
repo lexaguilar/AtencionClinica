@@ -1,4 +1,5 @@
-import notify from 'devextreme/ui/notify';
+import { userService } from "../services/user.service";
+
 const root = process.env.PUBLIC_URL;
 const path = `${root}/api/`;
 
@@ -8,7 +9,13 @@ const http = url => {
         
         return new Promise((resolve, reject) => {
 
-            fetch(`${url}`, properties)
+            let token =  userService.getToken();
+
+            let headers = {};
+
+            if(token) headers = { 'Authorization': `Bearer ${token}`}
+
+            fetch(`${url}`, {...properties, headers})
                 .then(processResponse)
                 .catch(error => reject(error))
                 .then(response => resolve(response));
@@ -54,7 +61,8 @@ const http = url => {
                         method: 'POST',
                         body: data ? JSON.stringify(data) : null,
                         headers: {
-                            "Content-Type": "application/json;charset=UTF-8"
+                            "Content-Type": "application/json;charset=UTF-8",
+                            'Authorization': 'Bearer ' +  userService.getToken()
                         }
                     })
                     .then(processResponse)
@@ -65,7 +73,9 @@ const http = url => {
         asDelete: (data = null) => {
             let params = getParameters(data);
 
-            return base(`${_url}${params}`, { method: 'DELETE' });
+            return base(`${_url}${params}`, { method: 'DELETE', headers: {                
+                'Authorization': 'Bearer ' +  userService.getToken()
+            }});
 
         },
         asFile: (file = null) => {
@@ -74,6 +84,9 @@ const http = url => {
                 formData.append('file', file);
                 fetch(_url, {
                         method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' +  userService.getToken()
+                        },
                         body: formData
                     })
                     .then(processResponse)
@@ -93,6 +106,11 @@ const processResponse = resp => {
 
         if (resp.status == httpStatus.internalServerError)
             resp.text().then(err => reject('Error interno en la aplicacion'));
+
+        if (resp.status == httpStatus.unauthorized)
+        {
+            window.location.href = '/account/login';
+        }
 
         if (resp.status == httpStatus.ok)
             resp.json().then(data => resolve(data))

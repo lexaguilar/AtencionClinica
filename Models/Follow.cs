@@ -9,6 +9,7 @@ namespace AtencionClinica.Models
     {
         public Follow()
         {
+            FollowServices = new HashSet<FollowService>();
             WorkOrders = new HashSet<WorkOrder>();
         }
 
@@ -23,6 +24,7 @@ namespace AtencionClinica.Models
         public virtual Admission Admission { get; set; }
         public virtual Area AreaSource { get; set; }
         public virtual Area AreaTarget { get; set; }
+        public virtual ICollection<FollowService> FollowServices { get; set; }
         public virtual ICollection<WorkOrder> WorkOrders { get; set; }
     }
 }

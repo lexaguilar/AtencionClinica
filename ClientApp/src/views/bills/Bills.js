@@ -9,7 +9,7 @@ import {
     Column, 
     Lookup,
     Export, Editing} from 'devextreme-react/data-grid';
-import { createStore } from '../../utils/proxy';
+import { createStore, createStoreLocal } from '../../utils/proxy';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
@@ -17,10 +17,14 @@ import { store } from '../../services/store';
 
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
 import { cellRender, formatToMoney } from '../../utils/common';
+import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Bills = props => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.caja, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -35,9 +39,12 @@ const Bills = props => {
             if(e.rowIndex >= 0)
                 e.items.push({
 
-                    text: 'Re-imprimir ticket',
+                    text: 'Re-imprimir factura',
                     icon : 'print',
-                    onItemClick: () => 0
+                    onItemClick: () => {
+                        const report = urlReport();
+                        report.print(`${report.billTicket(e.row.data.id)}`);
+                    }
                     
                 },{
 
@@ -51,15 +58,17 @@ const Bills = props => {
 
     const onRowPrepared = (e) => {
         if (e.rowType == 'data') {
-            console.log(e);
             if (!e.data.active) 
                 e.rowElement.classList.add('no-activo');
             
         }
     }
 
-    const title = 'Facturas'
-    return (
+    const title = 'Facturas';
+    const active = true;
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>
@@ -87,6 +96,7 @@ const Bills = props => {
         >
             <Paging defaultPageSize={20} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[10, 20, 50]}
             />
@@ -97,13 +107,15 @@ const Bills = props => {
             <Column dataField="id"  width={100} />          
             <Column dataField="nombre" />
             <Column dataField="areaId" width={170} caption="Area">
-                <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStoreLocal({name : 'area'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="billTypeId" width={170} caption="Tipo Ingreso">
-                <Lookup disabled={true} dataSource={createStore('billType')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStoreLocal({name : 'billType'})} valueExpr="id" displayExpr="name" />
             </Column> 
-            <Column dataField="total" width={150}/>
-            <Column dataField="total" width={150} cellRender={cellRender} />
+            <Column dataField="currencyId" caption="Moneda" width={100}>
+                <Lookup disabled={true} dataSource={createStoreLocal({name: 'currency'})} valueExpr="id" displayExpr="name" />
+            </Column>
+            <Column dataField="total" width={100} cellRender={cellRender()} />
             <Column dataField="createBy" caption='Creado por' width={100} />
             <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180} />
             <Editing

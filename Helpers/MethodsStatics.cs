@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,9 +16,16 @@ namespace AtencionClinica
             StringBuilder sBuilder = new StringBuilder();
             stream = sha256.ComputeHash(encoding.GetBytes(pass));
             for(int i =0; i < stream.Length;i++)
-                sBuilder.AppendFormat("0:x2",stream[i]);
+                sBuilder.AppendFormat("{0:x2}",stream[i]);
             return sBuilder.ToString();
 
+        }
+
+        internal static string GenerateRndPwd()
+        {
+            byte[] buffer = new byte[10];
+            System.Security.Cryptography.RandomNumberGenerator.Fill(buffer);
+            return Convert.ToBase64String(buffer).Substring(0, 8);
         }
     
     }

@@ -20,8 +20,12 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
+import useAuthorization from '../../hooks/useAuthorization';
+import { dataAccess, resources } from '../../data/app';
 
 const Doctores = (props) => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const title = 'Doctores';
 
@@ -34,6 +38,8 @@ const Doctores = (props) => {
             options: {
                 text: 'Agregar nuevo',
                 icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
             }
         },{
@@ -47,7 +53,9 @@ const Doctores = (props) => {
         });
     }  
 
-    return (
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}/>          
@@ -63,6 +71,7 @@ const Doctores = (props) => {
         >
             <Paging defaultPageSize={20} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[10, 20, 50]}
             />
@@ -73,17 +82,18 @@ const Doctores = (props) => {
             <Column dataField="name" caption='Nombre' />
             <Column dataField="minsaCode" caption='Cod Minsa' />
             <Column dataField="specialtyId" width={150} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="phoneNumber" caption='Telefono' />
             <Column dataField="address" caption='Direccion' />
+            <Column dataField="active" dataType="boolean" width={100} />
             <Editing
                 mode="popup"
                 allowUpdating={true}
                 allowDeleting={true}
                 useIcons={true}
             >
-                <Popup title={title} showTitle={true} width={500} height={380}>
+                <Popup title={title} showTitle={true} width={500} height={420}>
                     
                 </Popup>
                 <Form>
@@ -103,6 +113,8 @@ const Doctores = (props) => {
                     </Item>
                     <Item  dataField="address" editorType="dxTextArea" colSpan={2}>
                         <StringLengthRule max={250} message="Máximo de caracteres 250"/>
+                    </Item>
+                    <Item  dataField="active" editorType="dxCheckBox">
                     </Item>
                 </Form>
             </Editing>

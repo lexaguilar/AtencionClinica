@@ -17,10 +17,13 @@ import { store } from '../../services/store';
 
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
-import onExporting from '../../components/grids/Importer';
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
+import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Appointments = props => {
+
+    const { isAuthorization, Unauthorized } = useAuthorization([ resources.citas, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -35,9 +38,12 @@ const Appointments = props => {
             if(e.rowIndex >= 0)
                 e.items.push({
 
-                    text: 'Re-imprimir ticket admision',
+                    text: 'Re-imprimir cita',
                     icon : 'print',
-                    onItemClick: () => 0
+                    onItemClick: () => {
+                        const report = urlReport();
+                        report.print(`${report.appointment(e.row.data.id)}`);
+                    }
                     
                 },{
 
@@ -78,13 +84,17 @@ const Appointments = props => {
             options: {
                 text: 'Exportar a excel',
                 icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.exportToExcel(false)
             }
         });
     }  
 
     const title = 'Citas'
-    return (
+    return !isAuthorization ?
+    <Unauthorized/> :
+    (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>
@@ -114,6 +124,7 @@ const Appointments = props => {
         >
             <Paging defaultPageSize={5} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
             />
@@ -126,10 +137,10 @@ const Appointments = props => {
             <Column dataField="tipo"  width={110} />
             <Column dataField="nombre" />
             <Column dataField="doctorId" width={160} caption="Doctor">
-                <Lookup disabled={true} dataSource={createStore('doctor')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name: 'doctor'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="specialtyId" width={160} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name: 'specialty'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="dateAppointment" caption='Cita' dataType='date' format={formatDateTime} width={160} />
             <Column dataField="createBy" caption='Creado por' width={80} visible={false} />

@@ -1,4 +1,20 @@
-const catalogos = [ 'areas','especialidades' ];
+const catalogos = [{
+    name : 'areas',
+    url : 'areas'
+},{
+    name : 'especialidades',
+    url : 'especialidades'
+},{
+    name : 'familias',
+    url : 'familias'
+},{
+    name : 'presentaciones',
+    url : 'presentaciones'
+},{
+    name : 'unidadmedida',
+    caption : 'Unidad de Medida',
+    url : 'ums'
+}];
 
 const estadoGeneric = {
     activo: 1,
@@ -21,6 +37,11 @@ export const estadoBeneficiario = {...estadoGeneric};
 export const monedaSymbol = {
     1: "C$",
     2: "$"
+}
+
+export const typeTraslate = {
+    create: 'create',
+    update: 'update'
 }
 
 export default catalogos;

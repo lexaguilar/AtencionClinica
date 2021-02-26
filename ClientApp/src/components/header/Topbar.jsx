@@ -19,7 +19,6 @@ function Topbar(props) {
     ];
 
     const accountLinks = [
-        { title: 'Editar Perfil', url: '/account/profile' },
         { title: 'Password', url: '/account/password' },
         { title: 'Salir', url: '/account/logout' },
     ];
@@ -38,7 +37,7 @@ function Topbar(props) {
                     <div className="topbar__spring" />
                     <div className="topbar__item">
                         <Dropdown
-                            title={<b>{user.username}</b>}
+                            title={<><span className="far fa-user-circle"></span> <b>{user.username}</b></>}
                             items={accountLinks}
                         />
                     </div>                                              

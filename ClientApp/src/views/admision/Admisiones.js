@@ -14,14 +14,18 @@ import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
-import { formatDateTime } from '../../data/app';
+import { formatDateTime, resources, dataAccess } from '../../data/app';
+import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Admisiones = props => {
 
     let dataGrid = React.createRef();
+
+    const { isAuthorization, Unauthorized } = useAuthorization([resources.admision, dataAccess.access ]);
+    
 
     const addMenuItems =(e) => {
         
@@ -36,7 +40,10 @@ const Admisiones = props => {
 
                     text: 'Re-imprimir ticket admision',
                     icon : 'print',
-                    onItemClick: () => 0
+                    onItemClick: () => {
+                        const report = urlReport();
+                        report.print(`${report.admisionTicket(e.row.data.id)}`);
+                    }
                     
                 },{
 
@@ -70,8 +77,11 @@ const Admisiones = props => {
 
     }
 
-    const title = 'Admisiones'
-    return (
+    const title = 'Admisiones';
+
+    return !isAuthorization 
+    ?  <Unauthorized />  
+    : (
         <div className="container">
         <Title title={title}/>
         <BlockHeader title={title}>
@@ -100,6 +110,7 @@ const Admisiones = props => {
         >
             <Paging defaultPageSize={20} />
             <Pager
+                showInfo={true}
                 showPageSizeSelector={true}
                 allowedPageSizes={[10, 20, 50]}
             />
@@ -113,10 +124,10 @@ const Admisiones = props => {
             <Column dataField="tipo"  width={110} />
             <Column dataField="nombre" />
             <Column dataField="areaId" width={150} caption="Area">
-                <Lookup disabled={true} dataSource={createStore('area')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'area' })} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="specialtyId" width={150} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore('specialty')} valueExpr="id" displayExpr="name" />
+                <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
             </Column> 
             <Column dataField="createBy" caption='Creado por' width={80} />
             <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />
@@ -129,6 +140,11 @@ const Admisiones = props => {
         </DataGrid>
     </div>
     );
+
+    
 }
 
+
 export default Admisiones;
+
+

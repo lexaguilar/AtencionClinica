@@ -21,6 +21,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<App> Apps { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
+        public virtual DbSet<AreaProductStock> AreaProductStocks { get; set; }
         public virtual DbSet<AreaService> AreaServices { get; set; }
         public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
         public virtual DbSet<BeneficiaryStatus> BeneficiaryStatuses { get; set; }
@@ -29,17 +30,35 @@ namespace AtencionClinica.Models
         public virtual DbSet<BillType> BillTypes { get; set; }
         public virtual DbSet<Cie10> Cie10s { get; set; }
         public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerStatus> CustomerStatuses { get; set; }
         public virtual DbSet<CustomerType> CustomerTypes { get; set; }
         public virtual DbSet<Doctor> Doctors { get; set; }
         public virtual DbSet<DoctorTime> DoctorTimes { get; set; }
+        public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
+        public virtual DbSet<FollowService> FollowServices { get; set; }
+        public virtual DbSet<FollowServiceDetail> FollowServiceDetails { get; set; }
         public virtual DbSet<FollowsPrivate> FollowsPrivates { get; set; }
+        public virtual DbSet<InPutProduct> InPutProducts { get; set; }
+        public virtual DbSet<InPutProductDetail> InPutProductDetails { get; set; }
+        public virtual DbSet<InPutProductState> InPutProductStates { get; set; }
+        public virtual DbSet<InPutProductType> InPutProductTypes { get; set; }
+        public virtual DbSet<OutPutProduct> OutPutProducts { get; set; }
+        public virtual DbSet<OutPutProductDetail> OutPutProductDetails { get; set; }
+        public virtual DbSet<OutPutProductState> OutPutProductStates { get; set; }
+        public virtual DbSet<OutPutProductType> OutPutProductTypes { get; set; }
         public virtual DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<Percapita> Percapitas { get; set; }
+        public virtual DbSet<Presentation> Presentations { get; set; }
         public virtual DbSet<PrivateCustomer> PrivateCustomers { get; set; }
         public virtual DbSet<PrivateCustomerStat> PrivateCustomerStats { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductState> ProductStates { get; set; }
+        public virtual DbSet<Provider> Providers { get; set; }
+        public virtual DbSet<ProviderState> ProviderStates { get; set; }
+        public virtual DbSet<Rate> Rates { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Relationship> Relationships { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
@@ -50,9 +69,17 @@ namespace AtencionClinica.Models
         public virtual DbSet<Sex> Sexs { get; set; }
         public virtual DbSet<Specialty> Specialties { get; set; }
         public virtual DbSet<Subsidy> Subsidies { get; set; }
+        public virtual DbSet<Traslate> Traslates { get; set; }
+        public virtual DbSet<TraslateDetail> TraslateDetails { get; set; }
+        public virtual DbSet<TraslateStage> TraslateStages { get; set; }
+        public virtual DbSet<TraslateState> TraslateStates { get; set; }
+        public virtual DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<VwFollow> VwFollows { get; set; }
         public virtual DbSet<VwFollowsPrivate> VwFollowsPrivates { get; set; }
+        public virtual DbSet<VwKardex> VwKardices { get; set; }
+        public virtual DbSet<VwLastMedicinesByBeneficiary> VwLastMedicinesByBeneficiaries { get; set; }
+        public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
 
@@ -237,6 +264,31 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<AreaProductStock>(entity =>
+            {
+                entity.HasKey(e => new { e.AreaId, e.ProductId });
+
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.CostReal).HasColumnType("money");
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.AreaProductStocks)
+                    .HasForeignKey(d => d.AreaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AreaProductStocks_Areas");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.AreaProductStocks)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AreaProductStocks_Products");
+            });
+
             modelBuilder.Entity<AreaService>(entity =>
             {
                 entity.HasIndex(e => new { e.AreaId, e.ServiceId }, "IX_AreaServices_AreaServices");
@@ -257,6 +309,12 @@ namespace AtencionClinica.Models
             modelBuilder.Entity<Beneficiary>(entity =>
             {
                 entity.HasIndex(e => e.Inss, "IX_Beneficiaries");
+
+                entity.HasIndex(e => e.FirstName, "IX_Beneficiaries_FirstName");
+
+                entity.HasIndex(e => e.Id, "IX_Beneficiaries_Identification");
+
+                entity.HasIndex(e => e.LastName, "IX_Beneficiaries_LastName");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -380,6 +438,8 @@ namespace AtencionClinica.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Rate).HasColumnType("money");
+
                 entity.Property(e => e.Total).HasColumnType("decimal(18, 4)");
 
                 entity.HasOne(d => d.Area)
@@ -394,6 +454,12 @@ namespace AtencionClinica.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Bills_BillTypes");
 
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Bills)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Bills_Currencies");
+
                 entity.HasOne(d => d.PrivateCustomer)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.PrivateCustomerId)
@@ -405,11 +471,13 @@ namespace AtencionClinica.Models
             {
                 entity.HasIndex(e => e.ServiceId, "IX_BillDetails_Product");
 
-                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.Total).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
 
                 entity.HasOne(d => d.Bill)
                     .WithMany(p => p.BillDetails)
@@ -456,13 +524,27 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Currency>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Symbol)
+                    .IsRequired()
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.HasKey(e => e.Inss)
                     .HasName("PK_Customers_1");
 
-                entity.HasIndex(e => e.Inss, "IX_Customers")
-                    .IsUnique();
+                entity.HasIndex(e => e.Identification, "IX_Customers_Identification");
 
                 entity.Property(e => e.Inss).ValueGeneratedNever();
 
@@ -474,6 +556,10 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Identification)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -569,6 +655,14 @@ namespace AtencionClinica.Models
                     .HasConstraintName("FK_DoctorTimes_Doctors");
             });
 
+            modelBuilder.Entity<Family>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Follow>(entity =>
             {
                 entity.HasIndex(e => e.AdmissionId, "IX_Follows");
@@ -607,6 +701,49 @@ namespace AtencionClinica.Models
                     .HasConstraintName("FK_Follows_Areas_Destino");
             });
 
+            modelBuilder.Entity<FollowService>(entity =>
+            {
+                entity.HasIndex(e => e.FollowId, "IX_Table_Follows");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observacion)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Follow)
+                    .WithMany(p => p.FollowServices)
+                    .HasForeignKey(d => d.FollowId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FollowServices_Follows");
+            });
+
+            modelBuilder.Entity<FollowServiceDetail>(entity =>
+            {
+                entity.HasIndex(e => e.FollowServiceId, "IX_FollowServiceDetails_FollowService");
+
+                entity.HasIndex(e => e.ServiceId, "IX_FollowServiceDetails_Services");
+
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.FollowService)
+                    .WithMany(p => p.FollowServiceDetails)
+                    .HasForeignKey(d => d.FollowServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FollowServiceDetails_FollowServices");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.FollowServiceDetails)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FollowServiceDetails_Services");
+            });
+
             modelBuilder.Entity<FollowsPrivate>(entity =>
             {
                 entity.HasIndex(e => e.AreaSourceId, "IX_FollowsPrivates_AreaSource");
@@ -643,6 +780,253 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.BillId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FollowsPrivates_Bills");
+            });
+
+            modelBuilder.Entity<InPutProduct>(entity =>
+            {
+                entity.HasIndex(e => e.AreaId, "IX_InPutProducts_Area");
+
+                entity.HasIndex(e => e.Number, "IX_InPutProducts_Number");
+
+                entity.HasIndex(e => e.Reference, "IX_InPutProducts_Reference");
+
+                entity.HasIndex(e => e.TypeId, "IX_InPutProducts_TypeInputProduct");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.Import).HasColumnType("money");
+
+                entity.Property(e => e.Iva)
+                    .HasColumnType("money")
+                    .HasColumnName("IVA");
+
+                entity.Property(e => e.Observation).HasMaxLength(500);
+
+                entity.Property(e => e.Rate).HasColumnType("money");
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.InPutProducts)
+                    .HasForeignKey(d => d.AreaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InPutProducts_Areas");
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.InPutProducts)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InPutProducts_Currencies");
+
+                entity.HasOne(d => d.Provider)
+                    .WithMany(p => p.InPutProducts)
+                    .HasForeignKey(d => d.ProviderId)
+                    .HasConstraintName("FK_InPutProducts_Providers");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.InPutProducts)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InPutProducts_InPutProductStates");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.InPutProducts)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InPutProducts_InPutProductTypes");
+            });
+
+            modelBuilder.Entity<InPutProductDetail>(entity =>
+            {
+                entity.HasIndex(e => e.InPutProductId, "IX_InPutProductDetails_InPutProduct");
+
+                entity.HasIndex(e => e.ProductId, "IX_InPutProductDetails_Product");
+
+                entity.Property(e => e.Cost).HasColumnType("money");
+
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.Import).HasColumnType("money");
+
+                entity.Property(e => e.Iva)
+                    .HasColumnType("money")
+                    .HasColumnName("IVA");
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.InPutProduct)
+                    .WithMany(p => p.InPutProductDetails)
+                    .HasForeignKey(d => d.InPutProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InPutProductDetails_InPutProducts");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.InPutProductDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_InPutProductDetails_Products");
+            });
+
+            modelBuilder.Entity<InPutProductState>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<InPutProductType>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OutPutProduct>(entity =>
+            {
+                entity.HasIndex(e => e.AreaId, "IX_OutPutProducts_Area");
+
+                entity.HasIndex(e => e.Number, "IX_OutPutProducts_Number");
+
+                entity.HasIndex(e => e.Reference, "IX_OutPutProducts_Reference");
+
+                entity.HasIndex(e => e.TypeId, "IX_OutPutProducts_TypeOutPutProduct");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.Import).HasColumnType("money");
+
+                entity.Property(e => e.Iva)
+                    .HasColumnType("money")
+                    .HasColumnName("IVA");
+
+                entity.Property(e => e.Observation).HasMaxLength(500);
+
+                entity.Property(e => e.Rate).HasColumnType("money");
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.OutPutProducts)
+                    .HasForeignKey(d => d.AreaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OutPutProducts_Areas");
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.OutPutProducts)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OutPutProducts_Currencies");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.OutPutProducts)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OutPutProducts_OutPutProductStates");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.OutPutProducts)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OutPutProducts_OutPutProductTypes");
+            });
+
+            modelBuilder.Entity<OutPutProductDetail>(entity =>
+            {
+                entity.HasIndex(e => e.OutPutProductId, "IX_OutPutProductDetails_OutPutProduct");
+
+                entity.HasIndex(e => e.ProductId, "IX_OutPutProductDetails_Product");
+
+                entity.Property(e => e.Cost).HasColumnType("money");
+
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.Import).HasColumnType("money");
+
+                entity.Property(e => e.Iva)
+                    .HasColumnType("money")
+                    .HasColumnName("IVA");
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.OutPutProduct)
+                    .WithMany(p => p.OutPutProductDetails)
+                    .HasForeignKey(d => d.OutPutProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OutPutProductDetails_OutPutProducts");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OutPutProductDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OutPutProductDetails_Products");
+            });
+
+            modelBuilder.Entity<OutPutProductState>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<OutPutProductType>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Parameter>(entity =>
@@ -696,6 +1080,14 @@ namespace AtencionClinica.Models
                 entity.Property(e => e.Rason)
                     .IsRequired()
                     .HasMaxLength(250)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Presentation>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
@@ -774,6 +1166,159 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasIndex(e => e.FamilyId, "IX_ProductsFamily");
+
+                entity.HasIndex(e => e.Name, "IX_ProductsName");
+
+                entity.HasIndex(e => e.PresentationId, "IX_ProductsPresentation");
+
+                entity.HasIndex(e => e.StateId, "IX_ProductsStatus");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.HasIva).HasColumnName("HasIVA");
+
+                entity.Property(e => e.LastDateModificationAt).HasColumnType("datetime");
+
+                entity.Property(e => e.LastModificationBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StockMin).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Currencies");
+
+                entity.HasOne(d => d.Family)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.FamilyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Families");
+
+                entity.HasOne(d => d.Presentation)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.PresentationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_Presentations");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_ProductStates");
+
+                entity.HasOne(d => d.UnitOfMeasure)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.UnitOfMeasureId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_UnitOfMeasures");
+            });
+
+            modelBuilder.Entity<ProductState>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Provider>(entity =>
+            {
+                entity.HasIndex(e => e.Ruc, "IX_Providers");
+
+                entity.HasIndex(e => e.Name, "IX_Providers_1");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastDateModificationAt).HasColumnType("datetime");
+
+                entity.Property(e => e.LastModificationBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ruc)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("RUC");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Providers)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Providers_ProviderStates");
+            });
+
+            modelBuilder.Entity<ProviderState>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Rate>(entity =>
+            {
+                entity.HasIndex(e => e.Date, "IX_Rates")
+                    .IsUnique();
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Value).HasColumnType("money");
+            });
+
             modelBuilder.Entity<Region>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -838,6 +1383,12 @@ namespace AtencionClinica.Models
                 entity.Property(e => e.PriceCalculate)
                     .HasMaxLength(250)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Services)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Services_Currencies");
             });
 
             modelBuilder.Entity<ServiceDetail>(entity =>
@@ -925,6 +1476,131 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.DoctorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Subsidies_Doctors");
+            });
+
+            modelBuilder.Entity<Traslate>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.Import).HasColumnType("money");
+
+                entity.Property(e => e.Iva)
+                    .HasColumnType("money")
+                    .HasColumnName("IVA");
+
+                entity.Property(e => e.LastDateModificationAt).HasColumnType("datetime");
+
+                entity.Property(e => e.LastModificationBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation).HasMaxLength(500);
+
+                entity.Property(e => e.Rate).HasColumnType("money");
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.AreaSource)
+                    .WithMany(p => p.TraslateAreaSources)
+                    .HasForeignKey(d => d.AreaSourceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Traslates_AreasSource");
+
+                entity.HasOne(d => d.AreaTarget)
+                    .WithMany(p => p.TraslateAreaTargets)
+                    .HasForeignKey(d => d.AreaTargetId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Traslates_AreasTarget");
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Traslates)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Traslates_Currencies");
+
+                entity.HasOne(d => d.Stage)
+                    .WithMany(p => p.Traslates)
+                    .HasForeignKey(d => d.StageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Traslates_TraslateStages");
+            });
+
+            modelBuilder.Entity<TraslateDetail>(entity =>
+            {
+                entity.HasIndex(e => e.ProductId, "IX_TraslateDetails_Product");
+
+                entity.HasIndex(e => e.TraslateId, "IX_TraslateDetails_Traslate");
+
+                entity.Property(e => e.Cost).HasColumnType("money");
+
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.Discount).HasColumnType("money");
+
+                entity.Property(e => e.Import).HasColumnType("money");
+
+                entity.Property(e => e.Iva)
+                    .HasColumnType("money")
+                    .HasColumnName("IVA");
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.TraslateDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TraslateDetails_Products");
+
+                entity.HasOne(d => d.Traslate)
+                    .WithMany(p => p.TraslateDetails)
+                    .HasForeignKey(d => d.TraslateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TraslateDetails_Traslates");
+            });
+
+            modelBuilder.Entity<TraslateStage>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TraslateState>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UnitOfMeasure>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -1026,8 +1702,87 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<VwKardex>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwKardex");
+
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.CostIn).HasColumnType("decimal(22, 4)");
+
+                entity.Property(e => e.CostOut).HasColumnType("decimal(22, 4)");
+
+                entity.Property(e => e.CostPromOut).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.CostTotalIn).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.CostTotalOut).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwLastMedicinesByBeneficiary>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwLastMedicinesByBeneficiary");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Product)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwProductInfo>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwProductInfo");
+
+                entity.Property(e => e.Cost).HasColumnType("money");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Presentation)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<WorkOrder>(entity =>
             {
+                entity.HasIndex(e => e.Reference, "IX_WorkOrders");
+
                 entity.HasIndex(e => e.FollowId, "IX_WorkOrders_Follows");
 
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
@@ -1037,8 +1792,14 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Observacion)
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Observation)
                     .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Follow)
@@ -1056,11 +1817,16 @@ namespace AtencionClinica.Models
 
                 entity.HasIndex(e => e.WorkOrderId, "IX_WorkOrderDetails_WorkOrder");
 
-                entity.Property(e => e.Price).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Costo).HasColumnType("money");
 
-                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Price).HasColumnType("money");
 
-                entity.Property(e => e.Total).HasColumnType("decimal(18, 4)");
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.WorkOrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_WorkOrderDetails_Products");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.WorkOrderDetails)

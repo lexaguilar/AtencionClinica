@@ -5,12 +5,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     public class BeneficiariesController : Controller
     {      
         private ClinicaContext _db = null;
@@ -41,12 +43,32 @@ namespace AtencionClinica.Controllers
             return Json(result);
         }
 
-        [Route("api/beneficiaries/post")]
-        public IActionResult Post([FromBody] Beneficiary beneficiario) 
+        [Route("api/beneficiaries/get/{beneficiaryId}/information")]
+        public IActionResult GetInformation(int beneficiaryId) 
         {
             
+            var bene = _db.Beneficiaries.Include(x => x.Relationship)
+            .FirstOrDefault(x => x.Id == beneficiaryId);
 
-            var user = this.GetAppUser();
+            var customer = _db.Customers.Include(x => x.CustomerStatus).FirstOrDefault(x => x.Inss == bene.Inss);
+
+            return Json(new {
+
+                Type = bene.Relationship.Name,
+                Name = bene.GetFullName(),
+                StatusId = customer.CustomerStatusId,
+                Status = customer.CustomerStatus.Name,
+                Nace = bene.BirthDate
+
+            });
+        }
+
+        [Route("api/beneficiaries/post")]
+        public IActionResult Post([FromBody] Beneficiary beneficiario) 
+        {           
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
             
             if(beneficiario.Id > 0){
                 var oldBeneficiario = _db.Beneficiaries.FirstOrDefault(x => x.Id == beneficiario.Id);
@@ -84,6 +106,16 @@ namespace AtencionClinica.Controllers
 
         }
 
+        [Route("api/beneficiaries/{beneficiaryId}/products")]
+        public IActionResult Products(int beneficiaryId) 
+        {
+            var products = _db.VwLastMedicinesByBeneficiaries.Where(x => x.BeneficiaryId == beneficiaryId)
+            .OrderByDescending(x => x.WorkOrderId)
+            .Take(20);
+            return Json(products);
+
+        }
+
         [Route("api/beneficiaries/search/{id}")]
         public async Task<IActionResult> Search(string id) 
         {
@@ -113,16 +145,16 @@ namespace AtencionClinica.Controllers
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
 
-                return Json(resultInss);
-            }
+                return Json(await resultInss.ToArrayAsync());
 
+            }
 
             //Buscar por cédula
             var reg = new Regex(@"\d{3}?-");
 
             if(reg.IsMatch(id))
             {
-                var result2 = _db.Beneficiaries
+                var resultCedula = _db.Beneficiaries
                 .Include(x => x.Relationship)
                 .Include(x => x.Sex)
                 .Include(x => x.BeneficiaryStatus)
@@ -141,7 +173,9 @@ namespace AtencionClinica.Controllers
                     x.Address,
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
-                return Json(result2);
+
+                return Json(await resultCedula.ToArrayAsync());
+
             }
 
             //Buscar por nombre
@@ -165,7 +199,7 @@ namespace AtencionClinica.Controllers
                     x.Address,
                     beneficiaryStatus = x.BeneficiaryStatus.Name
                 });
-            return Json(result);
+            return Json(await result.ToArrayAsync());
         }
     }
 }

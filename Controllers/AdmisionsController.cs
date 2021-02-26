@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,7 +14,8 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 namespace AtencionClinica.Controllers
-{  
+{
+    [Authorize]  
     public class AdmisionsController : Controller
     {      
         private ClinicaContext _db = null;
@@ -65,7 +67,12 @@ namespace AtencionClinica.Controllers
         [HttpPost("api/admisions/post")]
         public IActionResult Post([FromBody] Admission admission) 
         {
-            var user = this.GetAppUser();
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            if(user.AreaId != (int)AreaRestrict.Admision)
+                return BadRequest("Solo se permite admisionar desde el area de Admision");
 
             var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active);
             
@@ -73,7 +80,11 @@ namespace AtencionClinica.Controllers
                 return BadRequest("El beneficiario ya tiene una admision activa el dia de hoy");
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admission.BeneficiaryId);
-            
+
+            if(bene.RelationshipId == 2) //Hijo
+                if( (bene.BirthDate - DateTime.Today).Days/365 >= 12)
+                    return BadRequest("Solo se permiten admisiones para los hijos edad igual 12 años o menor");
+
             admission.Inss = bene.Inss;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
@@ -81,14 +92,12 @@ namespace AtencionClinica.Controllers
             admission.CreateBy = user.Username;
             _db.Admissions.Add(admission);    
 
-             _db.SaveChanges();      
-
             var follow = new Follow{
-                AdmissionId = admission.Id,
-                AreaSourceId = 1, //admision
+                Admission = admission,
+                AreaSourceId = 2, //admision
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
-                CreateAt = DateTime.Today,
+                CreateAt = DateTime.Now,
                 CreateBy = user.Username                
             };
 
@@ -103,6 +112,14 @@ namespace AtencionClinica.Controllers
         [HttpGet("api/admisions/{id}/delete")]
         public IActionResult Delete(int id) {
             var admision = _db.Admissions.FirstOrDefault(x => x.Id == id);
+
+            var follow = _db.Follows.Include(x => x.WorkOrders).Where(x => x.AdmissionId == id);
+            foreach (var item in follow)
+            {
+                if(item.WorkOrders.Count > 0)
+                return BadRequest("No se puede anular la admision porque ya tiene ordenes de trabajo");
+            }
+
 
             if(admision != null)
             {
@@ -121,7 +138,7 @@ namespace AtencionClinica.Controllers
             .Include(x => x.Specialty)
             .Where(x => x.BeneficiaryId == beneficiaryId && x.Active)
             .OrderByDescending(x => x.CreateAt);
-
+            //TODO verificar si no hay descargue de inventario para poder anular
             var items = admissions.Take(top).Select(x => new {
                 x.Id,
                 x.NumberOfDay,
