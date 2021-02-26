@@ -9,7 +9,7 @@ import {
     Column, 
     Lookup,
     Export, Editing} from 'devextreme-react/data-grid';
-import { createStore } from '../../utils/proxy';
+import { createStore, createStoreLocal } from '../../utils/proxy';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
@@ -24,8 +24,7 @@ const Admisiones = props => {
 
     let dataGrid = React.createRef();
 
-    const { authorized } = useAuthorization([resources.admision, dataAccess.access ]);
-    
+    const { authorized } = useAuthorization([resources.admision, dataAccess.access ]);    
 
     const addMenuItems =(e) => {
         
@@ -121,11 +120,14 @@ const Admisiones = props => {
                 <Column dataField="inss"  width={110} />
                 <Column dataField="tipo"  width={110} />
                 <Column dataField="nombre" />
+                <Column dataField="typeId" width={150} caption="Tipo Ingreso">
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'admissionType' })} valueExpr="id" displayExpr="name" />
+                </Column> 
                 <Column dataField="areaId" width={150} caption="Area">
-                    <Lookup disabled={true} dataSource={createStore({name : 'area' })} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'area' })} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="specialtyId" width={150} caption="Especialidad">
-                    <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'specialty'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="createBy" caption='Creado por' width={80} />
                 <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />

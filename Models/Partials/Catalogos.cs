@@ -28,4 +28,5 @@ namespace AtencionClinica.Models
     public partial class Provider : ICatalogo {  }
     public partial class TraslateState : ICatalogo {  }
     public partial class TraslateStage : ICatalogo {  }
+    public partial class AdmissionType : ICatalogo {  }
 }

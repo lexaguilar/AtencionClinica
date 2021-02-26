@@ -68,7 +68,7 @@ const menu = [{
         type: 'menu',
         menu: [
             { title: 'Asegurados', url: `${_path.CLINICA}/servicios` },
-            { title: 'Privados', url: `${_path.CLINICA}/servicios-privados` },           
+            { title: 'Privados y convenios', url: `${_path.CLINICA}/servicios-privados` },           
         ],
     },
 },{

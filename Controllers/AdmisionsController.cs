@@ -37,6 +37,12 @@ namespace AtencionClinica.Controllers
                 admissions = admissions.Where(x => x.Inss == inss);
             }
 
+            if (values.ContainsKey("typeId"))
+            {
+                var typeId = Convert.ToInt32(values["typeId"]);
+                admissions = admissions.Where(x => x.TypeId == typeId);
+            }
+
             if (values.ContainsKey("createAt"))
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
@@ -50,6 +56,7 @@ namespace AtencionClinica.Controllers
                 Nombre = x.Beneficiary.GetFullName(),
                 Tipo = $"{x.Beneficiary.Relationship.Name}",
                 x.AreaId,
+                x.TypeId,
                 x.SpecialtyId,
                 x.CreateAt,
                 x.CreateBy,
@@ -69,7 +76,7 @@ namespace AtencionClinica.Controllers
         {
             var user = this.GetAppUser(_db);
             if(user == null)
-                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+                return BadRequest("La información del usuario cambio, inicie sesion nuevamente");
 
             if(user.AreaId != (int)AreaRestrict.Admision)
                 return BadRequest("Solo se permite admisionar desde el area de Admision");
@@ -77,7 +84,7 @@ namespace AtencionClinica.Controllers
             var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active);
             
             if(existe)
-                return BadRequest("El beneficiario ya tiene una admision activa el dia de hoy");
+                return BadRequest("El beneficiario ya tiene una admisión activa el dia de hoy");
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admission.BeneficiaryId);
 

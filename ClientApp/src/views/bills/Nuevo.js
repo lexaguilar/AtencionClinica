@@ -3,7 +3,7 @@ import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule, Emp
 import { createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
 import http from '../../utils/http';
-import { editorOptionsSelect } from '../../data/app';
+import { dataAccess, editorOptionsSelect, resources } from '../../data/app';
 import uri from '../../utils/uri';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
@@ -16,8 +16,11 @@ import DataGrid, { Column, Editing, Lookup } from 'devextreme-react/data-grid';
 import { cellRender, cellRenderBold, obtenerTasaCambio } from '../../utils/common';
 import urlReport from '../../services/reportServices';
 import Resumen from '../../components/footer/Resumen';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Nuevo = props => {
+
+    const { authorized } = useAuthorization([resources.caja, dataAccess.create ]);
     
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState({...billDefault});
@@ -139,7 +142,7 @@ const Nuevo = props => {
 
     const title = 'Factura';
 
-    return (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title='Nueva Factura' >

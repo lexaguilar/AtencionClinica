@@ -3,7 +3,7 @@ import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule } fr
 import { createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
 import http from '../../utils/http';
-import { editorOptionsSelect } from '../../data/app';
+import { dataAccess, editorOptionsSelect, resources } from '../../data/app';
 import uri from '../../utils/uri';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
@@ -18,8 +18,11 @@ import PopupBeneficiary from '../../components/beneficiary/PopupBeneficiary';
 import List from 'devextreme-react/list';
 import moment from 'moment';
 import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Nuevo = () => {
+
+    const { authorized } = useAuthorization([resources.citas, dataAccess.create ]);
 
     const dispatch = useDispatch();
     const { clear } = useSelector(store => store.customerClear);
@@ -238,7 +241,7 @@ const Nuevo = () => {
 
     const title = 'Citas';
 
-    return (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title='Nueva Cita' >              

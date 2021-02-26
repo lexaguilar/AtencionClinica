@@ -18,6 +18,7 @@ namespace AtencionClinica.Models
         }
 
         public virtual DbSet<Admission> Admissions { get; set; }
+        public virtual DbSet<AdmissionType> AdmissionTypes { get; set; }
         public virtual DbSet<App> Apps { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<Area> Areas { get; set; }
@@ -106,6 +107,8 @@ namespace AtencionClinica.Models
 
                 entity.HasIndex(e => e.NumberOfDay, "IX_Admissions_NumberOfDay");
 
+                entity.HasIndex(e => e.TypeId, "IX_Admissions_Type");
+
                 entity.Property(e => e.AreaId).HasComment("Area al que ve el paciente");
 
                 entity.Property(e => e.Cie10Id)
@@ -159,6 +162,20 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.SpecialtyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Admissions_Specialties");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.Admissions)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Admissions_AdmissionTypes");
+            });
+
+            modelBuilder.Entity<AdmissionType>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<App>(entity =>

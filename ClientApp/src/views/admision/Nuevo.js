@@ -3,7 +3,7 @@ import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule } fr
 import { createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
 import http from '../../utils/http';
-import { editorOptionsSelect } from '../../data/app';
+import { dataAccess, editorOptionsSelect, resources } from '../../data/app';
 import uri from '../../utils/uri';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
@@ -19,8 +19,11 @@ import { admisionDefault } from '../../data/admision';
 import { useDispatch, useSelector } from 'react-redux'
 import Citas from '../../components/grids/Citas';
 import urlReport from '../../services/reportServices';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const Nuevo = props => {    
+
+    const { authorized } = useAuthorization([resources.admision, dataAccess.create ]);
 
     const { clear } = useSelector(store => store.customerClear);
     const dispatch = useDispatch();
@@ -33,6 +36,7 @@ const Nuevo = props => {
     let refAdmision = React.createRef();
 
     const guardarAdmision = () => {
+
         let result = refAdmision.instance.validate();
         if (result.isValid) {
 
@@ -79,7 +83,7 @@ const Nuevo = props => {
 
     const title = 'Admision';
 
-    return (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title='Nueva Admision' >
@@ -116,10 +120,18 @@ const Nuevo = props => {
                         <Label text="Especialidad" />
                         <RequiredRule message="Seleccione la especialidad" />
                     </SimpleItem>
-                    <SimpleItem dataField="motive" colSpan={2}>
+                    <SimpleItem dataField="typeId" editorType="dxSelectBox"  colSpan={2}
+                        editorOptions={{
+                            dataSource: createStoreLocal({ name: 'admissionType'}),
+                            ...editorOptionsSelect
+                        }} >
+                        <Label text="Tipo de Ingreso" />
+                        <RequiredRule message="Seleccione el tipo de ingreso" />
+                    </SimpleItem>
+                    {/* <SimpleItem dataField="motive" colSpan={2}>
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
                         <Label text="Motivo de consulta" />
-                    </SimpleItem>
+                    </SimpleItem> */}
                     <SimpleItem dataField="observation" colSpan={2}>
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
                         <Label text="Observacion" />
