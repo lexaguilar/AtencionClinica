@@ -4,9 +4,7 @@ import { Item } from "devextreme-react/box";
 import http from "../../utils/http";
 import uri from "../../utils/uri";
 import { store } from "../../services/store";
-import { Column, Editing, Popup, Form,
-    RequiredRule,
-    StringLengthRule } from "devextreme-react/data-grid";
+import { Column, Editing, Popup, Form } from "devextreme-react/data-grid";
 import Title from "../../components/shared/Title";
 import BlockHeader from "../../components/shared/BlockHeader";
 import useAuthorization from "../../hooks/useAuthorization";

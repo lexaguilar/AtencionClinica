@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { custumerDefault } from '../../data/custumer';
-import { NumberBox } from 'devextreme-react/number-box';
 import { Button } from 'devextreme-react/button';
 import { editorOptionsSelect, cssClasses } from '../../data/app';
 import http from '../../utils/http';

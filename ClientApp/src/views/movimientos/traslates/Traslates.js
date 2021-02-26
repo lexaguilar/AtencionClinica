@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import SelectBox from 'devextreme-react/select-box';
+import React, { useRef } from 'react';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import Title from '../../../components/shared/Title';
 import DataGrid, {

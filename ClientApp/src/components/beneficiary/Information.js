@@ -1,7 +1,6 @@
 import { Form } from 'devextreme-react';
 import { GroupItem, Label, SimpleItem } from 'devextreme-react/form';
 import React, { useEffect, useState } from 'react';
-import { cssClasses } from '../../data/app';
 import http from '../../utils/http';
 import uri from '../../utils/uri';
 

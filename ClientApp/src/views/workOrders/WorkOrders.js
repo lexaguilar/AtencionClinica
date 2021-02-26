@@ -18,7 +18,7 @@ import { store } from '../../services/store';
 import { formatDate, formatDateTime } from '../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../components/buttons/CustomButton';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
 
 

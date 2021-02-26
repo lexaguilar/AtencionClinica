@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Title from '../../components/shared/Title';
 import DataGrid, {
     Column,
@@ -12,7 +12,7 @@ import DataGrid, {
     Paging,
     Button as ButtonGrid 
   } from 'devextreme-react/data-grid';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStore } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
 import CustomButton from '../../components/buttons/CustomButton';

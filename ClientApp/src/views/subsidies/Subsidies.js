@@ -8,7 +8,6 @@ import {
     ColumnChooser, 
     Column, 
     Lookup,
-    Export, 
     Editing
 } from 'devextreme-react/data-grid';
 import { store } from '../../services/store';
@@ -21,7 +20,6 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import onExporting from '../../components/grids/Importer';
-import { Resources } from 'devextreme-react/gantt';
 import { dataAccess, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
 

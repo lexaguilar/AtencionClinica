@@ -1,10 +1,8 @@
 
 import React from 'react';
-import { Popup, ToolbarItem } from 'devextreme-react/popup';
-import Beneficiarios from '../../views/beneficiarios';
+import { Popup } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
-import CustomButton from '../buttons/CustomButton';
 import WorkOrders from '../../views/workOrders/WorkOrders';
 
 const PopupWorkOrder = () => {

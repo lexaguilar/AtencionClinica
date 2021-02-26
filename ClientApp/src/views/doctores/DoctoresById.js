@@ -20,7 +20,7 @@ import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
-import { dataAccess, formatDateTime, resources } from '../../data/app';
+import { dataAccess, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
 
 const DoctoresById = () => {

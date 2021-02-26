@@ -6,7 +6,7 @@ import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDial
 import { createStoreLocal } from '../../../utils/proxy';
 import { editorOptionsSelect } from '../../../data/app';
 import { DataGrid } from 'devextreme-react';
-import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, Summary, TotalItem } from 'devextreme-react/data-grid';
+import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
 import { cellRender, onCellPrepared } from '../../../utils/common';

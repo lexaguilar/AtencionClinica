@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Box, DataGrid, SelectBox } from "devextreme-react";
+import React from "react";
+import { DataGrid } from "devextreme-react";
 import { Item } from "devextreme-react/box";
-import http from "../../utils/http";
 import uri from "../../utils/uri";
 import { store } from "../../services/store";
 import { Column, Editing, Popup, Form,

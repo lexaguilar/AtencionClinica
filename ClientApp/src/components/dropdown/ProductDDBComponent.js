@@ -1,17 +1,12 @@
 import React from 'react';
 import DataGrid, {
     Column,
-    Paging,
     Scrolling,
     Selection,
-    FilterRow,
-    HeaderFilter,
-    SearchPanel,
+    FilterRow
 } from 'devextreme-react/data-grid';
 import DropDownBox from 'devextreme-react/drop-down-box';
-import { cellRender, formatToMoney } from '../../utils/common';
-import uri from '../../utils/uri';
-import { store } from '../../services/store';
+import { cellRender } from '../../utils/common';
 import CustomStore from 'devextreme/data/custom_store';
 import http from '../../utils/http';
 

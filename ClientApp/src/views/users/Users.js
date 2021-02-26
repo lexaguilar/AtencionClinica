@@ -1,21 +1,18 @@
-import React, { Component, useRef } from "react";
+import React, { useRef } from "react";
 import {
     Column,
-    ColumnChooser,
     FilterRow,
     SearchPanel,
     Lookup,
     Pager,
     Paging,
     Export,
-    Button as ButtonGrid,
     Editing,
     Popup,
     Form,
     RequiredRule,
     StringLengthRule,
     EmailRule,
-    ToolbarItem
 }
     from 'devextreme-react/data-grid';
 import { DataGrid } from 'devextreme-react';

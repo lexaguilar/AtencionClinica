@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DataGrid } from 'devextreme-react';
 import { 
     Paging, 
@@ -7,19 +7,14 @@ import {
     HeaderFilter, 
     ColumnChooser, 
     Column, 
-    Lookup,
     Export, 
-    Editing,
-    Popup,     
     Form as FromGrid, 
-    RequiredRule,
-    StringLengthRule} from 'devextreme-react/data-grid';
-import { Item } from 'devextreme-react/form';
+} from 'devextreme-react/data-grid';
 import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { dataAccess, formatDate, formatDateTime, resources } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';

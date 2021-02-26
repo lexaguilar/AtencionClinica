@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { userService } from "../../services/user.service";
 import notify from "devextreme/ui/notify";
 import { useDispatch } from "react-redux";
-import * as actions from '../../store/user/userActions';
 import { ToastContainer } from "react-toastify";
 import Footer from "../footer";
 import { useSelector } from 'react-redux';

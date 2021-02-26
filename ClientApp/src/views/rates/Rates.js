@@ -1,6 +1,6 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { Paging, Pager, FilterRow, HeaderFilter, Column, Export, Editing, RequiredRule } from 'devextreme-react/data-grid';
+import { Paging, Pager, FilterRow, Column, Export, Editing, RequiredRule } from 'devextreme-react/data-grid';
 
 import Title from '../../components/shared/Title';
 import { store } from '../../services/store';
@@ -9,7 +9,6 @@ import Nuevo from './Nuevo';
 import BlockHeader from '../../components/shared/BlockHeader';
 import useAuthorization from '../../hooks/useAuthorization';
 import { dataAccess, resources } from '../../data/app';
-
 
 const Rates = () => {
 

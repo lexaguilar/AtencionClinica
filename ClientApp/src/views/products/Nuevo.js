@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Popup } from 'devextreme-react/popup';
-import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule } from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem, Label, RequiredRule } from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogProduct } from '../../store/product/productDialogReducer';
 import { createStore, createStoreLocal } from '../../utils/proxy';
 import { editorOptionsSelect } from '../../data/app';
 import { Button } from 'devextreme-react/button';
-import { DataGrid } from 'devextreme-react';
-import { Column, Editing, Lookup, StringLengthRule } from 'devextreme-react/data-grid';
-import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
+import { StringLengthRule } from 'devextreme-react/data-grid';
 import http from '../../utils/http';
 import uri from '../../utils/uri';
 import notify from 'devextreme/ui/notify';

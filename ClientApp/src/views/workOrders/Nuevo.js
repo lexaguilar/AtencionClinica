@@ -1,23 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Popup, ToolbarItem } from 'devextreme-react/popup';
-import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule, EmptyItem} from 'devextreme-react/form';
+import { Popup } from 'devextreme-react/popup';
+import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule } from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
 import ScrollView from 'devextreme-react/scroll-view';
-import { dialogInputProduct } from '../../store/inPutProduct/inPutProductDialogReducer';
-import { Button, DataGrid } from 'devextreme-react';
-import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
-import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
+import { Button } from 'devextreme-react';
 import uri from '../../utils/uri';
-import { cellRender, getPriceByCurrency, obtenerTasaCambio, onCellPrepared } from '../../utils/common';
+import { obtenerTasaCambio } from '../../utils/common';
 import http from '../../utils/http';
-import gridsHelper from '../../utils/gridsHelper';
-import ButtonForm from '../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
-import { cellRenderBold } from '../../utils/common';
-import useProducts from '../../hooks/useProducts';
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
 import Information from '../../components/beneficiary/Information';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import { areaRestrict, editorOptionsSelect } from '../../data/app';
 import GridMedicamentos from './GridMedicamentos';
 import GridProcedimientos from './GridProcedimientos';

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Popup, FileUploader, Button } from 'devextreme-react';
-import DateBox from 'devextreme-react/date-box';
+import { Popup, Button } from 'devextreme-react';
 
 import notify from 'devextreme/ui/notify';
 import http from '../../utils/http';

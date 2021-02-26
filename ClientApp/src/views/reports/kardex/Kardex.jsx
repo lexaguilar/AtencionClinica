@@ -3,10 +3,7 @@ import { Box, DataGrid, DateBox, DropDownBox, SelectBox } from "devextreme-react
 import { Item } from "devextreme-react/box";
 import http from "../../../utils/http";
 import uri from "../../../utils/uri";
-import { store } from "../../../services/store";
-import { Column, Editing, Popup, Form,
-    Selection,
-    Paging, FilterRow, Scrolling, Export  } from "devextreme-react/data-grid";
+import { Column, Selection, Paging, FilterRow, Scrolling, Export  } from "devextreme-react/data-grid";
 import Title from "../../../components/shared/Title";
 import BlockHeader from "../../../components/shared/BlockHeader";
 import useProducts from "../../../hooks/useProducts";

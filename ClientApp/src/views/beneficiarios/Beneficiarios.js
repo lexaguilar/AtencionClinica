@@ -28,6 +28,7 @@ import { formatDate } from '../../data/app';
 const title = 'Beneficiarios';
 
 const Beneficiarios = () => {
+    
     const [customer, setCustomer] = useState({inss : 0,status : false ,firstName: "", lastName: ""});     
     const [percapitaInfo, setPercapitaInfo] = useState({identification : '', address : '' ,sexId: "", cityId: ""});     
 

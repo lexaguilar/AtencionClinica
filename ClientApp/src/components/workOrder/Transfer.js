@@ -2,10 +2,10 @@
 import React, { useRef, useState } from 'react';
 import { Popup  } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
-import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule, StringLengthRule } from 'devextreme-react/form';
+import Form, { SimpleItem, Label,RequiredRule, StringLengthRule } from 'devextreme-react/form';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import useAreas from '../../hooks/useAreas';
-import { Button, SelectBox } from 'devextreme-react';
+import { Button } from 'devextreme-react';
 import { editorOptionsSelect } from '../../data/app';
 import { createStoreLocal } from '../../utils/proxy';
 import http from '../../utils/http';

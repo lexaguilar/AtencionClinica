@@ -15,14 +15,11 @@ import { appointmentDefault } from '../../data/appointment';
 import { useDispatch, useSelector } from 'react-redux'
 import { clearCustomer } from '../../store/customer/customerReducer';
 import PopupBeneficiary from '../../components/beneficiary/PopupBeneficiary';
-import { getDayInLastWeek, getWeekOfMonth, getWeeksOfMonth } from '../../utils/common';
 import List from 'devextreme-react/list';
 import moment from 'moment';
-import { RadioGroup } from 'devextreme-react/radio-group';
-import CustomCalendar from './CustomCalendar';
 import urlReport from '../../services/reportServices';
 
-const Nuevo = props => {
+const Nuevo = () => {
 
     const dispatch = useDispatch();
     const { clear } = useSelector(store => store.customerClear);

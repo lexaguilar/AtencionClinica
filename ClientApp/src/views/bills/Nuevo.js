@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule, EmptyItem } from 'devextreme-react/form';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
 import http from '../../utils/http';
 import { editorOptionsSelect } from '../../data/app';
@@ -10,11 +10,10 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import notify from 'devextreme/ui/notify';
 import { _path } from "../../data/headerNavigation";
 import { billDefault } from '../../data/bill';
-import { useDispatch, useSelector } from 'react-redux'
 import PopupPrivado from '../../components/beneficiary/PopupPrivado';
 import DataSource from "devextreme/data/data_source";
-import DataGrid, { Column, Editing, Lookup, Summary, TotalItem} from 'devextreme-react/data-grid';
-import { cellRender, cellRenderBold, formatToMoney, obtenerTasaCambio } from '../../utils/common';
+import DataGrid, { Column, Editing, Lookup } from 'devextreme-react/data-grid';
+import { cellRender, cellRenderBold, obtenerTasaCambio } from '../../utils/common';
 import urlReport from '../../services/reportServices';
 import Resumen from '../../components/footer/Resumen';
 

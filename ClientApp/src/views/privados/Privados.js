@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DataGrid } from 'devextreme-react';
 import { 
     Paging, 
@@ -16,12 +16,10 @@ import {
     StringLengthRule} from 'devextreme-react/data-grid';
 import { EmptyItem, Item } from 'devextreme-react/form';
 import { store } from '../../services/store';
-import { createStore,createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { estadoAdmision,relationships,estadoBeneficiario } from '../../data/catalogos';
-import http from '../../utils/http';
 import { dataAccess, formatDate, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
 

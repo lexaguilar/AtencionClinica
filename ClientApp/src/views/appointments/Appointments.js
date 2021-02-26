@@ -14,7 +14,6 @@ import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
 import { dataAccess, formatDateTime, resources } from '../../data/app';

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { userService } from "../services/user.service";
-import { resources } from '../data/app';
 
 /**
  * Retorna el un componente si el usuario no tiene permiso al recurso actual

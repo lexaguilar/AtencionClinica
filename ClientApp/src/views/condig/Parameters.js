@@ -1,19 +1,6 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { Item } from 'devextreme-react/form';
-import  { 
-    Paging, 
-    Pager, 
-    FilterRow, 
-    HeaderFilter, 
-    ColumnChooser, 
-    Column, 
-    Export, 
-    Editing,
-    Popup,     
-    Form, 
-    RequiredRule,
-    StringLengthRule, Lookup} from 'devextreme-react/data-grid';
+import  { Paging, Pager, FilterRow, HeaderFilter, Column } from 'devextreme-react/data-grid';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { store } from '../../services/store';

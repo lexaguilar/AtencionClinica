@@ -1,7 +1,5 @@
 import React from 'react';
-import DataGrid, { 
-    Column, 
-    Export} from 'devextreme-react/data-grid';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { store } from '../../services/store';
 import BlockHeader from '../../components/shared/BlockHeader';
 import { createProxy } from '../../utils/proxy';

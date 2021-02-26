@@ -14,16 +14,5 @@ const CustomCalendar = props => {
     );
 }
 
-// function areEqual(prevProps, nextProps) {
-//     /*
-//     retorna true si al pasar los nextProps a renderizar retorna
-//     el mismo resultado que al pasar los prevProps a renderizar,
-//     de otro modo retorna false
-//     */
-//    console.log(prevProps);
-//    console.log(nextProps);
-//    return prevProps.doctorId == nextProps.doctorId
-   
-//   }
 
 export default CustomCalendar;

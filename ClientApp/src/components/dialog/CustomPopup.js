@@ -1,6 +1,5 @@
 import React from 'react';
 import { Popup } from 'devextreme-react/popup';
-import Beneficiarios from '../../views/beneficiarios';
 import { useDispatch, useSelector } from 'react-redux'
 import { closeDialogBeneficiary, openDialogBeneficiary } from '../../store/beneficiary/beneficiaryDialogReducer';
 import CustomButton from '../buttons/CustomButton';

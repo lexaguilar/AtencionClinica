@@ -1,8 +1,6 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { 
-    Column, 
-    Export} from 'devextreme-react/data-grid';
+import { Column, Export} from 'devextreme-react/data-grid';
 import BlockHeader from '../shared/BlockHeader';
 import { store } from '../../services/store';
 

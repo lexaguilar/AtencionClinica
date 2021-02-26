@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { DataGrid } from 'devextreme-react';
-import { Item } from 'devextreme-react/form';
 import { 
     Paging, 
     Pager, 
     FilterRow, 
     HeaderFilter, 
-    ColumnChooser, 
     Column, 
    } from 'devextreme-react/data-grid';
 

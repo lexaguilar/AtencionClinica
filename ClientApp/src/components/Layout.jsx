@@ -2,10 +2,9 @@
 import React from 'react';
 
 // third-party
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import HomePage from './home/HomePage';
-import { resources } from '../data/app';
 
 // application
 import Footer from './footer';
@@ -31,7 +30,6 @@ import Paciente from './search/Paciente';
 import Bills, { BillNuevo } from '../views/bills';
 import Privados from '../views/privados';
 import Procedimientos from '../views/procedimientos/Procedimientos';
-import ProcedimientosXarea from '../views/procedimientos/ProcedimientosXarea';
 import AreaProcedimientos from '../views/procedimientos/AreaProcedimientos';
 import Parameters from '../views/condig/Parameters';
 import OutPutProducts from '../views/movimientos/outPutProducts';

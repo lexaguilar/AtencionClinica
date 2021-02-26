@@ -1,23 +1,9 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { Item } from 'devextreme-react/form';
-import { 
-    Paging, 
-    Pager, 
-    FilterRow, 
-    HeaderFilter, 
-    ColumnChooser, 
-    Column, 
-    Export, 
-    Editing,
-    Popup,     
-    Form, 
-    RequiredRule,
-    StringLengthRule, Lookup} from 'devextreme-react/data-grid';
+import { FilterRow, HeaderFilter, Column, Editing, Lookup} from 'devextreme-react/data-grid';
 
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-
 import { createStore } from '../../utils/proxy';
 
 const ProcedimientosXarea = ({areaId}) => {
