@@ -24,7 +24,7 @@ const Admisiones = props => {
 
     let dataGrid = React.createRef();
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.admision, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.admision, dataAccess.access ]);
     
 
     const addMenuItems =(e) => {
@@ -79,66 +79,64 @@ const Admisiones = props => {
 
     const title = 'Admisiones';
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
-        <Title title={title}/>
-        <BlockHeader title={title}>
-            <CustomButton
-                text="Nueva admision"
-                icon='plus'
-                onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/admisiones/nuevo`})}
-            />
-        </BlockHeader>
-        <DataGrid id="gridContainer"
-            ref={(ref) => dataGrid = ref}
-            selection={{ mode: 'single' }}
-            dataSource={store({uri : uri.admisions, remoteOperations: true})}
-            showBorders={true}
-            showRowLines={true}
-            allowColumnResizing={true}
-            allowColumnReordering={true}
-            onContextMenuPreparing={addMenuItems}
-            onRowPrepared={onRowPrepared}
-            onCellPrepared={onCellPrepared}
-            
-            remoteOperations={{
-                paging: true,
-                filtering: true
-            }}
-        >
-            <Paging defaultPageSize={20} />
-            <Pager
-                showInfo={true}
-                showPageSizeSelector={true}
-                allowedPageSizes={[10, 20, 50]}
-            />
-            <FilterRow visible={true} />
-            <HeaderFilter visible={true} />
-            <ColumnChooser enabled={true} />
-            <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-            <Column dataField="id"  width={80} />
-            <Column dataField="numberOfDay" width={90} caption='Numero' />
-            <Column dataField="inss"  width={110} />
-            <Column dataField="tipo"  width={110} />
-            <Column dataField="nombre" />
-            <Column dataField="areaId" width={150} caption="Area">
-                <Lookup disabled={true} dataSource={createStore({name : 'area' })} valueExpr="id" displayExpr="name" />
-            </Column> 
-            <Column dataField="specialtyId" width={150} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
-            </Column> 
-            <Column dataField="createBy" caption='Creado por' width={80} />
-            <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />
-            <Column dataField="active" caption='Estado' width={80} visible={false} />
-            <Editing
-                    mode="popup"                 
-                    allowDeleting={true}
-                    useIcons={true}
-            ></Editing>
-        </DataGrid>
-    </div>
+            <Title title={title}/>
+            <BlockHeader title={title}>
+                <CustomButton
+                    text="Nueva admision"
+                    icon='plus'
+                    onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/admisiones/nuevo`})}
+                />
+            </BlockHeader>
+            <DataGrid id="gridContainer"
+                ref={(ref) => dataGrid = ref}
+                selection={{ mode: 'single' }}
+                dataSource={store({uri : uri.admisions, remoteOperations: true})}
+                showBorders={true}
+                showRowLines={true}
+                allowColumnResizing={true}
+                allowColumnReordering={true}
+                onContextMenuPreparing={addMenuItems}
+                onRowPrepared={onRowPrepared}
+                onCellPrepared={onCellPrepared}
+                
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}
+            >
+                <Paging defaultPageSize={20} />
+                <Pager
+                    showInfo={true}
+                    showPageSizeSelector={true}
+                    allowedPageSizes={[10, 20, 50]}
+                />
+                <FilterRow visible={true} />
+                <HeaderFilter visible={true} />
+                <ColumnChooser enabled={true} />
+                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
+                <Column dataField="id"  width={80} />
+                <Column dataField="numberOfDay" width={90} caption='Numero' />
+                <Column dataField="inss"  width={110} />
+                <Column dataField="tipo"  width={110} />
+                <Column dataField="nombre" />
+                <Column dataField="areaId" width={150} caption="Area">
+                    <Lookup disabled={true} dataSource={createStore({name : 'area' })} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="specialtyId" width={150} caption="Especialidad">
+                    <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="createBy" caption='Creado por' width={80} />
+                <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />
+                <Column dataField="active" caption='Estado' width={80} visible={false} />
+                <Editing
+                        mode="popup"                 
+                        allowDeleting={true}
+                        useIcons={true}
+                ></Editing>
+            </DataGrid>
+        </div>
     );
 
     

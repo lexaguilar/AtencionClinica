@@ -26,7 +26,7 @@ import { dataAccess, resources } from '../../data/app';
 
 const Products = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.inventarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.inventarios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -40,9 +40,7 @@ const Products = () => {
     const title = "Inventario";
     const active = true;
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >

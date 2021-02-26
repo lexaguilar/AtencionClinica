@@ -24,7 +24,7 @@ import useAuthorization from '../../hooks/useAuthorization';
 
 const Bills = props => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.caja, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.caja, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -66,65 +66,63 @@ const Bills = props => {
 
     const title = 'Facturas';
     const active = true;
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
-        <Title title={title}/>
-        <BlockHeader title={title}>
-            <CustomButton
-                text="Nueva factura"
-                icon='plus'
-                onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/facturas/nuevo`})}
-            />
-        </BlockHeader>
-        <DataGrid id="gridContainer"
-            ref={(ref) => dataGrid = ref}
-            selection={{ mode: 'single' }}
-            dataSource={store({uri : uri.bill, remoteOperations: true})}
-            showBorders={true}
-            showRowLines={true}
-            allowColumnResizing={true}
-            allowColumnReordering={true}
-            onContextMenuPreparing={addMenuItems}
-            onRowPrepared={onRowPrepared}
-            
-            remoteOperations={{
-                paging: true,
-                filtering: true
-            }}
-        >
-            <Paging defaultPageSize={20} />
-            <Pager
-                showInfo={true}
-                showPageSizeSelector={true}
-                allowedPageSizes={[10, 20, 50]}
-            />
-            <FilterRow visible={true} />
-            <HeaderFilter visible={true} />
-            <ColumnChooser enabled={true} />
-            <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-            <Column dataField="id"  width={100} />          
-            <Column dataField="nombre" />
-            <Column dataField="areaId" width={170} caption="Area">
-                <Lookup disabled={true} dataSource={createStoreLocal({name : 'area'})} valueExpr="id" displayExpr="name" />
-            </Column> 
-            <Column dataField="billTypeId" width={170} caption="Tipo Ingreso">
-                <Lookup disabled={true} dataSource={createStoreLocal({name : 'billType'})} valueExpr="id" displayExpr="name" />
-            </Column> 
-            <Column dataField="currencyId" caption="Moneda" width={100}>
-                <Lookup disabled={true} dataSource={createStoreLocal({name: 'currency'})} valueExpr="id" displayExpr="name" />
-            </Column>
-            <Column dataField="total" width={100} cellRender={cellRender()} />
-            <Column dataField="createBy" caption='Creado por' width={100} />
-            <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180} />
-            <Editing
-                mode="popup"                 
-                allowDeleting={true}
-                useIcons={true}
-            ></Editing>
-        </DataGrid>
-    </div>
+            <Title title={title}/>
+            <BlockHeader title={title}>
+                <CustomButton
+                    text="Nueva factura"
+                    icon='plus'
+                    onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/facturas/nuevo`})}
+                />
+            </BlockHeader>
+            <DataGrid id="gridContainer"
+                ref={(ref) => dataGrid = ref}
+                selection={{ mode: 'single' }}
+                dataSource={store({uri : uri.bill, remoteOperations: true})}
+                showBorders={true}
+                showRowLines={true}
+                allowColumnResizing={true}
+                allowColumnReordering={true}
+                onContextMenuPreparing={addMenuItems}
+                onRowPrepared={onRowPrepared}
+                
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}
+            >
+                <Paging defaultPageSize={20} />
+                <Pager
+                    showInfo={true}
+                    showPageSizeSelector={true}
+                    allowedPageSizes={[10, 20, 50]}
+                />
+                <FilterRow visible={true} />
+                <HeaderFilter visible={true} />
+                <ColumnChooser enabled={true} />
+                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
+                <Column dataField="id"  width={100} />          
+                <Column dataField="nombre" />
+                <Column dataField="areaId" width={170} caption="Area">
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'area'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="billTypeId" width={170} caption="Tipo Ingreso">
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'billType'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="currencyId" caption="Moneda" width={100}>
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'currency'})} valueExpr="id" displayExpr="name" />
+                </Column>
+                <Column dataField="total" width={100} cellRender={cellRender()} />
+                <Column dataField="createBy" caption='Creado por' width={100} />
+                <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180} />
+                <Editing
+                    mode="popup"                 
+                    allowDeleting={true}
+                    useIcons={true}
+                ></Editing>
+            </DataGrid>
+        </div>
     );
 }
 

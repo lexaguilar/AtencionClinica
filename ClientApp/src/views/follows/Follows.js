@@ -24,7 +24,7 @@ import Transfer from '../../components/workOrder/Transfer';
 
 const Follows = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.servicios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.servicios, dataAccess.access ]);
     
     const {  areaId } = useSelector(store => store.user); 
     const dispatch = useDispatch();
@@ -73,12 +73,12 @@ const Follows = () => {
         }
 
     }
+
+    console.log('')
     
     const title = 'Servicios';
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />   

@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { userService } from "../services/user.service";
 
+
+
+const Authorized = isAuthorization => component => {
+    return isAuthorization ? component : (
+        <div className="container small text-center text-danger mt-25">
+            <p>El usuario no tiene permisos para este recurso</p>
+        </div>
+    )
+}
+
 /**
  * Retorna el un componente si el usuario no tiene permiso al recurso actual
  * @param {{resourceId : boolean, action : Number}} token -  token que se va guardar
@@ -12,20 +22,12 @@ const useAuthorization = ([resourceId, action]) => {
 
     const resource = user.resources.find(x => x.resource == resourceId);
     
-    const [ isAuthorization ] = useState( (resource.action & action) > 0);
+    const isAuthorization = (resource.action & action) > 0;
 
     return {
         isAuthorization,
-        Unauthorized
+        authorized : Authorized(isAuthorization)
     }
-}
-
-const Unauthorized = props => {
-    return (
-        <div className="container small text-center text-danger mt-25">
-            <p>El usuario no tiene permisos para este recurso</p>
-        </div>
-    )
 }
 
 export default useAuthorization;

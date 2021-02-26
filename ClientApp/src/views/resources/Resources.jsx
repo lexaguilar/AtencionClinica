@@ -14,7 +14,7 @@ import { dataAccess, resources } from "../../data/app";
 
 const Resources = props => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
     const [roles, setRoles] = useState([]);
     const [rolId, setRolId] = useState(0);
@@ -36,9 +36,7 @@ const Resources = props => {
 
     const title ='Recursos'
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container medium">
             <Title title={title} />
             <BlockHeader title={title} />

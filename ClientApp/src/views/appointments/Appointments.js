@@ -22,7 +22,7 @@ import useAuthorization from '../../hooks/useAuthorization';
 
 const Appointments = props => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([ resources.citas, dataAccess.access ]);
+    const { authorized } = useAuthorization([ resources.citas, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -91,66 +91,64 @@ const Appointments = props => {
     }  
 
     const title = 'Citas'
-    return !isAuthorization ?
-    <Unauthorized/> :
-    (
+    return authorized(
         <div className="container">
-        <Title title={title}/>
-        <BlockHeader title={title}>
-            <CustomButton
-                text="Nueva cita"
-                icon='plus'
-                onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/citas/nuevo`})}
-            />
-        </BlockHeader>
-        <DataGrid id="gridContainer"
-            ref={(ref) => dataGrid = ref}
-            selection={{ mode: 'single' }}
-            dataSource={store({uri : uri.appointments, remoteOperations: true})}
-            showBorders={true}
-            showRowLines={true}
-            allowColumnResizing={true}
-            allowColumnReordering={true}
-            onContextMenuPreparing={addMenuItems}
-            onRowPrepared={onRowPrepared}
-            onCellPrepared={onCellPrepared}
-            onToolbarPreparing={onToolbarPreparing}
-            //onExporting={(e) => onExporting(e, title)}
-            remoteOperations={{
-                paging: true,
-                filtering: true
-            }}
-        >
-            <Paging defaultPageSize={5} />
-            <Pager
-                showInfo={true}
-                showPageSizeSelector={true}
-                allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
-            />
-            <FilterRow visible={true} />
-            <HeaderFilter visible={true} />
-            <ColumnChooser enabled={true} />
-            <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-            <Column dataField="id"  width={100} />
-            <Column dataField="inss"  width={110} />
-            <Column dataField="tipo"  width={110} />
-            <Column dataField="nombre" />
-            <Column dataField="doctorId" width={160} caption="Doctor">
-                <Lookup disabled={true} dataSource={createStore({name: 'doctor'})} valueExpr="id" displayExpr="name" />
-            </Column> 
-            <Column dataField="specialtyId" width={160} caption="Especialidad">
-                <Lookup disabled={true} dataSource={createStore({name: 'specialty'})} valueExpr="id" displayExpr="name" />
-            </Column> 
-            <Column dataField="dateAppointment" caption='Cita' dataType='date' format={formatDateTime} width={160} />
-            <Column dataField="createBy" caption='Creado por' width={80} visible={false} />
-            <Column dataField="createAt" caption='Creado el' dataType='date' visible={false} format={formatDateTime} width={150} />
-            <Editing
-                    mode="popup"                 
-                    allowDeleting={true}
-                    useIcons={true}
-            ></Editing>
-        </DataGrid>
-    </div>
+            <Title title={title}/>
+            <BlockHeader title={title}>
+                <CustomButton
+                    text="Nueva cita"
+                    icon='plus'
+                    onClick = {() => props.history.push({ pathname : `${_path.CLINICA}/citas/nuevo`})}
+                />
+            </BlockHeader>
+            <DataGrid id="gridContainer"
+                ref={(ref) => dataGrid = ref}
+                selection={{ mode: 'single' }}
+                dataSource={store({uri : uri.appointments, remoteOperations: true})}
+                showBorders={true}
+                showRowLines={true}
+                allowColumnResizing={true}
+                allowColumnReordering={true}
+                onContextMenuPreparing={addMenuItems}
+                onRowPrepared={onRowPrepared}
+                onCellPrepared={onCellPrepared}
+                onToolbarPreparing={onToolbarPreparing}
+                //onExporting={(e) => onExporting(e, title)}
+                remoteOperations={{
+                    paging: true,
+                    filtering: true
+                }}
+            >
+                <Paging defaultPageSize={5} />
+                <Pager
+                    showInfo={true}
+                    showPageSizeSelector={true}
+                    allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
+                />
+                <FilterRow visible={true} />
+                <HeaderFilter visible={true} />
+                <ColumnChooser enabled={true} />
+                <Export enabled={false} fileName={title} allowExportSelectedData={true} />
+                <Column dataField="id"  width={100} />
+                <Column dataField="inss"  width={110} />
+                <Column dataField="tipo"  width={110} />
+                <Column dataField="nombre" />
+                <Column dataField="doctorId" width={160} caption="Doctor">
+                    <Lookup disabled={true} dataSource={createStore({name: 'doctor'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="specialtyId" width={160} caption="Especialidad">
+                    <Lookup disabled={true} dataSource={createStore({name: 'specialty'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="dateAppointment" caption='Cita' dataType='date' format={formatDateTime} width={160} />
+                <Column dataField="createBy" caption='Creado por' width={80} visible={false} />
+                <Column dataField="createAt" caption='Creado el' dataType='date' visible={false} format={formatDateTime} width={150} />
+                <Editing
+                        mode="popup"                 
+                        allowDeleting={true}
+                        useIcons={true}
+                ></Editing>
+            </DataGrid>
+        </div>
     );
 }
 

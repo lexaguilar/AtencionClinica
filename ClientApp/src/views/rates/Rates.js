@@ -12,7 +12,7 @@ import { dataAccess, resources } from '../../data/app';
 
 const Rates = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -20,9 +20,7 @@ const Rates = () => {
 
     const title="Tasa de cambio";
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container small">
             <Title title={title}/>
             <BlockHeader title={title} />

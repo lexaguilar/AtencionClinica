@@ -28,7 +28,7 @@ function Catalogo(props) {
 
     const { name, url, caption } = props;
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -46,9 +46,7 @@ function Catalogo(props) {
         });
     }  
     
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container small">
             <Title title={caption||name}/>
             <BlockHeader title={toCapital(caption||name)}/>          

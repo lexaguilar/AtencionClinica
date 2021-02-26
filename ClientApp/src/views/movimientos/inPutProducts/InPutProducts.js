@@ -30,7 +30,7 @@ const InPutProducts = (
         Component= Nuevo
     }) => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -39,9 +39,7 @@ const InPutProducts = (
         dataGrid.current.instance.refresh();
     }
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >

@@ -30,7 +30,7 @@ import useAuthorization from "../../hooks/useAuthorization";
 
 const Users = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
     const dataGrid = useRef();
 
@@ -96,9 +96,7 @@ const Users = () => {
 
     const title = "Usuarios";
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container medium">
                 <Title title={title} />
                 <BlockHeader title={title} />

@@ -6,13 +6,11 @@ import useAuthorization from '../../../hooks/useAuthorization';
 
 const OutPutProducts = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
 
     const title = "Salida de inventario";
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title}/>     

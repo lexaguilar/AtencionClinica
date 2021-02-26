@@ -26,7 +26,7 @@ import useAuthorization from '../../hooks/useAuthorization';
 
 const Subsidies = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.subsidios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.subsidios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -96,9 +96,7 @@ const Subsidies = () => {
         });
     }  
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} >

@@ -15,13 +15,11 @@ import useAuthorization from "../../hooks/useAuthorization";
 
 const Roles = props => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
     const title ='Roles'
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container small">
             <Title title={title} />
             <BlockHeader title={title} />

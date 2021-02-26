@@ -26,7 +26,7 @@ import useAuthorization from '../../../hooks/useAuthorization';
 
 const Traslates = (props) => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.requisas, dataAccess.access ]);    
+    const { authorized } = useAuthorization([resources.requisas, dataAccess.access ]);    
 
     const {  areaId } = useSelector(store => store.user); 
 
@@ -41,9 +41,7 @@ const Traslates = (props) => {
 
     let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >

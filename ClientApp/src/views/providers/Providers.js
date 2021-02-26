@@ -25,7 +25,7 @@ import { dataAccess, resources } from '../../data/app';
 
 const Providers = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const title = 'Proveedores';
 
@@ -45,9 +45,7 @@ const Providers = () => {
         });
     }
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />

@@ -27,7 +27,7 @@ import useAuthorization from '../../hooks/useAuthorization';
 
 const Percapita = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const [ date, setDate ] = useState(new Date());
 
@@ -41,10 +41,7 @@ const Percapita = () => {
         dataGrid.instance.refresh();
     }
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
-        
+    return authorized(        
         <div className="container">
             <Title title="Tasa de cambio" />
             

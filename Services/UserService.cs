@@ -18,6 +18,7 @@ namespace AtencionClinica.Services
     public class AppClaimTypes
     {
         internal const string AreaId = "AreaId";
+        internal const string RolId = "RolId";
     }
     public interface IUserService
     {
@@ -89,6 +90,7 @@ namespace AtencionClinica.Services
 
             //Agregar resursos
             identity.AddClaim(new Claim(AppClaimTypes.AreaId, user.AreaId.ToString()));
+            identity.AddClaim(new Claim(AppClaimTypes.RolId, user.RolId.ToString()));
 
             return identity;
         }
