@@ -17,6 +17,9 @@ namespace AtencionClinica.Factory
         public User GetById(string username){
             return db.Users.FirstOrDefault(x => x.Username == username);
         }       
+        public User GetByIdOrEmail(string username){
+            return db.Users.FirstOrDefault(x => x.Username == username || x.Email == username);
+        }       
 
         public User Auth(string username, string password)
         {
@@ -47,6 +50,7 @@ namespace AtencionClinica.Factory
             return result;
         }
 
+        public void Save() => db.SaveChanges();
 
         
     }

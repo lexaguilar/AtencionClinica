@@ -25,4 +25,10 @@ namespace AtencionClinica.ViewModel
         public string RepeatPassword { get; set; }
     }
 
+    public class RestPasswordRequest
+    {
+        [Required]
+        public string Username { get; set; }
+    }
+
 }

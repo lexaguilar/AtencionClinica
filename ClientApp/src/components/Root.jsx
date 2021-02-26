@@ -13,6 +13,7 @@ import Login from './account/login';
 import Logout from './account/logout';
 import HomePage from './home/HomePage';
 import ChangePassword from './account/changepassword';
+import ResetPassword from './account/ResetPassword';
 
 export default class Root extends Component {
 
@@ -56,6 +57,7 @@ export default class Root extends Component {
                     <Route path="/account/login" component={Login} />
                     <Route path="/account/logout" component={Logout} />                   
                     <Route path="/account/password" component={ChangePassword} />                   
+                    <Route path="/account/resetpassword" component={ResetPassword} />                   
                     <Route path="/clinica" component={HomePage} />
                     <Redirect to='/clinica'/>
                 </Switch>

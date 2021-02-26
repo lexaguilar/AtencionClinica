@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import * as actions from '../../store/user/userActions';
 import { ToastContainer } from "react-toastify";
 import Footer from "../footer";
+import { Link } from 'react-router-dom';
 
 function Login(props) {
 
@@ -57,7 +58,8 @@ function Login(props) {
                         <input value={user.password} onChange={onValueChange} type="password" className="form-control" name="password" placeholder="Contraseña" required="" />
                     </div>
 
-                    <a href="/">Olvide mi Contraseña</a>
+                    <Link to={'/account/resetpassword'} >Olvide mi Contraseña</Link>
+
                     <br />
                     <button className="btn btn-lg btn-primary btn-block" type="button" onClick={sendUser} disabled={loading} >
                         {loading ? "Iniciando..." : "Login"}

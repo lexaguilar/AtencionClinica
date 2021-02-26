@@ -120,7 +120,7 @@ function Layout(props) {
                 </div>
 
                 <footer className="site__footer">
-                    <Footer />
+                    <Footer showInfo={true} />
                 </footer>
             </div>
         </React.Fragment>

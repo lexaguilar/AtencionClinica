@@ -35,6 +35,7 @@ namespace AtencionClinica
             services.AddDbContext<ClinicaContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddInPutProductServices();
             services.AddTraslateServices();
             services.AddWorkOrderServices();

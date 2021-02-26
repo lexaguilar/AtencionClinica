@@ -8,13 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
 
 namespace AtencionClinica.Services
 {
-     public class AppClaimTypes
+    public class AppClaimTypes
     {
         internal const string AreaId = "AreaId";
     }
@@ -22,6 +23,7 @@ namespace AtencionClinica.Services
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         User ChangePassword(ChangePasswordRequest model);
+        User ResetPassword(RestPasswordRequest model);
         User GetById(string username);
     }
 
@@ -31,22 +33,24 @@ namespace AtencionClinica.Services
 
 
         private readonly AppSettings _appSettings;
-         private readonly ClinicaContext _db;
-         private readonly UserFactory userFactory = null;
+        private readonly ClinicaContext _db;
+        private readonly UserFactory userFactory = null;
+        private readonly IEmailService _emailService= null;
 
-        public UserService(IOptions<AppSettings> appSettings, ClinicaContext db)
+        public UserService(IOptions<AppSettings> appSettings, ClinicaContext db, IEmailService emailService)
         {
             _appSettings = appSettings.Value;
             _db = db;
             userFactory = new UserFactory(_db);
+            _emailService = emailService;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
-        {          
+        {
             var user = userFactory.Auth(model.Username, model.Password);
 
             // return null if user not found
-            if (user == null) return null;            
+            if (user == null) return null;
 
             // authentication successful so generate jwt token
             var hours = _appSettings.Hours;
@@ -54,7 +58,7 @@ namespace AtencionClinica.Services
 
             return new AuthenticateResponse(user, token);
         }
-       
+
 
         public User GetById(string username)
         {
@@ -91,7 +95,7 @@ namespace AtencionClinica.Services
 
         public User ChangePassword(ChangePasswordRequest model)
         {
-            
+
             var user = userFactory.ChangePassword(model);
 
             if (user == null) return null;
@@ -99,6 +103,39 @@ namespace AtencionClinica.Services
             return user;
 
         }
-        
+
+        public User ResetPassword(RestPasswordRequest model)
+        {
+            var user = userFactory.GetByIdOrEmail(model.Username);
+            if (user == null) return null;
+
+            var newPassword = CreatePassword(8);
+
+            user.Password = UserHelpers.GetPasswordHashedSHA256(newPassword);
+
+            userFactory.Save();
+
+            var mail = new MailMessage(_appSettings.From, user.Email);
+
+            mail.Subject = "Restablecer contraseña.";
+            mail.Body = $"Estimado usuario se ha restablecido su contraseña, favor ingresar al sistema con su usuario {user.Username} y la nueva contraseña {newPassword}";
+
+            _emailService.SendEmailAsync(mail);
+
+            return user;
+
+        }
+
+        public string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
+        }
     }
 }

@@ -17,11 +17,13 @@ namespace AtencionClinica.Controllers
     {
         private readonly ClinicaContext db = null;
         private IUserService _userService;
+        
 
         public AccountController(ClinicaContext _db, IUserService userService)
         {
             this.db = _db;
             _userService = userService;
+            
         }
 
         [HttpPost("api/account/auth")]
@@ -51,6 +53,22 @@ namespace AtencionClinica.Controllers
                 return BadRequest("El usario o contraseña es incorrecta");
 
             return Ok(user);
+        }
+        [HttpPost("api/account/resetpassword")]
+        public IActionResult Resetpassword([FromBody] RestPasswordRequest model)
+        {
+
+            if(string.IsNullOrEmpty(model.Username))
+                return BadRequest("El usuario o correo es requerido");       
+
+            var user = _userService.ResetPassword(model);
+
+            if(user == null)
+                return BadRequest("No se encontró el usuario");       
+
+            return Ok(new { 
+                email = user.Email
+             });
         }
     }
 }

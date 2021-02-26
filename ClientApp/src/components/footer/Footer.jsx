@@ -17,7 +17,8 @@ class Footer extends Component {
 
     
     render() {
-        let { app, user } = this.props;
+
+        let { app, user, showInfo } = this.props;
 
         return (
             <div className="site-footer">
@@ -31,9 +32,11 @@ class Footer extends Component {
                         {' '}
                             {app.version}
                         </div>
-                        <div className="site-footer__payments">
-                            <i className="fa fa-home text-danger"></i> Area : {user.area}
-                        </div>
+                        {showInfo && 
+                            <div className="site-footer__payments">
+                                <i className="fa fa-home text-danger"></i> Area : {user.area}
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
