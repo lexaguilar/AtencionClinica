@@ -23,7 +23,6 @@ namespace AtencionClinica.Models
         public int PresentationId { get; set; }
         public int UnitOfMeasureId { get; set; }
         public bool HasIva { get; set; }
-        public decimal StockMin { get; set; }
         public int StateId { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }

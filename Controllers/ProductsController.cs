@@ -147,7 +147,6 @@ namespace AtencionClinica.Controllers
                     x.FamilyId,
                     x.UnitOfMeasureId,
                     x.PresentationId,
-                    x.StockMin,
                     x.StateId,
                     x.HasIva,
                     x.CurrencyId

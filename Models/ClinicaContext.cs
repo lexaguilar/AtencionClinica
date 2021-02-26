@@ -1219,8 +1219,6 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.StockMin).HasColumnType("decimal(18, 2)");
-
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CurrencyId)
