@@ -7,8 +7,7 @@ import {
     HeaderFilter, 
     ColumnChooser, 
     Column, 
-    Export, 
-    Form as FromGrid, 
+    Export
 } from 'devextreme-react/data-grid';
 import { store } from '../../services/store';
 import uri from '../../utils/uri';
@@ -74,8 +73,6 @@ const Follows = () => {
 
     }
 
-    console.log('')
-    
     const title = 'Servicios';
 
     return authorized(

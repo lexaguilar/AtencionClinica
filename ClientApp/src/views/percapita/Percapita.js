@@ -8,20 +8,14 @@ import {
     HeaderFilter,
     Column,
     Export,
-    GroupPanel,
 } from 'devextreme-react/data-grid';
 import Box, {
     Item
   } from 'devextreme-react/box';
 import DateBox from 'devextreme-react/date-box';
 import Title from '../../components/shared/Title';
-import CustomStore from 'devextreme/data/custom_store';
-import http from '../../utils/http';
-import { customizeText, getMonthName } from '../../utils/common';
-import { Button } from 'devextreme-react/button';
 import Delete from './Delete';
 import { dataAccess, formatDate, resources } from '../../data/app';
-import uri from '../../utils/uri';
 import { store } from '../../services/store';
 import useAuthorization from '../../hooks/useAuthorization';
 
