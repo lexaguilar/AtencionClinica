@@ -6,6 +6,7 @@ import * as actions from '../../store/user/userActions';
 import { ToastContainer } from "react-toastify";
 import Footer from "../footer";
 import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 
 function ChangePassword(props) {
 
@@ -60,7 +61,7 @@ function ChangePassword(props) {
                         <input value={user.newPassword} onChange={onValueChange} type="password" className="form-control" name="newPassword" placeholder="Nueva contraseña" required />
                         <input value={user.repeatPassword} onChange={onValueChange} type="password" className="form-control" name="repeatPassword" placeholder="Repetir contraseña" required />
                     </div>
-
+                    <Link to={'/clinica/'} >Regresar</Link>
                     <br />
                     <input 
                         className="btn btn-lg btn-primary btn-block" 
