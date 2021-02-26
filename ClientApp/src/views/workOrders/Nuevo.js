@@ -25,10 +25,11 @@ const Nuevo = props => {
     const { followId, beneficiaryId } = props;
 
     const exists = true;    
+    const active = true;    
 
     const { workOrderDialog : { open }, user } = useSelector(store => store);
   
-    const { products, setProducts } = useProducts(user.areaId , exists);
+    const { products, setProducts } = useProducts({areaId: user.areaId, exists, active});
     const [services, setServices] = useState([]);
 
     const [ workOrder, setWorkOrder ] = useState({});
@@ -43,7 +44,7 @@ const Nuevo = props => {
     useEffect(() => {        
         setWorkOrder({areaId : user.areaId });
         setDetails([]);
-        http(`services/area/${user.areaId}/get`).asGet({active:true}).then(resp => setServices(resp));
+        http(`services/area/${user.areaId}/get`).asGet({ active }).then(resp => setServices(resp));
     }, [open]);
 
     const dispatch = useDispatch();
@@ -162,7 +163,7 @@ const Nuevo = props => {
     return (
         <div>
              <Popup
-                width={1000}
+                width={1050}
                 height={660}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
@@ -214,7 +215,7 @@ const Nuevo = props => {
                                 allowColumnResizing={true}
                                 allowColumnReordering={true}
                                 height={200}
-                                onToolbarPreparing={onToolbarPreparingProducts}
+                                onToolbarPreparing={onToolbarPreparingProducts}                                
                                 onCellPrepared={onCellPrepared}
                             >
                                 <Column dataField="productId" caption="Producto"

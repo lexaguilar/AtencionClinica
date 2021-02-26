@@ -20,7 +20,7 @@ const Kardex = () => {
     const [areas, setAreas] = useState([]);
     const [areaId, setAreaId] = useState(0);
     const [date, setDate] = useState(null);
-    const {products} = useProducts(areaId);   
+    const {products} = useProducts({ areaId });   
     const [gridBoxValue, setGridBoxValue] = useState([]);  
 
     const [kardex, setKardex] = useState(undefined);
@@ -77,7 +77,6 @@ const Kardex = () => {
     }, [areaId, gridBoxValue, date]);
 
     const stockcellRender = (cellData) => {
-        console.log(cellData)
         return (
             <div className={cellData.data.quantityIn > 0 ? 'inc' : 'dec'} >             
               <div className='diff'>{cellData.value}</div>

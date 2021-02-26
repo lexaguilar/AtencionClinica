@@ -58,7 +58,7 @@ function Layout(props) {
 
     let prop = (path, component) => ({exact:true, path : `${_path.CLINICA}/${path}`, component });
 
-    const builRoute = (path, component) => <PrivateRoute {...prop(path, component) } /> ;
+    const builRoute = (path, component) => <PrivateRoute key={path} {...prop(path, component) } /> ;
 
     const routes = [
         builRoute('', HomePage)
@@ -114,8 +114,8 @@ function Layout(props) {
                     <Switch>
                         {PrintCatalogos}    
                         {routes}   
-                        <PrivateRoute exact path={`${_path.CLINICA}/movimientos/traslados`} render={props => <Traslates {...props} type={typeTraslate.create} /> } />                         
-                        <PrivateRoute exact path={`${_path.CLINICA}/movimientos/despacho`} render={props => <Traslates {...props} type={typeTraslate.update}/> } />                         
+                        <PrivateRoute key={1} exact path={`${_path.CLINICA}/movimientos/traslados`} render={props => <Traslates {...props} type={typeTraslate.create} /> } />                         
+                        <PrivateRoute key={2} exact path={`${_path.CLINICA}/movimientos/despacho`} render={props => <Traslates {...props} type={typeTraslate.update}/> } />                         
                     </Switch>
                 </div>
 

@@ -8,8 +8,6 @@ import Footer from "../footer";
 
 function Login(props) {
 
-    console.log(props);
-
     let username = props.location.state?.username;
 
     const dispatch = useDispatch();

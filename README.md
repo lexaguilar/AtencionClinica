@@ -9,7 +9,8 @@
 -Todo lo que es date, mandarlo formateado a 00:00 horas
 -Historial de medicamentos
 -Llenar sabana de datos
-
+-Opcion de reset password
+-Reset store usuarios al momento de login
 
 
 # Listos
@@ -17,7 +18,6 @@
 -Admisionar solo desde el area admision
 -Reglas para beneficiarios menores de 12
 -Poner Home Page
--Opcion de reset password
 -Poner el doctor en la farmacia
 -Poner fecha de incio para kardex y traer saldo anterior
 

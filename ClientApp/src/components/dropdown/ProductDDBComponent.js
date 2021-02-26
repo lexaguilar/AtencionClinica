@@ -15,7 +15,7 @@ import { store } from '../../services/store';
 import CustomStore from 'devextreme/data/custom_store';
 import http from '../../utils/http';
 
-const dropDownOptions = { width: 790 };
+const dropDownOptions = { width: 880 };
 
 export default class ProductDDBComponent extends React.Component {
     constructor(props) {
@@ -26,30 +26,6 @@ export default class ProductDDBComponent extends React.Component {
         this.dropDownBoxRef = React.createRef();
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
         this.contentRender = this.contentRender.bind(this);
-    }
-
-    customCell(cellData) {
-        
-        return (
-          <div>
-
-            <div className="item-descripcion">
-                <div className="item-numero">{cellData.data.id}</div>
-                <div className="item-nombre">{cellData.data.name}</div>
-                <div className="item-nombre">{cellData.data.name}</div>
-            </div>           
-            <div className="item-values">
-                
-                <div className={cellData.data.existencias > 0 ? "stock" : "item-stock-zero"}>
-                    Stock: 0
-                </div>
-                <div className="item-label">
-                    Precio: <span className="item-price">{formatToMoney(cellData.data.precio)}</span>
-                </div>
-            </div>
-          
-          </div>
-        );
     }
 
     customStore(url){
@@ -136,7 +112,7 @@ export default class ProductDDBComponent extends React.Component {
                 <Column dataField="name" caption="Nombre" ></Column>
                 <Column dataField="presentation" caption="Presentacion" width={120}></Column>
                 <Column dataField="um" caption="UM" width={100}></Column>
-                <Column dataField="cost" caption="Costo" cellRender={cellRender()} width={100}></Column>
+                <Column dataField="cost" caption="Costo" cellRender={cellRender()} width={80}></Column>
                 <Column dataField="stock" caption="Cant" width={80}></Column>                
                 <Scrolling mode="virtual" />
                 <Selection mode="single" />

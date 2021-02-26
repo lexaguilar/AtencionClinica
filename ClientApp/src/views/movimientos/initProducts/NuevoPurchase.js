@@ -9,7 +9,7 @@ import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, Summary, TotalItem } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender } from '../../../utils/common';
+import { cellRender, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
@@ -19,10 +19,12 @@ import notify from 'devextreme/ui/notify';
 const NuevoPurchase = props => {    
 
     const { typeId } = props;
+    
+    const active = true;
 
     const { inPutProductDialog : { open }, user } = useSelector(store => store);
 
-    const { products, isLoading } = useProducts(user.areaId);
+    const { products, isLoading } = useProducts({ areaId:user.areaId,  active });
     const [ inPutProduct, setInPutProduct ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);   
@@ -36,7 +38,7 @@ const NuevoPurchase = props => {
     }, [open]);
     
     const dispatch = useDispatch();
-    const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar items', icon:'plus' });
+    const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' });
 
     const closeDialog = ( load ) => {
 
@@ -105,7 +107,7 @@ const NuevoPurchase = props => {
     return (
         <div>
              <Popup
-                width={950}
+                width={1050}
                 height={580}
                 title={`Nueva entrada de inventario`}
                 onHiding={onHiding}
@@ -168,6 +170,7 @@ const NuevoPurchase = props => {
                             allowColumnReordering={true}
                             height={290}
                             onToolbarPreparing={onToolbarPreparing}
+                            onCellPrepared={onCellPrepared}
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}

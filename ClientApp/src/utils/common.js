@@ -60,7 +60,6 @@ export const getPriceByCurrency = (currencyId, rate) => service => {
 }
 
 const fn = fx => data => {
-    console.log(data) 
     return fx;
 }  
 
@@ -72,28 +71,24 @@ export const cellDiff = data => {
     )
 }
 
-export const customCell = data => {
-        
-    return (
-      <div>
+export const onCellPrepared = e => {
 
-        <div className="item-descripcion">
-            <div className="item-numero">{data.id}</div>
-            <div className="item-nombre">{data.name}</div>
-        </div>           
-        <div className="item-values">
-            
-            <div className={data.existencias > 0 ? "stock" : "item-stock-zero"}>
-                Stock: 0
-            </div>
-            <div className="item-label">
-                Precio: <span className="item-price">{formatToMoney(data.precio)}</span>
-            </div>
-        </div>
-      
-      </div>
-    );
-  }
+    console.log(e)
+
+    const cellsQuantity = ['quantity', 'quantityRequest']
+        
+    if (e.rowType == 'data' && e.column.allowEditing) {
+        if(cellsQuantity.includes(e.column.dataField))
+            e.cellElement.classList.add('quantity-text');
+        if(e.column.dataField == "quantityResponse")
+            e.cellElement.classList.add('quantityResponse-text');
+        if(e.column.dataField == "cost")
+            e.cellElement.classList.add('cost-text');
+        if(e.column.dataField == "price")
+            e.cellElement.classList.add('price-text');
+    }
+
+}
 
 
 const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']

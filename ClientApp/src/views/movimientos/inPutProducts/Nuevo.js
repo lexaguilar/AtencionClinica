@@ -22,7 +22,9 @@ const Nuevo = props => {
 
     const { inPutProductDialog : { open }, user } = useSelector(store => store);
 
-    const { products, isLoading } = useProducts(user.areaId);
+    const active = true;
+
+    const { products, isLoading } = useProducts({areaId: user.areaId,  active });
     const [ inPutProduct, setInPutProduct ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
@@ -36,7 +38,7 @@ const Nuevo = props => {
     }, [open]);
 
     const dispatch = useDispatch();
-    const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar items', icon:'plus' });
+    const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' });
 
     const closeDialog = ( load ) => {
         refForm.current.instance.resetValues();  
@@ -99,7 +101,7 @@ const Nuevo = props => {
     return (
         <div>
              <Popup
-                width={950}
+                width={1050}
                 height={550}
                 title={`Nueva entrada de inventario`}
                 onHiding={onHiding}

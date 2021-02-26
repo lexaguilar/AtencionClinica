@@ -9,7 +9,7 @@ import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, Summary, TotalItem } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender } from '../../../utils/common';
+import { cellRender, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
@@ -22,7 +22,9 @@ const Nuevo = props => {
 
     const { inPutProductDialog : { open }, user } = useSelector(store => store);
 
-    const { products } = useProducts(user.areaId);
+    const active = true;
+
+    const { products } = useProducts({ areaId: user.areaId, active });
     const [ inPutProduct, setInPutProduct ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
@@ -36,7 +38,7 @@ const Nuevo = props => {
     }, [open]);
 
     const dispatch = useDispatch();
-    const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar items', icon:'plus' });
+    const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' });
 
     const closeDialog = ( load ) => {
         refForm.current.instance.resetValues();  
@@ -104,7 +106,7 @@ const Nuevo = props => {
     return (
         <div>
              <Popup
-                width={950}
+                width={1050}
                 height={550}
                 title={`Nueva entrada de inventario`}
                 onHiding={onHiding}
@@ -155,6 +157,7 @@ const Nuevo = props => {
                             allowColumnReordering={true}
                             height={320}
                             onToolbarPreparing={onToolbarPreparing}
+                            onCellPrepared={onCellPrepared}
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}

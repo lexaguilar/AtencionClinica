@@ -9,7 +9,7 @@ import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, Summary, TotalItem } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender } from '../../../utils/common';
+import { cellRender, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
@@ -20,6 +20,7 @@ import { typeTraslate } from '../../../data/catalogos';
 const Nuevo = props => {    
 
     const exists = true;
+    const active = true;
 
     const  {stageId, type}  = props;
 
@@ -28,7 +29,7 @@ const Nuevo = props => {
     const { customDialog : { open, id }, user } = useSelector(store => store);
 
     const [ areaSourceId, setAreaSourceId ] = useState(0);
-    const { products, setProducts } = useProducts(areaSourceId , exists);
+    const { products, setProducts } = useProducts({areaId: areaSourceId, exists, active });
     const [ traslate, setTraslate ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
@@ -42,7 +43,7 @@ const Nuevo = props => {
     }, [open]);
 
     const dispatch = useDispatch();
-    const onToolbarPreparing = areaSourceId > 0 ? gridsHelper(refGrid, { text : 'Agregar items', icon:'plus' }) : undefined;
+    const onToolbarPreparing = areaSourceId > 0 ? gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' }) : undefined;
 
     const close = ( load ) => {
 
@@ -147,11 +148,9 @@ const Nuevo = props => {
 
             http(uri.traslates.getById(id)).asGet().then(resp =>{
 
-                //setAreaSourceId(resp.areaSourceId);
-
                 setTraslate({ ...withOutDetaill(resp) });
 
-                http(`products/getbyarea/${resp.areaSourceId}`).asGet({ exists }).then(data =>{
+                http(uri.products.getByArea(resp.areaSourceId)).asGet({ exists }).then(data =>{
                     
                     setProducts(data);
 
@@ -203,8 +202,8 @@ const Nuevo = props => {
     return (
         <div>
              <Popup
-                width={950}
-                height={550}
+                width={1050}
+                height={580}
                 title={isCreate  ? `Nueva solicitud de traslado` : `Despachar solicitud ${id}`}
                 onHiding={onHiding}
                 onShowing={onShowing}
@@ -248,6 +247,7 @@ const Nuevo = props => {
                             allowColumnReordering={true}
                             height={320}
                             onToolbarPreparing={isCreate ? onToolbarPreparing : undefined}
+                            onCellPrepared={onCellPrepared}
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}
