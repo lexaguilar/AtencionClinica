@@ -15,8 +15,6 @@ const PopupWorkOrder = () => {
 
     const title = 'Servicios';
 
-    console.log(beneficiaryId);
-    
     return (
         <div>           
             <Popup

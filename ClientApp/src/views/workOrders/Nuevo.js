@@ -8,7 +8,7 @@ import { Button, DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import uri from '../../utils/uri';
-import { cellRender, getPriceByCurrency, obtenerTasaCambio } from '../../utils/common';
+import { cellRender, getPriceByCurrency, obtenerTasaCambio, onCellPrepared } from '../../utils/common';
 import http from '../../utils/http';
 import gridsHelper from '../../utils/gridsHelper';
 import ButtonForm from '../../components/buttons/ButtonForm';
@@ -18,19 +18,17 @@ import useProducts from '../../hooks/useProducts';
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
 import Information from '../../components/beneficiary/Information';
 import { createStore, createStoreLocal } from '../../utils/proxy';
-import { editorOptionsSelect } from '../../data/app';
+import { areaRestrict, editorOptionsSelect } from '../../data/app';
+import GridMedicamentos from './GridMedicamentos';
+import GridProcedimientos from './GridProcedimientos';
+import GridListaMedicamentoPte from './GridListaMedicamentoPte';
 
 const Nuevo = props => {   
     
     const { followId, beneficiaryId } = props;
-
-    const exists = true;    
-    const active = true;    
+    const [ isClosing, setIsClosing]  = useState(false);
 
     const { workOrderDialog : { open }, user } = useSelector(store => store);
-  
-    const { products, setProducts } = useProducts({areaId: user.areaId, exists, active});
-    const [services, setServices] = useState([]);
 
     const [ workOrder, setWorkOrder ] = useState({});
     const [ saving, setSaving ] = useState(false);
@@ -38,26 +36,20 @@ const Nuevo = props => {
     const [ details, setDetails ] = useState([]);
 
     let refForm = useRef();
-    let refGridServices = useRef();
-    let refGridProducts = useRef();
 
     useEffect(() => {        
         setWorkOrder({areaId : user.areaId });
         setDetails([]);
-        http(`services/area/${user.areaId}/get`).asGet({ active }).then(resp => setServices(resp));
     }, [open]);
 
     const dispatch = useDispatch();
-    const onToolbarPreparing = gridsHelper(refGridServices, { text : 'Agregar procedimientos', icon:'plus' });
-    const onToolbarPreparingProducts = gridsHelper(refGridProducts, { text : 'Agregar productos', icon:'plus' });
 
     const closeDialog = ( load ) => {
-
+        
         refForm.current.instance.resetValues();  
-        refGridProducts.current.instance.cancelEditData();
-        refGridServices.current.instance.cancelEditData();
-
+        
         dispatch(dialogWorkOrder({open : false}));
+        setIsClosing(true);
 
         if (load) {
             let { onSave } = props;
@@ -92,54 +84,7 @@ const Nuevo = props => {
 
         }
 
-    }
-
-    const setCellValue = (prop, newData, value, currentRowData) => {
-
-        newData[prop] = value || 0;
-        if(prop == 'productId' && value){
-
-            let info = products.find(x => x.id == value);
-            newData['presentation'] = info.presentation;
-            newData['um'] = info.um
-            newData['cost'] = info.cost;
-            newData['price'] = info.price;
-            newData['quantity'] = 1;
-            newData['serviceId'] = null;
-            !currentRowData['total'] &&( newData['total'] = info.cost);
-
-        }
-        
-        if(prop == 'quantity' && (+value) >= 0)
-            newData['total'] = currentRowData['cost'] * value;
-
-    }    
-
-    const setCellValueServices = (newData, value, currentRowData) => {
-
-        const service = services.find(x => x.id == value);
-
-        const price = getPriceByCurrency(1, workOrder.rate)(service);
-      
-        newData.id = value;
-      
-        newData.quantity = 1;     
-        newData.price = price;
-        newData.productId = null;
-        newData.cost = 0;
-        newData.subTotal = price * newData.quantity;  
-        newData.total = newData.subTotal;  
-      
-    }
-
-    const setCellValueCantServices = (newData, value, currentRowData) => {
-
-        newData.quantity = value;
-        newData.price = currentRowData.price;     
-        newData.subTotal = currentRowData.price * newData.quantity;  
-        newData.total = newData.subTotal;  
-
-    }
+    } 
 
     useEffect(() => {
         obtenerTasaCambio(new Date()).then(rate =>{
@@ -147,16 +92,6 @@ const Nuevo = props => {
                 setWorkOrder({...workOrder, rate : rate.value});
         });
     }, [0]);
-
-    const onCellPrepared = e => {
-        
-        if (e.rowType == 'data') {
-
-            if(e.column.dataField == "quantity")
-                e.cellElement.classList.add('quantity-text');
-        }
-
-    }
 
     const text = 'Guardar orden';  
 
@@ -206,98 +141,23 @@ const Nuevo = props => {
                             
                         </GroupItem>
                         <GroupItem>
-                            <DataGrid id="gridDetails"
-                                ref={refGridProducts}
-                                selection={{ mode: 'single' }}
-                                dataSource={details}
-                                showBorders={true}
-                                showRowLines={true}
-                                allowColumnResizing={true}
-                                allowColumnReordering={true}
-                                height={200}
-                                onToolbarPreparing={onToolbarPreparingProducts}                                
-                                onCellPrepared={onCellPrepared}
-                            >
-                                <Column dataField="productId" caption="Producto"
-                                    setCellValue={setCellValue.bind(null,"productId")}
-                                    editCellComponent={ProductDDBComponent}>
-                                        <Lookup 
-                                            dataSource={products}
-                                            valueExpr="id" 
-                                            displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
-                                        
-                                        />
-                                        <RuleRequired />
-                                </Column>                          
-                                <Column dataField="presentation" caption="Presentacion" width={120} allowEditing={false}>
-                                    <RuleRequired />
-                                </Column>
-                                <Column dataField="um" caption="Um" width={120} allowEditing={false}>
-                                    <RuleRequired />
-                                </Column>
-                                <Column dataField="quantity" 
-                                    caption="Cantidad" 
-                                    dataType="number" width={80}                               
-                                    setCellValue={setCellValue.bind(null,"quantity")}>
-                                    <RuleRequired />
-                                </Column>                         
-                                <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
-                                    <RuleRequired />
-                                </Column>
-                                <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
-                                    <RuleRequired />
-                                </Column>                          
-                                <Column type="buttons" width={50}>
-                                    <ButtonGrid name="delete" />                            
-                                </Column>
-                                <Editing
-                                    mode="cell"
-                                    allowDeleting={true}                               
-                                    allowUpdating={true}
-                                    selectTextOnEditStart={true}
-                                    useIcons={true}
-                                ></Editing>
-                            </DataGrid>
+                            <GridMedicamentos 
+                                isClosing={isClosing}
+                                details={details}
+                                user={user}  />
                         </GroupItem>
                         <GroupItem>
-                            <DataGrid id="gridDetailsServices"
-                                ref={refGridServices}
-                                selection={{ mode: 'single' }}
-                                dataSource={detailsServices}
-                                showBorders={true}
-                                showRowLines={true}
-                                allowColumnResizing={true}
-                                allowColumnReordering={true}
-                                height={200}
-                                onToolbarPreparing={onToolbarPreparing}
-                                onCellPrepared={onCellPrepared}
-                            >
-                                <Column dataField="id" caption="Procedimiento" setCellValue={setCellValueServices}>
-                                    <Lookup 
-                                        disabled={true} 
-                                        dataSource={services} 
-                                        valueExpr="id" displayExpr="name" 
-                                    />
-                                </Column>                          
-                                <Column dataField="quantity" 
-                                    caption="Cantidad" 
-                                    dataType="number" width={120}                               
-                                    setCellValue={setCellValueCantServices}>
-                                    <RuleRequired />
-                                </Column>
-                                <Column dataField="price" allowEditing={false} caption='Precio' width={100}  cellRender={cellRender()}/>
-                                <Column dataField="total" allowEditing={false} width={120}  cellRender={cellRenderBold()}/>
-                                <Column type="buttons" width={50}>
-                                    <ButtonGrid name="delete" />                            
-                                </Column>
-                                <Editing
-                                    mode="cell"
-                                    allowDeleting={true}                               
-                                    allowUpdating={true}
-                                    selectTextOnEditStart={true}
-                                    useIcons={true}
-                                ></Editing>
-                            </DataGrid>
+                            {areaRestrict.farmacia != user.areaId ?
+                                <GridProcedimientos 
+                                    isClosing={isClosing}
+                                    detailsServices={detailsServices}
+                                    user={user}
+                                    open={open}
+                                    rate={workOrder.rate}
+                                />
+                            :
+                                <GridListaMedicamentoPte beneficiaryId={beneficiaryId} open={open}/>}
+
                         </GroupItem>
                         
                     </Form>    

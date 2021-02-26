@@ -15,8 +15,8 @@ namespace AtencionClinica.Models
         public string Presentation { get; set; }
         public int StateId { get; set; }
         public int CurrencyId { get; set; }
-        public double? Stock { get; set; }
+        public double Stock { get; set; }
         public bool Exists { get; set; }
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
     }
 }

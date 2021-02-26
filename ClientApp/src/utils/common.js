@@ -73,8 +73,6 @@ export const cellDiff = data => {
 
 export const onCellPrepared = e => {
 
-    console.log(e)
-
     const cellsQuantity = ['quantity', 'quantityRequest']
         
     if (e.rowType == 'data' && e.column.allowEditing) {

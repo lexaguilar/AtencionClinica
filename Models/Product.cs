@@ -13,6 +13,7 @@ namespace AtencionClinica.Models
             InPutProductDetails = new HashSet<InPutProductDetail>();
             OutPutProductDetails = new HashSet<OutPutProductDetail>();
             TraslateDetails = new HashSet<TraslateDetail>();
+            WorkOrderDetails = new HashSet<WorkOrderDetail>();
         }
 
         public int Id { get; set; }
@@ -39,5 +40,6 @@ namespace AtencionClinica.Models
         public virtual ICollection<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }
         public virtual ICollection<TraslateDetail> TraslateDetails { get; set; }
+        public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
     }
 }

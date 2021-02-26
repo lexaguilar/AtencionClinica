@@ -78,6 +78,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<VwFollow> VwFollows { get; set; }
         public virtual DbSet<VwFollowsPrivate> VwFollowsPrivates { get; set; }
         public virtual DbSet<VwKardex> VwKardices { get; set; }
+        public virtual DbSet<VwLastMedicinesByBeneficiary> VwLastMedicinesByBeneficiaries { get; set; }
         public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
@@ -1733,6 +1734,25 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<VwLastMedicinesByBeneficiary>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwLastMedicinesByBeneficiary");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Product)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<VwProductInfo>(entity =>
             {
                 entity.HasNoKey();
@@ -1802,6 +1822,11 @@ namespace AtencionClinica.Models
                 entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.WorkOrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_WorkOrderDetails_Products");
 
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.WorkOrderDetails)

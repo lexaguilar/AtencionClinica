@@ -17,6 +17,7 @@ namespace AtencionClinica.Models
         public decimal Total { get; set; }
         public decimal Costo { get; set; }
 
+        public virtual Product Product { get; set; }
         public virtual Service Service { get; set; }
         public virtual WorkOrder WorkOrder { get; set; }
     }

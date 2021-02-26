@@ -106,6 +106,16 @@ namespace AtencionClinica.Controllers
 
         }
 
+        [Route("api/beneficiaries/{beneficiaryId}/products")]
+        public IActionResult Products(int beneficiaryId) 
+        {
+            var products = _db.VwLastMedicinesByBeneficiaries.Where(x => x.BeneficiaryId == beneficiaryId)
+            .OrderByDescending(x => x.WorkOrderId)
+            .Take(20);
+            return Json(products);
+
+        }
+
         [Route("api/beneficiaries/search/{id}")]
         public async Task<IActionResult> Search(string id) 
         {

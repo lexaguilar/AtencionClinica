@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
 import DataGrid, {
@@ -20,13 +20,13 @@ import Nuevo from './Nuevo';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
-import { typeTraslate } from '../../data/catalogos';
+
 
 const WorkOrders = (props) => {
 
     const { followId, beneficiaryId } = props;
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
     const dispatch = useDispatch();
 
     const reload = () => dataGrid.current.instance.refresh();    
