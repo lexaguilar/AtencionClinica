@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, DataGrid, DateBox, DropDownBox, SelectBox } from "devextreme-react";
 import { Item } from "devextreme-react/box";
+import { Switch } from 'devextreme-react/switch';
+import { Button } from 'devextreme-react/button';
 import http from "../../../utils/http";
 import uri from "../../../utils/uri";
 import { Column, Selection, Paging, FilterRow, Scrolling, Export  } from "devextreme-react/data-grid";
@@ -10,18 +12,17 @@ import useProducts from "../../../hooks/useProducts";
 import { cellRender } from "../../../utils/common";
 import { formatDate } from "../../../data/app";
 
-const Kardex = () => {
+const Existencias = () => {
 
     let dropDownBoxRef = useRef();
 
     const [areas, setAreas] = useState([]);
-    const [areaId, setAreaId] = useState(0);
-    const [date, setDate] = useState(null);
+    const [areaId, setAreaId] = useState( null );
+    const [withStock, setWithStock] = useState( true );
     const {products} = useProducts({ areaId });   
-    const [gridBoxValue, setGridBoxValue] = useState([]);  
+    const [gridBoxValue, setGridBoxValue] = useState(null);  
 
-    const [kardex, setKardex] = useState(undefined);
-    const [saldoAnterior, setSaldoAnterior] = useState(0);
+    const [stocks, setStocks] = useState([]);
 
     const changeHandler = (e) => {
         setGridBoxValue(e.value);
@@ -57,31 +58,17 @@ const Kardex = () => {
         setAreaId(e.value)
     }
 
-    const changeDate = e => {
-        setDate(e.value)
-    }
-
     useEffect(() => {
         http(uri.areas.get).asGet().then(resp => setAreas(resp));
     }, [0]);
 
-    useEffect(() => {
-        if(areaId && gridBoxValue && date)
-            http('reports/kardex').asPost({areaId, productId : gridBoxValue, date}).then(resp => {
-                setKardex(resp.result)
-                setSaldoAnterior(resp.saldoAnterior)
-            });      
-    }, [areaId, gridBoxValue, date]);
-
-    const stockcellRender = (cellData) => {
-        return (
-            <div className={cellData.data.quantityIn > 0 ? 'inc' : 'dec'} >             
-              <div className='diff'>{cellData.value}</div>
-            </div>
-          );
+    const buscar = (params) => {
+        http('reports/stock').asPost({areaId, productId: gridBoxValue, withStock}).then(resp => {
+            setStocks(resp)
+        });  
     }
 
-    const title ='Kardex';    
+    const title ='Existencias';    
 
     return (
         <div className="container big">
@@ -115,55 +102,46 @@ const Kardex = () => {
                         />
                     </div>
                 </Item>
-                <Item ratio={1}>
+                <Item ratio={1}>   
                     <div className="ml-10">
-                        <label>Seleccione la fecha de corte:</label>
-                        <DateBox type="date" displayFormat={formatDate} openOnFieldClick={true} onValueChanged={changeDate}/>
-                    </div>
+                        <label>Ver solo existencias mayor a 0?:</label>  
+                        <br />
+                        <Switch 
+                            onText="SI"
+                            offText="NO"
+                            defaultValue={withStock} 
+                            onValueChanged={e => setWithStock(e.value)}/>   
+                    </div> 
+                </Item>
+                <Item ratio={1}>   
+                    <div className="ml-10">
+                        <label></label>  
+                        <br />
+                        <Button text='Realizar busqueda' onClick={buscar} type='default' stylingMode="outlined" icon='search'/> 
+                    </div> 
                 </Item>
             </Box>
             <Box direction="row" width="100%" height={75}>
 
                 <Item ratio={1}>
-                    <label>Kardex</label>
-                    <DataGrid
-                        dataSource={[{ stocks : saldoAnterior, type:'Saldo Anterior',id:'-', date: date  }]}
-                        showBorders={true}
-                        showRowLines={true}
-                    >                       
-                        <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-                        <Column dataField="type" caption="Saldo Antorior" width={120} />
-                        <Column dataField="id" caption="Documento" width={100} />
-                        <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
-                        <Column dataField="reference" caption="Referencia" />                        
-                        <Column dataField="stocks" caption="Existencia"  width={80} />
-                    </DataGrid>
+                    <label>Existencias</label>                   
                     <DataGrid
                         id="gridContainer"
-                        dataSource={kardex}
+                        dataSource={stocks}
                         showBorders={true}
                         showRowLines={true}
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-                        <Column dataField="type" caption="Tipo" width={120} />
-                        <Column dataField="id" caption="Documento" width={100} />
-                        <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
-                        <Column dataField="reference" caption="Referencia" />
-                        <Column caption="Entradas" alignment="center">
-                            <Column dataField="quantityIn" caption="Cantidad"  width={75} />
-                            <Column dataField="costIn" caption="Costo" cellRender={cellRender()} width={100} alignment="right" />
-                            <Column dataField="costTotalIn" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
-                        </Column>                        
-                        <Column caption="Salidas" alignment="center">
-                            <Column dataField="quantityOut" caption="Cantidad"  width={75} />
-                            <Column dataField="costOut" caption="Costo" cellRender={cellRender()} width={100} alignment="right"/>
-                            <Column dataField="costTotalOut" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
-                        </Column>   
-                        <Column caption="Existencias" alignment="center">
-                            <Column dataField="stocks" caption="Existencia" width={80} cellRender={stockcellRender} />
-                            <Column dataField="costAvg" caption="Costo Prom" cellRender={cellRender()} width={100} alignment="right"/>
-                            <Column dataField="costPromOut" caption="Total" cellRender={cellRender()} width={115} alignment="right"/>
-                        </Column>                     
+                        <Column dataField="areaId" visible={false} />
+                        <Column dataField="area" visible={false} groupIndex={0} />
+                        <Column dataField="productId" caption="Codigo" width={150}/>
+                        <Column dataField="productName" caption="Producto"  />
+                        <Column dataField="um" caption="Unidad Medida" width={120} />
+                        <Column dataField="presentation" caption="Presentacion" width={120} />
+                        <Column dataField="price" caption="Precio" cellRender={cellRender()} width={120} alignment="right" />
+                        <Column dataField="costAvg" caption="Costo" cellRender={cellRender()} width={120} alignment="right" />
+                        <Column dataField="stock" caption="Existencia" width={100} />
+                                
                     </DataGrid>
                 </Item>
 
@@ -173,4 +151,4 @@ const Kardex = () => {
     );
 }
 
-export default Kardex;
+export default Existencias;

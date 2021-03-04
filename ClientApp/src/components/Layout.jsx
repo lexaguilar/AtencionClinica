@@ -45,6 +45,7 @@ import Providers from '../views/providers/Providers';
 import Traslates from '../views/movimientos/traslates';
 import Kardex from '../views/reports/kardex';
 import Customers from '../views/customers';
+import Existencias from '../views/reports/kardex/Existencias';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -90,6 +91,7 @@ function Layout(props) {
         ,builRoute('roles', Roles)
         ,builRoute('permisos', Resources)
         ,builRoute('inventario/reportes/kardex', Kardex)
+        ,builRoute('inventario/reportes/existencias', Existencias)
         
     ];
     return (

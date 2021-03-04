@@ -83,6 +83,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<VwKardex> VwKardices { get; set; }
         public virtual DbSet<VwLastMedicinesByBeneficiary> VwLastMedicinesByBeneficiaries { get; set; }
         public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
+        public virtual DbSet<VwStocksForArea> VwStocksForAreas { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
 
@@ -1823,6 +1824,41 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwStocksForArea>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwStocksForArea");
+
+                entity.Property(e => e.Area)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CostAvg)
+                    .HasColumnType("money")
+                    .HasColumnName("CostAVG");
+
+                entity.Property(e => e.CostReal).HasColumnType("money");
+
+                entity.Property(e => e.Presentation)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Um)
                     .IsRequired()

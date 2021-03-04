@@ -126,7 +126,7 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/kardex` },
-                        { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/karex` },
+                        { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/existencias` },
                     ],
                 },]
             }]
