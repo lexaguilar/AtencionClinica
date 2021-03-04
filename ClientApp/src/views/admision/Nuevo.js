@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule } from 'devextreme-react/form';
 import { createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
@@ -33,11 +33,11 @@ const Nuevo = props => {
     const [admision, setAdmision] = useState({...admisionDefault});
     const [beneficiaryId, setBeneficiaryId] = useState(0);
 
-    let refAdmision = React.createRef();
+    let refAdmision = useRef();
 
     const guardarAdmision = () => {
 
-        let result = refAdmision.instance.validate();
+        let result = refAdmision.current.instance.validate();
         if (result.isValid) {
 
 
@@ -90,7 +90,7 @@ const Nuevo = props => {
                 <PopupBeneficiary />
             </BlockHeader>            
             <Customer valueChanged={valueChanged}></Customer>
-            <Form formData={admision} ref={ref => refAdmision = ref}>
+            <Form formData={admision} ref={refAdmision}>
                 <GroupItem cssClass="second-group" colCount={4}>
                     <SimpleItem dataField="beneficiaryId" colSpan={2} editorType="dxSelectBox"
                         editorOptions={{
