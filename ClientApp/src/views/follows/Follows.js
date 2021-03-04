@@ -1,5 +1,5 @@
-import React from 'react';
-import { DataGrid } from 'devextreme-react';
+import React, { useRef, useState } from 'react';
+import { Button, DataGrid, Popup } from 'devextreme-react';
 import { 
     Paging, 
     Pager, 
@@ -20,13 +20,21 @@ import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
 import useAuthorization from '../../hooks/useAuthorization';
 import Transfer from '../../components/workOrder/Transfer';
+import http from '../../utils/http';
+import notify from 'devextreme/ui/notify';
 
 const Follows = () => {
 
     const { authorized } = useAuthorization([resources.servicios, dataAccess.access ]);
+    const [visible, setVisible] = useState(false);
+    const [admissionId, setAdmissionId] = useState(0);
     
     const {  areaId } = useSelector(store => store.user); 
     const dispatch = useDispatch();
+
+    
+
+    let dataGrid = useRef();
 
     const addMenuItems =(e) => {
 
@@ -56,6 +64,17 @@ const Follows = () => {
                     text: 'Ver movimientos',
                     icon : 'runner',
                     onItemClick: () => 0                
+                },{
+
+                    text: 'Dar de alta',
+                    icon : 'fas fa-wheelchair',
+                    onItemClick: () => {
+                        
+                        setAdmissionId(e.row.data.admissionId);
+                        setVisible(true);
+                        
+                    },
+                    color : 'red'
                 });
         }
     }
@@ -73,16 +92,43 @@ const Follows = () => {
 
     }
 
+    const anular = () => {
+
+        http(`admisions/${admissionId}/alta`).asGet().then(resp =>{
+            notify('Paciente ha sido dado de alta con éxito'); 
+            onHiding();
+            //dataGrid.current.instance.refresh();  
+        });
+        
+    }
+
+    const onHiding = () => {
+        setAdmissionId(0);
+        setVisible(false); 
+    }
+
     const title = 'Servicios';
 
     return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />   
-
+            <Popup  
+                width={350}
+                height={220}
+                title='Dar de alta'
+                onHiding={onHiding}
+                visible={visible}
+                >
+                    <p>Esta seguro de dar de alta al paciente?</p>
+                    <p className="text-danger">Despues de esto ya no se podra atender al paciente, hasta que tenga una nueva admisión</p>
+                    <br />
+                    <Button className="m0" type="default" text="Confirmar" onClick={anular} width="100%" ></Button>
+            </Popup>
             <PopupWorkOrder />  
             <Transfer />  
             <DataGrid id="gridContainer"
+                ref={dataGrid}
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.follows(areaId), remoteOperations: true })}
                 showBorders={true}
@@ -114,6 +160,8 @@ const Follows = () => {
                 <Column dataField="firstName" caption='Nombres'/>
                 <Column dataField="lastName" caption='Apellidos'/>
                 <Column dataField="areaSource" caption='Area Origen' />       
+                <Column dataField="admissionType" caption='Tipo Ingreso' width={120}/>       
+                <Column dataField="finished" caption='Finalizado' dataType='boolean' width={100}/>       
                 <Column dataField="createBy" caption='Creado por' width={120} />
                 <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDateTime} width={150} />
             </DataGrid>

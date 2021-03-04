@@ -18,5 +18,7 @@ namespace AtencionClinica.Models
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public int AreaTargetId { get; set; }
+        public string AdmissionType { get; set; }
+        public bool Finished { get; set; }
     }
 }

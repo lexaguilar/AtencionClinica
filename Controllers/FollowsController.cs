@@ -64,6 +64,14 @@ namespace AtencionClinica.Controllers
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            var admission = _db.Admissions.FirstOrDefault(x => x.Id == follow.AdmissionId);
+
+            if(!admission.Active)
+                return BadRequest("No se puede porque la admision esta anulada");
+
+             if(admission.Finished)
+                return BadRequest("La admision ya no esta valida porque ya ha sido egresado el paciente");
                 
             follow.AreaSourceId = user.AreaId;
             follow.CreateAt = DateTime.Now;

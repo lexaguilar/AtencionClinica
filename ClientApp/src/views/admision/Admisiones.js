@@ -9,7 +9,7 @@ import {
     Column, 
     Lookup,
     Export, Editing} from 'devextreme-react/data-grid';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
@@ -19,6 +19,7 @@ import { _path } from "../../data/headerNavigation";
 import { formatDateTime, resources, dataAccess } from '../../data/app';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
+
 
 const Admisiones = props => {
 

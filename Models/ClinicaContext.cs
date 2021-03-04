@@ -1691,6 +1691,11 @@ namespace AtencionClinica.Models
 
                 entity.ToView("vwFollows");
 
+                entity.Property(e => e.AdmissionType)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.AreaSource)
                     .IsRequired()
                     .HasMaxLength(50)

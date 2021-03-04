@@ -86,6 +86,10 @@ namespace AtencionClinica.Controllers
             if(existe)
                 return BadRequest("El beneficiario ya tiene una admisión activa el dia de hoy");
 
+            var existeHops = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.TypeId == (int)AdmisionTypes.IngresoHops && !x.Finished && x.Active);
+            if(existeHops)
+                return BadRequest("El beneficiario ya tiene una admisión de ingreso activa");
+
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admission.BeneficiaryId);
 
             if(bene.RelationshipId == 2) //Hijo
@@ -131,6 +135,20 @@ namespace AtencionClinica.Controllers
             if(admision != null)
             {
                 admision.Active = false;
+                _db.SaveChanges();
+            }
+
+            return Json(new { n = id });
+        } 
+
+        [HttpGet("api/admisions/{id}/alta")]
+        public IActionResult Alta(int id) {
+
+            var admision = _db.Admissions.FirstOrDefault(x => x.Id == id);
+
+            if(admision != null)
+            {
+                admision.Finished = true;
                 _db.SaveChanges();
             }
 
