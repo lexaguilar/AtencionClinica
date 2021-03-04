@@ -81,7 +81,7 @@ namespace AtencionClinica.Controllers
             if(user.AreaId != (int)AreaRestrict.Admision)
                 return BadRequest("Solo se permite admisionar desde el area de Admision");
 
-            var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active);
+            var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active && x.TypeId == (int)AdmisionTypes.Consulta);
             
             if(existe)
                 return BadRequest("El beneficiario ya tiene una admisión activa el dia de hoy");

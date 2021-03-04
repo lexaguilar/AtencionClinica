@@ -30,9 +30,7 @@ const Follows = () => {
     const [admissionId, setAdmissionId] = useState(0);
     
     const {  areaId } = useSelector(store => store.user); 
-    const dispatch = useDispatch();
-
-    
+    const dispatch = useDispatch();    
 
     let dataGrid = useRef();
 
@@ -69,9 +67,12 @@ const Follows = () => {
                     text: 'Dar de alta',
                     icon : 'fas fa-wheelchair',
                     onItemClick: () => {
-                        
-                        setAdmissionId(e.row.data.admissionId);
-                        setVisible(true);
+
+                        if(e.row.data.admissionTypeId == 2){                            
+                            setAdmissionId(e.row.data.admissionId);
+                            setVisible(true);
+                        }else
+                            notify('Solo se permite dar alta a admisiones tipo ingreso Hospitalarios','error');
                         
                     },
                     color : 'red'

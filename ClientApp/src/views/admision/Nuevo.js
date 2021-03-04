@@ -57,7 +57,7 @@ const Nuevo = props => {
                     const report = urlReport();
                     report.print(`${report.admisionTicket(resp.id)}`);
 
-                    refAdmision.instance.resetValues();
+                    refAdmision.current.instance.resetValues();
 
                 }
             }).catch(err => {
