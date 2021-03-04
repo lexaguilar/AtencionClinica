@@ -1,6 +1,6 @@
 import { Workbook } from 'exceljs';
 import saveAs from 'file-saver';
-import { exportDataGrid } from 'devextreme/exporter/exceljs/excelExporter';
+import { exportDataGrid } from 'devextreme/excel_exporter';
 
 const onExporting = (e, title) => {
     const workbook = new Workbook();

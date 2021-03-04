@@ -93,11 +93,7 @@ const Users = () => {
             msgDeleted: 'Usuario eliminado correctamente',
             remoteOperations: remoteOperations
         });
-
-    const onEditingStart = (e) => {
-        console.log(e);
-    }
-
+   
     const title = "Usuarios";
 
     return authorized(
@@ -119,14 +115,13 @@ const Users = () => {
                         filtering: true
                     }}
                     onToolbarPreparing={onToolbarPreparing}
-                    onEditingStart={onEditingStart}
                 >
                     <Pager allowedPageSizes={[10, 15, 30, 50]} showPageSizeSelector={true} showInfo={true} />
                     <Paging defaultPageSize={15} />
                     <SearchPanel visible={true} width={250} />
                     <FilterRow visible={true} />                 
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                    <Column dataField="username" width={140} />
+                    <Column dataField="username" width={140} allowEditing={false}/>
                     <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />
                     <Column dataField="areaId" width={150} caption="Area">
@@ -145,8 +140,6 @@ const Users = () => {
                         </Popup>
                         <Form colCount={1}>
                             <Item dataField="username">
-                                <RequiredRule message="El nombre es requerido" />
-                                <StringLengthRule max={20} min={5} message="Máximo de caracteres 150 y 5 mínimo" />
                             </Item>
                             <Item dataField="fullName" >
                                 <RequiredRule message="El nombre es requerido" />
