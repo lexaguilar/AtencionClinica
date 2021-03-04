@@ -36,7 +36,7 @@ namespace AtencionClinica.Controllers
                 result = result.Where(x => x.Date == date);
             }
 
-            var items = result.Skip(skip).Take(take);
+            var items = result.OrderByDescending(x=> x.Date).Skip(skip).Take(take);
 
             return Json(new
             {

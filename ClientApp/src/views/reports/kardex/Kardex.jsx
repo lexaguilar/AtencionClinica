@@ -133,7 +133,7 @@ const Kardex = () => {
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
                         <Column dataField="type" caption="Saldo Antorior" width={120} />
-                        <Column dataField="id" caption="Documento" width={100} />
+                        <Column dataField="id" caption="Documento" width={100} alignment="right"/>
                         <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
                         <Column dataField="reference" caption="Referencia" />                        
                         <Column dataField="stocks" caption="Existencia"  width={80} />

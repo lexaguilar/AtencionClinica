@@ -16,7 +16,21 @@ const Rates = () => {
 
     let dataGrid = React.createRef();
 
-    const reload = () => dataGrid.current.instance.refresh();    
+    const reload = () => dataGrid.current.instance.refresh();   
+    
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'after',
+            widget: 'dxButton',
+            options: {
+                text: 'Agregar',
+                icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  dataGrid.current.instance.addRow()
+            }
+        });
+    }  
 
     const title="Tasa de cambio";
 
@@ -39,10 +53,11 @@ const Rates = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-                remoteOperations={{
+                remoteOperations={{                    
                     paging: true,
                     filtering: true
                 }}     
+                onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={10} />
                 <Pager
