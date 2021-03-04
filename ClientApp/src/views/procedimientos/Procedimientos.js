@@ -47,6 +47,10 @@ const Procedimientos = () => {
         });
     }  
 
+    const onInitNewRow = (e) => {
+        e.data.active = true;
+    }
+
     return authorized(
         <div className="container medium">
             <Title title={title}/>
@@ -60,6 +64,7 @@ const Procedimientos = () => {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 onToolbarPreparing={onToolbarPreparing}
+                onInitNewRow={onInitNewRow}
                 remoteOperations={{
                     paging: true,
                     filtering: true
