@@ -44,6 +44,7 @@ import initPurchases from '../views/movimientos/initProducts/initPurchases';
 import Providers from '../views/providers/Providers';
 import Traslates from '../views/movimientos/traslates';
 import Kardex from '../views/reports/kardex';
+import Customers from '../views/customers';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -65,6 +66,7 @@ function Layout(props) {
         ,builRoute('config/percapitas', Percapita)
         ,builRoute('citas', Appointments)
         ,builRoute('citas/nuevo', AppointmentsNuevo.default)
+        ,builRoute('asegurados/activos', Customers)
         ,builRoute('beneficiarios', Beneficiarios)
         ,builRoute('privados', Privados)
         ,builRoute('servicios', Follows)
@@ -81,8 +83,6 @@ function Layout(props) {
         ,builRoute('movimientos/entradas', InPutProducts)
         ,builRoute('movimientos/inv-inicial', initProduct)
         ,builRoute('movimientos/compras', initPurchases)
-        // ,builRoute('movimientos/traslados', <TraslatesCreate />)
-        // ,builRoute('movimientos/despacho', <Traslates />)
         ,builRoute('productos', Products)
         ,builRoute('tasa-de-cambio', Rates)
         ,builRoute('proveedores', Providers)
@@ -90,6 +90,7 @@ function Layout(props) {
         ,builRoute('roles', Roles)
         ,builRoute('permisos', Resources)
         ,builRoute('inventario/reportes/kardex', Kardex)
+        
     ];
     return (
         <React.Fragment>          

@@ -76,38 +76,6 @@ const menu = [{
     title: 'Subsidios',
     url: `${_path.CLINICA}/subsidios`
 },{
-//     layout: 'clinica',
-//     title: 'Inventario',
-//     url: `${_path.CLINICA}/productos`,
-//     submenu: {
-//         type: 'menu',
-//         menu: [
-//             { title: 'Productos', url: `${_path.CLINICA}/productos` },           
-//             { title: 'Familias', url: `${_path.CLINICA}/familias` },
-//             { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
-//             { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
-//             { 
-//                 title: 'Movimientos', 
-//                 url: `${_path.CLINICA}/movimientos`,
-//                 submenu : [
-//                     { title: 'Entradas', url: `${_path.CLINICA}/movimientos/entradas` },           
-//                     { title: 'Salidas', url: `${_path.CLINICA}/movimientos/salidas` },
-//                     { title: 'Compras', url: `${_path.CLINICA}/movimientos/compras` },
-//                     { title: 'Requisas', url: `${_path.CLINICA}/movimientos/requisas` },
-//                     { title: 'Inventario Inicial', url: `${_path.CLINICA}/movimientos/inv-inicial` },
-//                 ]
-//             },
-//             { 
-//                 title: 'Reportes', 
-//                 url: ``,
-//                 submenu : [
-//                     { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/karex` },
-//                     { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/karex` },
-//                 ]
-//             },   
-//         ],
-//     },
-// },{
     layout: 'clinica',
     title: 'Inventario',
     url: `${_path.CLINICA}/productos`,
@@ -191,9 +159,9 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Percapita', url: `${_path.CLINICA}/config/percapitas` },
+                        { title: 'Asegurados', url: `${_path.CLINICA}/asegurados/activos` },
                         { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiarios` },
-                        { title: 'Privados', url: `${_path.CLINICA}/privados` },
-                        { title: 'Convenios', url: `${_path.CLINICA}/actividades` },
+                        { title: 'Privados y convenios', url: `${_path.CLINICA}/privados` },
                     ],
                 },]
             },{
@@ -206,6 +174,7 @@ const menu = [{
                         { title: 'Doctores', url: `${_path.CLINICA}/doctores` },
                         { title: 'Doctores Horario', url: `${_path.CLINICA}/doctores/horarios` },
                         { title: 'Especialidades', url: `${_path.CLINICA}/especialidades` },
+                        { title: 'Tipo de convenios', url: `${_path.CLINICA}/tipo-convenio` },
                     ],
                 },]
             }]

@@ -14,6 +14,10 @@ const catalogos = [{
     name : 'unidadmedida',
     caption : 'Unidad de Medida',
     url : 'ums'
+},{
+    name : 'tipo-convenio',
+    caption : 'Tipo de convenio',
+    url : 'contracts'
 }];
 
 const estadoGeneric = {

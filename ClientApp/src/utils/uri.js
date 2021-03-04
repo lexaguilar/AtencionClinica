@@ -6,6 +6,7 @@ const uri = {
     areas : createProxyBase('areas'),
     areaServices : areaId => createProxyBase(`area/${areaId}/services`),
     bill : createProxyBase('bill'),
+    customers: createProxyBase('customers'),
     compras: createProxyBase('compras'),
     cie10: createProxyBase('cie10'),
     doctores : createProxyBase('doctores'),

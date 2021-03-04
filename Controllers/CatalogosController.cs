@@ -47,6 +47,8 @@ namespace AtencionClinica.Controllers
             var traslateState = db.TraslateStates.ToArray();
             var traslateStage = db.TraslateStages.ToArray();
             var admissionType = db.AdmissionTypes.ToArray();
+            var privateCustomerType = db.PrivateCustomerTypes.ToArray();
+            var contract = db.Contracts.ToArray();
 
             return Json(new {
                 beneficiaryStatus,
@@ -67,7 +69,9 @@ namespace AtencionClinica.Controllers
                 privateCustomerStat,
                 traslateState,
                 traslateStage,
-                admissionType
+                admissionType,
+                privateCustomerType,
+                contract
             });
 
         }

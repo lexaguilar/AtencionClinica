@@ -31,6 +31,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<BillType> BillTypes { get; set; }
         public virtual DbSet<Cie10> Cie10s { get; set; }
         public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<Contract> Contracts { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerStatus> CustomerStatuses { get; set; }
@@ -55,6 +56,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<Presentation> Presentations { get; set; }
         public virtual DbSet<PrivateCustomer> PrivateCustomers { get; set; }
         public virtual DbSet<PrivateCustomerStat> PrivateCustomerStats { get; set; }
+        public virtual DbSet<PrivateCustomerType> PrivateCustomerTypes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductState> ProductStates { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
@@ -534,6 +536,14 @@ namespace AtencionClinica.Models
             });
 
             modelBuilder.Entity<City>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Contract>(entity =>
             {
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -1131,6 +1141,8 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ContractId).HasComment("Id del convenio");
+
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
 
                 entity.Property(e => e.CreateBy)
@@ -1166,17 +1178,35 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.Contract)
+                    .WithMany(p => p.PrivateCustomers)
+                    .HasForeignKey(d => d.ContractId)
+                    .HasConstraintName("FK_PrivateCustomers_Contracts");
+
                 entity.HasOne(d => d.PrivateCustomerStatus)
                     .WithMany(p => p.PrivateCustomers)
                     .HasForeignKey(d => d.PrivateCustomerStatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PrivateCustomers_PrivateCustomerStats");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.PrivateCustomers)
+                    .HasForeignKey(d => d.TypeId)
+                    .HasConstraintName("FK_PrivateCustomers_PrivateCustomerTypes");
             });
 
             modelBuilder.Entity<PrivateCustomerStat>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PrivateCustomerType>(entity =>
+            {
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)

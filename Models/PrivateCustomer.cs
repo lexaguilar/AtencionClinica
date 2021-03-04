@@ -30,8 +30,13 @@ namespace AtencionClinica.Models
         public DateTime? LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
         public int PrivateCustomerStatusId { get; set; }
+        public int? Inss { get; set; }
+        public int? TypeId { get; set; }
+        public int? ContractId { get; set; }
 
+        public virtual Contract Contract { get; set; }
         public virtual PrivateCustomerStat PrivateCustomerStatus { get; set; }
+        public virtual PrivateCustomerType Type { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
     }
 }

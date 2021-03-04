@@ -9,6 +9,7 @@ namespace AtencionClinica
     public enum OutputType { Facturacion = 1, AjusteSalida = 2, FarmaciaServicios = 3, Traslado = 4 }
     public enum AreaRestrict { Bodega = 1, Admision = 2, Farmacia = 7 }
     public enum Roles {None, Administrador }
+    public enum ClientType { Private = 1, Contract = 2 }
 
     public enum Resource { Ninguno, Usuarios, Catalogos, Facturacion, Clientes, Agenda, Inventario, Graduaciones, SMS }
     [Flags]

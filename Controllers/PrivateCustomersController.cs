@@ -43,6 +43,18 @@ namespace AtencionClinica.Controllers
                 privates = privates.Where(x => x.LastName.StartsWith(LastName));
             }
 
+            if (values.ContainsKey("typeId"))
+            {
+                var typeId = Convert.ToInt32(values["typeId"]);
+                privates = privates.Where(x => x.TypeId == typeId);
+            }
+
+            if (values.ContainsKey("contractId"))
+            {
+                var contractId = Convert.ToInt32(values["contractId"]);
+                privates = privates.Where(x => x.ContractId == contractId);
+            }
+
             if (values.ContainsKey("createAt"))
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
@@ -88,6 +100,20 @@ namespace AtencionClinica.Controllers
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            if(privateCustomer.TypeId == (int)ClientType.Contract) //convenio
+            {
+                if(privateCustomer.ContractId == null)
+                    return BadRequest("Debe seleccionar el convenio cuando se estable como tipo Convenio");
+
+            }
+
+            if(privateCustomer.TypeId == (int)ClientType.Private) //privado
+            {
+                if(privateCustomer.ContractId != null)
+                    return BadRequest("No debe seleccionar el convenio cuando se estable como tipo privado");
+
+            }
             
             if(privateCustomer.Id > 0){
                 var oldprivateCustomer = _db.PrivateCustomers.FirstOrDefault(x => x.Id == privateCustomer.Id);
@@ -105,7 +131,11 @@ namespace AtencionClinica.Controllers
                     x.Identification,
                     x.SexId,
                     x.RegionId,
-                    x.CityId,                    
+                    x.CityId,    
+                    x.PrivateCustomerStatusId,
+                    x.Inss,
+                    x.TypeId,
+                    x.ContractId                
                 });
 
                 oldprivateCustomer.LastDateModificationAt = DateTime.Now;

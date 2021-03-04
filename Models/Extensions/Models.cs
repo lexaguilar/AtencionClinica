@@ -11,4 +11,5 @@ namespace AtencionClinica.Models{
     public partial class InPutProduct : ModelExtension<InPutProduct>  {  }
     public partial class OutPutProduct : ModelExtension<OutPutProduct>  {  }
     public partial class Provider : ModelExtension<Provider>  {  }
+    public partial class Contract : ModelExtension<Contract>  {  }
 }

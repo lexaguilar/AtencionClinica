@@ -45,6 +45,10 @@ function Catalogo(props) {
             }
         });
     }  
+
+    const onInitNewRow = (e) => {
+        e.data.active = true;
+    }
     
     return authorized(
         <div className="container small">
@@ -59,6 +63,7 @@ function Catalogo(props) {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 onToolbarPreparing={onToolbarPreparing}
+                onInitNewRow={onInitNewRow}
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -68,14 +73,14 @@ function Catalogo(props) {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <Export enabled={true} fileName={name} allowExportSelectedData={true} />
-                <Column dataField="name" />
+                <Column dataField="name" caption="Descripcion" />
                 <Column dataField="active" caption="Activo" dataType="boolean" width={100} />
                 <Editing
                     mode="popup"
                     allowUpdating={true}
                     useIcons={true}
                 >
-                    <Popup title={toCapital(name)} showTitle={true} width={450} height={250}>
+                    <Popup title={toCapital(caption||name)} showTitle={true} width={450} height={250}>
                         
                     </Popup>
                     <Form>
