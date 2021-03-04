@@ -94,10 +94,14 @@ const Users = () => {
             remoteOperations: remoteOperations
         });
 
+    const onEditingStart = (e) => {
+        console.log(e);
+    }
+
     const title = "Usuarios";
 
     return authorized(
-        <div className="container medium">
+        <div className="container">
                 <Title title={title} />
                 <BlockHeader title={title} />
                 <DataGrid
@@ -115,22 +119,23 @@ const Users = () => {
                         filtering: true
                     }}
                     onToolbarPreparing={onToolbarPreparing}
+                    onEditingStart={onEditingStart}
                 >
                     <Pager allowedPageSizes={[10, 15, 30, 50]} showPageSizeSelector={true} showInfo={true} />
                     <Paging defaultPageSize={15} />
                     <SearchPanel visible={true} width={250} />
                     <FilterRow visible={true} />                 
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                    <Column dataField="username" width={120} allowEditing={false} />
+                    <Column dataField="username" width={140} />
                     <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />
                     <Column dataField="areaId" width={150} caption="Area">
                         <Lookup disabled={true} dataSource={createStore({name :'area'})} valueExpr="id" displayExpr="name" />
                     </Column>
-                    <Column dataField="rolId" width={130} caption="Permisos">
+                    <Column dataField="rolId" width={160} caption="Permisos">
                         <Lookup disabled={true} dataSource={createStore({name :'rol'})} valueExpr="id" displayExpr="name" />
                     </Column>
-                    <Column dataField="active" caption="Activo" dataType="boolean"  width={90}/>
+                    <Column dataField="active" caption="Activo" dataType="boolean"  width={100}/>
                     <Editing
                         mode="popup"
                         allowUpdating={true}    
@@ -139,8 +144,9 @@ const Users = () => {
                         <Popup title={title} showTitle={true} width={400} height={390}>                           
                         </Popup>
                         <Form colCount={1}>
-                            <Item dataField="username" disabled={true}>
-                                
+                            <Item dataField="username">
+                                <RequiredRule message="El nombre es requerido" />
+                                <StringLengthRule max={20} min={5} message="Máximo de caracteres 150 y 5 mínimo" />
                             </Item>
                             <Item dataField="fullName" >
                                 <RequiredRule message="El nombre es requerido" />
