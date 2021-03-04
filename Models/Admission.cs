@@ -18,13 +18,14 @@ namespace AtencionClinica.Models
         public int BeneficiaryId { get; set; }
         public int AreaId { get; set; }
         public int SpecialtyId { get; set; }
-        public string Observation { get; set; }
-        public DateTime CreateAt { get; set; }
-        public string CreateBy { get; set; }
         public string Cie10Id { get; set; }
         public bool Active { get; set; }
         public string Motive { get; set; }
         public int TypeId { get; set; }
+        public string Observation { get; set; }
+        public DateTime CreateAt { get; set; }
+        public string CreateBy { get; set; }
+        public bool Finished { get; set; }
 
         public virtual Area Area { get; set; }
         public virtual Beneficiary Beneficiary { get; set; }

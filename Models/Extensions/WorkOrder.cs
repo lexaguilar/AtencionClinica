@@ -30,15 +30,20 @@ namespace AtencionClinica.Models{
             if(existeMasReciente)
                 return modelValidation.AsError($"Existe una admisión mas reciente de paciente, ésta ya no es válida");
 
-            if(follow.AreaTargetId == (int)AreaRestrict.Farmacia){
+            //if(follow.AreaTargetId == (int)AreaRestrict.Farmacia){
 
-                if(admision.CreateAt.Date != DateTime.Today)
-                    return modelValidation.AsError($"No se puede despachar sin una admisión previa de hoy");
+                if(admision.TypeId == (int)AdmisionTypes.Consulta)
+                    if(admision.CreateAt.Date != DateTime.Today)
+                        return modelValidation.AsError($"No se puede despachar sin una admisión previa de hoy");
             
                 if(string.IsNullOrEmpty(this.Reference))
-                    return modelValidation.AsError($"La referencia de la receta es necesaria");
+                    return modelValidation.AsError($"La referencia de la orden es necesaria");
+
+                if(admision.TypeId == (int)AdmisionTypes.IngresoHops && admision.Finished)                
+                    return modelValidation.AsError($"La admision del paciente ya no es válida");
+                
                     
-            }
+            //}
 
             var doctor = _db.Doctors.FirstOrDefault(x => x.Id == this.DoctorId);
             if(!doctor.Active)

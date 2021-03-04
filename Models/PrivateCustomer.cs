@@ -31,7 +31,7 @@ namespace AtencionClinica.Models
         public string LastModificationBy { get; set; }
         public int PrivateCustomerStatusId { get; set; }
         public int? Inss { get; set; }
-        public int? TypeId { get; set; }
+        public int TypeId { get; set; }
         public int? ContractId { get; set; }
 
         public virtual Contract Contract { get; set; }
