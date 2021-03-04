@@ -2,27 +2,26 @@
 
 # Pedientes
 
-
 -Validar lotes
--Validar costos promedios
--Poner cantidad al momento de descargar inventario
 -Todo lo que es date, mandarlo formateado a 00:00 horas
--Historial de medicamentos
 -Llenar sabana de datos
--Opcion de reset password
--Reset store usuarios al momento de login
-
 
 # Listos
+ç
 -Registrar descargue de inventario y procedimientos en la ultima admision o cita
 -Admisionar solo desde el area admision
 -Reglas para beneficiarios menores de 12
 -Poner Home Page
 -Poner el doctor en la farmacia
 -Poner fecha de incio para kardex y traer saldo anterior
-
-# Nice to Have
+-Opcion de reset password
+-Reset store usuarios al momento de login
+-Historial de medicamentos
 -Color en las col editables
+-Poner cantidad al momento de descargar inventario
+-Validar costos promedios
+# Nice to Have
+
 
 
 

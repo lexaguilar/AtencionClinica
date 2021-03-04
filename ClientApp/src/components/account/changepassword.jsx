@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { userService } from "../../services/user.service";
 import notify from "devextreme/ui/notify";
-import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import Footer from "../footer";
 import { useSelector } from 'react-redux';
@@ -11,7 +10,6 @@ function ChangePassword(props) {
 
     const currenteUser = useSelector(store => store.user); 
 
-    const dispatch = useDispatch();
     const [user, setUser] = useState({ 
         username: currenteUser.username, 
         oldPassword: "", 

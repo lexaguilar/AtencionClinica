@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { userService } from "../services/user.service";
-
-
 
 const Authorized = isAuthorization => component => {
     return isAuthorization ? component : (

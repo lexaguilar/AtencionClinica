@@ -2,7 +2,7 @@ import http from "../utils/http"
 import uri from "../utils/uri"
 
 const tokenName = 'token';
-const user = 'user';
+const _user = 'user';
 
 /**
  * Logea un usuario y guarda el token
@@ -19,7 +19,7 @@ const resetPassword = user => http(uri.resetPassword).asPost(user);
 const logout = () => {
 
     localStorage.removeItem(tokenName);
-    localStorage.removeItem(user);
+    localStorage.removeItem(_user);
     
 } 
 
@@ -31,7 +31,7 @@ const logout = () => {
 const setToken = resp => 
 {
     localStorage.setItem(tokenName, resp.token);
-    localStorage.setItem(user, JSON.stringify(buildUser(resp)));
+    localStorage.setItem(_user, JSON.stringify(buildUser(resp)));
 
     return resp;
 }
@@ -48,7 +48,7 @@ const getToken = () => localStorage.getItem(tokenName);
  * Retorna el usuario guardado en memoria
  * @return {{ resources : []}} token
  */
-const getUser = () => JSON.parse(localStorage.getItem(user));
+const getUser = () => JSON.parse(localStorage.getItem(_user));
 
 /**
  * Verificar si el usuario esta logeado
