@@ -22,7 +22,7 @@ const AreaProcedimientos = () => {
 
     const [areaId, setAreaId] = useState(0);
 
-    const title = 'Procedimientos';
+    const title = 'Procedimientos por area';
 
     let dataGrid = React.createRef();
 

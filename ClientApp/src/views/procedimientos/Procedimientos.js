@@ -38,7 +38,7 @@ const Procedimientos = () => {
             location: 'before',
             widget: 'dxButton',
             options: {
-                text: 'Agregar nuevo',
+                text: 'Agregar procedimiento o examen',
                 icon:'plus',
                 type:'default',
                 stylingMode:"outlined",
@@ -77,7 +77,7 @@ const Procedimientos = () => {
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" width={100}/>
                 <Column dataField="name" caption='Nombre' />
-                <Column dataField="price" caption='Precio' width={120} allowFiltering={false} cellRender={cellRender}/>          
+                <Column dataField="price" caption='Precio' width={120} allowFiltering={false} cellRender={cellRender()}/>          
                 <Column dataField="priceCalculate" caption='Precio Calculado' width={200} allowFiltering={false} />
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStore({name: 'Currency'})} valueExpr="id" displayExpr="name" />
