@@ -62,9 +62,11 @@ const GridProcedimientos = ({detailsServices=[], open, user, rate}) => {
                 />
             </Column>
             <Column dataField="quantity"
+                allowEditing={false} 
                 caption="Cantidad"
                 dataType="number" width={120}
-                setCellValue={setCellValueCant}>
+                //setCellValue={setCellValueCant}
+                >
                 <RuleRequired />
             </Column>
             <Column dataField="price" allowEditing={false} caption='Precio' width={100} cellRender={cellRender()} />
