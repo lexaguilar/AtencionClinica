@@ -73,9 +73,9 @@ namespace AtencionClinica.Models{
             if(totalItems != this.WorkOrderDetails.Where(x => !x.IsService).Select(x => x.ProductId).Count())            
                 return modelValidation.AsError($"No se permite items duplicados");
 
-            // totalItems = this.WorkOrderDetails.Where(x => x.IsService).Select(x => x.ServiceId).Distinct().Count();
-            // if(totalItems != this.WorkOrderDetails.Where(x => x.IsService).Select(x => x.ServiceId).Count())            
-            //     return modelValidation.AsError($"No se permite procedimientos duplicados");
+            totalItems = this.WorkOrderDetails.Where(x => x.IsService).Select(x => x.ServiceId).Distinct().Count();
+            if(totalItems != this.WorkOrderDetails.Where(x => x.IsService).Select(x => x.ServiceId).Count())            
+                return modelValidation.AsError($"No se permite procedimientos duplicados");
 
             foreach (var item in this.WorkOrderDetails)
             {
