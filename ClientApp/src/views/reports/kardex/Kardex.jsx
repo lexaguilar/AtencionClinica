@@ -132,7 +132,7 @@ const Kardex = () => {
                         showRowLines={true}
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-                        <Column dataField="type" caption="Saldo Antorior" width={120} />
+                        <Column dataField="type" caption="Saldo Antorior" width={150} />
                         <Column dataField="id" caption="Documento" width={100} alignment="right"/>
                         <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
                         <Column dataField="reference" caption="Referencia" />                        
@@ -145,7 +145,7 @@ const Kardex = () => {
                         showRowLines={true}
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-                        <Column dataField="type" caption="Tipo" width={120} />
+                        <Column dataField="type" caption="Tipo" width={150} />
                         <Column dataField="id" caption="Documento" width={100} />
                         <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
                         <Column dataField="reference" caption="Referencia" />

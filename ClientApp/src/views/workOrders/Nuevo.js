@@ -30,7 +30,13 @@ const Nuevo = props => {
 
     let refForm = useRef();
 
-    useEffect(() => {        
+    useEffect(() => {      
+
+        obtenerTasaCambio(new Date()).then(rate =>{
+            if(rate)
+                setWorkOrder({...workOrder, rate : rate.value});
+        });  
+
         setWorkOrder({areaId : user.areaId });
         setDetails([]);
     }, [open]);
@@ -62,7 +68,10 @@ const Nuevo = props => {
         if (result.isValid) {
 
             setSaving(true);
-            let data = {...workOrder, followId,  WorkOrderDetails:[...details] };
+
+            const workOrderDetails = [...details,...detailsServices];
+
+            let data = {...workOrder, followId,  WorkOrderDetails: workOrderDetails };
 
             http(uri.workOrders.insert).asPost(data).then(resp => {
 
@@ -79,20 +88,13 @@ const Nuevo = props => {
 
     } 
 
-    useEffect(() => {
-        obtenerTasaCambio(new Date()).then(rate =>{
-            if(rate)
-                setWorkOrder({...workOrder, rate : rate.value});
-        });
-    }, [0]);
-
     const text = 'Guardar orden';  
 
     return (
         <div>
              <Popup
                 width={1050}
-                height={660}
+                height={695}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
                 visible={open}    
