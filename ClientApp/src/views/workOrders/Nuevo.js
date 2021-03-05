@@ -4,6 +4,7 @@ import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule } fr
 import { useDispatch, useSelector } from 'react-redux'
 import ScrollView from 'devextreme-react/scroll-view';
 import { Button } from 'devextreme-react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import uri from '../../utils/uri';
 import { obtenerTasaCambio } from '../../utils/common';
 import http from '../../utils/http';
@@ -16,6 +17,8 @@ import GridMedicamentos from './GridMedicamentos';
 import GridProcedimientos from './GridProcedimientos';
 import GridListaMedicamentoPte from './GridListaMedicamentoPte';
 
+import 'react-tabs/style/react-tabs.css';
+
 const Nuevo = props => {   
     
     const { followId, beneficiaryId } = props;
@@ -23,6 +26,7 @@ const Nuevo = props => {
 
     const { workOrderDialog : { open }, user } = useSelector(store => store);
 
+    const [tabIndex, setTabIndex] = useState(0);
     const [ workOrder, setWorkOrder ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ detailsServices, setDetailsServices ] = useState([]);
@@ -135,23 +139,47 @@ const Nuevo = props => {
                             </SimpleItem>
                             
                         </GroupItem>
+
                         <GroupItem>
-                            <GridMedicamentos 
-                                isClosing={isClosing}
-                                details={details}
-                                user={user}  />
+                            <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+                                
+                                <TabList>
+                                    <Tab>Productos</Tab>
+                                    <Tab>Procedimientos</Tab>                               
+                                </TabList>
+
+                                <TabPanel>   
+                                    <GridMedicamentos 
+                                        isClosing={isClosing}
+                                        details={details}
+                                        user={user}  />  
+
+                                    {areaRestrict.farmacia == user.areaId &&
+                                       
+                                        <GridListaMedicamentoPte 
+                                            beneficiaryId={beneficiaryId} 
+                                            open={open}
+                                        />
+                                    }
+                                </TabPanel>
+                                <TabPanel>
+                                   
+                                    <GridProcedimientos 
+                                        isClosing={isClosing}
+                                        detailsServices={detailsServices}
+                                        user={user}
+                                        open={open}
+                                        rate={workOrder.rate}
+                                    />
+                                   
+                                </TabPanel>
+                            </Tabs>
                         </GroupItem>
                         <GroupItem>
-                            {areaRestrict.farmacia != user.areaId ?
-                                <GridProcedimientos 
-                                    isClosing={isClosing}
-                                    detailsServices={detailsServices}
-                                    user={user}
-                                    open={open}
-                                    rate={workOrder.rate}
-                                />
-                            :
-                                <GridListaMedicamentoPte beneficiaryId={beneficiaryId} open={open}/>}
+                            
+                        </GroupItem>
+                        <GroupItem>
+                           
 
                         </GroupItem>
                         

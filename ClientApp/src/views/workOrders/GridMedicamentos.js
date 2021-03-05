@@ -10,14 +10,10 @@ const GridMedicamentos = ({isClosing, details, user}) => {
 
     const exists = true;    
     const active = true;   
-    let ref = useRef();
-
-    
+    let ref = useRef();    
 
     const { products } = useProducts({areaId: user.areaId, exists, active});
-    const onToolbarPreparing = gridsHelper(ref, { text : 'Agregar productos', icon:'plus' });
-
-   
+    const onToolbarPreparing = gridsHelper(ref, { text : 'Agregar productos', icon:'plus' });   
     
     const setCellValue = (prop, newData, value, currentRowData) => {
 
@@ -41,7 +37,8 @@ const GridMedicamentos = ({isClosing, details, user}) => {
     }  
 
     if(isClosing)
-        ref.current.instance.cancelEditData();
+        if(ref.current)
+            ref.current.instance.cancelEditData();
 
     return (
         <DataGrid id="gridDetails"
