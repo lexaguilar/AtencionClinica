@@ -17,11 +17,13 @@ import customerClearReducer from './customer';
 import beneficiaryDialogReducer from './beneficiary';
 import catalogReducer from './catalogs';
 import inPutProductDialogReducer from './inPutProduct';
+import outPutProductDialogReducer from './outPutProduct';
 import productDialogReducer from './product';
 import workOrderDialogReducer from './workOrder';
 import workOrdersDialogReducer from './workOrders';
 import transferDialogReducer from './transfer';
 import customDialogReducer from './customDialog';
+import serviceTestDialogReducer from './servicetest';
 
 export default combineReducers({
     currency: currencyReducer,
@@ -39,10 +41,12 @@ export default combineReducers({
     customerClear : customerClearReducer,
     beneficiaryDialog : beneficiaryDialogReducer,
     inPutProductDialog : inPutProductDialogReducer,
+    outPutProductDialog : outPutProductDialogReducer,
     workOrderDialog : workOrderDialogReducer,
     workOrdersDialog : workOrdersDialogReducer,
     productDialog : productDialogReducer,
     catalog : catalogReducer,
     transfer : transferDialogReducer,
     customDialog : customDialogReducer,
+    serviceTestDialog : serviceTestDialogReducer,
 });

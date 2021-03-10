@@ -101,7 +101,7 @@ const menu = [{
                     title: 'Salidas',
                     url: '',
                     links: [
-                        // { title: 'Momivientos de salida', url: `${_path.CLINICA}/movimientos/salidas` },
+                        { title: 'Ajuste de salida', url: `${_path.CLINICA}/movimientos/salidas` },
                         { title: 'Despacho', url: `${_path.CLINICA}/movimientos/despacho` },    
                     ],
                 },]
@@ -149,6 +149,7 @@ const menu = [{
                     links: [
                         { title: 'Procedimientos', url: `${_path.CLINICA}/procedimientos` },
                         { title: 'Procedimientos por area', url: `${_path.CLINICA}/area/procedimientos` },
+                        { title: 'Detalle de procedimientos', url: `${_path.CLINICA}/procedimientos/detalle` },
                         { title: 'Perfiles', url: `${_path.CLINICA}/perfiles/procedimientos` }
                     ],
                 },]

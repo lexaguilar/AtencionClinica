@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import WorkOrders from '../../views/workOrders/WorkOrders';
 
-const PopupWorkOrder = () => {
+const PopupWorkOrder = ({areaId}) => {
 
     const { open, id, beneficiaryId } = useSelector(store => store.workOrdersDialog);
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const PopupWorkOrder = () => {
                 title={title}
                 visible={open}
             >               
-                <WorkOrders followId={id} beneficiaryId={beneficiaryId}/>
+                <WorkOrders followId={id} beneficiaryId={beneficiaryId} areaId={areaId}/>
             </Popup>
         </div>
     );

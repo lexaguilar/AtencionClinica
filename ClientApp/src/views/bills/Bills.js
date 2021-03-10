@@ -9,7 +9,7 @@ import {
     Column, 
     Lookup,
     Export, Editing} from 'devextreme-react/data-grid';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import uri from '../../utils/uri';
@@ -18,7 +18,7 @@ import { store } from '../../services/store';
 import CustomButton from '../../components/buttons/CustomButton';
 import { _path } from "../../data/headerNavigation";
 import { dataAccess, formatDateTime, resources } from '../../data/app';
-import { cellRender, formatToMoney } from '../../utils/common';
+import { cellRender } from '../../utils/common';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
 

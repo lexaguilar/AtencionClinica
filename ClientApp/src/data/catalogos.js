@@ -38,10 +38,17 @@ export const estadoCustomer = {...estadoGeneric};
 
 export const estadoBeneficiario = {...estadoGeneric};
 
+export const inPutProductStates = {...estadoGeneric};
+
+export const outPutProductStates = {...estadoGeneric};
+
 export const monedaSymbol = {
     1: "C$",
     2: "$"
 }
+
+export const inPutProductTypes = { compra: 1, ajuste: 2, saldoInicial : 3 }
+export const outPutProductTypes = { facturacion: 1, ajuste: 2, servicios : 3, traslado : 4 }
 
 export const typeTraslate = {
     create: 'create',

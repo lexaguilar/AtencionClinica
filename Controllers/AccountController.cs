@@ -54,6 +54,7 @@ namespace AtencionClinica.Controllers
 
             return Ok(user);
         }
+
         [HttpPost("api/account/resetpassword")]
         public IActionResult Resetpassword([FromBody] RestPasswordRequest model)
         {
@@ -61,7 +62,24 @@ namespace AtencionClinica.Controllers
             if(string.IsNullOrEmpty(model.Username))
                 return BadRequest("El usuario o correo es requerido");       
 
-            var user = _userService.ResetPassword(model);
+            var user = _userService.ResetPassword(model, false);
+
+            if(user == null)
+                return BadRequest("No se encontró el usuario");       
+
+            return Ok(new { 
+                email = user.Email
+             });
+        }
+
+        [HttpPost("api/account/resetpassworddefault")]
+        public IActionResult ResetpasswordDefault([FromBody] RestPasswordRequest model)
+        {
+
+            if(string.IsNullOrEmpty(model.Username))
+                return BadRequest("El usuario o correo es requerido");       
+
+            var user = _userService.ResetPassword(model, true);
 
             if(user == null)
                 return BadRequest("No se encontró el usuario");       

@@ -5,8 +5,10 @@ const gridsHelper = (gridRef, options) => {
             location: 'before',
             widget: 'dxButton',
             options: {
+                stylingMode:"outlined",
                 text: options.text,
                 icon:options.icon,
+                type:'default',
                 onClick: () =>  gridRef.current.instance.addRow()
             }
         });

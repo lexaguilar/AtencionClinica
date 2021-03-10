@@ -17,6 +17,7 @@ import {
     from 'devextreme-react/data-grid';
 import { DataGrid } from 'devextreme-react';
 import { createStore } from "../../utils/proxy";
+import { confirm } from 'devextreme/ui/dialog';
 
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from "../../components/shared/Title";
@@ -51,10 +52,25 @@ const Users = () => {
                 onItemClick: () => {                    
 
                     http('users/update').asGet({username, active: !active}).then(resp => {
-                        this.reload();
+                        reload();
                         notify("Usuario actualizado correctamente");
                     });                    
 
+                }
+            },{
+                text: `Restablecer contraseña`,
+                icon :  'refresh',
+                onItemClick: () => {
+                    
+                    let result = confirm("<i>Estas seguro de restablecer la contraseña?</i>", "Confirmar");
+                    result.then((dialogResult) => {
+                        if(dialogResult)
+                            http('account/resetpassworddefault').asPost({username}).then(resp => {
+                                notify("Contraseña retablecida correctamente");
+                            });
+                    });
+
+                   
                 }
             });
         }

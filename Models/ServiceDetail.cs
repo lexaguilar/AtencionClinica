@@ -9,7 +9,7 @@ namespace AtencionClinica.Models
     {
         public int Id { get; set; }
         public int ServiceId { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
         public string Um { get; set; }
         public string Reference { get; set; }
     }

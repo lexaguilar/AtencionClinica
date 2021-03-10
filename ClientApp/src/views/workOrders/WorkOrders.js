@@ -15,21 +15,51 @@ import DataGrid, {
 import {  createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-import { formatDate, formatDateTime } from '../../data/app';
+import { areaRestrict, formatDate, formatDateTime } from '../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
+import { openDialogServiceTest } from '../../store/servicetest/serviceTestDialogReducer';
+import PopupServiceTest from '../../components/workOrder/PopupServiceTest';
 
 
 const WorkOrders = (props) => {
 
-    const { followId, beneficiaryId } = props;
+    const { followId, beneficiaryId, areaId } = props;
+
+    console.log(followId)
 
     let dataGrid = useRef();
     const dispatch = useDispatch();
 
-    const reload = () => dataGrid.current.instance.refresh();    
+    const reload = () => dataGrid.current.instance.refresh(); 
+    
+    const isLaboratorio = areaRestrict.laboratorio == areaId;
+
+    const addMenuItems =(e) => {
+
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+            
+            if(e.row?.data){ 
+                if(isLaboratorio){
+
+                    e.items.push({
+                        text: 'Registrar resultados',
+                        icon : 'fas fa-flask',
+                        onItemClick: () => {
+                            
+                            let { id } = e.row.data;
+                            dispatch(openDialogServiceTest({ id, followId, beneficiaryId}));
+                            
+                        }
+                    });
+                }
+            }
+        }
+    }
+    
 
     const title = `Ordenes de trabajo movimiento ${followId}`;
 
@@ -45,7 +75,9 @@ const WorkOrders = (props) => {
                     onClick={()=>dispatch(dialogWorkOrder({open : true}))}
                 />
             </BlockHeader>
+
             <Nuevo onSave={reload} followId={followId} beneficiaryId={beneficiaryId}/> 
+            <PopupServiceTest /> 
             
             <DataGrid id="gridContainer"
                 ref={dataGrid}
@@ -55,6 +87,7 @@ const WorkOrders = (props) => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                onContextMenuPreparing={addMenuItems}
                 remoteOperations={{
                     paging: true,
                     filtering: true

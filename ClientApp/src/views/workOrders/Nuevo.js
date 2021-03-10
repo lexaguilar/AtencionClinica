@@ -92,7 +92,9 @@ const Nuevo = props => {
 
     } 
 
-    const text = 'Guardar orden';  
+    const text = 'Guardar orden';   
+
+    const isFarmacia = areaRestrict.farmacia == user.areaId;
 
     return (
         <div>
@@ -145,7 +147,7 @@ const Nuevo = props => {
                                 
                                 <TabList>
                                     <Tab>Productos</Tab>
-                                    <Tab>Procedimientos</Tab>                               
+                                    <Tab hidden={isFarmacia}>Procedimientos</Tab>                               
                                 </TabList>
 
                                 <TabPanel>   
@@ -154,7 +156,7 @@ const Nuevo = props => {
                                         details={details}
                                         user={user}  />  
 
-                                    {areaRestrict.farmacia == user.areaId &&
+                                    {isFarmacia &&
                                        
                                         <GridListaMedicamentoPte 
                                             beneficiaryId={beneficiaryId} 
@@ -162,8 +164,7 @@ const Nuevo = props => {
                                         />
                                     }
                                 </TabPanel>
-                                <TabPanel>
-                                   
+                                <TabPanel hidden={isFarmacia}>                                    
                                     <GridProcedimientos 
                                         isClosing={isClosing}
                                         detailsServices={detailsServices}
@@ -171,7 +172,7 @@ const Nuevo = props => {
                                         open={open}
                                         rate={workOrder.rate}
                                     />
-                                   
+                                    
                                 </TabPanel>
                             </Tabs>
                         </GroupItem>

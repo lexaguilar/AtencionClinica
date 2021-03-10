@@ -135,8 +135,8 @@ namespace AtencionClinica.Controllers
             if(traslate.StateId != 1)
                 return BadRequest("No se puede anular el traslado");
 
-             if(traslate.StageId != 1)
-                return BadRequest("No se puede anular el traslado");
+            if(traslate.StageId != 1)
+                return BadRequest("No se puede anular un traslado que ya esta procesado");
 
             if (traslate != null)
             {

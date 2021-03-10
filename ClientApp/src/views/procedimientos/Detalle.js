@@ -1,25 +1,24 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { FilterRow, Column, Editing, Lookup, RequiredRule} from 'devextreme-react/data-grid';
+import { Column, Editing, RequiredRule} from 'devextreme-react/data-grid';
 
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-import { createStore } from '../../utils/proxy';
 
-const ProcedimientosXarea = ({areaId}) => {
+const Detalle = ({serviceId}) => {
 
     const onInitNewRow = (e) => {  
-        e.data.areaId = areaId;  
+        e.data.serviceId = serviceId;  
     } 
 
     let dataGrid = React.createRef();
 
     const onToolbarPreparing = (e) => {
-        areaId && e.toolbarOptions.items.unshift({
+        serviceId && e.toolbarOptions.items.unshift({
             location: 'before',
             widget: 'dxButton',
             options: {
-                text: 'Nuevo procedimiento',
+                text: 'Agregar detalle',
                 icon: 'plus',
                 type:'default',
                 stylingMode:"outlined",
@@ -33,29 +32,33 @@ const ProcedimientosXarea = ({areaId}) => {
         <DataGrid
             ref={(ref) => dataGrid = ref}
             selection={{ mode: 'single' }}
-            dataSource={store({uri : uri.areaServices(areaId) })}
+            dataSource={store({uri : uri.servicesDetails(serviceId) })}
             showBorders={true}
             showRowLines={true}
             allowColumnResizing={true}
             allowColumnReordering={true}
             onInitNewRow={onInitNewRow}
             onToolbarPreparing={onToolbarPreparing}
-        >           
-            <FilterRow visible={true} />               
-            <Column dataField="areaId" visible={false}/>
-            <Column dataField="serviceId" width={180} caption="Procedimiento">              
-                <Lookup disabled={true} dataSource={createStore({name:'service'})} valueExpr="id" displayExpr="name" />
+        >                    
+            <Column dataField="serviceId" visible={false}/>
+            <Column dataField="name" width={180} caption="Nombre" >
                 <RequiredRule message="El campo es requerido"/>
             </Column>             
+            <Column dataField="um" width={180} caption="UM" >
+                <RequiredRule message="El campo es requerido"/>
+            </Column>              
+            <Column dataField="reference" width={180} caption="Referencia" >
+                <RequiredRule message="El campo es requerido"/>
+            </Column>              
             <Editing
-                mode="cell"
+                mode="batch"
                 allowUpdating={true}
                 allowDeleting={true}               
                 useIcons={true}
-            >              
+            >                
             </Editing>
         </DataGrid>
     );
 }
 
-export default ProcedimientosXarea;
+export default Detalle;

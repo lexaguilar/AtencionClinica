@@ -1440,6 +1440,11 @@ namespace AtencionClinica.Models
 
             modelBuilder.Entity<ServiceDetail>(entity =>
             {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Reference)
                     .HasMaxLength(150)
                     .IsUnicode(false);

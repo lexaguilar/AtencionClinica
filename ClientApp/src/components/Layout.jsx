@@ -46,6 +46,7 @@ import Traslates from '../views/movimientos/traslates';
 import Kardex from '../views/reports/kardex';
 import Customers from '../views/customers';
 import Existencias from '../views/reports/stocks';
+import ProcedimientoDetalle from '../views/procedimientos/ProcedimientoDetalle';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -79,6 +80,7 @@ function Layout(props) {
         ,builRoute('facturas/nuevo', BillNuevo)
         ,builRoute('procedimientos', Procedimientos)
         ,builRoute('area/procedimientos', AreaProcedimientos)
+        ,builRoute('procedimientos/detalle', ProcedimientoDetalle)
         ,builRoute('config/parameters', Parameters)
         ,builRoute('movimientos/salidas', OutPutProducts)
         ,builRoute('movimientos/entradas', InPutProducts)

@@ -82,5 +82,22 @@ namespace AtencionClinica.Controllers
             return Json(new { n = id });
         }
 
+        // [Route("api/workOrders/{id}/get/asServices")]
+        // public IActionResult GetAsServices(int workId)
+        // {
+        // //     IQueryable<WorkOrderDetail> workOrders = _db.WorkOrderDetails.Where(x => x.WorkOrderId == workId && x.IsService)
+        // //    .Select(x => new {
+
+
+        // //    });
+
+        // //     return Json(new
+        // //     {
+        // //         items,
+        // //         totalCount = workOrders.Count()
+        // //     });
+
+        // }
+
     }
 }

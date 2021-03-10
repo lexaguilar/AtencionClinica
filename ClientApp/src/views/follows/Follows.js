@@ -13,7 +13,7 @@ import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { dataAccess, formatDateTime, resources } from '../../data/app';
+import { areaRestrict, dataAccess, formatDateTime, resources } from '../../data/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
@@ -29,7 +29,7 @@ const Follows = () => {
     const [visible, setVisible] = useState(false);
     const [admissionId, setAdmissionId] = useState(0);
     
-    const {  areaId } = useSelector(store => store.user); 
+    const { areaId } = useSelector(store => store.user); 
     const dispatch = useDispatch();    
 
     let dataGrid = useRef();
@@ -39,7 +39,8 @@ const Follows = () => {
         if (e.target == "content") {
             if (!e.items) e.items = [];
             
-            if(e.row?.data)
+            if(e.row?.data){
+            
                 e.items.push({
                     text: 'Nueva orden de trabajo',
                     icon : 'folder',
@@ -62,6 +63,7 @@ const Follows = () => {
                     text: 'Ver movimientos',
                     icon : 'runner',
                     onItemClick: () => 0                
+                
                 },{
 
                     text: 'Dar de alta',
@@ -77,6 +79,7 @@ const Follows = () => {
                     },
                     color : 'red'
                 });
+            }
         }
     }
 
@@ -126,7 +129,7 @@ const Follows = () => {
                     <br />
                     <Button className="m0" type="default" text="Confirmar" onClick={anular} width="100%" ></Button>
             </Popup>
-            <PopupWorkOrder />  
+            <PopupWorkOrder areaId={areaId} />  
             <Transfer />  
             <DataGrid id="gridContainer"
                 ref={dataGrid}
