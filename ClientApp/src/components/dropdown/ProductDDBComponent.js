@@ -85,7 +85,18 @@ export default class ProductDDBComponent extends React.Component {
             byKey: id => http(`products/get/${id}`).asGet()
         })
     }
-   
+
+    onCellPrepared(e) {
+        
+        console.log(e)
+
+        if (e.rowType == 'data') {
+            if(e.column.dataField == "stock")
+                if(e.value == 0)
+                    e.cellElement.classList.add('stock-0');
+           
+        }
+    }   
 
     contentRender() {
         return (
@@ -101,6 +112,7 @@ export default class ProductDDBComponent extends React.Component {
                 rowAlternationEnabled={true}
                 allowColumnResizing={true}
                 columnAutoWidth={true}
+                onCellPrepared ={this.onCellPrepared}
             >
                 <FilterRow visible={true} />
                 <Column dataField="id" caption="Codigo" width={80}></Column>

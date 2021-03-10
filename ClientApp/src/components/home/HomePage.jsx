@@ -1,8 +1,5 @@
-// react
-import React from 'react';
 
-// third-party
-import { Helmet } from 'react-helmet';
+import React from 'react';
 import { logoHome } from '../../data/logo';
 import Title from '../shared/Title';
 

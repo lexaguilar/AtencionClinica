@@ -28,6 +28,8 @@ export const cellRenderBold = currencyId => data => cellAsBold(formatToMoney(dat
 
 export const formatId = value => numeral(value).format('000000');
 
+export const dataFormatId = data => formatId(data.value);
+
 export const formatToMoney = (value, currencyId) =>`${currency[currencyId || 1]} ${numeral(value).format('0,0.00')}`;
 
 export const customizeTextAsPercent = data => `${data.value || 0} %`

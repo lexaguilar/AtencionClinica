@@ -21,8 +21,9 @@ import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
 import { openDialog } from '../../../store/customDialog/customDialogReducer';
-import { typeTraslate } from '../../../data/catalogos';
+import { inPutProductStates, typeTraslate } from '../../../data/catalogos';
 import useAuthorization from '../../../hooks/useAuthorization';
+import { dataFormatId, formatId } from '../../../utils/common';
 
 const Traslates = (props) => {
 
@@ -40,6 +41,15 @@ const Traslates = (props) => {
     const title = type==typeTraslate.create ? "Traslado de inventario" : "Despacho de inventario";
 
     let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
+
+    const onRowPrepared = (e) => {
+        if (e.rowType == 'data') {
+            
+            if (e.data.stateId == inPutProductStates.noActivo) 
+                e.rowElement.classList.add('no-activo');
+            
+        }
+    }
 
     return authorized(
         <div className="container">
@@ -61,6 +71,7 @@ const Traslates = (props) => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                onRowPrepared={onRowPrepared}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -76,7 +87,7 @@ const Traslates = (props) => {
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption='Numero' width={100}/>
+                <Column dataField="id" caption='Numero' width={100}  cellRender={dataFormatId}/>
                 <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
                 <Column dataField="areaSourceId" caption="Bodega" width={250} visible={type==typeTraslate.create}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />

@@ -15,12 +15,14 @@ import DataGrid, {
 import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
+import { inPutProductStates } from '../../../data/catalogos';
 import { dataAccess, formatDate, formatDateTime, resources } from '../../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
 import useAuthorization from '../../../hooks/useAuthorization';
+import { dataFormatId, formatId } from '../../../utils/common';
 
 const InPutProducts = (    
     { 
@@ -37,6 +39,15 @@ const InPutProducts = (
 
     const reload = (params) => {
         dataGrid.current.instance.refresh();
+    }
+
+    const onRowPrepared = (e) => {
+        if (e.rowType == 'data') {
+            console.log(e)
+            if (e.data.stateId == inPutProductStates.noActivo) 
+                e.rowElement.classList.add('no-activo');
+            
+        }
     }
 
     return authorized(
@@ -59,6 +70,7 @@ const InPutProducts = (
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                onRowPrepared={onRowPrepared}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -74,7 +86,7 @@ const InPutProducts = (
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption='Numero' width={100}/>
+                <Column dataField="id" caption='Numero' width={100} cellRender={dataFormatId}/>
                 <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
                 <Column dataField="areaId" caption="Area" width={200}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
