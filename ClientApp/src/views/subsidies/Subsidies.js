@@ -79,9 +79,7 @@ const Subsidies = () => {
         }
 
     }
-
-    const title = 'Subsidios';
-
+    
     const onToolbarPreparing = (e) => {  
         e.toolbarOptions.items.unshift({
             location: 'before',
@@ -95,6 +93,8 @@ const Subsidies = () => {
             }
         });
     }  
+
+    const title = 'Subsidios';
 
     return authorized(
         <div className="container">

@@ -13,6 +13,7 @@ import { cellRender } from "../../../utils/common";
 import { formatDate } from "../../../data/app";
 
 const Existencias = () => {
+    let dataGrid = useRef();
 
     let dropDownBoxRef = useRef();
 
@@ -68,6 +69,20 @@ const Existencias = () => {
         });  
     }
 
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  dataGrid.current.instance.exportToExcel(false)
+            }
+        });
+    }  
+
     const title ='Existencias';    
 
     return (
@@ -107,8 +122,8 @@ const Existencias = () => {
                         <label>Ver solo existencias mayor a 0?:</label>  
                         <br />
                         <Switch 
-                            onText="SI"
-                            offText="NO"
+                            switchedOnText = "SI"
+                            switchedOffText ="NO"
                             defaultValue={withStock} 
                             onValueChanged={e => setWithStock(e.value)}/>   
                     </div> 
@@ -124,12 +139,14 @@ const Existencias = () => {
             <Box direction="row" width="100%" height={75}>
 
                 <Item ratio={1}>
-                    <label>Existencias</label>                   
+                    <label>Existencias</label>
                     <DataGrid
+                        ref={dataGrid}
                         id="gridContainer"
                         dataSource={stocks}
                         showBorders={true}
                         showRowLines={true}
+                        onToolbarPreparing={onToolbarPreparing}
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
                         <Column dataField="areaId" visible={false} />
