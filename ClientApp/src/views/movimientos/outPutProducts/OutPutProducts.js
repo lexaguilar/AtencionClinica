@@ -49,7 +49,7 @@ const OutPutProducts = () => {
     return authorized(
         <div className="container">
             <Title title={title}/>   
-            <BlockHeader title={title} >
+            <BlockHeader title={title} icon="dx-icon-decreaseindent color-icon-red" >
                 <CustomButton                 
                     text='Agregar nueva salida'
                     icon='plus'                    

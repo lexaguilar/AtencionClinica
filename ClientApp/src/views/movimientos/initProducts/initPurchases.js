@@ -10,7 +10,7 @@ const initPurchases = () => {
     const typeId = inPutProductTypes.compra;
 
     return (
-        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId} Component={NuevoPurchase}/>
+        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId} icon="dx-icon-cart color-icon-green" Component={NuevoPurchase}/>
     );
 }
 

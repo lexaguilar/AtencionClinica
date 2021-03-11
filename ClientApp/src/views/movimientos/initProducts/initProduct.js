@@ -10,7 +10,7 @@ const initProduct = () => {
     const typeId = inPutProductTypes.saldoInicial;
 
     return (
-        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId} Component={Nuevo}/>
+        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId}  icon="dx-icon-increaseindent color-icon-green" Component={Nuevo}/>
     );
 }
 

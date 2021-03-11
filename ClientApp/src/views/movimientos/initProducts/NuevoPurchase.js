@@ -109,7 +109,7 @@ const NuevoPurchase = props => {
              <Popup
                 width={1050}
                 height={580}
-                title={`Nueva entrada de inventario`}
+                title={`Nueva compra de inventario`}
                 onHiding={onHiding}
                 visible={open}                
             >

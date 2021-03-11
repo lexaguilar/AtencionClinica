@@ -10,7 +10,7 @@ const initAdjustments = () => {
     const typeId = inPutProductTypes.ajusteEntrada;
 
     return (
-        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId} Component={props => <Nuevo {...props} exists={true} />}/>
+        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId} icon="dx-icon-increaseindent color-icon-green" Component={props => <Nuevo {...props} exists={true} />}/>
     );
 }
 

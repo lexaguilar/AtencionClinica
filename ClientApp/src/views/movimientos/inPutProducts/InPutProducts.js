@@ -26,9 +26,10 @@ import { dataFormatId, formatId } from '../../../utils/common';
 
 const InPutProducts = (    
     { 
-        title= "Entrada de inventario", 
+        title= "Entrada de entrada inventario", 
         btnAddText= "Crear entrada",
         typeId= null,
+        icon="",
         Component= Nuevo
     }) => {
 
@@ -53,7 +54,7 @@ const InPutProducts = (
     return authorized(
         <div className="container">
             <Title title={title}/>
-            <BlockHeader title={title} >
+            <BlockHeader title={title} icon={icon} >
                 <CustomButton                 
                     text={btnAddText}
                     icon='plus'
