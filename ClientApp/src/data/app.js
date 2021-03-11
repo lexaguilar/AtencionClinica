@@ -35,8 +35,7 @@ export const resources = {
     administracion : 8,
     usuarios : 9,
     requisas : 10,
-    ajusteSalida : 11,
-    ajusteEntrada : 12,
+    compras : 11
 }
 
 export const dataAccess = {

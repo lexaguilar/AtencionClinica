@@ -19,6 +19,9 @@ const useAuthorization = ([resourceId, action]) => {
     const user = userService.getUser();
 
     const resource = user.resources.find(x => x.resource == resourceId);
+
+    if(!resource)
+        alert("El recurso es requerido")
     
     const isAuthorization = (resource.action & action) > 0;
 

@@ -26,7 +26,7 @@ import { dataFormatId, formatId } from '../../../utils/common';
 
 const OutPutProducts = () => {
 
-    const { authorized } = useAuthorization([resources.ajusteSalida, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
 
     let refGrid = useRef();
     const dispatch = useDispatch();

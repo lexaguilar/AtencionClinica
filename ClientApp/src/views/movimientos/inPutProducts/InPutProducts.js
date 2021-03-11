@@ -16,7 +16,7 @@ import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
 import { inPutProductStates } from '../../../data/catalogos';
-import { dataAccess, formatDate, formatDateTime, resources } from '../../../data/app';
+import { dataAccess, formatDate, formatDateTime } from '../../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
@@ -30,10 +30,11 @@ const InPutProducts = (
         btnAddText= "Crear entrada",
         typeId= null,
         icon="",
-        Component= Nuevo
+        Component= Nuevo,
+        resourcesId = null
     }) => {
 
-    const { authorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
+    const { authorized } = useAuthorization([resourcesId, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();

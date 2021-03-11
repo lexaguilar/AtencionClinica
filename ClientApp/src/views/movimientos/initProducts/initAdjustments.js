@@ -1,6 +1,7 @@
 import React from 'react';
 import { inPutProductTypes } from '../../../data/catalogos';
 import InPutProducts from '../inPutProducts/InPutProducts';
+import { resources } from '../../../data/app';
 import Nuevo from './Nuevo';
 
 const initAdjustments = () => {
@@ -10,7 +11,14 @@ const initAdjustments = () => {
     const typeId = inPutProductTypes.ajusteEntrada;
 
     return (
-        <InPutProducts title={title} btnAddText={btnAddText} typeId={typeId} icon="dx-icon-increaseindent color-icon-green" Component={props => <Nuevo {...props} exists={true} />}/>
+        <InPutProducts 
+            title={title} 
+            btnAddText={btnAddText} 
+            typeId={typeId} 
+            icon="dx-icon-increaseindent color-icon-green" 
+            resourcesId = {resources.movimientos}
+            Component={props => <Nuevo {...props} exists={true} />}
+        />
     );
 }
 
