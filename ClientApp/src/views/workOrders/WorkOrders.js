@@ -28,8 +28,6 @@ const WorkOrders = (props) => {
 
     const { followId, beneficiaryId, areaId } = props;
 
-    console.log(followId)
-
     let dataGrid = useRef();
     const dispatch = useDispatch();
 
@@ -51,7 +49,7 @@ const WorkOrders = (props) => {
                         onItemClick: () => {
                             
                             let { id } = e.row.data;
-                            dispatch(openDialogServiceTest({ id, followId, beneficiaryId}));
+                            dispatch(openDialogServiceTest({ id, beneficiaryId}));
                             
                         }
                     });
@@ -72,7 +70,7 @@ const WorkOrders = (props) => {
                 <CustomButton                                       
                     text='Nueva orden'
                     icon='plus'
-                    onClick={()=>dispatch(dialogWorkOrder({open : true}))}
+                    onClick={()=>dispatch(dialogWorkOrder({open : true, followId}))}
                 />
             </BlockHeader>
 

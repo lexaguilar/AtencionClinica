@@ -22,6 +22,7 @@ import productDialogReducer from './product';
 import workOrderDialogReducer from './workOrder';
 import workOrdersDialogReducer from './workOrders';
 import transferDialogReducer from './transfer';
+import transferWithProdcutDialogReducer from './transferWithProduct';
 import customDialogReducer from './customDialog';
 import serviceTestDialogReducer from './servicetest';
 
@@ -47,6 +48,7 @@ export default combineReducers({
     productDialog : productDialogReducer,
     catalog : catalogReducer,
     transfer : transferDialogReducer,
+    transferWithProdcut : transferWithProdcutDialogReducer,
     customDialog : customDialogReducer,
     serviceTestDialog : serviceTestDialogReducer,
 });

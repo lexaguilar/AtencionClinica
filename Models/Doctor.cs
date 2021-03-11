@@ -11,6 +11,7 @@ namespace AtencionClinica.Models
         {
             Appointments = new HashSet<Appointment>();
             Subsidies = new HashSet<Subsidy>();
+            WorkPreOrders = new HashSet<WorkPreOrder>();
         }
 
         public int Id { get; set; }
@@ -25,5 +26,6 @@ namespace AtencionClinica.Models
         public virtual DoctorTime DoctorTime { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
         public virtual ICollection<Subsidy> Subsidies { get; set; }
+        public virtual ICollection<WorkPreOrder> WorkPreOrders { get; set; }
     }
 }

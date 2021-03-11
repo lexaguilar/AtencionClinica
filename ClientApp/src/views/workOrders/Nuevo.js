@@ -24,7 +24,7 @@ const Nuevo = props => {
     const { followId, beneficiaryId } = props;
     const [ isClosing, setIsClosing]  = useState(false);
 
-    const { workOrderDialog : { open }, user } = useSelector(store => store);
+    const { workOrderDialog : { open, id }, user } = useSelector(store => store);
 
     const [tabIndex, setTabIndex] = useState(0);
     const [ workOrder, setWorkOrder ] = useState({});
@@ -43,6 +43,25 @@ const Nuevo = props => {
 
         setWorkOrder({areaId : user.areaId });
         setDetails([]);
+
+        if(followId > 0){
+            //verificar si trae productos preregistrados
+            http(`follows/${followId}/getWorkPreOrders`).asGet().then(resp=>{
+                console.log(resp);
+                if(resp){
+                    const { doctorId,  } = resp;
+                    setWorkOrder({...workOrder, doctorId });
+                    setDetails(resp.workPreOrderDetails.map(x => ({ 
+                        productId : x.productId, 
+                        quantity : x.quantity, 
+                        price: x.price,
+                        presentation: x.presentation,
+                        um: x.um 
+                    })))
+
+                }
+            });
+        }
     }, [open]);
 
     const dispatch = useDispatch();
@@ -77,7 +96,7 @@ const Nuevo = props => {
 
             let data = {...workOrder, followId,  WorkOrderDetails: workOrderDetails };
 
-            http(uri.workOrders.insert).asPost(data).then(resp => {
+            http(`${uri.workOrders.insert}?followId=${followId}`).asPost(data).then(resp => {
 
                 setSaving(false);
                 notify('Orden de trabajo registrada correctamente');

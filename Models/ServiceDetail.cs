@@ -7,10 +7,17 @@ namespace AtencionClinica.Models
 {
     public partial class ServiceDetail
     {
+        public ServiceDetail()
+        {
+            ServiceTestDetails = new HashSet<ServiceTestDetail>();
+        }
+
         public int Id { get; set; }
         public int ServiceId { get; set; }
         public string Name { get; set; }
         public string Um { get; set; }
         public string Reference { get; set; }
+
+        public virtual ICollection<ServiceTestDetail> ServiceTestDetails { get; set; }
     }
 }

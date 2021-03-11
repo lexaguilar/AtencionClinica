@@ -1,5 +1,5 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Popup  } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
 import Form, { SimpleItem, Label,RequiredRule, StringLengthRule } from 'devextreme-react/form';
@@ -17,11 +17,9 @@ const Transfer = () => {
     const { open, id } = useSelector(store => store.transfer);
     const dispatch = useDispatch();
     const onHiding = () => dispatch(dialogTransfer({open :  false, id : 0}));
-    const [transfer] = useState({});
+    const [ transfer, setTransfer ] = useState({});
 
     let refForm = useRef();
-
-    const { areas } = useAreas();
 
     const transferir = () => {
         
@@ -39,6 +37,10 @@ const Transfer = () => {
         }
 
     }
+
+    useEffect(() => {       
+        setTransfer({})    
+    }, [open]);
 
     const active = true;
     const title = 'Tranferir';

@@ -17,9 +17,11 @@ import { areaRestrict, dataAccess, formatDateTime, resources } from '../../data/
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
+import { dialogTransferWithProduct } from '../../store/transferWithProduct/transferWithProdcutDialogReducer';
 import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
 import useAuthorization from '../../hooks/useAuthorization';
 import Transfer from '../../components/workOrder/Transfer';
+import TransferWithProduct from '../../components/workOrder/TransferWithProduct';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 
@@ -57,6 +59,15 @@ const Follows = () => {
 
                         let { admissionId } = e.row.data;
                         dispatch(dialogTransfer({open : true, id : admissionId}));
+
+                    }              
+                },{
+                    text: 'Transferir con medicamentos',
+                    icon : 'chevrondoubleright',
+                    onItemClick: () => {
+
+                        let { admissionId } = e.row.data;
+                        dispatch(dialogTransferWithProduct({open : true, id : admissionId}));
 
                     }              
                 },{
@@ -131,6 +142,7 @@ const Follows = () => {
             </Popup>
             <PopupWorkOrder areaId={areaId} />  
             <Transfer />  
+            <TransferWithProduct />   
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}

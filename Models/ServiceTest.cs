@@ -5,24 +5,20 @@ using System.Collections.Generic;
 
 namespace AtencionClinica.Models
 {
-    public partial class WorkOrder
+    public partial class ServiceTest
     {
-        public WorkOrder()
+        public ServiceTest()
         {
-            WorkOrderDetails = new HashSet<WorkOrderDetail>();
+            ServiceTestDetails = new HashSet<ServiceTestDetail>();
         }
 
         public int Id { get; set; }
         public int FollowId { get; set; }
         public DateTime Date { get; set; }
-        public string Observation { get; set; }
-        public string Reference { get; set; }
-        public int DoctorId { get; set; }
-        public bool Active { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
 
         public virtual Follow Follow { get; set; }
-        public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
+        public virtual ICollection<ServiceTestDetail> ServiceTestDetails { get; set; }
     }
 }

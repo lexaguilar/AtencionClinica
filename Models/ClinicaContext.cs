@@ -69,6 +69,8 @@ namespace AtencionClinica.Models
         public virtual DbSet<RolResource> RolResources { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ServiceDetail> ServiceDetails { get; set; }
+        public virtual DbSet<ServiceTest> ServiceTests { get; set; }
+        public virtual DbSet<ServiceTestDetail> ServiceTestDetails { get; set; }
         public virtual DbSet<Sex> Sexs { get; set; }
         public virtual DbSet<Specialty> Specialties { get; set; }
         public virtual DbSet<Subsidy> Subsidies { get; set; }
@@ -86,6 +88,8 @@ namespace AtencionClinica.Models
         public virtual DbSet<VwStocksForArea> VwStocksForAreas { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
+        public virtual DbSet<WorkPreOrder> WorkPreOrders { get; set; }
+        public virtual DbSet<WorkPreOrderDetail> WorkPreOrderDetails { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -1456,6 +1460,56 @@ namespace AtencionClinica.Models
                     .HasColumnName("UM");
             });
 
+            modelBuilder.Entity<ServiceTest>(entity =>
+            {
+                entity.HasIndex(e => e.FollowId, "IX_ServiceTests_Follow");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.HasOne(d => d.Follow)
+                    .WithMany(p => p.ServiceTests)
+                    .HasForeignKey(d => d.FollowId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTests_Follows");
+            });
+
+            modelBuilder.Entity<ServiceTestDetail>(entity =>
+            {
+                entity.Property(e => e.Result)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ResultJson).IsUnicode(false);
+
+                entity.HasOne(d => d.ServiceDetail)
+                    .WithMany(p => p.ServiceTestDetails)
+                    .HasForeignKey(d => d.ServiceDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestDetails_ServiceDetails");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.ServiceTestDetails)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestDetails_Services");
+
+                entity.HasOne(d => d.ServiceTest)
+                    .WithMany(p => p.ServiceTestDetails)
+                    .HasForeignKey(d => d.ServiceTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestDetails_ServiceTests");
+            });
+
             modelBuilder.Entity<Sex>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -1930,6 +1984,65 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.WorkOrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WorkOrderDetails_WorkOrders");
+            });
+
+            modelBuilder.Entity<WorkPreOrder>(entity =>
+            {
+                entity.HasIndex(e => e.FollowId, "IX_WorkPreOrders_Follow");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Doctor)
+                    .WithMany(p => p.WorkPreOrders)
+                    .HasForeignKey(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WorkPreOrders_Doctors");
+
+                entity.HasOne(d => d.Follow)
+                    .WithMany(p => p.WorkPreOrders)
+                    .HasForeignKey(d => d.FollowId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WorkPreOrders_Follows");
+            });
+
+            modelBuilder.Entity<WorkPreOrderDetail>(entity =>
+            {
+                entity.Property(e => e.Costo).HasColumnType("money");
+
+                entity.Property(e => e.Presentation)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.WorkPreOrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WorkPreOrderDetails_Products");
+
+                entity.HasOne(d => d.WorkOrder)
+                    .WithMany(p => p.WorkPreOrderDetails)
+                    .HasForeignKey(d => d.WorkOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WorkPreOrderDetails_WorkPreOrders");
             });
 
             OnModelCreatingPartial(modelBuilder);

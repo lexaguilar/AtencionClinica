@@ -90,7 +90,7 @@ namespace AtencionClinica.Controllers
                 AreaSourceId = 3, //caja
                 AreaTargetId = bill.AreaId,
                 Observation = "Tranferencia automatica desde caja",
-                CreateAt = DateTime.Today,
+                CreateAt = DateTime.Now,
                 CreateBy = user.Username                
             };
 

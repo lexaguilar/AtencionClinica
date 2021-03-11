@@ -84,6 +84,50 @@ namespace AtencionClinica.Controllers
             return Json(follow);
 
         }
-    
+
+        [HttpPost("api/follows/post/withproduct/Admission/{AdmissionId}/areaTarget/{areaTargetId}")]
+        public IActionResult PostWithProduct(int admissionId, int areaTargetId, [FromBody] WorkPreOrder workPreOrder) 
+        {
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            var admission = _db.Admissions.FirstOrDefault(x => x.Id == admissionId);
+
+            if(!admission.Active)
+                return BadRequest("No se puede porque la admision esta anulada");
+
+             if(admission.Finished)
+                return BadRequest("La admision ya no esta valida porque ya ha sido egresado el paciente");
+
+            workPreOrder.CreateAt = DateTime.Now;
+            workPreOrder.CreateBy = user.Username;
+            workPreOrder.Used = false;
+
+            var follow = new Follow();
+            follow.AdmissionId = admissionId;
+            follow.AreaTargetId = areaTargetId;
+            follow.AreaSourceId = user.AreaId;
+            follow.Observation = workPreOrder.Observation;
+            follow.CreateAt = DateTime.Now;
+            follow.CreateBy = user.Username;
+            follow.WorkPreOrders.Add(workPreOrder);
+        
+            _db.Follows.Add(follow);
+         
+            _db.SaveChanges();
+
+            return Json(follow);
+
+        }
+
+        [Route("api/follows/{followId}/getWorkPreOrders")]
+        public IActionResult PostWithProduct(int followId) 
+        {
+
+            var result = _db.WorkPreOrders.Include(x => x.WorkPreOrderDetails).FirstOrDefault(x => x.FollowId == followId && !x.Used);
+            return Json(result);
+
+        }
     }
 }

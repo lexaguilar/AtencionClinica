@@ -42,7 +42,7 @@ namespace AtencionClinica.Controllers
         }
 
         [HttpPost("api/workOrders/post")]
-        public IActionResult Post([FromBody] WorkOrder workOrder)
+        public IActionResult Post([FromBody] WorkOrder workOrder,[FromQuery]int followId)
         {            
 
             var user = this.GetAppUser(_db);
@@ -61,6 +61,10 @@ namespace AtencionClinica.Controllers
 
                 
             }            
+
+            var workPreOrders = _db.WorkPreOrders.FirstOrDefault(x => x.FollowId == followId);
+            if(workPreOrders != null)
+                workPreOrders.Used = true;
 
             _db.SaveChanges();
 

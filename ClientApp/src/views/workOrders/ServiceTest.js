@@ -25,6 +25,10 @@ import GridListaMedicamentoPte from './GridListaMedicamentoPte';
 
 const ServiceTest = () => {
 
+    return(
+        <div>En proceso</div>
+    )
+
     // const { serviceTestDialog : { open, beneficiaryId, id }, user } = useSelector(store => store);
 
     // console.log(beneficiaryId);
