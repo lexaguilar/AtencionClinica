@@ -87,8 +87,6 @@ export default class ProductDDBComponent extends React.Component {
     }
 
     onCellPrepared(e) {
-        
-        console.log(e)
 
         if (e.rowType == 'data') {
             if(e.column.dataField == "stock")

@@ -58,3 +58,10 @@ Obtener catalog activos para crear y todos para editar
     Families
     Presentations
     
+
+-Comprobar la existencia de objetos : true
+-Generar Script para objetos dependientes: true
+-Incluir DROP y CREATE en el script : Incluir DROP y CREATE en el script+
+-Incluir encabezados en el scrip : false
+-Tipos de datos que se deben incluir : Esquemas y Datos
+-Incluir indeces en el script : true

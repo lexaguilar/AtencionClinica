@@ -10,7 +10,9 @@ namespace AtencionClinica.Models
         public Doctor()
         {
             Appointments = new HashSet<Appointment>();
+            PrivateWorkOrders = new HashSet<PrivateWorkOrder>();
             Subsidies = new HashSet<Subsidy>();
+            WorkOrders = new HashSet<WorkOrder>();
             WorkPreOrders = new HashSet<WorkPreOrder>();
         }
 
@@ -25,7 +27,9 @@ namespace AtencionClinica.Models
         public virtual Specialty Specialty { get; set; }
         public virtual DoctorTime DoctorTime { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
+        public virtual ICollection<PrivateWorkOrder> PrivateWorkOrders { get; set; }
         public virtual ICollection<Subsidy> Subsidies { get; set; }
+        public virtual ICollection<WorkOrder> WorkOrders { get; set; }
         public virtual ICollection<WorkPreOrder> WorkPreOrders { get; set; }
     }
 }

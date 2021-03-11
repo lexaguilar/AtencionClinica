@@ -42,6 +42,18 @@ namespace AtencionClinica.Controllers
                 follows = follows.Where(x => x.BillId == billId);
             }
 
+            if (values.ContainsKey("billTypeId"))
+            {
+                var billTypeId = Convert.ToInt32(values["billTypeId"]);
+                follows = follows.Where(x => x.BillTypeId == billTypeId);
+            }
+
+            if (values.ContainsKey("privateCustomerTypeId"))
+            {
+                var privateCustomerTypeId = Convert.ToInt32(values["privateCustomerTypeId"]);
+                follows = follows.Where(x => x.PrivateCustomerTypeId == privateCustomerTypeId);
+            }
+
             var items = follows.Skip(skip).Take(take);
 
             return Json(new
@@ -53,16 +65,29 @@ namespace AtencionClinica.Controllers
         }      
 
         [HttpPost("api/followsprivate/post")]
-        public IActionResult Post([FromBody] Admission admission) 
+        public IActionResult Post([FromBody] FollowsPrivate follow) 
         {
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+            
+            var bill = _db.Bills.FirstOrDefault(x => x.Id == follow.BillId);
 
+            if(!bill.Active)
+                return BadRequest("No se puede porque la factura esta anulada");
+
+             if(bill.Finished)
+                return BadRequest("La factura ya no es valida porque ya ha sido egresado el paciente");
+                
+            follow.AreaSourceId = user.AreaId;
+            follow.CreateAt = DateTime.Now;
+            follow.CreateBy = user.Username;
+
+            _db.FollowsPrivates.Add(follow);
          
-            //_db.SaveChanges();
+            _db.SaveChanges();
 
-            return Json(admission);
+            return Json(follow);
 
         }
     

@@ -7,6 +7,11 @@ namespace AtencionClinica.Models
 {
     public partial class FollowsPrivate
     {
+        public FollowsPrivate()
+        {
+            PrivateWorkOrders = new HashSet<PrivateWorkOrder>();
+        }
+
         public int Id { get; set; }
         public int BillId { get; set; }
         public int AreaSourceId { get; set; }
@@ -18,5 +23,6 @@ namespace AtencionClinica.Models
         public virtual Area AreaSource { get; set; }
         public virtual Area AreaTarget { get; set; }
         public virtual Bill Bill { get; set; }
+        public virtual ICollection<PrivateWorkOrder> PrivateWorkOrders { get; set; }
     }
 }

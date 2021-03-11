@@ -87,19 +87,20 @@ const InPutProducts = (
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" caption='Numero' width={100} cellRender={dataFormatId}/>
-                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
-                <Column dataField="areaId" caption="Area" width={200}>
+                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={90} />
+                <Column dataField="areaId" caption="Area" width={170}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="typeId" caption="Tipo Entrada" width={160}>
+                <Column dataField="typeId" caption="Tipo Entrada" width={150}>
                     <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductType'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="reference" caption='Referencia' />
-                <Column dataField="stateId" caption="Estado" width={150}>
+                <Column dataField="reference" caption='Referencia' width={100}/>
+                <Column dataField="observation" caption='Observacion'/>
+                <Column dataField="stateId" caption="Estado" width={90}>
                     <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductState'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
-                <Column dataField="createBy" caption='Creado Por'/>
+                <Column dataField="createBy" caption='Creado Por'  width={120}/>
                 <Editing
                     mode="popup"
                     allowDeleting={true}

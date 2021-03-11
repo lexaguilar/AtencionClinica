@@ -47,7 +47,7 @@ export const monedaSymbol = {
     2: "$"
 }
 
-export const inPutProductTypes = { compra: 1, ajuste: 2, saldoInicial : 3 }
+export const inPutProductTypes = { compra: 1, ajusteEntrada: 2, saldoInicial : 3, traslado : 4 }
 export const outPutProductTypes = { facturacion: 1, ajuste: 2, servicios : 3, traslado : 4 }
 
 export const typeTraslate = {

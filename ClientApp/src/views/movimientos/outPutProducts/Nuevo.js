@@ -9,7 +9,7 @@ import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender } from '../../../utils/common';
+import { cellRender, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
@@ -155,6 +155,7 @@ const Nuevo = props => {
                             allowColumnReordering={true}
                             height={320}
                             onToolbarPreparing={onToolbarPreparing}
+                            onCellPrepared={onCellPrepared}
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}

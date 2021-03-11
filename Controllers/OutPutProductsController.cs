@@ -68,7 +68,15 @@ namespace AtencionClinica.Controllers
             if (outPutProduct.Id == 0)
             {
 
-                outPutProduct.CreateBy = user.Username;                
+                outPutProduct.CreateBy = user.Username;    
+
+                foreach (var item in outPutProduct.OutPutProductDetails)
+                {
+
+                    var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == outPutProduct.AreaId && x.ProductId == item.ProductId);
+                    item.CostAvg = areaProducto.CostAvg;                    
+
+                }             
 
                 var result = _service.Create(outPutProduct);
 

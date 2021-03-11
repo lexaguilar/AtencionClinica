@@ -21,6 +21,7 @@ import Admisiones from '../views/admision';
 import Nuevo from '../views/admision/Nuevo';
 import Beneficiarios from '../views/beneficiarios';
 import Follows from '../views/follows';
+import FollowsPrivate from '../views/followsPrivate';
 import Subsidies from '../views/subsidies';
 import Doctores from '../views/doctores';
 import DoctoresById from '../views/doctores/DoctoresById';
@@ -47,6 +48,7 @@ import Kardex from '../views/reports/kardex';
 import Customers from '../views/customers';
 import Existencias from '../views/reports/stocks';
 import ProcedimientoDetalle from '../views/procedimientos/ProcedimientoDetalle';
+import initAdjustments from '../views/movimientos/initProducts/initAdjustments';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -72,6 +74,7 @@ function Layout(props) {
         ,builRoute('beneficiarios', Beneficiarios)
         ,builRoute('privados', Privados)
         ,builRoute('servicios', Follows)
+        ,builRoute('servicios-privados', FollowsPrivate)
         ,builRoute('subsidios', Subsidies)
         ,builRoute('doctores', Doctores)
         ,builRoute('doctores/horarios', DoctoresById)
@@ -82,6 +85,7 @@ function Layout(props) {
         ,builRoute('area/procedimientos', AreaProcedimientos)
         ,builRoute('procedimientos/detalle', ProcedimientoDetalle)
         ,builRoute('config/parameters', Parameters)
+        ,builRoute('movimientos/entradas', initAdjustments)
         ,builRoute('movimientos/salidas', OutPutProducts)
         ,builRoute('movimientos/entradas', InPutProducts)
         ,builRoute('movimientos/inv-inicial', initProduct)

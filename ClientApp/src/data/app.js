@@ -36,6 +36,7 @@ export const resources = {
     usuarios : 9,
     requisas : 10,
     ajusteSalida : 11,
+    ajusteEntrada : 12,
 }
 
 export const dataAccess = {

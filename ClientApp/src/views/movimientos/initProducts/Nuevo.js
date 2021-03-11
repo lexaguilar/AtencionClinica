@@ -15,16 +15,21 @@ import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
 import ButtonForm from '../../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
+import { inPutProductTypes } from '../../../data/catalogos';
 
 const Nuevo = props => {    
 
-    const { typeId } = props;
+    
+    const { typeId, exists = false } = props;
+
+    const canEdit = typeId == inPutProductTypes.saldoInicial;
+    //const canEdit = typeId == inPutProductTypes.saldoInicial;
 
     const { inPutProductDialog : { open }, user } = useSelector(store => store);
 
     const active = true;
 
-    const { products } = useProducts({ areaId: user.areaId, active });
+    const { products } = useProducts({ areaId: user.areaId, active, exists });
     const [ inPutProduct, setInPutProduct ] = useState({});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
@@ -83,10 +88,11 @@ const Nuevo = props => {
         if(prop == 'productId' && value){
 
             let info = products.find(x => x.id == value);
+            console.log(info);
             newData['presentation'] = info.presentation;
             newData['um'] = info.um;
-            newData['cost'] = 0;            
-            newData['price'] = 0;            
+            newData['cost'] = canEdit ? 0 : info.cost ;
+            newData['price'] = canEdit ? 0 : info.price ;
             !currentRowData['quantity'] && (newData['quantity'] = 1);
             !currentRowData['total'] &&( newData['total'] = info.cost);
         }
@@ -179,13 +185,13 @@ const Nuevo = props => {
                             <Column dataField="quantity" caption="Cantidad" dataType="number" width={80} setCellValue={setCellValue.bind(null,"quantity")}>
                                 <RuleRequired />
                             </Column>
-                            <Column dataField="cost" caption="Costo" dataType="number" width={100} cellRender={cellRender()} setCellValue={setCellValue.bind(null,"cost")}>
+                            <Column dataField="cost" allowEditing={canEdit} caption="Costo" dataType="number" width={100} cellRender={cellRender()} setCellValue={setCellValue.bind(null,"cost")}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
                                 <RuleRequired />
                             </Column>        
-                            <Column dataField="price" caption="Precio" dataType="number" width={100} cellRender={cellRender()} >
+                            <Column visible={canEdit} dataField="price" caption="Precio" dataType="number" width={100} cellRender={cellRender()} >
                                 <RuleRequired />
                             </Column>                  
                             <Column type="buttons" width={50}>

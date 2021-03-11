@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace AtencionClinica.Models
 {
-    public partial class WorkOrder
+    public partial class PrivateWorkOrder
     {
-        public WorkOrder()
+        public PrivateWorkOrder()
         {
-            WorkOrderDetails = new HashSet<WorkOrderDetail>();
+            PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
         }
 
         public int Id { get; set; }
-        public int FollowId { get; set; }
+        public int FollowsPrivateId { get; set; }
         public DateTime Date { get; set; }
         public string Observation { get; set; }
         public string Reference { get; set; }
@@ -23,7 +23,7 @@ namespace AtencionClinica.Models
         public string CreateBy { get; set; }
 
         public virtual Doctor Doctor { get; set; }
-        public virtual Follow Follow { get; set; }
-        public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
+        public virtual FollowsPrivate FollowsPrivate { get; set; }
+        public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
     }
 }

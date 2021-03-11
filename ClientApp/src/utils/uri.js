@@ -48,6 +48,7 @@ uri.beneficarios = inss => {
 };
 
 uri.follows = areaId =>  createProxy(`follows/get/${areaId}`,`follows/post`);
+uri.followsPrivate = areaId =>  createProxy(`followsprivate/get/${areaId}`,`followsprivate/post`);
 
 uri.account = 'account/auth';
 uri.changepassword = 'account/changepassword';

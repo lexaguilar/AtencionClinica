@@ -39,6 +39,14 @@ const Bills = props => {
             if(e.rowIndex >= 0)
                 e.items.push({
 
+                    text: 'Pagar factura',
+                    icon : 'print',
+                    onItemClick: () => {
+                        
+                    }
+                    
+                },{
+
                     text: 'Re-imprimir factura',
                     icon : 'print',
                     onItemClick: () => {
