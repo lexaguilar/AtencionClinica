@@ -154,9 +154,8 @@ const Nuevo = props => {
                                 <StringLengthRule max={20} message="Maximo 20 caracteres" />
                             </SimpleItem>                           
                             <SimpleItem dataField="observation" colSpan={2}>
-                                <Label text="Observacion" />
-                                <RequiredRule message="Ingrese una observacion" />
-                                <StringLengthRule max={500} message="Maximo 500 caracteres" />
+                                <Label text="Observacion" />                               
+                                <StringLengthRule max={150} message="Maximo 150 caracteres" />
                             </SimpleItem>
                             
                         </GroupItem>

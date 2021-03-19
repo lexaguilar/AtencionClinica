@@ -116,7 +116,7 @@ const TransferWithProduct = () => {
                             <Label text="Doctor" />
                             <RequiredRule message="Seleecione el medico" />
                         </SimpleItem>
-                    <SimpleItem dataField="observation" editorType="dxTextArea">
+                    <SimpleItem dataField="observation" editorType="dxTextBox">
                         <Label text="Observacion" />
                         <StringLengthRule max={150} message="Maximo 150 caracteres" />
                     </SimpleItem>

@@ -28,7 +28,7 @@ const uri = {
     roles:createProxyBase('roles'),
     users:createProxyBase('users'),
     rates:createProxyBase('rates'),
-
+    areaProducts : areaId => createProxyBase(`area/${areaId}/products`) 
 };
 uri.privateCustomers = () => {
     let urls = createProxyBase('privateCustomers');

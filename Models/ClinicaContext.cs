@@ -108,13 +108,19 @@ namespace AtencionClinica.Models
 
             modelBuilder.Entity<Admission>(entity =>
             {
-                entity.HasIndex(e => e.CreateAt, "IX_Admissions");
+                entity.HasIndex(e => e.AreaId, "IX_Admissions_Area");
 
                 entity.HasIndex(e => e.BeneficiaryId, "IX_Admissions_Beneficiario");
+
+                entity.HasIndex(e => e.CreateAt, "IX_Admissions_CreateAt");
+
+                entity.HasIndex(e => e.CreateBy, "IX_Admissions_CreateBy");
 
                 entity.HasIndex(e => e.Inss, "IX_Admissions_Inss");
 
                 entity.HasIndex(e => e.NumberOfDay, "IX_Admissions_NumberOfDay");
+
+                entity.HasIndex(e => e.SpecialtyId, "IX_Admissions_Specialty");
 
                 entity.HasIndex(e => e.TypeId, "IX_Admissions_Type");
 

@@ -31,11 +31,36 @@ namespace AtencionClinica.Controllers
              .Include(x => x.Beneficiary).ThenInclude(x => x.Relationship)            
             .OrderByDescending(x => x.CreateAt);
 
+            if (values.ContainsKey("nombre"))
+            {
+                var nombre = Convert.ToString(values["nombre"]);
+                admissions = admissions.Where(x => x.Beneficiary.FirstName.StartsWith(nombre) || x.Beneficiary.LastName.StartsWith(nombre));
+            }
+
             if (values.ContainsKey("inss"))
             {
                 var inss = Convert.ToInt32(values["inss"]);
                 admissions = admissions.Where(x => x.Inss == inss);
             }
+
+            if (values.ContainsKey("id"))
+            {
+                var id = Convert.ToInt32(values["id"]);
+                admissions = admissions.Where(x => x.Id == id);
+            }
+
+            if (values.ContainsKey("areaId"))
+            {
+                var areaId = Convert.ToInt32(values["areaId"]);
+                admissions = admissions.Where(x => x.AreaId == areaId);
+            }
+
+            if (values.ContainsKey("specialtyId"))
+            {
+                var specialtyId = Convert.ToInt32(values["specialtyId"]);
+                admissions = admissions.Where(x => x.SpecialtyId == specialtyId);
+            }
+
 
             if (values.ContainsKey("typeId"))
             {
@@ -47,6 +72,12 @@ namespace AtencionClinica.Controllers
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
                 admissions = admissions.Where(x => x.CreateAt > createAt && x.CreateAt < createAt.AddDays(1));
+            }
+
+            if (values.ContainsKey("createBy"))
+            {
+                var createBy = Convert.ToString(values["createBy"]);
+                admissions = admissions.Where(x => x.CreateBy == createBy);
             }
 
             var items = admissions.Skip(skip).Take(take).Select(x => new {

@@ -49,6 +49,7 @@ import Customers from '../views/customers';
 import Existencias from '../views/reports/stocks';
 import ProcedimientoDetalle from '../views/procedimientos/ProcedimientoDetalle';
 import initAdjustments from '../views/movimientos/initProducts/initAdjustments';
+import Stock from '../views/reports/stocks/Stock';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -98,6 +99,7 @@ function Layout(props) {
         ,builRoute('permisos', Resources)
         ,builRoute('inventario/reportes/kardex', Kardex)
         ,builRoute('inventario/reportes/existencias', Existencias)
+        ,builRoute('inventario/reportes/stock', Stock)
         
     ];
     return (

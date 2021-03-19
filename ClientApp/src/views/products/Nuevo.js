@@ -128,11 +128,7 @@ const Nuevo = props => {
                         </SimpleItem>
                         <SimpleItem dataField="hasIva" editorType="dxCheckBox">
                             <Label text="Aplica IVA" />
-                        </SimpleItem>
-                        <SimpleItem dataField="stockMin" editorType="dxNumberBox">
-                            <Label text="Stock" />
-                            <RequiredRule message="ingrese el stock" />
-                        </SimpleItem>
+                        </SimpleItem>                        
                     </GroupItem>
                 </Form>       
                 <br/>        

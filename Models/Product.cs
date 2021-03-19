@@ -31,6 +31,7 @@ namespace AtencionClinica.Models
         public DateTime LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
         public int CurrencyId { get; set; }
+        public int? Stock { get; set; }
 
         public virtual Currency Currency { get; set; }
         public virtual Family Family { get; set; }

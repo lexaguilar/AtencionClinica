@@ -92,7 +92,7 @@ const Products = () => {
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStore({name: 'currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
-                <Column dataField="hasIva" caption='IVA ?' type="boolean" width={80} dataType="boolean"/>
+                <Column dataField="hasIva" caption='IVA ?' type="boolean" width={80} dataType="boolean"/>               
                 <Column dataField="createBy" caption='Creado Por' visible={false}/>
                 <Column dataField="createAt" caption='Creando el' visible={false} />
                 <Column dataField="lastModificationBy" caption='Modificado Por' visible={false}/>

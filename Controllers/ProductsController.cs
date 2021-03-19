@@ -149,7 +149,7 @@ namespace AtencionClinica.Controllers
                     x.PresentationId,
                     x.StateId,
                     x.HasIva,
-                    x.CurrencyId
+                    x.CurrencyId,
                 });
 
                 oldProduct.LastModificationBy = user.Username;

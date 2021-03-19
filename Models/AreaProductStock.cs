@@ -14,6 +14,7 @@ namespace AtencionClinica.Models
         public decimal CostReal { get; set; }
         public double Min { get; set; }
         public decimal Price { get; set; }
+        public double? StockMin { get; set; }
 
         public virtual Area Area { get; set; }
         public virtual Product Product { get; set; }
