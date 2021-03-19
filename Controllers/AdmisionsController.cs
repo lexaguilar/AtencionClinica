@@ -110,7 +110,7 @@ namespace AtencionClinica.Controllers
 
             var follow = new Follow{
                 Admission = admission,
-                AreaSourceId = 2, //admision
+                AreaSourceId = user.AreaId,
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
                 CreateAt = DateTime.Now,
