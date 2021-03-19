@@ -23,6 +23,12 @@ namespace AtencionClinica.Controllers
         {
             this._db = db;
         }
+        [Route("api/privateCustomers/get/{id}")]
+        public IActionResult Get(int id) 
+        {
+            var result = _db.PrivateCustomers.FirstOrDefault(x => x.Id == id);
+            return Json(result);
+        }
 
         [Route("api/privateCustomers/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values) 
