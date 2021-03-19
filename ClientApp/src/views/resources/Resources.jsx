@@ -56,6 +56,9 @@ const Resources = props => {
                         dataSource={store({ uri: { get: uri.resources(rolId), insert: uri.resources(rolId) } })}
                         showBorders={true}
                         showRowLines={true}
+                        allowColumnResizing={true}
+                        allowColumnReordering={true}
+                        rowAlternationEnabled={true}
                     >
                         <Editing
                             mode="popup"
@@ -63,10 +66,8 @@ const Resources = props => {
                             allowDeleting={false}
                             allowAdding={false}
                             useIcons={true}
-
                         >
                             <Popup title="Configuracion" width={300} height={350}>
-
                             </Popup>
                             <Form colCount={1}>
                                 <Item dataField="name"/>                                             
@@ -76,7 +77,7 @@ const Resources = props => {
                                 <Item dataField="canDelete"/>                                             
                             </Form>
                         </Editing>
-                        <Column dataField="name" caption="Recurso" width={200} allowEditing={false} />
+                        <Column dataField="name" caption="Recurso" allowEditing={false} />
                         <Column dataField="canRead" caption="Leer" allowFiltering={false} width={160} />
                         <Column dataField="canCreate" caption="Crear" allowFiltering={false} width={160} />
                         <Column dataField="canUpdate" caption="Actualizar" allowFiltering={false} width={160} />

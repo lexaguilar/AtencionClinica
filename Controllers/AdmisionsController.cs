@@ -78,13 +78,18 @@ namespace AtencionClinica.Controllers
             if(user == null)
                 return BadRequest("La información del usuario cambio, inicie sesion nuevamente");
 
-            if(user.AreaId != (int)AreaRestrict.Admision)
-                return BadRequest("Solo se permite admisionar desde el area de Admision");
+            if(user.AreaId != (int)AreaRestrict.Admision && user.AreaId != (int)AreaRestrict.Emergencia)
+                return BadRequest("Solo se permite admisionar desde el area de admision");
 
             var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active && x.TypeId == (int)AdmisionTypes.Consulta);
             
-            if(existe)
+            if(existe && user.AreaId != (int)AreaRestrict.Admision)
                 return BadRequest("El beneficiario ya tiene una admisión activa el dia de hoy");
+            
+            //TODO configurar el 3, parametrizar
+            var countAdmisions = _db.Admissions.Where(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active && x.TypeId == (int)AdmisionTypes.Consulta).Count();
+            if(countAdmisions > 3)
+                return BadRequest("El beneficiario ya tiene un maximo de 3 admisión activa el dia de hoy");
 
             var existeHops = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.TypeId == (int)AdmisionTypes.IngresoHops && !x.Finished && x.Active);
             if(existeHops)
@@ -93,8 +98,8 @@ namespace AtencionClinica.Controllers
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == admission.BeneficiaryId);
 
             if(bene.RelationshipId == 2) //Hijo
-                if( (bene.BirthDate - DateTime.Today).Days/365 >= 12)
-                    return BadRequest("Solo se permiten admisiones para los hijos edad igual 12 años o menor");
+                if( (bene.BirthDate - DateTime.Today).Days/365 >= 13)
+                    return BadRequest("Solo se permiten admisiones para los hijos edad igual 13 años o menor");
 
             admission.Inss = bene.Inss;
             admission.Active = true;

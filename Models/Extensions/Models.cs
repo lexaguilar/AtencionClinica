@@ -1,10 +1,10 @@
 namespace AtencionClinica.Models{
-    public partial class Area : ModelExtension<Beneficiary>  {  }
-    public partial class Specialty : ModelExtension<Beneficiary>  {  }
-    public partial class Doctor : ModelExtension<Beneficiary>  {  }
+    public partial class Area : ModelExtension<Area>  {  }
+    public partial class Specialty : ModelExtension<Specialty>  {  }
+    public partial class Doctor : ModelExtension<Doctor>  {  }
     public partial class AreaService : ModelExtension<AreaService>  {  }
     public partial class Product : ModelExtension<Product>  {  }
-    public partial class Family : ModelExtension<Product>  {  }
+    public partial class Family : ModelExtension<Family>  {  }
     public partial class Presentation : ModelExtension<Presentation>  {  }
     public partial class UnitOfMeasure : ModelExtension<UnitOfMeasure>  {  }
     public partial class User : ModelExtension<User>  {  }
