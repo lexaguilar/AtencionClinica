@@ -170,4 +170,4 @@ const Privados = () => {
     );
 }
 
-export default Privados;
+export default React.memo(Privados);

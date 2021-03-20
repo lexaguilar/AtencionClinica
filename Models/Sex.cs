@@ -10,11 +10,13 @@ namespace AtencionClinica.Models
         public Sex()
         {
             Beneficiaries = new HashSet<Beneficiary>();
+            PrivateCustomers = new HashSet<PrivateCustomer>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<Beneficiary> Beneficiaries { get; set; }
+        public virtual ICollection<PrivateCustomer> PrivateCustomers { get; set; }
     }
 }

@@ -36,6 +36,7 @@ namespace AtencionClinica.Models
 
         public virtual Contract Contract { get; set; }
         public virtual PrivateCustomerStat PrivateCustomerStatus { get; set; }
+        public virtual Sex Sex { get; set; }
         public virtual PrivateCustomerType Type { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
     }

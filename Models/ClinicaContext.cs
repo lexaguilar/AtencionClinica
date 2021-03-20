@@ -1202,6 +1202,12 @@ namespace AtencionClinica.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PrivateCustomers_PrivateCustomerStats");
 
+                entity.HasOne(d => d.Sex)
+                    .WithMany(p => p.PrivateCustomers)
+                    .HasForeignKey(d => d.SexId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateCustomers_Sexs");
+
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.PrivateCustomers)
                     .HasForeignKey(d => d.TypeId)

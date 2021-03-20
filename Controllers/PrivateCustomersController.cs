@@ -79,7 +79,11 @@ namespace AtencionClinica.Controllers
         [Route("api/privateCustomers/get/catalog")]
         public IActionResult GetCatalog(int skip, int take, IDictionary<string, string> values) 
         {
-             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers;
+             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers
+             .Include(x => x.Sex)
+             .Include(x => x.Contract)
+             .Include(x => x.Type)
+             ;
 
             if (values.ContainsKey("name"))
             {
@@ -87,9 +91,19 @@ namespace AtencionClinica.Controllers
                 privates = privates.Where(x => x.FirstName.StartsWith(name) || x.LastName.StartsWith(name));
             }
 
+            if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                privates = privates.Where(x => x.Identification.StartsWith(identification));
+            }
+
             var items = _db.PrivateCustomers.Skip(skip).Take(take).Select(x => new {
                 Id = x.Id,
-                Name = x.GetFullName()
+                x.Identification,
+                Name = x.GetFullName(),
+                Sex = x.Sex.Name,
+                Contract = x.Contract.Name,
+                Type = x.Type.Name,
             });
 
             return Json(new
