@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
+using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,11 @@ namespace AtencionClinica.Controllers
     public class ProductsController : Controller
     {
         private ClinicaContext _db = null;
+        private ProductsFactory factory = null;
         public ProductsController(ClinicaContext db)
         {
             this._db = db;
+            factory = new ProductsFactory(this._db);
         }
 
         [Route("api/products/get/{id}")]
@@ -48,29 +51,9 @@ namespace AtencionClinica.Controllers
         [Route("api/products/getbyarea/{areaId}")]
         public IActionResult GetCatalog(int areaId, bool active, bool exists,int skip, int take, IDictionary<string, string> values)
         {
-            var result = _db.VwProductInfos.Where(x => x.AreaId == areaId);
+            var result = factory.GetByArea(areaId, active, exists);
 
-            if (active)
-                result = result.Where(x => x.StateId == 1);
-
-            if (exists)
-                result = result.Where(x => x.Exists);
-
-            return Json(result);
-
-            // if (values.ContainsKey("name"))
-            // {
-            //     var name = Convert.ToString(values["name"]);
-            //     result = result.Where(x => x.Name.StartsWith(name));
-            // }
-
-            // var items = result.Skip(skip).Take(take);
-
-            // return Json(new
-            // {
-            //     items,
-            //     totalCount = result.Count()
-            // });
+            return Json(result);         
 
         }
 

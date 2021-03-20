@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
+using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,27 @@ namespace AtencionClinica.Controllers
     public class AreaServicesController : Controller
     {
         private ClinicaContext _db = null;
+        private ProductsFactory factory = null;
+        private ServicesFactory serviceFactory = null;
         public AreaServicesController(ClinicaContext db)
         {
             this._db = db;
+            factory = new ProductsFactory(this._db);
+            serviceFactory = new ServicesFactory(this._db);
+        }
+
+        [Route("api/area/{areaId}/services/products/get")]
+        public IActionResult GetServicesProducts(int areaId, bool active, bool exists,int skip, int take, IDictionary<string, string> values)
+        {
+            
+            var products = factory.GetByArea(areaId, active, exists);
+            var services = serviceFactory.GetByArea(areaId, active);
+
+            return Json(new { 
+                products,
+                services 
+            });
+
         }
 
         [Route("api/area/{areaId}/services/get")]

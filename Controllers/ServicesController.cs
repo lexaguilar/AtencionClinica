@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
+using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,11 @@ namespace AtencionClinica.Controllers
     public class ServicesController : Controller
     {
         private ClinicaContext _db = null;
+        private ServicesFactory factory = null;
         public ServicesController(ClinicaContext db)
         {
             this._db = db;
+            factory = new ServicesFactory(this._db);
         }
 
         [Route("api/services/get")]
@@ -50,9 +53,9 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/services/area/{areaId}/get")]
-        public IActionResult Get(int areaId)
+        public IActionResult Get(int areaId,bool active)
         {
-           var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId && x.Service.Active).Select(x => x.Service);
+           var result = factory.GetByArea(areaId, active);
 
            return Json(result);
 
