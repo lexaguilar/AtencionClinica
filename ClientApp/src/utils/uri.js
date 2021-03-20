@@ -54,4 +54,6 @@ uri.account = 'account/auth';
 uri.changepassword = 'account/changepassword';
 uri.resetPassword = 'account/resetpassword';
 
+export const routeReset = props => props.history.push({ pathname : '/clinica/navig' }, { returnUrl: props.location.pathname }); 
+
 export default uri;

@@ -92,6 +92,7 @@ const Bills = props => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onContextMenuPreparing={addMenuItems}
                 onRowPrepared={onRowPrepared}
                 

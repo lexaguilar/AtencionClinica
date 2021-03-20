@@ -3,7 +3,7 @@ import { createStoreLocal } from '../../utils/proxy';
 import { Button } from 'devextreme-react/button';
 import http from '../../utils/http';
 import { dataAccess, editorOptionsSelect, resources } from '../../data/app';
-import uri from '../../utils/uri';
+import uri, { routeReset } from '../../utils/uri';
 import Title from '../../components/shared/Title';
 import BlockHeader from '../../components/shared/BlockHeader';
 import notify from 'devextreme/ui/notify';
@@ -11,28 +11,21 @@ import { _path } from "../../data/headerNavigation";
 import { billDefault } from '../../data/bill';
 import PopupPrivado from '../../components/beneficiary/PopupPrivado';
 import DataSource from "devextreme/data/data_source";
-import DataGrid, { Column, Editing, Lookup, Selection, Paging, FilterRow, Scrolling } from 'devextreme-react/data-grid';
-import { cellRender, cellRenderBold, dataFormatId, obtenerTasaCambio } from '../../utils/common';
+import DataGrid, { Column, Editing, Lookup, Selection, Paging, FilterRow, Scrolling, Summary, TotalItem } from 'devextreme-react/data-grid';
+import { cellRender, cellRenderBold, dataFormatId, obtenerTasaCambio, formatToMoney } from '../../utils/common';
 import urlReport from '../../services/reportServices';
 import Resumen from '../../components/footer/Resumen';
 import useAuthorization from '../../hooks/useAuthorization';
 
 import {
     Validator,
-    RequiredRule,
-    CompareRule,
-    EmailRule,
-    PatternRule,
-    StringLengthRule,
-    RangeRule,
-    AsyncRule
+    RequiredRule
 } from 'devextreme-react/validator';
 import { DropDownBox, SelectBox, TextArea } from 'devextreme-react';
-import './bill.css';
 import { DivForm } from '../../utils/divHelpers';
 
 const Nuevo = props => {
-
+  
     const { authorized } = useAuthorization([resources.caja, dataAccess.create]);
 
     let dropDownBoxRef = useRef();
@@ -42,43 +35,7 @@ const Nuevo = props => {
     const [procedimientos, setProcedimientos] = useState([]);
     const [services, setServices] = useState([]);
 
-    let refBill = React.createRef();
-    let dataGrid = React.createRef();
-
-    const guardarFactura = () => {
-        let result = refBill.instance.validate();
-        if (result.isValid) {
-
-            setLoading(true);
-            http(uri.bill.insert).asPost({ ...bill, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
-                if (resp) {
-
-                    setLoading(false);
-                    notify(`Factura ${resp.id} creada correctamente`);
-
-                    setBill({ ...billDefault });
-
-                    const report = urlReport();
-                    report.print(`${report.billTicket(resp.id)}`);
-
-                }
-            }).catch(err => {
-
-                notify(err, 'error');
-                setLoading(false);
-
-            });
-        }
-    }
-
-    const onValueChangedArea = (e) => {
-        setBill({
-            ...bill,
-            areaId: e.value
-        });
-        setProcedimientos([]);
-        loadServices();
-    }
+    let dataGrid = React.createRef();      
 
     const loadServices = (areaId) => {
         http(`services/area/${areaId}/get`).asGet({ active: true }).then(resp => setServices(resp))
@@ -137,11 +94,6 @@ const Nuevo = props => {
         newData.subTotal = currentRowData.price * newData.quantity;
         newData.total = newData.subTotal;
 
-    }
-
-    const onValueChangedCurrency = (e) => {
-        setBill({ ...bill, currencyId: e.value });
-        setProcedimientos([]);
     }
 
     useEffect(() => {
@@ -218,20 +170,13 @@ const Nuevo = props => {
         http(uri.bill.insert).asPost({ ...bill,privateCustomerId: gridBoxValue, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
             if (resp) {
 
-                setLoading(false);
-                //notify(`Factura ${resp.id} creada correctamente`);
-
-                // setBill({ ...billDefault });
-                // setGridBoxValue(null);
-
-                // setProcedimientos([]);
-                // dropDownBoxRef.current.instance.reset();
-
-
+                setLoading(false); 
                 const report = urlReport();
                 report.print(`${report.billTicket(resp.id)}`);
-
-                window.location.reload(false);
+                
+                routeReset(props);
+                
+                //props.history.push({ pathname : '/clinica/navig' }, { returnUrl: props.location.pathname });
 
             }
         }).catch(err => {
@@ -353,7 +298,13 @@ const Nuevo = props => {
                         </Column>
                         <Column dataField="quantity" caption='Cant' width={70} setCellValue={setCellValueCant} />
                         <Column dataField="price" allowEditing={false} caption='Precio' width={100} cellRender={cellRender(bill.currencyId)} />
-                        <Column dataField="total" allowEditing={false} width={120} cellRender={cellRenderBold(bill.currencyId)} />
+                        <Column dataField="total" allowEditing={false} width={140} cellRender={cellRenderBold(bill.currencyId)} />
+                        <Summary>
+                            <TotalItem
+                                column="total"
+                                summaryType="sum" 
+                                customizeText= {e=> formatToMoney(e.value, bill.currencyId)} />                          
+                        </Summary>
                         <Editing
                             mode="cell"
                             selectTextOnEditStart={true}
