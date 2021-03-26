@@ -2,44 +2,78 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Popup } from 'devextreme-react/popup';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule} from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialog } from '../../../store/customDialog/customDialogReducer';
 import { createStoreLocal } from '../../../utils/proxy';
 import { editorOptionsSelect } from '../../../data/app';
 import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender, onCellPrepared } from '../../../utils/common';
+import { cellRender, formatId, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
 import ButtonForm from '../../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
-import { typeTraslate } from '../../../data/catalogos';
+import { typeTraslate, stagesTraslate } from '../../../data/catalogos';
+import { traslateDefault } from '../../../data/defaultObject';
+import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
 
 const Nuevo = props => {    
 
     const exists = true;
     const active = true;
+    const has = true;
 
     const  {stageId, type}  = props;
 
     const isCreate = type == typeTraslate.create;
 
-    const { customDialog : { open, id }, user } = useSelector(store => store);
+    const { traslateDialog : { open, id, editing }, user } = useSelector(store => store);
 
     const [ areaSourceId, setAreaSourceId ] = useState(0);
     const { products, setProducts } = useProducts({areaId: areaSourceId, exists, active });
-    const [ traslate, setTraslate ] = useState({});
+    const [ traslate, setTraslate ] = useState({...traslateDefault, stageId : 1});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
 
     let refForm = useRef();
     let refGrid = useRef();
 
-    useEffect(() => {        
-        setTraslate({areaId : user.areaId, stageId : stageId});
-        setDetails([]);
+    useEffect(() => {   
+
+        if(id == 0){
+            setTraslate({...traslate, areaId : user.areaId, stageId});
+            setDetails([]);
+        }        
+
+        if(id > 0){
+
+            http(uri.traslates.getById(id)).asGet().then(resp =>{
+
+                setTraslate({ ...withOutDetaill(resp) });
+
+                http(uri.products.getByArea(resp.areaSourceId)).asGet().then(data =>{
+                    
+                    setProducts(data);
+
+                    let arr = resp.traslateDetails.map(prod => {
+
+                        let info = data.find(x => x.id == prod.productId);
+
+                        prod['presentation'] = info.presentation;
+                        prod['um'] = info.um;
+
+                        return prod;
+                    })
+
+                    setDetails(arr);
+
+                })        
+
+
+            });
+
+        }
     }, [open]);
 
     const dispatch = useDispatch();
@@ -49,7 +83,7 @@ const Nuevo = props => {
 
         refForm.current.instance.resetValues();  
         refGrid.current.instance.cancelEditData();
-        dispatch(closeDialog());
+        dispatch(dialogTraslate({open: false, id: 0, editing : false}));
         if (load) {
             let { onSave } = props;
             onSave();      
@@ -57,11 +91,7 @@ const Nuevo = props => {
 
     }
 
-    const onHiding = ({ load }) => {
-       
-        close(load);
-
-    }
+    const onHiding = ({ load }) => close(load);
 
     const crearTraslado = (e) => {
 
@@ -71,8 +101,9 @@ const Nuevo = props => {
 
             setSaving(true);
             let data = {...traslate, traslateDetails:[...details] };
+            const url = editing ? `${uri.traslates.insert}/asEdit` : uri.traslates.insert; 
 
-            http(uri.traslates.insert).asPost(data).then(resp => {
+            http(url).asPost(data).then(resp => {
 
                 setSaving(false);
                 notify('Soliictud de traslado registrado correctamente');
@@ -142,43 +173,11 @@ const Nuevo = props => {
         setDetails([]);
     }
 
-    const onShowing = e =>{
-
-        if(id > 0){
-
-            http(uri.traslates.getById(id)).asGet().then(resp =>{
-
-                setTraslate({ ...withOutDetaill(resp) });
-
-                http(uri.products.getByArea(resp.areaSourceId)).asGet({ exists }).then(data =>{
-                    
-                    setProducts(data);
-
-                    let arr = resp.traslateDetails.map(prod => {
-
-                        let info = data.find(x => x.id == prod.productId);
-
-                        prod['presentation'] = info.presentation;
-                        prod['um'] = info.um;
-
-                        return prod;
-                    })
-
-                    setDetails(arr);
-
-                })        
-
-
-            });
-
-        }
-
-    }
-
     const withOutDetaill = ({traslateDetails,...rest}) => rest;
 
-    const textCreating = 'Guardar traslado';
+    const textCreating = editing ? 'Modificar traslado ' + formatId(id) : 'Solicitar traslado';
     const textEditing = 'Despachar traslado';
+
 
     var itemHTML = isCreate ?  <SimpleItem dataField="areaSourceId" editorType="dxSelectBox"
                                         editorOptions={{
@@ -206,7 +205,6 @@ const Nuevo = props => {
                 height={580}
                 title={isCreate  ? `Nueva solicitud de traslado` : `Despachar solicitud ${id}`}
                 onHiding={onHiding}
-                onShowing={onShowing}
                 visible={open}                
             >
                 <Form formData={traslate} ref={refForm} readOnly={!isCreate}>
@@ -303,12 +301,12 @@ const Nuevo = props => {
                 <ButtonForm 
                     saving={saving} 
                     textSaving={textCreating} 
-                    visible={isCreate} 
+                    visible={isCreate && traslate.stageId == stagesTraslate.pendiente} 
                     onClick={crearTraslado}/>
                 <ButtonForm 
                     saving={saving} 
                     textSaving={textEditing} 
-                    visible={!isCreate} 
+                    visible={!isCreate && traslate.stageId == stagesTraslate.pendiente} 
                     onClick={despacharTraslado}/>
                
             </Popup>

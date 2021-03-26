@@ -102,5 +102,4 @@ namespace AtencionClinica.Models
         }
     }
 
-    public partial class InPutProductDetail : ModelExtension<InPutProductDetail> { }
 }

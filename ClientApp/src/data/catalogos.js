@@ -55,4 +55,10 @@ export const typeTraslate = {
     update: 'update'
 }
 
+export const stagesTraslate = {
+    pendiente: 1,
+    anulado: 2,
+    procesado: 3
+}
+
 export default catalogos;

@@ -15,7 +15,7 @@ namespace AtencionClinica.Factory
             _db = db;
         }
 
-        public VwProductInfo[] GetByArea(int areaId, bool active, bool exists)
+        public VwProductInfo[] GetByArea(int areaId, bool active, bool exists,bool has)
         {
 
             var result = _db.VwProductInfos.Where(x => x.AreaId == areaId);
@@ -25,6 +25,9 @@ namespace AtencionClinica.Factory
 
             if (exists)
                 result = result.Where(x => x.Exists);
+
+            if(has)
+                result = result.Where(x => x.Stock > 0);
 
             return result.ToArray();
 

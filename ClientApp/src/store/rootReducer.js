@@ -26,6 +26,7 @@ import transferWithProdcutDialogReducer from './transferWithProduct';
 import customDialogReducer from './customDialog';
 import serviceTestDialogReducer from './servicetest';
 import areaProductDialogReducer from './areaProduct/areaProductDialogReducer';
+import traslateDialogReducer from './traslate';
 
 export default combineReducers({
     currency: currencyReducer,
@@ -53,4 +54,5 @@ export default combineReducers({
     customDialog : customDialogReducer,
     serviceTestDialog : serviceTestDialogReducer,
     areaProductDialog : areaProductDialogReducer,
+    traslateDialog : traslateDialogReducer,
 });

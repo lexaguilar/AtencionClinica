@@ -49,9 +49,9 @@ namespace AtencionClinica.Controllers
         // }
 
         [Route("api/products/getbyarea/{areaId}")]
-        public IActionResult GetCatalog(int areaId, bool active, bool exists,int skip, int take, IDictionary<string, string> values)
+        public IActionResult GetCatalog(int areaId, bool active, bool exists, bool has,int skip, int take, IDictionary<string, string> values)
         {
-            var result = factory.GetByArea(areaId, active, exists);
+            var result = factory.GetByArea(areaId, active, exists, has);
 
             return Json(result);         
 

@@ -27,10 +27,10 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/area/{areaId}/services/products/get")]
-        public IActionResult GetServicesProducts(int areaId, bool active, bool exists,int skip, int take, IDictionary<string, string> values)
+        public IActionResult GetServicesProducts(int areaId, bool active, bool exists, bool has,int skip, int take, IDictionary<string, string> values)
         {
             
-            var products = factory.GetByArea(areaId, active, exists);
+            var products = factory.GetByArea(areaId, active, exists, has);
             var services = serviceFactory.GetByArea(areaId, active);
 
             return Json(new { 

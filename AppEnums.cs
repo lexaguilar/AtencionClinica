@@ -12,6 +12,7 @@ namespace AtencionClinica
     public enum ClientType { Private = 1, Contract = 2 }
     public enum AdmisionTypes { Consulta = 1, IngresoHops = 2 }
     public enum PrivateCustomers { ClienteContado = 1 }
+    public enum TraslateStages { Pendiente = 1, Anulado = 2, Procesado = 3 }
 
     public enum Resource { Ninguno, Usuarios, Catalogos, Facturacion, Clientes, Agenda, Inventario, Graduaciones, SMS }
     [Flags]

@@ -21,9 +21,11 @@ import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
 import { openDialog } from '../../../store/customDialog/customDialogReducer';
-import { inPutProductStates, typeTraslate } from '../../../data/catalogos';
+import { inPutProductStates, stagesTraslate, typeTraslate } from '../../../data/catalogos';
 import useAuthorization from '../../../hooks/useAuthorization';
 import { dataFormatId, formatId } from '../../../utils/common';
+import { onToolbar } from '../../../components/grids/ToolBar';
+import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
 
 const Traslates = (props) => {
 
@@ -51,6 +53,11 @@ const Traslates = (props) => {
         }
     }
 
+    const showDialog = (id, editing= false) => dispatch(dialogTraslate({ open: true, id, editing }))
+
+    const isEditVisible = e => type == typeTraslate.create && e.row.data.stageId == stagesTraslate.pendiente;
+    const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
+
     return authorized(
         <div className="container">
             <Title title={title}/>
@@ -58,7 +65,7 @@ const Traslates = (props) => {
                 {type==typeTraslate.create && <CustomButton                                       
                     text='Nueva requisa'
                     icon='plus'
-                    onClick={()=>dispatch(openDialog({id : 0}))}
+                    onClick={()=>showDialog( 0 ) }
                 />}
             </BlockHeader>
             <Nuevo onSave={reload} stageId={1} type={type}/> 
@@ -71,7 +78,9 @@ const Traslates = (props) => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onRowPrepared={onRowPrepared}
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -87,6 +96,9 @@ const Traslates = (props) => {
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
+                <Column type="buttons">
+                    <Button hint="Ver" icon="find"onClick={e => showDialog(e.row.data.id, false)} />                  
+                </Column>
                 <Column dataField="id" caption='Numero' width={100}  cellRender={dataFormatId}/>
                 <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
                 <Column dataField="areaSourceId" caption="Bodega" width={250} visible={type==typeTraslate.create}>
@@ -104,8 +116,9 @@ const Traslates = (props) => {
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
                 <Column dataField="createBy" caption='Creado Por'/>
                 <Column type="buttons">
+                    <Button hint="Modificar" icon="edit"onClick={e => showDialog(e.row.data.id, true)} visible={isEditVisible} />
                     <Button name="delete" />
-                    <Button name="edit" text="Despachar" onClick={e => dispatch(openDialog({id : e.row.data.id}))}/>
+                    <Button hint="Despachar" name="edit" icon="bulletlist" onClick={e => showDialog(e.row.data.id)}/>
                 </Column>
                 <Editing
                     mode="popup"
