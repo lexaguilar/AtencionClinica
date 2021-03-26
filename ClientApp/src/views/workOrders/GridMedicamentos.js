@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
-import DataGrid, { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, TotalItem, Summary } from 'devextreme-react/data-grid';
 import gridsHelper from '../../utils/gridsHelper';
-import { cellRender, onCellPrepared } from '../../utils/common';
+import { cellRender, formatToMoney, onCellPrepared } from '../../utils/common';
 import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import useProducts from '../../hooks/useProducts';
 
 
-const GridMedicamentos = ({isClosing, details, user}) => {
+const GridMedicamentos = ({isClosing, details, user, showPrice= false, currencyId = 1, rate= 1}) => {
 
     const exists = true;    
     const active = true;   
@@ -14,6 +14,22 @@ const GridMedicamentos = ({isClosing, details, user}) => {
 
     const { products } = useProducts({areaId: user.areaId, exists, active});
     const onToolbarPreparing = gridsHelper(ref, { text : 'Agregar productos', icon:'plus' });   
+
+    const getPriceByCurrency = product => {
+
+        let price = 0;
+
+        if (currencyId == product.currencyId)
+            price = product.price;
+        else
+            if (currencyId == 1)
+                price = product.price * rate;
+            else
+                price = product.price / rate;
+
+        return price;
+
+    }
     
     const setCellValue = (prop, newData, value, currentRowData) => {
 
@@ -21,18 +37,32 @@ const GridMedicamentos = ({isClosing, details, user}) => {
         if(prop == 'productId' && value){
 
             let info = products.find(x => x.id == value);
+
+            const price = getPriceByCurrency(info);
+
+
             newData['presentation'] = info.presentation;
             newData['um'] = info.um
             newData['cost'] = info.cost;
-            newData['price'] = info.price;
+            newData['price'] = price;
             newData['quantity'] = 1;
             newData['serviceId'] = null;
-            !currentRowData['total'] &&( newData['total'] = info.cost);
+
+            if(showPrice)
+                newData['total'] = price;
+            else
+                newData['total'] = info.cost;
+                
+
+            
 
         }
         
         if(prop == 'quantity' && (+value) >= 0)
-            newData['total'] = currentRowData['cost'] * value;
+            if(showPrice)
+                newData['total'] = currentRowData['price'] * value;
+            else
+                newData['total'] = currentRowData['cost'] * value;
 
     }  
 
@@ -55,7 +85,7 @@ const GridMedicamentos = ({isClosing, details, user}) => {
         >
             <Column dataField="productId" caption="Producto"
                 setCellValue={setCellValue.bind(null, "productId")}
-                editCellComponent={ProductDDBComponent}>
+                editCellComponent={props => <ProductDDBComponent showPrice={true} {...props} />}>
                 <Lookup
                     dataSource={products}
                     valueExpr="id"
@@ -76,15 +106,24 @@ const GridMedicamentos = ({isClosing, details, user}) => {
                 setCellValue={setCellValue.bind(null, "quantity")}>
                 <RuleRequired />
             </Column>
-            <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
+            <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} visible={!showPrice} cellRender={cellRender(currencyId)} >
                 <RuleRequired />
             </Column>
-            <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender()} >
+            <Column dataField="price" caption="Precio" dataType="number" width={100} allowEditing={false} visible={showPrice} cellRender={cellRender(currencyId)} >
+                <RuleRequired />
+            </Column>
+            <Column dataField="total" caption="Total" dataType="number" width={120} allowEditing={false} cellRender={cellRender(currencyId)} >
                 <RuleRequired />
             </Column>
             <Column type="buttons" width={50}>
                 <ButtonGrid name="delete" />
             </Column>
+            <Summary>
+                <TotalItem
+                    column="total"
+                    summaryType="sum" 
+                    customizeText= {e=> formatToMoney(e.value, currencyId)} />                          
+            </Summary>
             <Editing
                 mode="cell"
                 allowDeleting={true}

@@ -92,17 +92,19 @@ const Products = () => {
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStore({name: 'currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
-                <Column dataField="hasIva" caption='IVA ?' type="boolean" width={80} dataType="boolean"/>               
+                <Column dataField="hasIva" caption='IVA ?' width={80} dataType="boolean"/>               
+                <Column dataField="stockMin" caption='Stock' width={80} />               
                 <Column dataField="createBy" caption='Creado Por' visible={false}/>
                 <Column dataField="createAt" caption='Creando el' visible={false} />
                 <Column dataField="lastModificationBy" caption='Modificado Por' visible={false}/>
                 <Column dataField="lastDateModificationAt" caption='Modificado el' visible={false} />
                 <Column type="buttons">
-                    <ButtonGrid name="modificar" text="Editar" onClick={e => openDialog(e.row.data.id)}/>
+                    <ButtonGrid name="edit" icon="edit" onClick={e => openDialog(e.row.data.id)}/>
                 </Column>
                 <Editing
                     mode="popup"
                     useIcons={true}
+                    allowUpdating={true}
                 >
                 </Editing>
             </DataGrid>

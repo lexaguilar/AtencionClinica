@@ -21,6 +21,7 @@ export default class ProductDDBComponent extends React.Component {
         this.dropDownBoxRef = React.createRef();
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
         this.contentRender = this.contentRender.bind(this);
+        this.showPrice = props.showPrice;
     }
 
     customStore(url){
@@ -117,7 +118,8 @@ export default class ProductDDBComponent extends React.Component {
                 <Column dataField="name" caption="Nombre" ></Column>
                 <Column dataField="presentation" caption="Presentacion" width={120}></Column>
                 <Column dataField="um" caption="UM" width={100}></Column>
-                <Column dataField="cost" caption="Costo" cellRender={cellRender()} width={80}></Column>
+                <Column dataField="cost" caption="Costo" visible={!this.showPrice} cellRender={cellRender()} width={80}></Column>
+                <Column dataField="price" caption="Precio" visible={this.showPrice} cellRender={cellRender()} width={90}></Column>
                 <Column dataField="stock" caption="Cant" width={80}></Column>                
                 <Scrolling mode="virtual" />
                 <Selection mode="single" />

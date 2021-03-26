@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using AtencionClinica.Extensions;
 using AtencionClinica.Models;
+using AtencionClinica.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +21,11 @@ namespace AtencionClinica.Controllers
     public class BillsController : Controller
     {      
         private ClinicaContext _db = null;
-        public BillsController(ClinicaContext db)
+        private IProductServices<Bill> _service;
+        public BillsController(ClinicaContext db, IProductServices<Bill> service)
         {
             this._db = db;
+             _service = service;
         }
 
         [Route("api/bill/get")]
@@ -70,7 +74,7 @@ namespace AtencionClinica.Controllers
         }      
 
         [HttpPost("api/bill/post")]
-        public IActionResult Post([FromBody] Bill bill) 
+        public async Task<IActionResult> Post([FromBody] Bill bill) 
         {
             var user = this.GetAppUser(_db);
             if(user == null)
@@ -81,20 +85,43 @@ namespace AtencionClinica.Controllers
             bill.Total = bill.BillDetails.Sum(x => x.Total);
             bill.CreateAt = DateTime.Now;
             bill.CreateBy = user.Username;
-            _db.Bills.Add(bill);    
+          
 
-            _db.SaveChanges();      
+            if(bill.PrivateCustomerId == (int)PrivateCustomers.ClienteContado)
+            {
+                var cliente = _db.PrivateCustomers.FirstOrDefault(x => x.Id == (int)PrivateCustomers.ClienteContado);
+                if(cliente == null)
+                    return BadRequest("La información del cliente de contado no se encontro en el sistema");
 
-            var follow = new FollowsPrivate{
-                BillId = bill.Id,
-                AreaSourceId = 3, //caja
-                AreaTargetId = bill.AreaId,
-                Observation = "Tranferencia automatica desde caja",
-                CreateAt = DateTime.Now,
-                CreateBy = user.Username                
-            };
+                bill.NameCustomer = string.IsNullOrEmpty(bill.NameCustomer) ? cliente.GetFullName() : bill.NameCustomer;
+            }
 
-            _db.FollowsPrivates.Add(follow);
+             var result = _service.Create(bill);
+
+            if(!result.IsValid)
+                return BadRequest(result.Error);
+
+            await _db.SaveChangesAsync();
+
+            var lastOutPutProduct = _db.OutPutProducts.OrderByDescending(x=> x.Id).FirstOrDefault(x => x.CreateBy == user.Username && x.AreaId == bill.AreaId);
+            
+            if(lastOutPutProduct != null)         
+                lastOutPutProduct.Reference = bill.Id.ToString();
+
+            if(bill.PrivateCustomerId != (int)PrivateCustomers.ClienteContado)
+            {
+                 var follow = new FollowsPrivate{
+                    BillId = bill.Id,
+                    AreaSourceId = 3, //caja
+                    AreaTargetId = bill.AreaId,
+                    Observation = "Tranferencia automatica desde caja",
+                    CreateAt = DateTime.Now,
+                    CreateBy = user.Username                
+                };
+
+                _db.FollowsPrivates.Add(follow);
+
+            }
 
             _db.SaveChanges();
 

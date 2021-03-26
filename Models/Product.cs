@@ -10,6 +10,7 @@ namespace AtencionClinica.Models
         public Product()
         {
             AreaProductStocks = new HashSet<AreaProductStock>();
+            BillDetails = new HashSet<BillDetail>();
             InPutProductDetails = new HashSet<InPutProductDetail>();
             OutPutProductDetails = new HashSet<OutPutProductDetail>();
             PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
@@ -31,7 +32,7 @@ namespace AtencionClinica.Models
         public DateTime LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
         public int CurrencyId { get; set; }
-        public int? Stock { get; set; }
+        public double? StockMin { get; set; }
 
         public virtual Currency Currency { get; set; }
         public virtual Family Family { get; set; }
@@ -39,6 +40,7 @@ namespace AtencionClinica.Models
         public virtual ProductState State { get; set; }
         public virtual UnitOfMeasure UnitOfMeasure { get; set; }
         public virtual ICollection<AreaProductStock> AreaProductStocks { get; set; }
+        public virtual ICollection<BillDetail> BillDetails { get; set; }
         public virtual ICollection<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }
         public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }

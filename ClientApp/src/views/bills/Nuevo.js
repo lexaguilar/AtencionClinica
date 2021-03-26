@@ -161,10 +161,7 @@ const Nuevo = props => {
     }
 
     const onFormSubmit = (e) => {
-        window.location.ref = window.location.ref;
-        console.log(bill)
         e.preventDefault();
-
 
         setLoading(true);
         http(uri.bill.insert).asPost({ ...bill,privateCustomerId: gridBoxValue, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
@@ -175,8 +172,6 @@ const Nuevo = props => {
                 report.print(`${report.billTicket(resp.id)}`);
                 
                 routeReset(props);
-                
-                //props.history.push({ pathname : '/clinica/navig' }, { returnUrl: props.location.pathname });
 
             }
         }).catch(err => {

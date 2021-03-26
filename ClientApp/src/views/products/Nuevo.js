@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Popup } from 'devextreme-react/popup';
 import Form, { SimpleItem, GroupItem, Label, RequiredRule } from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,7 +14,7 @@ import { productDefault } from '../../data/product';
 
 const Nuevo = props => {
 
-    let refProduct = React.createRef();
+    let refProduct = useRef();
 
     const [product, setProduct] = useState({...productDefault});
     const [saving, setSaving] = useState(false);
@@ -69,7 +69,7 @@ const Nuevo = props => {
             })
         }
                
-    }, [id]);
+    }, [open]);
 
     const active = true;
 
@@ -128,6 +128,9 @@ const Nuevo = props => {
                         </SimpleItem>
                         <SimpleItem dataField="hasIva" editorType="dxCheckBox">
                             <Label text="Aplica IVA" />
+                        </SimpleItem>                        
+                        <SimpleItem dataField="stockMin" editorType="dxNumberBox">
+                            <Label text="Stock Minimo" />
                         </SimpleItem>                        
                     </GroupItem>
                 </Form>       

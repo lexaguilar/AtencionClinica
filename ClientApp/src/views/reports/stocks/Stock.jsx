@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import DataGrid, {
     Column,
     ColumnChooser,
@@ -10,19 +10,25 @@ import DataGrid, {
     Pager,
     Paging,
     Popup,
-    Form as FromGrid
+    Button as ButtonGrid
 } from 'devextreme-react/data-grid';
 import { Item } from 'devextreme-react/form';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import Title from '../../../components/shared/Title';
 import uri from '../../../utils/uri';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../../../services/store';
 import { createStore } from '../../../utils/proxy';
+import { dialogAreaProduct } from '../../../store/areaProduct/areaProductDialogReducer';
+import onExporting from '../../../components/grids/Importer';
+import Nuevo from './Nuevo';
 
 const Stock = () => {
 
     const { areaId } = useSelector(store => store.user);
+
+    const dataGrid = useRef();
+    const dispatch = useDispatch();
 
     const onCellPrepared = e => {
         
@@ -40,7 +46,30 @@ const Stock = () => {
     const cb = data => data.map(x => {
         x.isLimit = x.stockMin ? x.stock <= x.stockMin : false
         return x;
-    })
+    });
+
+    const openDialog = (e) => {
+        console.log(e);
+        const { productId, product } = e.row.data;
+        dispatch(dialogAreaProduct({open : true, productId, name : product.name}));
+    } 
+
+    const onToolbarPreparing = (e) => {
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon: 'xlsxfile',
+                type: 'success',
+                stylingMode: "outlined",
+                onClick: () => dataGrid.current.instance.exportToExcel(false)
+            }
+        });
+    }
+        
+    const onSave = () => dataGrid.current.instance.refresh();
+
 
     const title = 'Inventario';
 
@@ -49,8 +78,9 @@ const Stock = () => {
             <Title title={title} />
             <BlockHeader title={title} >
             </BlockHeader>
+            <Nuevo onSave={onSave} areaId={areaId}/>   
             <DataGrid id="gridContainer"
-
+                ref={dataGrid}
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.areaProducts(areaId), cb  })}
                 showBorders={true}
@@ -58,6 +88,8 @@ const Stock = () => {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 onCellPrepared={onCellPrepared}
+                onToolbarPreparing={onToolbarPreparing}
+                onExporting={(e) => onExporting(e, title)}
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -84,23 +116,14 @@ const Stock = () => {
                 <Column dataField="stock" caption='Existencias' />
                 <Column dataField="stockMin" />
                 <Column dataField="isLimit" caption="Necesita abastecer ?" />
+                <Column type="buttons" width={60}>
+                   <ButtonGrid name="edit" onClick={e => openDialog(e)}/>
+                </Column>
                 <Editing
                     mode="popup"
-                    allo
                     useIcons={true}
                     allowUpdating={true}
-                >
-                    <Popup title={title} showTitle={true} width={450} height={300}>
-
-                    </Popup>
-                    <FromGrid>
-                        <Item dataField="product.name" colSpan={2} >
-                        </Item>
-                        <Item dataField="stock"  colSpan={2}>
-                        </Item>
-                        <Item dataField="stockMin"  colSpan={2}>
-                        </Item>
-                    </FromGrid>
+                >                   
                 </Editing>
             </DataGrid>
         </div>

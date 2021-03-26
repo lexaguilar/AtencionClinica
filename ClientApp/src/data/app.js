@@ -7,6 +7,25 @@ export const editorOptionsSelect = {
 }
 
 
+export const editorOptionsSwitch = {
+    switchedOffText:"NO",
+    switchedOnText:"SI",
+}
+
+export const editorOptionsNumberBox={
+    showSpinButtons:true,
+    showClearButton:true
+}
+
+export const editorOptsTextBoxPhone={
+    mask: "0000-0000"
+}
+
+export const editorOptsTextBox={
+    showClearButton:true
+}
+
+
 export const cssClasses = {
     0 : '',
     1 : 'custome-active',

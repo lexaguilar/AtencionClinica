@@ -51,6 +51,7 @@ import ProcedimientoDetalle from '../views/procedimientos/ProcedimientoDetalle';
 import initAdjustments from '../views/movimientos/initProducts/initAdjustments';
 import Stock from '../views/reports/stocks/Stock';
 import Navig from './navigator/Navig';
+import NuevoQuickly from '../views/bills/NuevoQuickly';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -83,6 +84,7 @@ function Layout(props) {
         ,builRoute('paciente/:id', Paciente)
         ,builRoute('facturas', Bills)
         ,builRoute('facturas/nuevo', BillNuevo)
+        ,builRoute('facturas/nuevo-quickly', NuevoQuickly)
         ,builRoute('procedimientos', Procedimientos)
         ,builRoute('area/procedimientos', AreaProcedimientos)
         ,builRoute('procedimientos/detalle', ProcedimientoDetalle)

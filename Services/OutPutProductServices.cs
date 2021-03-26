@@ -117,6 +117,37 @@ namespace AtencionClinica.Services
             
         }
 
+        public ModelValidationSource<OutPutProduct> CreateFrom(Bill bill)
+        {
+            var items = new List<OutPutProductDetail>();
+            foreach (var item in bill.BillDetails.Where(x => !x.IsService))
+            {
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == bill.AreaId && x.ProductId == item.ProductId);
+
+                items.Add(new OutPutProductDetail{
+                    ProductId = item.ProductId.Value,
+                    Quantity = Convert.ToDouble(item.Quantity),
+                    Cost = areaProducto.CostAvg,
+                    Price = item.Price,
+                    Discount = 0,
+                    CostAvg = areaProducto.CostAvg
+                });
+            } 
+
+            var outPutProduct = new OutPutProduct{
+                AreaId = bill.AreaId,
+                TypeId = (int)OutputType.Facturacion,
+                Date = bill.CreateAt,               
+                Observation = "Salida por factura",
+                CreateBy = bill.CreateBy,               
+                OutPutProductDetails = items,
+            };
+
+            return this.Create(outPutProduct);
+            
+        }
+
+
         public int Delete(int id)
         {
             throw new NotImplementedException();

@@ -82,6 +82,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<TraslateState> TraslateStates { get; set; }
         public virtual DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<VwBillProductsService> VwBillProductsServices { get; set; }
         public virtual DbSet<VwFollow> VwFollows { get; set; }
         public virtual DbSet<VwFollowsPrivate> VwFollowsPrivates { get; set; }
         public virtual DbSet<VwKardex> VwKardices { get; set; }
@@ -466,6 +467,10 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.NameCustomer)
+                    .HasMaxLength(80)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Observation)
                     .HasMaxLength(250)
                     .IsUnicode(false);
@@ -517,10 +522,14 @@ namespace AtencionClinica.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BillDetails_Bills");
 
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.BillDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_BillDetails_Products");
+
                 entity.HasOne(d => d.Service)
                     .WithMany(p => p.BillDetails)
                     .HasForeignKey(d => d.ServiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BillDetails_Services");
             });
 
@@ -1330,6 +1339,8 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.StockMin).HasDefaultValueSql("((0))");
+
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CurrencyId)
@@ -1818,6 +1829,57 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.RolId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_Rols");
+            });
+
+            modelBuilder.Entity<VwBillProductsService>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwBillProductsServices");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Contract)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GranTotal).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(101)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NameService)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.SubTotal).HasColumnType("money");
+
+                entity.Property(e => e.TipoIngreso)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.Property(e => e.TypeCustomer)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<VwFollow>(entity =>

@@ -31,6 +31,16 @@ namespace AtencionClinica.Controllers
 
         }
 
+        [Route("api/area/{areaId}/products/get/{id}")]
+        public IActionResult Get(int areaId, int id)
+        {
+            var areaProduct = _db.AreaProductStocks.Include(x => x.Product)
+           .FirstOrDefault(x => x.AreaId == areaId && x.ProductId == id);
+
+            return Json(areaProduct);
+
+        }
+
         [HttpPost("api/area/{areaId}/products/post")]
         public IActionResult Post(int areaId, [FromBody] AreaProductStock model)
         {
@@ -44,6 +54,7 @@ namespace AtencionClinica.Controllers
 
             oldService.CopyFrom(model, x => new
             {
+                x.Inherit,
                 x.StockMin
             });
 

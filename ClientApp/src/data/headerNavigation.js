@@ -11,6 +11,7 @@ const menu = [{
         type: 'menu',
         menu: [
             { title: 'Nueva', url: `${_path.CLINICA}/facturas/nuevo` },
+            { title: 'Factura rapida', url: `${_path.CLINICA}/facturas/nuevo-quickly` },
             { title: 'Facturas', url: `${_path.CLINICA}/facturas` },
             { 
                 title: 'Reportes', 

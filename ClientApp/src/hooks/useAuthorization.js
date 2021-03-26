@@ -1,12 +1,8 @@
 import React from "react";
 import { userService } from "../services/user.service";
-
+import MsgAuthorize from './MsgAuthorized';
 const Authorized = isAuthorization => component => {
-    return isAuthorization ? component : (
-        <div className="container small text-center text-danger mt-25">
-            <p>El usuario no tiene permisos para este recurso</p>
-        </div>
-    )
+    return isAuthorization ? component : <MsgAuthorize/>
 }
 
 /**
