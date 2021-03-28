@@ -9,46 +9,81 @@ import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender, onCellPrepared } from '../../../utils/common';
+import { cellRender, formatId, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
 import ButtonForm from '../../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
 import { inPutProductTypes } from '../../../data/catalogos';
+import { inPutProductDefault } from '../../../data/defaultObject';
 
 const Nuevo = props => {    
-
     
     const { typeId, exists = false } = props;
 
     const canEdit = typeId == inPutProductTypes.saldoInicial;
-    //const canEdit = typeId == inPutProductTypes.saldoInicial;
 
-    const { inPutProductDialog : { open }, user } = useSelector(store => store);
-
+    const { inPutProductDialog : { open, id }, user } = useSelector(store => store);
+    
     const active = true;
 
-    const { products } = useProducts({ areaId: user.areaId, active, exists });
-    const [ inPutProduct, setInPutProduct ] = useState({});
+    const { products, setProducts } = useProducts({ areaId: user.areaId, active, exists });
+    const [ inPutProduct, setInPutProduct ] = useState({...inPutProductDefault});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
 
     let refForm = useRef();
     let refGrid = useRef();
 
-    useEffect(() => {        
-        setInPutProduct({areaId : user.areaId, typeId : typeId});
-        setDetails([]);
+    useEffect(() => {     
+        console.log(open, id);   
+        if(id > 0){
+            
+            http(uri.inPutProducts.getById(id)).asGet().then(resp => {
+
+                http(uri.products.getByArea(resp.areaId)).asGet().then(data =>{
+
+                    setProducts(data);
+
+                    const { inPutProductDetails, ...rest } = resp;
+
+                    inPutProductDetails.map(detail =>{
+
+                        let info = products.find(x => x.id == detail.productId);
+
+                        console.log(info)
+
+                        detail['presentation'] = info.presentation;
+                        detail['um'] = info.um;
+
+                        return detail;
+                    });
+
+                    setInPutProduct({...inPutProduct, ...rest});
+                    setDetails([...inPutProductDetails]);
+
+                });                
+
+            });
+
+        }else{
+
+            setInPutProduct({...inPutProductDefault, areaId : user.areaId, typeId : typeId});
+            setDetails([]);          
+
+        }
     }, [open]);
 
     const dispatch = useDispatch();
     const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' });
 
     const closeDialog = ( load ) => {
+
         refForm.current.instance.resetValues();  
         refGrid.current.instance.cancelEditData();
-        dispatch(dialogInputProduct({open : false}));
+
+        dispatch(dialogInputProduct({open : false, id : 0}));
         if (load) {
             let { onSave } = props;
             onSave();      
@@ -88,13 +123,13 @@ const Nuevo = props => {
         if(prop == 'productId' && value){
 
             let info = products.find(x => x.id == value);
-            console.log(info);
+          
             newData['presentation'] = info.presentation;
             newData['um'] = info.um;
             newData['cost'] = canEdit ? 0 : info.cost ;
             newData['price'] = canEdit ? 0 : info.price ;
-            !currentRowData['quantity'] && (newData['quantity'] = 1);
-            !currentRowData['total'] &&( newData['total'] = info.cost);
+            newData['quantity'] = 1;
+            newData['total'] = info.cost;
         }
         
         if(prop == 'quantity' && (+value) >= 0){
@@ -107,6 +142,8 @@ const Nuevo = props => {
 
     }
 
+    const isNew = id == 0;
+
     const textSaving = 'Guardar Entrada';
 
     return (
@@ -114,7 +151,7 @@ const Nuevo = props => {
              <Popup
                 width={1050}
                 height={550}
-                title={`Nueva entrada de inventario`}
+                title={isNew ? `Nueva entrada de inventario` : `Entrada #${ formatId(id)}`}
                 onHiding={onHiding}
                 visible={open}                
             >
@@ -208,7 +245,7 @@ const Nuevo = props => {
                     </GroupItem>
                 </Form>
 
-                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada}/>
+                <ButtonForm saving={saving} visible={isNew} textSaving={textSaving} onClick={guardarEntrada}/>
                
             </Popup>
         </div>

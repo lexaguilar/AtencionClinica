@@ -15,18 +15,19 @@ import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
 import ButtonForm from '../../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
+import { outPutProductDefault } from '../../../data/defaultObject';
 
 const Nuevo = props => {    
 
     const { typeId } = props;
 
-    const { outPutProductDialog : { open }, user } = useSelector(store => store);
+    const { outPutProductDialog : { open, id }, user } = useSelector(store => store);
 
     const active = true;
     const exists = true;
 
-    const { products, isLoading } = useProducts({areaId: user.areaId,  active, exists });
-    const [ outPutProduct, setOutPutProduct ] = useState({});
+    const { products } = useProducts({areaId: user.areaId,  active, exists });
+    const [ outPutProduct, setOutPutProduct ] = useState({...outPutProductDefault});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
     const dispatch = useDispatch();
@@ -34,11 +35,37 @@ const Nuevo = props => {
     let refForm = useRef();
     let refGrid = useRef();
 
-    useEffect(() => {        
-        setOutPutProduct({areaId : user.areaId, typeId : typeId});
-        setDetails([]);
-    }, [open]);
+    useEffect(() => {          
 
+        if(id > 0){
+            
+            http(uri.outPutProducts.getById(id)).asGet().then(resp => {
+
+                const { outPutProductDetails, ...rest } = resp;
+
+                outPutProductDetails.map(detail =>{
+
+                    let info = products.find(x => x.id == detail.productId);
+
+                    detail['presentation'] = info.presentation;
+                    detail['um'] = info.um;
+
+                    return detail;
+                })
+
+                setOutPutProduct({...outPutProduct, ...rest});              
+                setDetails([...outPutProductDetails]);
+
+            });
+
+        }else{
+
+            setOutPutProduct({...outPutProductDefault, areaId : user.areaId, typeId : typeId});
+            setDetails([]);       
+
+        }
+
+    }, [open]);
     
     const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' });
 

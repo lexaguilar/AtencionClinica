@@ -21,5 +21,6 @@ namespace AtencionClinica.Models
         public decimal Price { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+        public string Currency { get; set; }
     }
 }

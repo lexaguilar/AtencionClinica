@@ -9,12 +9,14 @@ import { DataGrid } from 'devextreme-react';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender, onCellPrepared } from '../../../utils/common';
+import { cellRender, formatId, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
 import ButtonForm from '../../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
+import { purchaseDefault } from '../../../data/defaultObject';
+import { dialogPurchase } from '../../../store/inPutProductPurchase/purchaseDialogReducer';
 
 const NuevoPurchase = props => {    
 
@@ -22,19 +24,52 @@ const NuevoPurchase = props => {
     
     const active = true;
 
-    const { inPutProductDialog : { open }, user } = useSelector(store => store);
+    const { purchaseDialog : { open, id }, user } = useSelector(store => store);
 
-    const { products, isLoading } = useProducts({ areaId:user.areaId,  active });
-    const [ inPutProduct, setInPutProduct ] = useState({});
+    const { products, setProducts } = useProducts({ areaId:user.areaId,  active });
+    const [ inPutProduct, setInPutProduct ] = useState({...purchaseDefault });
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);   
 
     let refForm = useRef();
     let refGrid = useRef();
 
-    useEffect(() => {        
-        setInPutProduct({areaId : user.areaId, typeId : typeId});
-        setDetails([]);
+    useEffect(() => {  
+        
+        if(id > 0){
+            
+            http(uri.inPutProducts.getById(id)).asGet().then(resp => {    
+                
+                http(uri.products.getByArea(resp.areaId)).asGet().then(data =>{
+
+                    setProducts(data); 
+                    
+                    const { inPutProductDetails, ...rest } = resp;
+                    
+                    inPutProductDetails.map(detail =>{
+                        
+                        let info = products.find(x => x.id == detail.productId);
+                        
+                        detail['presentation'] = info.presentation;
+                        detail['um'] = info.um;
+                        
+                        return detail;
+                    })
+                    
+                    setInPutProduct({...purchaseDefault, ...rest});
+                    setDetails([...inPutProductDetails]);
+                
+                });
+
+            });
+
+        }else{
+
+            setInPutProduct({...purchaseDefault, areaId : user.areaId, typeId : typeId});
+            setDetails([]);
+
+        }
+       
     }, [open]);
     
     const dispatch = useDispatch();
@@ -45,7 +80,7 @@ const NuevoPurchase = props => {
         refForm.current.instance.resetValues();
         refGrid.current.instance.cancelEditData();  
 
-        dispatch(dialogInputProduct({open : false}));
+        dispatch(dialogPurchase({open : false, id: 0}));
         if (load) {
             let { onSave } = props;
             onSave();      
@@ -88,8 +123,8 @@ const NuevoPurchase = props => {
             newData['um'] = info.um;
             newData['cost'] = 0;            
             newData['price'] = 0;            
-            !currentRowData['quantity'] && (newData['quantity'] = 1);
-            !currentRowData['total'] &&( newData['total'] = info.cost);
+            newData['quantity'] = 1;
+            newData['total'] = info.cost;
         }
         
         if(prop == 'quantity' && (+value) >= 0){
@@ -102,6 +137,8 @@ const NuevoPurchase = props => {
 
     }
 
+    const isNew = id == 0;
+
     const textSaving = 'Guardar Entrada';
 
     return (
@@ -109,7 +146,7 @@ const NuevoPurchase = props => {
              <Popup
                 width={1050}
                 height={580}
-                title={`Nueva compra de inventario`}
+                title={isNew ? `Nueva compra de inventario` : `Compra #${formatId(id)}`}
                 onHiding={onHiding}
                 visible={open}                
             >

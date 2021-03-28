@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import Title from '../../../components/shared/Title';
 import DataGrid, {
@@ -11,18 +11,20 @@ import DataGrid, {
     Lookup,
     Pager,
     Paging,
+    Button as ButtonGrid,
   } from 'devextreme-react/data-grid';
 import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
 import { inPutProductStates } from '../../../data/catalogos';
 import { dataAccess, formatDate, formatDateTime } from '../../../data/app';
-import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
 import useAuthorization from '../../../hooks/useAuthorization';
-import { dataFormatId, formatId } from '../../../utils/common';
+import { dataFormatId } from '../../../utils/common';
+import { addMenu } from '../../../components/grids/Menu';
+import { onToolbar } from '../../../components/grids/ToolBar';
 
 const InPutProducts = (    
     { 
@@ -30,27 +32,38 @@ const InPutProducts = (
         btnAddText= "Crear entrada",
         typeId= null,
         icon="",
-        Component= Nuevo,
-        resourcesId = null
+        Component= null,
+        resourcesId = null,
+        dialog = dialogInputProduct
     }) => {
 
     const { authorized } = useAuthorization([resourcesId, dataAccess.access ]);
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
     const dispatch = useDispatch();
 
-    const reload = (params) => {
-        dataGrid.current.instance.refresh();
-    }
+    const reload = () => dataGrid.current.instance.refresh();    
 
     const onRowPrepared = (e) => {
         if (e.rowType == 'data') {
-            console.log(e)
+            
             if (e.data.stateId == inPutProductStates.noActivo) 
                 e.rowElement.classList.add('no-activo');
             
         }
     }
+
+    const showDialog = id => dispatch(dialog({ open: true, id }));    
+
+    const addMenuItems = (e) => {
+        addMenu(e, [{
+            text: `Ver ${title}`,
+            icon: 'find',
+            onItemClick: () => showDialog(e.row.data.id)
+        }])
+    }
+
+    const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
 
     return authorized(
         <div className="container">
@@ -59,7 +72,7 @@ const InPutProducts = (
                 <CustomButton                 
                     text={btnAddText}
                     icon='plus'
-                    onClick={()=>dispatch(dialogInputProduct({open : true}))}
+                    onClick={() => showDialog(0)}
                 />
             </BlockHeader>
             <Component onSave={reload} typeId={typeId}/> 
@@ -73,6 +86,8 @@ const InPutProducts = (
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 onRowPrepared={onRowPrepared}
+                onContextMenuPreparing={addMenuItems}
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -103,9 +118,14 @@ const InPutProducts = (
                 </Column> 
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
                 <Column dataField="createBy" caption='Creado Por'  width={120}/>
+                <Column type="buttons" width={60}>
+                    <ButtonGrid name="edit" icon="find" onClick={e => showDialog(e.row.data.id)}/>
+                    <ButtonGrid name="delete" />
+                </Column>
                 <Editing
                     mode="popup"
                     allowDeleting={true}
+                    allowUpdating={true}
                     useIcons={true}
                 >
                 </Editing>

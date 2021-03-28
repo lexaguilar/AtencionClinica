@@ -1853,6 +1853,11 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Currency)
+                    .IsRequired()
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.GranTotal).HasColumnType("decimal(18, 4)");
 
                 entity.Property(e => e.Name)

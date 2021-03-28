@@ -24,6 +24,14 @@ namespace AtencionClinica.Controllers
             _service = service;
         }
 
+         [Route("api/[Controller]/get/{id}")]
+
+        public IActionResult GetById(int id)
+        {
+            var result = _db.InPutProducts.Include(x => x.InPutProductDetails).FirstOrDefault(x => x.Id == id);
+            return Json(result);
+        }
+
         [Route("api/inputproducts/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
         {

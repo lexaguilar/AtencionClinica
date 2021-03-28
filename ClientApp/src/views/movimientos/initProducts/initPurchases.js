@@ -3,6 +3,7 @@ import { inPutProductTypes } from '../../../data/catalogos';
 import InPutProducts from '../inPutProducts/InPutProducts';
 import { resources } from '../../../data/app';
 import NuevoPurchase from './NuevoPurchase';
+import { dialogPurchase } from '../../../store/inPutProductPurchase/purchaseDialogReducer';
 
 const initPurchases = () => {
 
@@ -16,7 +17,8 @@ const initPurchases = () => {
             btnAddText={btnAddText} 
             typeId={typeId} icon="dx-icon-cart color-icon-green" 
             resourcesId = {resources.compras}
-            Component={NuevoPurchase}/>
+            Component={NuevoPurchase}
+            dialog = {dialogPurchase}/>
     );
 }
 
