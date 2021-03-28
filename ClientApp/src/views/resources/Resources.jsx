@@ -8,7 +8,7 @@ import { Column, Editing, Popup, Form } from "devextreme-react/data-grid";
 import Title from "../../components/shared/Title";
 import BlockHeader from "../../components/shared/BlockHeader";
 import useAuthorization from "../../hooks/useAuthorization";
-import { dataAccess, resources } from "../../data/app";
+import { dataAccess, editorOptionsSwitch, resources } from "../../data/app";
 
 
 
@@ -71,10 +71,10 @@ const Resources = props => {
                             </Popup>
                             <Form colCount={1}>
                                 <Item dataField="name"/>                                             
-                                <Item dataField="canRead"/>                                             
-                                <Item dataField="canCreate"/>                                             
-                                <Item dataField="canUpdate"/>                                             
-                                <Item dataField="canDelete"/>                                             
+                                <Item dataField="canRead" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
+                                <Item dataField="canCreate" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
+                                <Item dataField="canUpdate" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
+                                <Item dataField="canDelete" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
                             </Form>
                         </Editing>
                         <Column dataField="name" caption="Recurso" allowEditing={false} />

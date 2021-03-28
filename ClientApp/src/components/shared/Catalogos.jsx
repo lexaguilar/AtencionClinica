@@ -22,7 +22,7 @@ import Title from './Title';
 import BlockHeader from './BlockHeader';
 import { createProxyBase } from '../../utils/proxy';
 import useAuthorization from '../../hooks/useAuthorization';
-import { dataAccess, resources } from '../../data/app';
+import { dataAccess, editorOptionsSwitch, resources } from '../../data/app';
 
 function Catalogo(props) {
 
@@ -88,7 +88,7 @@ function Catalogo(props) {
                             <RequiredRule message="El campo es requerida"/>
                             <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
                         </Item>
-                        <Item  dataField="active" editorOptions={{ width:300 }}  colSpan={2}>
+                        <Item  dataField="active"  editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}  colSpan={2}>
                         </Item>  
                     </Form>
                 </Editing>

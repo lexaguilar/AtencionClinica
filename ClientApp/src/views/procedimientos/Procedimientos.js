@@ -22,7 +22,7 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import { createStore } from '../../utils/proxy';
 import { cellRender } from '../../utils/common';
 import useAuthorization from '../../hooks/useAuthorization';
-import { dataAccess, resources } from '../../data/app';
+import { dataAccess, editorOptionsSwitch, resources } from '../../data/app';
 
 const Procedimientos = () => {
 
@@ -111,7 +111,7 @@ const Procedimientos = () => {
                         <Item  dataField="currencyId" colSpan={2}>
                             <RequiredRule message="El campo es requerido"/>
                         </Item>
-                        <Item  dataField="active" colSpan={2}>
+                        <Item  dataField="active" colSpan={2} editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}>
                         </Item>
                     </Form>
                 </Editing>
