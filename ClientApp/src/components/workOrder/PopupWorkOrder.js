@@ -9,7 +9,7 @@ const PopupWorkOrder = ({areaId}) => {
 
     const { open, id, beneficiaryId } = useSelector(store => store.workOrdersDialog);
     const dispatch = useDispatch();
-    const onHiding = () => dispatch(dialogWorkOrders({open :  false, id : 0}));
+    const onHiding = () => dispatch(dialogWorkOrders({open :  false, id : 0, beneficiaryId : 0}));
 
     const title = 'Servicios';
 

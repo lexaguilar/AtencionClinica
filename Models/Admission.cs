@@ -26,6 +26,7 @@ namespace AtencionClinica.Models
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public bool Finished { get; set; }
+        public string Identification { get; set; }
 
         public virtual Area Area { get; set; }
         public virtual Beneficiary Beneficiary { get; set; }

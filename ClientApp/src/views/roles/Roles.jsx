@@ -27,6 +27,7 @@ const Roles = props => {
                 dataSource={store({ uri: uri.roles })}
                 showBorders={true}
                 showRowLines={true}
+                hoverStateEnabled={true}
             >
                 <Column dataField="id" caption="Id" width={60} visible={false} allowEditing={false} />
                 <Column dataField="name" caption="Rol" />

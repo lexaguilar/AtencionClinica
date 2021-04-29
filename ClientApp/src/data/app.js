@@ -25,6 +25,10 @@ export const editorOptsTextBox={
     showClearButton:true
 }
 
+export const types = {
+    private : 'private',
+    inss : 'inss'
+}
 
 export const cssClasses = {
     0 : '',

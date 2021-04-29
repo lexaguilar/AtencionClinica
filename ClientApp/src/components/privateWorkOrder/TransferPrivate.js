@@ -12,7 +12,7 @@ import http from '../../utils/http';
 import uri from '../../utils/uri';
 import notify from 'devextreme/ui/notify';
 
-const Transfer = () => {
+const TransferPrivate = () => {
 
     const { open, id } = useSelector(store => store.transfer);
     const dispatch = useDispatch();
@@ -75,4 +75,4 @@ const Transfer = () => {
     );
 }
 
-export default Transfer;
+export default TransferPrivate;

@@ -7,7 +7,8 @@ import {
     HeaderFilter,
     ColumnChooser,
     Column,
-    Export
+    Export,
+    Lookup
 } from 'devextreme-react/data-grid';
 import { store } from '../../services/store';
 import uri from '../../utils/uri';
@@ -18,12 +19,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import { dialogTransferWithProduct } from '../../store/transferWithProduct/transferWithProdcutDialogReducer';
+import { dialogTransferWithService } from '../../store/transferWithService/transferWithServiceDialogReducer';
 import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
+import { openDialogServiceTest } from '../../store/servicetest/serviceTestDialogReducer';
 import useAuthorization from '../../hooks/useAuthorization';
 import Transfer from '../../components/workOrder/Transfer';
 import TransferWithProduct from '../../components/workOrder/TransferWithProduct';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
+import { createStoreLocal } from '../../utils/proxy';
+import PopupServiceTest from '../../components/workOrder/PopupServiceTest';
+import TransferWithService from '../../components/workOrder/TransferWithService';
 
 const Follows = () => {
 
@@ -31,10 +37,13 @@ const Follows = () => {
     const [visible, setVisible] = useState(false);
     const [admissionId, setAdmissionId] = useState(0);
 
-    const { areaId } = useSelector(store => store.user);
+    const { user } = useSelector(store => store);
+    const { areaId } = user;
     const dispatch = useDispatch();
 
     let dataGrid = useRef();
+
+    const isLaboratorio = areaRestrict.laboratorio == areaId;
 
     const addMenuItems = (e) => {
 
@@ -42,7 +51,6 @@ const Follows = () => {
             if (!e.items) e.items = [];
 
             if (e.row?.data) {
-
                 e.items.push({
                     text: 'Nueva orden de trabajo',
                     icon: 'folder',
@@ -52,7 +60,9 @@ const Follows = () => {
                         dispatch(dialogWorkOrders({ open: true, id, beneficiaryId: beneficiaryId }));
 
                     }
-                }, {
+                });
+
+                e.items.push({
                     text: 'Nueva transferencia',
                     icon: 'chevrondoubleright',
                     onItemClick: () => {
@@ -61,7 +71,9 @@ const Follows = () => {
                         dispatch(dialogTransfer({ open: true, id: admissionId }));
 
                     }
-                }, {
+                });
+
+                e.items.push({
                     text: 'Transferir con medicamentos',
                     icon: 'chevrondoubleright',
                     onItemClick: () => {
@@ -70,12 +82,32 @@ const Follows = () => {
                         dispatch(dialogTransferWithProduct({ open: true, id: admissionId }));
 
                     }
-                }, {
-                    text: 'Ver movimientos',
-                    icon: 'runner',
-                    onItemClick: () => 0
+                });
 
-                }, {
+                e.items.push({
+                    text: 'Transferir a laboratorio',
+                    icon: 'chevrondoubleright',
+                    onItemClick: () => {
+
+                        let { admissionId, followId } = e.row.data;
+                        dispatch(dialogTransferWithService({ open: true, id: admissionId }));
+
+                    }
+                });
+
+                if(isLaboratorio)
+                    e.items.push({
+                        text: 'Registrar resultados',
+                        icon : 'fas fa-flask',
+                        onItemClick: () => {
+                            
+                            let { id, beneficiaryId } = e.row.data;
+                            dispatch(openDialogServiceTest({ id, beneficiaryId, followId: id }));
+                            
+                        }
+                    });
+
+                e.items.push({
 
                     text: 'Dar de alta',
                     icon: 'fas fa-wheelchair',
@@ -145,6 +177,8 @@ const Follows = () => {
             <PopupWorkOrder areaId={areaId} />
             <Transfer />
             <TransferWithProduct />
+            <TransferWithService />
+            <PopupServiceTest user={user} /> 
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
@@ -153,6 +187,7 @@ const Follows = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onCellPrepared={onCellPrepared}
                 onContextMenuPreparing={addMenuItems}
                 noDataText='No se encontró ninguna transferencia'
@@ -174,13 +209,18 @@ const Follows = () => {
                 <Column dataField="id" width={100} />
                 <Column dataField="admissionId" width={100} caption='Admision' />
                 <Column dataField="inss" width={100} />
-                <Column dataField="relationship" width={100} caption="Tipo" />
+                <Column dataField="relationship" width={100} caption="Tipo" allowFiltering={false} allowHeaderFiltering={false}/>
+                <Column dataField="identification" caption='Identificacion'  width={130}/>
                 <Column dataField="firstName" caption='Nombres' />
                 <Column dataField="lastName" caption='Apellidos' />
-                <Column dataField="areaSource" caption='Area Origen' />
-                <Column dataField="admissionType" caption='Tipo Ingreso' width={120} />
-                <Column dataField="finished" caption='Finalizado' dataType='boolean' width={100} />
-                <Column dataField="createBy" caption='Creado por' width={120} />
+                <Column dataField="areaSourceId" caption='Area Origen' >
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'area' })} valueExpr="id" displayExpr="name" />
+                </Column>
+                <Column dataField="admissionTypeId" caption='Tipo Ingreso' width={120} >
+                    <Lookup disabled={true} dataSource={createStoreLocal({name : 'admissionType' })} valueExpr="id" displayExpr="name" />
+                </Column>
+                <Column dataField="finished" caption='Finalizado' dataType='boolean' allowFiltering={false} allowHeaderFiltering={false} width={90} />
+                <Column dataField="createBy" caption='Creado por' width={120} visible={false} allowFiltering={false} allowHeaderFiltering={false} />
                 <Column dataField="createAt" caption='Creado el' dataType='date' format={formatDateTime} width={150} />
             </DataGrid>
         </div>

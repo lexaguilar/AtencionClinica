@@ -15,6 +15,8 @@ const useProducts = ({areaId = 0,exists=false, active=false, has=false}) => {
         setIsLoading(false);
 
     }
+
+    const reload = callApi;
     
     useEffect(() => {
         callApi();
@@ -23,7 +25,8 @@ const useProducts = ({areaId = 0,exists=false, active=false, has=false}) => {
     return {
         products, 
         setProducts,
-        isLoading
+        isLoading,
+        reload,
     }
 
 }

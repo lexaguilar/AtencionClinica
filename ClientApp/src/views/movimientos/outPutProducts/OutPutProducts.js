@@ -72,6 +72,7 @@ const OutPutProducts = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onRowPrepared={onRowPrepared}
                 onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{

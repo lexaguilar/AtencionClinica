@@ -11,6 +11,7 @@ namespace AtencionClinica.Models
         public int BillId { get; set; }
         public int BillTypeId { get; set; }
         public string BillTypeName { get; set; }
+        public int PrivateCustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? Inss { get; set; }

@@ -65,6 +65,7 @@ const Doctores = (props) => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={20} />

@@ -24,7 +24,7 @@ const Transfer = () => {
     const transferir = () => {
         
         var result = refForm.current.instance.validate();
-        if(result){
+        if(result.isValid){
            
             http(uri.follows(0).insert).asPost({...transfer, admissionId : id}).then(resp => {
                 notify("Se realizo la transferencia con éxito");

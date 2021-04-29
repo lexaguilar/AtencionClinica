@@ -3,13 +3,14 @@ import React from 'react';
 import { Popup } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
-import WorkOrders from '../../views/workOrders/WorkOrders';
+import WorkOrders from '../../views/privateWorkOrders/WorkOrders';
 
-const PopupWorkOrder = ({areaId}) => {
 
-    const { open, id, beneficiaryId } = useSelector(store => store.workOrdersDialog);
+const PopupWorkOrderPrivate = ({ areaId }) => {
+
+    const { open, id, customerId } = useSelector(store => store.workOrdersDialog);
     const dispatch = useDispatch();
-    const onHiding = () => dispatch(dialogWorkOrders({open :  false, id : 0}));
+    const onHiding = () => dispatch(dialogWorkOrders({open :  false, id : 0, customerId: 0}));
 
     const title = 'Servicios';
 
@@ -23,10 +24,10 @@ const PopupWorkOrder = ({areaId}) => {
                 title={title}
                 visible={open}
             >               
-                <WorkOrders followId={id} beneficiaryId={beneficiaryId} areaId={areaId}/>
+                <WorkOrders followId={id} customerId={customerId} areaId={areaId}/>
             </Popup>
         </div>
     );
 }
 
-export default PopupWorkOrder;
+export default PopupWorkOrderPrivate;

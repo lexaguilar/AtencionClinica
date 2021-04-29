@@ -78,6 +78,7 @@ const Percapita = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                
                 remoteOperations={{
                     paging: true,
                     filtering: true

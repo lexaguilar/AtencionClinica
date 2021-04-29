@@ -85,6 +85,7 @@ const InPutProducts = (
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onRowPrepared={onRowPrepared}
                 onContextMenuPreparing={addMenuItems}
                 onToolbarPreparing={onToolbarPreparing}

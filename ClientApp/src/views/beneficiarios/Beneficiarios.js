@@ -100,6 +100,7 @@ const Beneficiarios = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 noDataText='No se encontró ningun beneficiario'
                 onInitNewRow={onInitNewRow}
                 onToolbarPreparing={onToolbarPreparing}

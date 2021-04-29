@@ -68,10 +68,17 @@ namespace AtencionClinica.Controllers
                 admissions = admissions.Where(x => x.TypeId == typeId);
             }
 
+            if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                admissions = admissions.Where(x => x.Identification.StartsWith(identification));
+            }
+
             if (values.ContainsKey("createAt"))
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
-                admissions = admissions.Where(x => x.CreateAt > createAt && x.CreateAt < createAt.AddDays(1));
+                var createAtEnd = Convert.ToDateTime(values["createAtEnd"]);
+                admissions = admissions.Where(x => x.CreateAt > createAt && x.CreateAt < createAtEnd);
             }
 
             if (values.ContainsKey("createBy"))
@@ -91,7 +98,8 @@ namespace AtencionClinica.Controllers
                 x.SpecialtyId,
                 x.CreateAt,
                 x.CreateBy,
-                x.Active
+                x.Active,
+                x.Identification
             });
 
             return Json(new
@@ -133,6 +141,7 @@ namespace AtencionClinica.Controllers
                     return BadRequest("Solo se permiten admisiones para los hijos edad igual 13 años o menor");
 
             admission.Inss = bene.Inss;
+            admission.Identification = bene.Identification;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
             admission.CreateAt = DateTime.Now;

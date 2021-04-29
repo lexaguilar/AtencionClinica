@@ -171,6 +171,7 @@ const Nuevo = props => {
                                 <TabPanel>   
                                     <GridMedicamentos 
                                         isClosing={isClosing}
+                                        
                                         details={details}
                                         user={user}  />  
 

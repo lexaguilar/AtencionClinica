@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import DataGrid, { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, TotalItem, Summary } from 'devextreme-react/data-grid';
 import gridsHelper from '../../utils/gridsHelper';
 import { cellRender, formatToMoney, onCellPrepared } from '../../utils/common';
@@ -6,13 +6,13 @@ import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import useProducts from '../../hooks/useProducts';
 
 
-const GridMedicamentos = ({isClosing, details, user, showPrice= false, currencyId = 1, rate= 1}) => {
+const GridMedicamentos = ({isClosing, details, user, showPrice= false, currencyId = 1, rate= 1, refresh = false}) => {
 
     const exists = true;    
     const active = true;   
     let ref = useRef();    
 
-    const { products } = useProducts({areaId: user.areaId, exists, active});
+    const { products, reload } = useProducts({areaId: user.areaId, exists, active});
     const onToolbarPreparing = gridsHelper(ref, { text : 'Agregar productos', icon:'plus' });   
 
     const getPriceByCurrency = product => {
@@ -65,6 +65,11 @@ const GridMedicamentos = ({isClosing, details, user, showPrice= false, currencyI
                 newData['total'] = currentRowData['cost'] * value;
 
     }  
+
+    useEffect(() => {
+        if(refresh)
+            reload();
+    }, [refresh]);
 
     if(isClosing)
         if(ref.current)

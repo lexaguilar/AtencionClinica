@@ -76,6 +76,25 @@ namespace AtencionClinica.Controllers
             });
         }
 
+        [Route("api/privateCustomers/get/{customerId}/information")]
+        public IActionResult GetInformation(int customerId) 
+        {
+            
+            var customer = _db.PrivateCustomers
+            .Include(x => x.Type)
+            .Include(x => x.PrivateCustomerStatus)
+            .FirstOrDefault(x => x.Id == customerId);
+          
+            return Json(new {
+
+                Type = customer.Type.Name,
+                Name = customer.GetFullName(),
+                Status = customer.PrivateCustomerStatus.Name,
+                StatusId = customer.PrivateCustomerStatusId,
+
+            });
+        }
+
         [Route("api/privateCustomers/get/catalog")]
         public IActionResult GetCatalog(int skip, int take, IDictionary<string, string> values) 
         {
@@ -120,6 +139,9 @@ namespace AtencionClinica.Controllers
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            if(privateCustomer.Id == 1)
+                return BadRequest("No se puede modificar este cliente ya que es para fines de facturas al contado");
 
             if(privateCustomer.TypeId == (int)ClientType.Contract) //convenio
             {

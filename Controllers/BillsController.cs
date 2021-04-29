@@ -110,7 +110,7 @@ namespace AtencionClinica.Controllers
 
             if(bill.PrivateCustomerId != (int)PrivateCustomers.ClienteContado)
             {
-                 var follow = new FollowsPrivate{
+                var follow = new FollowsPrivate{
                     BillId = bill.Id,
                     AreaSourceId = 3, //caja
                     AreaTargetId = bill.AreaId,
@@ -127,7 +127,21 @@ namespace AtencionClinica.Controllers
 
             return Json(bill);
 
-        }      
+        }   
+
+        [HttpGet("api/bill/{id}/alta")]
+        public IActionResult Alta(int id) {
+
+            var bill = _db.Bills.FirstOrDefault(x => x.Id == id);
+
+            if(bill != null)
+            {
+                bill.Finished = true;
+                _db.SaveChanges();
+            }
+
+            return Json(new { n = id });
+        }    
 
         [HttpGet("api/bill/{id}/delete")]
         public IActionResult Delete(int id) {
@@ -135,6 +149,16 @@ namespace AtencionClinica.Controllers
             //TODO verificar si no hay descargue de inventario para poder anular
             if(bill != null)
             {
+                if(bill.Finished)
+                    return BadRequest("No se puede anular una factura que ya fue procesada por las areas");
+
+                var follow = _db.FollowsPrivates.Include(x => x.PrivateWorkOrders).Where(x => x.BillId == id);
+                foreach (var item in follow)
+                {
+                    if(item.PrivateWorkOrders.Count > 0)
+                    return BadRequest("No se puede anular la factura porque ya tiene ordenes de trabajo realizadas");
+                }
+
                 bill.Active = false;
                 _db.SaveChanges();
             }

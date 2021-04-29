@@ -58,6 +58,7 @@ const Customers = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 noDataText='No se encontró ningun asegurado'
                 onToolbarPreparing={onToolbarPreparing}
                 onCellPrepared={onCellPrepared}

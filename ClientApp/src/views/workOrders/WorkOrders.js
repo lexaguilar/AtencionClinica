@@ -33,30 +33,30 @@ const WorkOrders = (props) => {
 
     const reload = () => dataGrid.current.instance.refresh(); 
     
-    const isLaboratorio = areaRestrict.laboratorio == areaId;
+   // const isLaboratorio = areaRestrict.laboratorio == areaId;
 
-    const addMenuItems =(e) => {
+    // const addMenuItems =(e) => {
 
-        if (e.target == "content") {
-            if (!e.items) e.items = [];
+    //     if (e.target == "content") {
+    //         if (!e.items) e.items = [];
             
-            if(e.row?.data){ 
-                if(isLaboratorio){
+    //         if(e.row?.data){ 
+    //             if(isLaboratorio){
 
-                    e.items.push({
-                        text: 'Registrar resultados',
-                        icon : 'fas fa-flask',
-                        onItemClick: () => {
+    //                 e.items.push({
+    //                     text: 'Registrar resultados',
+    //                     icon : 'fas fa-flask',
+    //                     onItemClick: () => {
                             
-                            let { id } = e.row.data;
-                            dispatch(openDialogServiceTest({ id, beneficiaryId}));
+    //                         let { id } = e.row.data;
+    //                         dispatch(openDialogServiceTest({ id, beneficiaryId}));
                             
-                        }
-                    });
-                }
-            }
-        }
-    }
+    //                     }
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }
     
 
     const title = `Ordenes de trabajo movimiento ${followId}`;
@@ -74,8 +74,7 @@ const WorkOrders = (props) => {
                 />
             </BlockHeader>
 
-            <Nuevo onSave={reload} followId={followId} beneficiaryId={beneficiaryId}/> 
-            <PopupServiceTest /> 
+            <Nuevo onSave={reload} followId={followId} beneficiaryId={beneficiaryId}/>            
             
             <DataGrid id="gridContainer"
                 ref={dataGrid}
@@ -85,7 +84,8 @@ const WorkOrders = (props) => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-                onContextMenuPreparing={addMenuItems}
+                hoverStateEnabled={true}
+                //onContextMenuPreparing={addMenuItems}
                 remoteOperations={{
                     paging: true,
                     filtering: true

@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { closeDialogServiceTest } from '../../store/servicetest/serviceTestDialogReducer';
 import ServiceTest from '../../views/workOrders/ServiceTest';
 
-const PopupServiceTest = () => {
+const PopupServiceTest = ({user}) => {
 
-    const { open } = useSelector(store => store.serviceTestDialog);
+    const { open, beneficiaryId, followId } = useSelector(store => store.serviceTestDialog);
     const dispatch = useDispatch();
     const onHiding = () => dispatch(closeDialogServiceTest({id : 0, followId : 0, beneficiaryId : 0}));
 
@@ -23,7 +23,7 @@ const PopupServiceTest = () => {
                 title={title}
                 visible={open}
             >               
-                <ServiceTest />
+                <ServiceTest beneficiaryId={beneficiaryId} user={user} open={open} followId={followId} />
             </Popup>
         </div>
     );

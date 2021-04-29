@@ -109,6 +109,7 @@ const Appointments = props => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onContextMenuPreparing={addMenuItems}
                 onRowPrepared={onRowPrepared}
                 onCellPrepared={onCellPrepared}
@@ -126,13 +127,13 @@ const Appointments = props => {
                     allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
                 />
                 <FilterRow visible={true} />
-                <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={false} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id"  width={100} />
                 <Column dataField="inss"  width={110} />
                 <Column dataField="tipo"  width={110} />
-                <Column dataField="nombre" />
+                <Column dataField="identification" caption="Identificacion" width={130}/>
+                <Column dataField="nombre" allowFiltering={false}/>
                 <Column dataField="doctorId" width={160} caption="Doctor">
                     <Lookup disabled={true} dataSource={createStore({name: 'doctor'})} valueExpr="id" displayExpr="name" />
                 </Column> 

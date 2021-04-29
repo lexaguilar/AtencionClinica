@@ -115,6 +115,7 @@ const Subsidies = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onContextMenuPreparing={addMenuItems}
                 onCellPrepared={onCellPrepared}
                 onRowPrepared={onRowPrepared}
@@ -132,13 +133,13 @@ const Subsidies = () => {
                     allowedPageSizes={[10, 20, 50]}
                 />
                 <FilterRow visible={true} />
-                <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 {/* <Export enabled={true}  /> */}
                 <Column dataField="id"  width={80} />
                 <Column dataField="reference"  width={90} caption='Boleta' alignment='right'/>
                 <Column dataField="inss"  width={100} />
-                <Column dataField="nombre" caption='Nombre'/>
+                <Column dataField="identification" caption="Identificacion" width={130}/>
+                <Column dataField="nombre" caption='Nombre' allowFiltering={false}/>
                 <Column dataField="areaId" width={150} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore({name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 

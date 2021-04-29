@@ -29,16 +29,34 @@ namespace AtencionClinica.Controllers
              .Include(x => x.Cie10)           
             .OrderByDescending(x => x.Reference);
 
+            if (values.ContainsKey("id"))
+            {
+                var id = Convert.ToInt32(values["id"]);
+                subsidies = subsidies.Where(x => x.Id == id);
+            }
+
             if (values.ContainsKey("inss"))
             {
                 var inss = Convert.ToInt32(values["inss"]);
                 subsidies = subsidies.Where(x => x.Inss == inss);
             }
 
+             if (values.ContainsKey("areaId"))
+            {
+                var areaId = Convert.ToInt32(values["areaId"]);
+                subsidies = subsidies.Where(x => x.AreaId == areaId);
+            }
+
             if (values.ContainsKey("reference"))
             {
                 var reference = Convert.ToString(values["reference"]);
                 subsidies = subsidies.Where(x => x.Reference == reference);
+            }
+
+             if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                subsidies = subsidies.Where(x => x.Identification.StartsWith(identification));
             }
 
             if (values.ContainsKey("createAt"))
@@ -61,7 +79,8 @@ namespace AtencionClinica.Controllers
                 x.Days,
                 x.CreateAt,
                 x.CreateBy,
-                x.Active
+                x.Active,
+                x.Identification
             });
 
             return Json(new
@@ -88,6 +107,7 @@ namespace AtencionClinica.Controllers
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == subsidy.BeneficiaryId);
             
             subsidy.Inss = bene.Inss;
+            subsidy.Identification = bene.Identification;
             subsidy.Active = true;
             subsidy.CreateAt = DateTime.Now;
             subsidy.CreateBy = user.Username;

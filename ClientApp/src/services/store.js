@@ -70,23 +70,6 @@ const store =
                         dataFilter(loadOptions.filter);
                         
                         params = { ...params, ...moreParams}
-
-                        // for (var filter in loadOptions.filter) {
-                        //     if (loadOptions.filter.hasOwnProperty(filter)) {
-                        //         const element = loadOptions.filter[filter];
-                        //         if (typeof element == 'object') {
-                        //             if (typeof element[0] == 'object') {
-                        //                 var t = element[0];
-                        //                 if (!params[t[0]])
-                        //                     params[t[0]] = t[2];
-                        //             } else {
-                        //                 if (!params[element[0]])
-                        //                     params[element[0]] = element[2];
-                        //             }
-
-                        //         }
-                        //     }
-                        // }
                     } else {
                         params[loadOptions.filter[0]] = loadOptions.filter[2];
                     }

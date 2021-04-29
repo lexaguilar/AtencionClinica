@@ -63,6 +63,7 @@ const Privados = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 noDataText='No se encontró ningun paciente'
                 onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{

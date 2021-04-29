@@ -63,6 +63,7 @@ const Procedimientos = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onToolbarPreparing={onToolbarPreparing}
                 onInitNewRow={onInitNewRow}
                 remoteOperations={{

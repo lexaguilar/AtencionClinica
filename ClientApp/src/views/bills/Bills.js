@@ -21,12 +21,15 @@ import { dataAccess, formatDateTime, resources } from '../../data/app';
 import { cellRender } from '../../utils/common';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
+import { billTypes } from '../../data/bill';
 
 const Bills = props => {
 
     const { authorized } = useAuthorization([resources.caja, dataAccess.access ]);
 
     let dataGrid = React.createRef();
+
+    const report = urlReport();
 
     const addMenuItems =(e) => {
         
@@ -37,21 +40,25 @@ const Bills = props => {
  
             // Add a custom menu item
             if(e.rowIndex >= 0)
-                e.items.push({
-
-                    text: 'Pagar factura',
-                    icon : 'print',
-                    onItemClick: () => {
-                        
-                    }
-                    
-                },{
+                e.items.push({                  
 
                     text: 'Re-imprimir factura',
                     icon : 'print',
                     onItemClick: () => {
-                        const report = urlReport();
-                        report.print(`${report.billTicket(e.row.data.id)}`);
+                        
+                        report.print(`${report.billTicket(e.row.data.id)}`)  
+
+                    } 
+                    
+                },{
+
+                    text: 'Estado de cuenta',
+                    icon : 'print',
+                    onItemClick: () => {
+
+                        if(e.row.data.billTypeId == billTypes.ingreso )
+                            report.print(`${report.billbyClient(e.row.data.id)}`);
+
                     }
                     
                 },{
@@ -108,7 +115,6 @@ const Bills = props => {
                     allowedPageSizes={[10, 20, 50]}
                 />
                 <FilterRow visible={true} />
-                <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id"  width={100} />          

@@ -40,7 +40,7 @@ const TransferWithProduct = () => {
     const transferir = () => {
 
         var result = refForm.current.instance.validate();
-        if (result) {
+        if (result.isValid) {
 
             http(`follows/post/withproduct/Admission/${id}/areaTarget/${workPreOrder.areaTargetId}`)
             .asPost({ ...workPreOrder, workPreOrderDetails : details }).then(resp => {

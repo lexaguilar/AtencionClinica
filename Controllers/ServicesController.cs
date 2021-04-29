@@ -85,11 +85,6 @@ namespace AtencionClinica.Controllers
                     if(hasWorkOrders)
                         return BadRequest("No se puede editar la moneda de este servicio porque ya tiene ordenes de trabajo");
 
-                    //Verificar que no tenga movimientos en facturas
-                    var hasFollowServices = _db.FollowServiceDetails.Any(x => x.ServiceId == service.Id);
-                    if(hasFollowServices)
-                        return BadRequest("No se puede editar la moneda de este servicio porque ya tiene descargues de trabajo");
-
                 }
 
                 oldService.CopyFrom(service, x => new

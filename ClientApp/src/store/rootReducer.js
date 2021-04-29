@@ -20,9 +20,11 @@ import inPutProductDialogReducer from './inPutProduct';
 import outPutProductDialogReducer from './outPutProduct';
 import productDialogReducer from './product';
 import workOrderDialogReducer from './workOrder';
+import privateWorkOrderDialogReducer from './privateWorkOrder';
 import workOrdersDialogReducer from './workOrders';
 import transferDialogReducer from './transfer';
 import transferWithProdcutDialogReducer from './transferWithProduct';
+import transferWithServiceDialogReducer from './transferWithService';
 import customDialogReducer from './customDialog';
 import serviceTestDialogReducer from './servicetest';
 import areaProductDialogReducer from './areaProduct/areaProductDialogReducer';
@@ -52,9 +54,11 @@ export default combineReducers({
     catalog : catalogReducer,
     transfer : transferDialogReducer,
     transferWithProdcut : transferWithProdcutDialogReducer,
+    transferWithService : transferWithServiceDialogReducer,
     customDialog : customDialogReducer,
     serviceTestDialog : serviceTestDialogReducer,
     areaProductDialog : areaProductDialogReducer,
     purchaseDialog : purchaseDialogReducer,
     traslateDialog : traslateDialogReducer,
+    privateWorkOrderDialog : privateWorkOrderDialogReducer,
 });

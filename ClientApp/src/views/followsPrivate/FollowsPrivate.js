@@ -13,24 +13,25 @@ import { store } from '../../services/store';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { areaRestrict, dataAccess, formatDateTime, resources } from '../../data/app';
+import { areaRestrict, dataAccess, formatDateTime, resources, types } from '../../data/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import { dialogTransferWithProduct } from '../../store/transferWithProduct/transferWithProdcutDialogReducer';
-import PopupWorkOrder from '../../components/workOrder/PopupWorkOrder';
+import PopupWorkOrderPrivate from '../../components/privateWorkOrder/PopupWorkOrderPrivate';
 import useAuthorization from '../../hooks/useAuthorization';
-import Transfer from '../../components/privateWorkOrder/Transfer';
+import TransferPrivate from '../../components/privateWorkOrder/TransferPrivate';
 import TransferWithProduct from '../../components/workOrder/TransferWithProduct';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 import { dataFormatId, formatId } from '../../utils/common';
+import { billTypes } from '../../data/bill';
 
 const FollowsPrivate = () => {
 
     const { authorized } = useAuthorization([resources.servicios, dataAccess.access ]);
     const [visible, setVisible] = useState(false);
-    const [admissionId, setAdmissionId] = useState(0);
+    const [billId, setBillId] = useState(0);
     
     const { areaId } = useSelector(store => store.user); 
     const dispatch = useDispatch();    
@@ -48,9 +49,17 @@ const FollowsPrivate = () => {
                     text: 'Nueva orden de trabajo',
                     icon : 'folder',
                     onItemClick: () => {
-                                               
-                        let { id, beneficiaryId } = e.row.data;
-                        dispatch(dialogWorkOrders({open : true, id, beneficiaryId : beneficiaryId}));
+
+                        console.log(e.row.data);
+
+                        if(e.row.data.billTypeId == billTypes.ingreso){
+                            
+                            let { id, privateCustomerId } = e.row.data;                       
+                            dispatch(dialogWorkOrders({open : true, id, customerId : privateCustomerId}));
+
+                        }else{
+                            notify('Solo se permite ordenes de trabajo a ingreso Hospitalarios','error');
+                        }
 
                     }
                 },{
@@ -58,9 +67,16 @@ const FollowsPrivate = () => {
                     icon : 'chevrondoubleright',
                     onItemClick: () => {
 
-                        let { billId } = e.row.data;
-                        dispatch(dialogTransfer({open : true, id : billId}));
+                        if(e.row.data.billTypeId == billTypes.ingreso){
+                            
+                            let { billId } = e.row.data;
+                            dispatch(dialogTransfer({open : true, id : billId}));
+                            
+                        }else{
+                            notify('Solo se permite transferencias a ingreso Hospitalarios','error');
+                        }
 
+                       
                     }              
                 // },{
                 //     text: 'Transferir con medicamentos',
@@ -82,8 +98,8 @@ const FollowsPrivate = () => {
                     icon : 'fas fa-wheelchair',
                     onItemClick: () => {
 
-                        if(e.row.data.admissionTypeId == 2){                            
-                            setAdmissionId(e.row.data.admissionId);
+                        if(e.row.data.billTypeId == billTypes.ingreso){                            
+                            setBillId(e.row.data.billId);
                             setVisible(true);
                         }else
                             notify('Solo se permite dar alta a admisiones tipo ingreso Hospitalarios','error');
@@ -110,7 +126,7 @@ const FollowsPrivate = () => {
 
     const anular = () => {
 
-        http(`admisions/${admissionId}/alta`).asGet().then(resp =>{
+        http(`bill/${billId}/alta`).asGet().then(resp =>{
             notify('Paciente ha sido dado de alta con éxito'); 
             onHiding();
             //dataGrid.current.instance.refresh();  
@@ -119,7 +135,7 @@ const FollowsPrivate = () => {
     }
 
     const onHiding = () => {
-        setAdmissionId(0);
+        setBillId(0);
         setVisible(false); 
     }
 
@@ -137,13 +153,12 @@ const FollowsPrivate = () => {
                 visible={visible}
                 >
                     <p>Esta seguro de dar de alta al paciente?</p>
-                    <p className="text-danger">Despues de esto ya no se podra atender al paciente, hasta que tenga una nueva admisión</p>
+                    <p className="text-danger">Despues de esto ya no se podra atender al paciente, hasta que tenga una nueva factura</p>
                     <br />
                     <Button className="m0" type="default" text="Confirmar" onClick={anular} width="100%" ></Button>
             </Popup>
-            <PopupWorkOrder areaId={areaId} />  
-            <Transfer />  
-            <TransferWithProduct />   
+            <PopupWorkOrderPrivate areaId={areaId} />  
+            <TransferPrivate />          
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
@@ -152,6 +167,7 @@ const FollowsPrivate = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onCellPrepared={onCellPrepared}
                 onContextMenuPreparing={addMenuItems}
                 noDataText='No se encontró ninguna transferencia'
@@ -172,7 +188,7 @@ const FollowsPrivate = () => {
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id"  width={100} />
                 <Column dataField="billId"  width={100} caption='Factura #' cellRender={dataFormatId} />
-                <Column dataField="inss"  width={100} />
+                <Column dataField="inss" caption="Código"  width={100} />
                 <Column dataField="privateCustomerTypeName" caption='Contrato'/>
                 <Column dataField="firstName" caption='Nombres'/>
                 <Column dataField="lastName" caption='Apellidos'/>

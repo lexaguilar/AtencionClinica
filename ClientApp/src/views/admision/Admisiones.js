@@ -97,6 +97,7 @@ const Admisiones = props => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onContextMenuPreparing={addMenuItems}
                 onRowPrepared={onRowPrepared}
                 onCellPrepared={onCellPrepared}
@@ -117,11 +118,12 @@ const Admisiones = props => {
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true}  />
                 <Column dataField="id"  width={80} allowHeaderFiltering={false} />
-                <Column dataField="numberOfDay" width={90} caption='Numero' allowFiltering={false} allowHeaderFiltering={false}/>
-                <Column dataField="inss"  width={110}  allowHeaderFiltering={false}/>
+                <Column dataField="numberOfDay" width={80} caption='Numero' allowFiltering={false} allowHeaderFiltering={false}/>
+                <Column dataField="inss"  width={100}  allowHeaderFiltering={false}/>
                 <Column dataField="tipo"  width={110} allowFiltering={false}/>
+                <Column dataField="identification" caption="Identificacion" width={130}/>
                 <Column dataField="nombre"  allowHeaderFiltering={false}/>
-                <Column dataField="typeId" width={150} caption="Tipo Ingreso">
+                <Column dataField="typeId" width={120} caption="Tipo Ingreso">
                     <Lookup disabled={true} dataSource={createStoreLocal({name : 'admissionType' })} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="areaId" width={150} caption="Area">
@@ -130,7 +132,7 @@ const Admisiones = props => {
                 <Column dataField="specialtyId" width={150} caption="Especialidad">
                     <Lookup disabled={true} dataSource={createStoreLocal({name : 'specialty'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="createBy" caption='Creado por' width={80}  allowHeaderFiltering={false}/>
+                <Column dataField="createBy" caption='Creado por' width={80}  allowHeaderFiltering={false} visible={false}/>
                 <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150}  allowHeaderFiltering={false}/>
                 <Column dataField="active" caption='Estado' width={80} visible={false} />
                 <Editing

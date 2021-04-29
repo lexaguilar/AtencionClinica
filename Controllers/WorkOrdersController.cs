@@ -64,44 +64,20 @@ namespace AtencionClinica.Controllers
 
             var workPreOrders = _db.WorkPreOrders.FirstOrDefault(x => x.FollowId == followId);
             if(workPreOrders != null)
-                workPreOrders.Used = true;
+                workPreOrders.Used = true;            
 
             _db.SaveChanges();
+
+            var lastOutPutProduct = _db.OutPutProducts.OrderByDescending(x=> x.Id).FirstOrDefault(x => x.CreateBy == user.Username && x.AreaId == user.AreaId);
+            
+            if(lastOutPutProduct != null){
+
+                lastOutPutProduct.Reference = workOrder.Id.ToString();
+                _db.SaveChanges();
+            }
 
             return Json(workOrder);
 
         }
-        
-        [HttpGet("api/workOrders/{id}/delete")]
-        public IActionResult Delete(int id)
-        {
-            var inPutProducts = _db.InPutProducts.Include(x => x.InPutProductDetails).FirstOrDefault(x => x.Id == id);
-
-            if (inPutProducts != null)
-            {
-                inPutProducts.StateId = 2;
-                _db.SaveChanges();
-            }
-
-            return Json(new { n = id });
-        }
-
-        // [Route("api/workOrders/{id}/get/asServices")]
-        // public IActionResult GetAsServices(int workId)
-        // {
-        // //     IQueryable<WorkOrderDetail> workOrders = _db.WorkOrderDetails.Where(x => x.WorkOrderId == workId && x.IsService)
-        // //    .Select(x => new {
-
-
-        // //    });
-
-        // //     return Json(new
-        // //     {
-        // //         items,
-        // //         totalCount = workOrders.Count()
-        // //     });
-
-        // }
-
     }
 }

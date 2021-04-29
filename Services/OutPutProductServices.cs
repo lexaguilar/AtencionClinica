@@ -117,6 +117,42 @@ namespace AtencionClinica.Services
             
         }
 
+        public ModelValidationSource<OutPutProduct> CreateFrom(PrivateWorkOrder work)
+        {
+
+            var follow = _db.FollowsPrivates.FirstOrDefault(x => x.Id == work.FollowsPrivateId);
+
+            var items = new List<OutPutProductDetail>();
+            foreach (var item in work.PrivateWorkOrderDetails.Where(x => !x.IsService))
+            {
+
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaTargetId && x.ProductId == item.ProductId);
+
+                items.Add(new OutPutProductDetail{
+                    ProductId = item.ProductId.Value,
+                    Quantity = item.Quantity,
+                    Cost = areaProducto.CostAvg,
+                    CostAvg = areaProducto.CostAvg,
+                    Price = item.Price,
+                    Discount = 0
+                });
+
+            } 
+
+            var outPutProduct = new OutPutProduct{
+                AreaId = follow.AreaTargetId,
+                TypeId = (int)OutputType.FarmaciaServicios,
+                Date = work.Date,
+                Observation = "Despacho por servicios privados",
+                CreateBy = work.CreateBy,
+                Reference = work.Reference,
+                OutPutProductDetails = items
+            };
+
+            return this.Create(outPutProduct);
+            
+        }
+
         public ModelValidationSource<OutPutProduct> CreateFrom(Bill bill)
         {
             var items = new List<OutPutProductDetail>();

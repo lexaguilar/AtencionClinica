@@ -53,6 +53,7 @@ const Rates = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 remoteOperations={{                    
                     paging: true,
                     filtering: true

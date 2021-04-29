@@ -21,6 +21,7 @@ const uri = {
     outPutProducts: createProxyBase('outPutProducts'),  
     traslates: createProxyBase('traslates'),  
     workOrders: createProxyBase('workOrders'),  
+    privateWorkOrders: createProxyBase('privateWorkOrders'),  
     subsidies: createProxyBase('subsidies'),
     services: createProxyBase('services'),
     workOrdersServices: workOrderId =>  createProxyBase(`workOrdersServices/${workOrderId}`),
@@ -32,7 +33,8 @@ const uri = {
 };
 uri.privateCustomers = () => {
     let urls = createProxyBase('privateCustomers');
-    urls.getAsCatalog = `privateCustomers/get/catalog`
+    urls.getAsCatalog = `privateCustomers/get/catalog`;
+    urls.getInfo = customerId => `privateCustomers/get/${customerId}/information`
     return urls;
 }
 uri.resources= roleId => `roles/${roleId}/resources`;

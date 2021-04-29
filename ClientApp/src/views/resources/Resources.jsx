@@ -59,6 +59,7 @@ const Resources = props => {
                         allowColumnResizing={true}
                         allowColumnReordering={true}
                         rowAlternationEnabled={true}
+                        hoverStateEnabled={true}
                     >
                         <Editing
                             mode="popup"
