@@ -49,7 +49,7 @@ const Existencias = () => {
             <FilterRow visible={true} />
             <Column dataField="id" caption="Codigo" width={80}/>
             <Column dataField="name" caption="Nombre" />
-            <Column dataField="presentation" caption="Presentacion" width={100}/>
+            <Column dataField="presentation" caption="Laboratorio" width={100}/>
             <Column dataField="um" caption="UM" width={80}/>
           </DataGrid>
         );
@@ -154,7 +154,7 @@ const Existencias = () => {
                         <Column dataField="productId" caption="Codigo" width={150}/>
                         <Column dataField="productName" caption="Producto"  />
                         <Column dataField="um" caption="Unidad Medida" width={120} />
-                        <Column dataField="presentation" caption="Presentacion" width={120} />
+                        <Column dataField="presentation" caption="Laboratorio" width={120} />
                         <Column dataField="price" caption="Precio" cellRender={cellRender()} width={120} alignment="right" />
                         <Column dataField="costAvg" caption="Costo" cellRender={cellRender()} width={120} alignment="right" />
                         <Column dataField="stock" caption="Existencia" width={100} />

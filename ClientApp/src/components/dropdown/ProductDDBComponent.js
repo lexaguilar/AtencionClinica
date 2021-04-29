@@ -116,7 +116,7 @@ export default class ProductDDBComponent extends React.Component {
                 <FilterRow visible={true} />
                 <Column dataField="id" caption="Codigo" width={80}></Column>
                 <Column dataField="name" caption="Nombre" ></Column>
-                <Column dataField="presentation" caption="Presentacion" width={120}></Column>
+                <Column dataField="presentation" caption="Laboratorio" width={120}></Column>
                 <Column dataField="um" caption="UM" width={100}></Column>
                 <Column dataField="cost" caption="Costo" visible={!this.showPrice} cellRender={cellRender()} width={80}></Column>
                 <Column dataField="price" caption="Precio" visible={this.showPrice} cellRender={cellRender()} width={90}></Column>

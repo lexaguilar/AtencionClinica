@@ -213,7 +213,7 @@ const Nuevo = props => {
                                     />
                                     <RuleRequired />
                             </Column>                          
-                            <Column dataField="presentation" caption="Presentac" width={120} allowEditing={false}>
+                            <Column dataField="presentation" caption="Lab." width={120} allowEditing={false}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="um" caption="Um" width={120} allowEditing={false}>

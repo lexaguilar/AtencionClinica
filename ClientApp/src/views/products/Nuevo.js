@@ -108,7 +108,7 @@ const Nuevo = props => {
                                 ...editorOptionsSelect
                             }} >
                             <Label text="Presentacion" />
-                            <RequiredRule message="Seleccione la presentacion" />
+                            <RequiredRule message="Seleccione el Laboratorio" />
                         </SimpleItem>
                         <SimpleItem dataField="unitOfMeasureId" editorType="dxSelectBox"
                             editorOptions={{

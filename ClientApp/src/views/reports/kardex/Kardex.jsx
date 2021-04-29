@@ -47,7 +47,7 @@ const Kardex = () => {
             <FilterRow visible={true} />
             <Column dataField="id" caption="Codigo" width={80}/>
             <Column dataField="name" caption="Nombre" />
-            <Column dataField="presentation" caption="Presentacion" width={100}/>
+            <Column dataField="presentation" caption="Laboratorio" width={100}/>
             <Column dataField="um" caption="UM" width={80}/>
           </DataGrid>
         );

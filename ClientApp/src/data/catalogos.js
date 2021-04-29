@@ -9,7 +9,8 @@ const catalogos = [{
     url : 'familias'
 },{
     name : 'presentaciones',
-    url : 'presentaciones'
+    url : 'presentaciones',
+    caption :'Laboratorio'
 },{
     name : 'unidadmedida',
     caption : 'Unidad de Medida',

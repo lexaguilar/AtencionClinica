@@ -115,7 +115,7 @@ const menu = [{
                     links: [
                         { title: 'Productos', url: `${_path.CLINICA}/productos` },           
                         { title: 'Familias', url: `${_path.CLINICA}/familias` },
-                        { title: 'Presentaciones', url: `${_path.CLINICA}/presentaciones` },
+                        { title: 'Laboratorios', url: `${_path.CLINICA}/presentaciones` },
                         { title: 'Unidad Medida', url: `${_path.CLINICA}/unidadmedida` },
                         { title: 'Proveedores', url: `${_path.CLINICA}/proveedores` },
                         { title: 'Tasa de cambio', url: `${_path.CLINICA}/tasa-de-cambio` },

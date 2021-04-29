@@ -107,7 +107,7 @@ const Stock = () => {
                 <Column dataField="product.familyId" caption="Familia" width={150}>
                     <Lookup disabled={true} dataSource={createStore({ name: 'family' })} valueExpr="id" displayExpr="name" />
                 </Column>
-                <Column dataField="product.presentationId" caption="Presentacion" width={150}>
+                <Column dataField="product.presentationId" caption="Laboratorio" width={150}>
                     <Lookup disabled={true} dataSource={createStore({ name: 'Presentation' })} valueExpr="id" displayExpr="name" />
                 </Column>
                 <Column dataField="product.unitOfMeasureId" caption="UM" width={120}>

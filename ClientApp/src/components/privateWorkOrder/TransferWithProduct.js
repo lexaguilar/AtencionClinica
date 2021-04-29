@@ -144,7 +144,7 @@ const TransferWithProduct = () => {
                                 />
                                 <RuleRequired />
                             </Column>
-                            <Column dataField="presentation" caption="Presentacion" width={120} allowEditing={false}>
+                            <Column dataField="presentation" caption="Laboratorio" width={120} allowEditing={false}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="um" caption="Um" width={120} allowEditing={false}>
