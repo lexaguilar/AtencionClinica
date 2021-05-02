@@ -72,6 +72,10 @@ namespace AtencionClinica.Models
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ServiceDetail> ServiceDetails { get; set; }
         public virtual DbSet<ServiceTest> ServiceTests { get; set; }
+        public virtual DbSet<ServiceTestBaarDetail> ServiceTestBaarDetails { get; set; }
+        public virtual DbSet<ServiceTestCultive> ServiceTestCultives { get; set; }
+        public virtual DbSet<ServiceTestCultiveAntiBiotic> ServiceTestCultiveAntiBiotics { get; set; }
+        public virtual DbSet<ServiceTestCultiveFresc> ServiceTestCultiveFrescs { get; set; }
         public virtual DbSet<ServiceTestDetail> ServiceTestDetails { get; set; }
         public virtual DbSet<Sex> Sexs { get; set; }
         public virtual DbSet<Specialty> Specialties { get; set; }
@@ -91,6 +95,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<VwLastMedicinesByBeneficiary> VwLastMedicinesByBeneficiaries { get; set; }
         public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
         public virtual DbSet<VwStocksForArea> VwStocksForAreas { get; set; }
+        public virtual DbSet<VwTestsResult> VwTestsResults { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
         public virtual DbSet<WorkPreOrder> WorkPreOrders { get; set; }
@@ -1594,6 +1599,121 @@ namespace AtencionClinica.Models
                     .HasConstraintName("FK_ServiceTests_SendTests");
             });
 
+            modelBuilder.Entity<ServiceTestBaarDetail>(entity =>
+            {
+                entity.HasIndex(e => e.ServiceTestId, "IX_ServiceTestBaarDetails_ServiceTest");
+
+                entity.Property(e => e.Appearance)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AppearanceBio)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ObservationBk)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ObservationBK");
+
+                entity.Property(e => e.TestDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.ServiceTestBaarDetails)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestBaarDetails_Services");
+
+                entity.HasOne(d => d.ServiceTest)
+                    .WithMany(p => p.ServiceTestBaarDetails)
+                    .HasForeignKey(d => d.ServiceTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestBaarDetails_ServiceTests");
+            });
+
+            modelBuilder.Entity<ServiceTestCultive>(entity =>
+            {
+                entity.HasIndex(e => e.ServiceId, "IX_ServiceTestCultives_Service");
+
+                entity.HasIndex(e => e.ServiceTestId, "IX_ServiceTestCultives_ServiceTest");
+
+                entity.Property(e => e.Gram)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Isolated)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Mycologycal)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TestDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.ServiceTestCultives)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestCultives_Services");
+
+                entity.HasOne(d => d.ServiceTest)
+                    .WithMany(p => p.ServiceTestCultives)
+                    .HasForeignKey(d => d.ServiceTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestCultives_ServiceTests");
+            });
+
+            modelBuilder.Entity<ServiceTestCultiveAntiBiotic>(entity =>
+            {
+                entity.HasIndex(e => e.ServiceTestCultiveId, "IX_ServiceTestCultiveAntiBiotics_CultiveTest");
+
+                entity.Property(e => e.TestId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.ServiceTestCultive)
+                    .WithMany(p => p.ServiceTestCultiveAntiBiotics)
+                    .HasForeignKey(d => d.ServiceTestCultiveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestCultiveAntiBiotics_ServiceTestCultives");
+            });
+
+            modelBuilder.Entity<ServiceTestCultiveFresc>(entity =>
+            {
+                entity.HasIndex(e => e.ServiceTestCultiveId, "IX_ServiceTestCultiveFrescs_CultiveTest");
+
+                entity.Property(e => e.ResultId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TestId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.ServiceTestCultive)
+                    .WithMany(p => p.ServiceTestCultiveFrescs)
+                    .HasForeignKey(d => d.ServiceTestCultiveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceTestCultiveFrescs_ServiceTestCultives");
+            });
+
             modelBuilder.Entity<ServiceTestDetail>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -2198,6 +2318,62 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwTestsResult>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTestsResults");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Doctor)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Edad).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Examen)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Paciente)
+                    .IsRequired()
+                    .HasMaxLength(101)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Procedimiento)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Relationship)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Result)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("UM");
             });
 
             modelBuilder.Entity<WorkOrder>(entity =>

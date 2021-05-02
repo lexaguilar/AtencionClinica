@@ -88,6 +88,7 @@ const Procedimientos = () => {
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStore({name: 'Currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
+                <Column dataField="isCultive" caption='Es Cultivo' allowFiltering={false}  width={100}/>
                 <Column dataField="active" caption='Activo' allowFiltering={false}  width={100}/>
                 <Editing
                     mode="popup"
@@ -95,7 +96,7 @@ const Procedimientos = () => {
                     allowDeleting={true}
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={450} height={410}>
+                    <Popup title={title} showTitle={true} width={450} height={470}>
                         
                     </Popup>
                     <Form>
@@ -111,6 +112,8 @@ const Procedimientos = () => {
                         </Item>
                         <Item  dataField="currencyId" colSpan={2}>
                             <RequiredRule message="El campo es requerido"/>
+                        </Item>
+                        <Item  dataField="isCultive" colSpan={2} editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}>
                         </Item>
                         <Item  dataField="active" colSpan={2} editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}>
                         </Item>

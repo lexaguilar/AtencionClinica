@@ -7,6 +7,7 @@ const urlReport = () =>
         billTicket : id => `${urlBase}/bill?id=${id}`,
         billbyClient : id => `${urlBase}/bill/billByClient?id=${id}`,
         appointment : id => `${urlBase}/appointments?id=${id}`,
+        testsResult : id => `${urlBase}/testservices?id=${id}`,
         print : (url) =>  window.open(`${url}`,'_blank')
     }
 

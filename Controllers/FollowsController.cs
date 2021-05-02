@@ -211,23 +211,51 @@ namespace AtencionClinica.Controllers
 
             foreach (var item in sendTest.SendTestDetails)
             {
-                var serviceDetails = _db.ServiceDetails.Where(x => x.ServiceId == item.Serviceid);
+                var service = _db.Services.FirstOrDefault(x => x.Id == item.Serviceid);
 
-                foreach (var item2 in serviceDetails)
+                if (service.IsCultive)//Cultivo
                 {
-                    serviceTest.ServiceTestDetails.Add(new ServiceTestDetail
+
+                    serviceTest.ServiceTestCultives.Add(new ServiceTestCultive
                     {
                         ServiceTest = serviceTest,
                         ServiceId = item.Serviceid,
-                        ServiceDetailId = item2.Id,
-
-                        Name = item2.Name,
-                        Um = item2.Um,
-                        Reference = item2.Reference,
-
-                        Result = "",
-                        ResultJson = "",
+                        Name = service.Name
                     });
+
+                }
+                else if (item.Serviceid == 8)//BAAR
+                {
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        serviceTest.ServiceTestBaarDetails.Add(new ServiceTestBaarDetail
+                        {
+                            ServiceTest = serviceTest,
+                            ServiceId = item.Serviceid,
+                            TestNumber = i
+                        });
+                    }
+                }
+                else
+                {
+                    var serviceDetails = _db.ServiceDetails.Where(x => x.ServiceId == item.Serviceid);
+
+                    foreach (var item2 in serviceDetails)
+                    {
+                        serviceTest.ServiceTestDetails.Add(new ServiceTestDetail
+                        {
+                            ServiceTest = serviceTest,
+                            ServiceId = item.Serviceid,
+                            ServiceDetailId = item2.Id,
+
+                            Name = item2.Name,
+                            Um = item2.Um,
+                            Reference = item2.Reference,
+
+                            Result = "",
+                            ResultJson = "",
+                        });
+                    }
                 }
 
             }
@@ -277,14 +305,107 @@ namespace AtencionClinica.Controllers
 
 
         }
+
         [HttpPost("api/follows/{serviceTestId}/getServicesSent/{serviceId}/Details")]
-        public IActionResult SaveResutls([FromBody]ServiceTestDetail serviceTestDetail)
+        public IActionResult SaveResutls([FromBody] ServiceTestDetail serviceTestDetail)
         {
 
             var oldServiceTestDetail = _db.ServiceTestDetails.FirstOrDefault(x => x.Id == serviceTestDetail.Id);
             oldServiceTestDetail.Result = serviceTestDetail.Result;
             _db.SaveChanges();
             return Json(serviceTestDetail);
+
+
+
+        }
+        //GET BAAR
+        [Route("api/follows/{serviceTestId}/getServicesSent/{serviceId}/Details/baar")]
+        public IActionResult PostWithServiceDetailsBaar(int serviceTestId)
+        {
+
+            var result = _db.ServiceTestBaarDetails.Where(x => x.ServiceTestId == serviceTestId);
+            return Json(result);
+
+
+        }
+
+        [HttpPost("api/follows/{serviceTestId}/getServicesSent/{serviceId}/Details/baar")]
+        public IActionResult SaveResutlsBaar([FromBody] ServiceTestBaarDetail serviceTestBaar)
+        {
+
+            var oldServiceTestDetail = _db.ServiceTestBaarDetails.FirstOrDefault(x => x.Id == serviceTestBaar.Id);
+            oldServiceTestDetail.TestDate = serviceTestBaar.TestDate;
+            oldServiceTestDetail.Appearance = serviceTestBaar.Appearance;
+            oldServiceTestDetail.ObservationBk = serviceTestBaar.ObservationBk;
+            oldServiceTestDetail.Observation = serviceTestBaar.Observation;
+            oldServiceTestDetail.AppearanceBio = serviceTestBaar.AppearanceBio;
+            _db.SaveChanges();
+
+            return Json(serviceTestBaar);
+
+
+
+        }
+
+        //GET CULTIVO
+        [Route("api/follows/{serviceTestId}/getServicesSent/{serviceId}/Details/cultivos")]
+        public IActionResult PostWithServiceDetailsCultivos(int serviceTestId)
+        {
+
+            var result = _db.ServiceTestCultives
+            .Include(x => x.ServiceTestCultiveAntiBiotics)
+            .Include(x => x.ServiceTestCultiveFrescs)
+            .FirstOrDefault(x => x.ServiceTestId == serviceTestId);
+            return Json(result);
+
+
+        }
+
+        [HttpPost("api/follows/{serviceTestId}/getServicesSent/{serviceId}/Details/cultivos")]
+        public IActionResult SaveResutlsBaar([FromBody] ServiceTestCultive serviceTest)
+        {
+
+            var oldServiceTestDetail = _db.ServiceTestCultives.FirstOrDefault(x => x.Id == serviceTest.Id);
+
+            oldServiceTestDetail.TestDate = serviceTest.TestDate;
+            oldServiceTestDetail.Gram = serviceTest.Gram;
+            oldServiceTestDetail.Isolated = serviceTest.Isolated;
+            oldServiceTestDetail.Aminas = serviceTest.Aminas;
+            oldServiceTestDetail.Observation = serviceTest.Observation;
+            oldServiceTestDetail.Mycologycal = serviceTest.Mycologycal;
+
+            var antiBioticos = _db.ServiceTestCultiveAntiBiotics.Where(x => x.ServiceTestCultiveId == serviceTest.Id);
+            _db.ServiceTestCultiveAntiBiotics.RemoveRange(antiBioticos);
+
+            var antiFrescs = _db.ServiceTestCultiveFrescs.Where(x => x.ServiceTestCultiveId == serviceTest.Id);
+            _db.ServiceTestCultiveFrescs.RemoveRange(antiFrescs);
+
+            _db.SaveChanges();
+
+            foreach (var item in serviceTest.ServiceTestCultiveAntiBiotics)
+            {
+                _db.ServiceTestCultiveAntiBiotics.Add(new ServiceTestCultiveAntiBiotic
+                {
+                    ServiceTestCultiveId = item.ServiceTestCultiveId,
+                    ResultId = item.ResultId,
+                    TestId = item.TestId,
+                });
+            }
+
+
+            foreach (var item in serviceTest.ServiceTestCultiveFrescs)
+            {
+                _db.ServiceTestCultiveFrescs.Add(new ServiceTestCultiveFresc
+                {
+                    ServiceTestCultiveId = item.ServiceTestCultiveId,
+                    ResultId = item.ResultId,
+                    TestId = item.TestId,
+                });
+            }          
+
+            _db.SaveChanges();
+
+            return Json(serviceTest);
 
 
 

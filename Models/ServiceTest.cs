@@ -9,6 +9,8 @@ namespace AtencionClinica.Models
     {
         public ServiceTest()
         {
+            ServiceTestBaarDetails = new HashSet<ServiceTestBaarDetail>();
+            ServiceTestCultives = new HashSet<ServiceTestCultive>();
             ServiceTestDetails = new HashSet<ServiceTestDetail>();
         }
 
@@ -23,6 +25,8 @@ namespace AtencionClinica.Models
         public virtual Doctor Doctor { get; set; }
         public virtual Follow Follow { get; set; }
         public virtual SendTest SendTest { get; set; }
+        public virtual ICollection<ServiceTestBaarDetail> ServiceTestBaarDetails { get; set; }
+        public virtual ICollection<ServiceTestCultive> ServiceTestCultives { get; set; }
         public virtual ICollection<ServiceTestDetail> ServiceTestDetails { get; set; }
     }
 }

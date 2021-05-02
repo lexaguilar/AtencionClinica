@@ -93,7 +93,8 @@ namespace AtencionClinica.Controllers
                     x.Price,
                     x.PriceCalculate,
                     x.Active,
-                    x.CurrencyId
+                    x.CurrencyId,
+                    x.IsCultive
                 });
 
                 _db.SaveChanges();
