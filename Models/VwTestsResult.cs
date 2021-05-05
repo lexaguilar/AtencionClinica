@@ -8,6 +8,7 @@ namespace AtencionClinica.Models
     public partial class VwTestsResult
     {
         public int Id { get; set; }
+        public int Detalle { get; set; }
         public DateTime Date { get; set; }
         public string CreateBy { get; set; }
         public string Doctor { get; set; }
@@ -19,6 +20,6 @@ namespace AtencionClinica.Models
         public int Inss { get; set; }
         public string Paciente { get; set; }
         public string Relationship { get; set; }
-        public decimal? Edad { get; set; }
+        public decimal Edad { get; set; }
     }
 }

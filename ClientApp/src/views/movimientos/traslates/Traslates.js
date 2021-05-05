@@ -26,6 +26,8 @@ import useAuthorization from '../../../hooks/useAuthorization';
 import { dataFormatId, formatId } from '../../../utils/common';
 import { onToolbar } from '../../../components/grids/ToolBar';
 import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
+import urlReport from '../../../services/reportServices';
+import { addMenu } from '../../../components/grids/Menu';
 
 const Traslates = (props) => {
 
@@ -58,6 +60,28 @@ const Traslates = (props) => {
     const isEditVisible = e => type == typeTraslate.create && e.row.data.stageId == stagesTraslate.pendiente;
     const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
 
+    const report = urlReport();
+
+    const addMenuItems = (e) => {
+        addMenu(e, [{
+            text: `Ver requisa`,
+            icon: 'find',
+            onItemClick: () => showDialog(e.row.data.id, false)
+        },{
+            text: `Imprimir requisa ${e.row.data.id}`,
+            icon: 'print',
+            onItemClick: () => {
+
+                if(type==typeTraslate.create)
+                    report.print(`${report.requisaSolicitud(e.row.data.id)}`);
+                else
+                    report.print(`${report.requisaDespacho(e.row.data.id)}`);
+
+            } 
+            
+        }])
+    }
+
     return authorized(
         <div className="container">
             <Title title={title}/>
@@ -81,6 +105,7 @@ const Traslates = (props) => {
                 hoverStateEnabled={true}
                 onRowPrepared={onRowPrepared}
                 onToolbarPreparing={onToolbarPreparing}
+                onContextMenuPreparing={addMenuItems}
                 remoteOperations={{
                     paging: true,
                     filtering: true

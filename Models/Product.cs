@@ -33,6 +33,8 @@ namespace AtencionClinica.Models
         public string LastModificationBy { get; set; }
         public int CurrencyId { get; set; }
         public double? StockMin { get; set; }
+        public int? ConvertProductId { get; set; }
+        public double? ConvertProductQuantity { get; set; }
 
         public virtual Currency Currency { get; set; }
         public virtual Family Family { get; set; }

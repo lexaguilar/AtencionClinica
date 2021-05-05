@@ -25,6 +25,7 @@ import useAuthorization from '../../../hooks/useAuthorization';
 import { dataFormatId } from '../../../utils/common';
 import { addMenu } from '../../../components/grids/Menu';
 import { onToolbar } from '../../../components/grids/ToolBar';
+import urlReport from '../../../services/reportServices';
 
 const InPutProducts = (    
     { 
@@ -34,6 +35,7 @@ const InPutProducts = (
         icon="",
         Component= null,
         resourcesId = null,
+        printName = null,
         dialog = dialogInputProduct
     }) => {
 
@@ -53,13 +55,23 @@ const InPutProducts = (
         }
     }
 
-    const showDialog = id => dispatch(dialog({ open: true, id }));    
+    const showDialog = id => dispatch(dialog({ open: true, id }));  
+    
+    const report = urlReport();
 
     const addMenuItems = (e) => {
         addMenu(e, [{
             text: `Ver ${title}`,
             icon: 'find',
             onItemClick: () => showDialog(e.row.data.id)
+        },{
+            text: `Imprimir ${title}`,
+            icon: 'print',
+            onItemClick: () => {
+
+                if(printName)
+                    report.print(`${report[printName](e.row.data.id)}`) ;
+            }
         }])
     }
 

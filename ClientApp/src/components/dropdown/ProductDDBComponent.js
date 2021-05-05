@@ -10,7 +10,7 @@ import { cellRender } from '../../utils/common';
 import CustomStore from 'devextreme/data/custom_store';
 import http from '../../utils/http';
 
-const dropDownOptions = { width: 880 };
+const dropDownOptions = { width: 930 };
 
 export default class ProductDDBComponent extends React.Component {
     constructor(props) {
@@ -117,10 +117,10 @@ export default class ProductDDBComponent extends React.Component {
                 <Column dataField="id" caption="Codigo" width={80}></Column>
                 <Column dataField="name" caption="Nombre" ></Column>
                 <Column dataField="presentation" caption="Laboratorio" width={120}></Column>
-                <Column dataField="um" caption="UM" width={100}></Column>
+                <Column dataField="um" caption="UM" width={90}></Column>
+                <Column dataField="stock" caption="Cant" width={80}></Column>                
                 <Column dataField="cost" caption="Costo" visible={!this.showPrice} cellRender={cellRender()} width={80}></Column>
                 <Column dataField="price" caption="Precio" visible={this.showPrice} cellRender={cellRender()} width={90}></Column>
-                <Column dataField="stock" caption="Cant" width={80}></Column>                
                 <Scrolling mode="virtual" />
                 <Selection mode="single" />
             </DataGrid>

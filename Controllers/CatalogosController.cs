@@ -4,6 +4,7 @@ using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace AtencionClinica.Controllers
 {
@@ -23,6 +24,38 @@ namespace AtencionClinica.Controllers
             return Json(catalogoFactory.GetAll(name));            
 
         }
+
+        [Route("productsAsCatalog")]
+        public IActionResult Get(int skip, int take, IDictionary<string, string> values) 
+        {
+             IQueryable<Product> products = db.Products;
+
+            if (values.ContainsKey("name"))
+            {
+                var name = Convert.ToString(values["name"]);
+                products = products.Where(x => x.Name.Contains(name));
+            }
+
+            var items = products.Skip(skip).Take(take);
+
+            return Json(new
+            {
+                items,
+                totalCount = products.Count()
+            });
+
+        }    
+
+
+        [Route("products/{id}")]
+        public IActionResult Get(int id) 
+        {
+            var product = db.Products.FirstOrDefault(x => x.Id == id);
+           
+            return Json(product);
+
+        }    
+        
 
         
         [Route("get-catalog-gerenals")]

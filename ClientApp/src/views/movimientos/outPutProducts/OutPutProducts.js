@@ -25,6 +25,8 @@ import { dialogOutputProduct } from '../../../store/outPutProduct/outPutProductD
 import { inPutProductStates, outPutProductStates, outPutProductTypes } from '../../../data/catalogos';
 import { dataFormatId, formatId } from '../../../utils/common';
 import { onToolbar } from '../../../components/grids/ToolBar';
+import urlReport from '../../../services/reportServices';
+import { addMenu } from '../../../components/grids/Menu';
 
 const OutPutProducts = () => {
 
@@ -47,6 +49,21 @@ const OutPutProducts = () => {
     const showDialog = id =>  dispatch(dialogOutputProduct({ open: true, id }))
 
     const onToolbarPreparing = onToolbar({ export : true } , refGrid);
+
+    const report = urlReport();
+
+    const addMenuItems = (e) => {
+        addMenu(e, [{
+            text: `Ver ajuste`,
+            icon: 'find',
+            onItemClick: () => showDialog(e.row.data.id)
+        },{
+            text: `Imprimir ajuste ${e.row.data.id}`,
+            icon: 'print',
+            onItemClick: () => report.print(`${report.ajustesalida(e.row.data.id)}`)
+            
+        }])
+    }
 
     const typeId = outPutProductTypes.ajuste;
 
@@ -75,6 +92,7 @@ const OutPutProducts = () => {
                 hoverStateEnabled={true}
                 onRowPrepared={onRowPrepared}
                 onToolbarPreparing={onToolbarPreparing}
+                onContextMenuPreparing={addMenuItems}
                 remoteOperations={{
                     paging: true,
                     filtering: true

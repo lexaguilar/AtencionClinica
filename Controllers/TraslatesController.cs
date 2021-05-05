@@ -113,6 +113,7 @@ namespace AtencionClinica.Controllers
 
             oldTraslate.CopyFrom(traslate, x=> new 
             { 
+                x.AreaSourceId,
                 x.Observation,
                 x.Date                
             });
@@ -153,9 +154,7 @@ namespace AtencionClinica.Controllers
                     x.Stocks,                   
                 });
 
-                newItem.TraslateId = traslate.Id;
-
-               
+                newItem.TraslateId = traslate.Id;               
 
                 _db.TraslateDetails.Add(newItem);
             }   

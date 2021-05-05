@@ -133,7 +133,9 @@ namespace AtencionClinica.Controllers
                     x.StateId,
                     x.HasIva,
                     x.CurrencyId,
-                    x.StockMin
+                    x.StockMin,
+                    x.ConvertProductId,
+                    x.ConvertProductQuantity,
                 });
 
                 oldProduct.LastModificationBy = user.Username;

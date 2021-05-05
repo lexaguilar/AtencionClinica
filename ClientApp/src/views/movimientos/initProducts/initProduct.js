@@ -9,6 +9,7 @@ const initProduct = () => {
     const title ='Saldos iniciales';
     const btnAddText ='Nuevo saldo inicial';
     const typeId = inPutProductTypes.saldoInicial;
+    const printName = 'saldoincial';
 
     return (
         <InPutProducts 
@@ -17,6 +18,7 @@ const initProduct = () => {
             typeId={typeId}  
             icon="dx-icon-increaseindent color-icon-green" 
             resourcesId = {resources.movimientos}
+            printName={printName}
             Component={Nuevo}/>
     );
 }

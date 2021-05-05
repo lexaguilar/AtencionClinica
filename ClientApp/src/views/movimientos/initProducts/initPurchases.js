@@ -10,6 +10,7 @@ const initPurchases = () => {
     const title ='Compras';
     const btnAddText ='Nueva Compra';
     const typeId = inPutProductTypes.compra;
+    const printName = 'compra';
 
     return (
         <InPutProducts 
@@ -17,6 +18,7 @@ const initPurchases = () => {
             btnAddText={btnAddText} 
             typeId={typeId} icon="dx-icon-cart color-icon-green" 
             resourcesId = {resources.compras}
+            printName={printName}
             Component={NuevoPurchase}
             dialog = {dialogPurchase}/>
     );
