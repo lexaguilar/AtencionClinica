@@ -78,6 +78,8 @@ const NuevoQuickly = props => {
         });
     }
 
+    const onlyFarmacias = data =>data.filter(x => x.id == areaRestrict.farmacia || x.id  == areaRestrict.farmaciaPrivada);
+    
     const title = 'Nueva factura';
 
     return authorized(
@@ -115,7 +117,7 @@ const NuevoQuickly = props => {
 
                     <DivForm title='Area' required>
                         <SelectBox
-                            disabled={true}
+                            //disabled={true}
                             value={bill.areaId}
                             onValueChanged={e => {
 
@@ -124,7 +126,7 @@ const NuevoQuickly = props => {
                                 loadServices(e.value);
 
                             }}
-                            dataSource={createStoreLocal({ name: 'area', active: true })}
+                            dataSource={createStoreLocal({ name: 'area', active: true, ck: onlyFarmacias })}
                             {...editorOptionsSelect}
                         >
                             <Validator>

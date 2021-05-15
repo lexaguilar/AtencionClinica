@@ -9,6 +9,7 @@ namespace AtencionClinica.Models
     {
         public ServiceDetail()
         {
+            PrivateServiceTestDetails = new HashSet<PrivateServiceTestDetail>();
             ServiceTestDetails = new HashSet<ServiceTestDetail>();
         }
 
@@ -18,6 +19,7 @@ namespace AtencionClinica.Models
         public string Um { get; set; }
         public string Reference { get; set; }
 
+        public virtual ICollection<PrivateServiceTestDetail> PrivateServiceTestDetails { get; set; }
         public virtual ICollection<ServiceTestDetail> ServiceTestDetails { get; set; }
     }
 }

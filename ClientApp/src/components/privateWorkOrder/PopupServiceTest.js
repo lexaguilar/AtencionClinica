@@ -2,16 +2,16 @@
 import React from 'react';
 import { Popup } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialogServiceTest } from '../../store/servicetest/serviceTestDialogReducer';
-import ServiceTest from '../../views/workOrders/ServiceTest';
+import { closeDialogPrivateServiceTest } from '../../store/privateServicetest/privateServiceTestDialogReducer';
+import ServiceTest from '../../views/privateWorkOrders/ServiceTest';
 
-const PopupServiceTest = () => {
+const PopupServiceTest = ({user}) => {
 
-    const { open } = useSelector(store => store.serviceTestDialog);
+    const { open, customerId, followId } = useSelector(store => store.privateServiceTestDialog);
     const dispatch = useDispatch();
-    const onHiding = () => dispatch(closeDialogServiceTest({id : 0, followId : 0, beneficiaryId : 0}));
+    const onHiding = () => dispatch(closeDialogPrivateServiceTest({id : 0, followId : 0, customerId : 0}));
 
-    const title = 'Resultados';
+    const title = 'Resultados privados';
 
     return (
         <div>           
@@ -23,7 +23,7 @@ const PopupServiceTest = () => {
                 title={title}
                 visible={open}
             >               
-                <ServiceTest />
+                <ServiceTest  customerId={customerId} user={user} open={open} followId={followId}/>
             </Popup>
         </div>
     );

@@ -17,11 +17,15 @@ import { areaRestrict, dataAccess, formatDateTime, resources, types } from '../.
 import { useDispatch, useSelector } from 'react-redux';
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
-import { dialogTransferWithProduct } from '../../store/transferWithProduct/transferWithProdcutDialogReducer';
+import { dialogPrivateTransferWithProduct } from '../../store/privateTransferWithProduct/privateTransferWithProdcutDialogReducer';
+import { dialogPrivateTransferWithService } from '../../store/privateTransferWithService/privateTransferWithServiceDialogReducer';
+import { openDialogPrivateServiceTest } from '../../store/privateServicetest/privateServiceTestDialogReducer';
 import PopupWorkOrderPrivate from '../../components/privateWorkOrder/PopupWorkOrderPrivate';
 import useAuthorization from '../../hooks/useAuthorization';
 import TransferPrivate from '../../components/privateWorkOrder/TransferPrivate';
-import TransferWithProduct from '../../components/workOrder/TransferWithProduct';
+import TransferWithProduct from '../../components/privateWorkOrder/TransferWithProduct';
+import TransferWithService from '../../components/privateWorkOrder/TransferWithService';
+import PopupServiceTest from '../../components/privateWorkOrder/PopupServiceTest';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 import { dataFormatId, formatId } from '../../utils/common';
@@ -33,10 +37,13 @@ const FollowsPrivate = () => {
     const [visible, setVisible] = useState(false);
     const [billId, setBillId] = useState(0);
     
-    const { areaId } = useSelector(store => store.user); 
+    const { user } = useSelector(store => store); 
+    const { areaId } = user;
     const dispatch = useDispatch();    
 
     let dataGrid = useRef();
+
+    const isLaboratorio = areaRestrict.laboratorio == areaId;
 
     const addMenuItems =(e) => {
 
@@ -77,23 +84,45 @@ const FollowsPrivate = () => {
                         }
 
                        
-                    }              
-                // },{
-                //     text: 'Transferir con medicamentos',
-                //     icon : 'chevrondoubleright',
-                //     onItemClick: () => {
-
-                //         let { admissionId } = e.row.data;
-                //         dispatch(dialogTransferWithProduct({open : true, id : admissionId}));
-
-                //     }              
-                // },{
-                //     text: 'Ver movimientos',
-                //     icon : 'runner',
-                //     onItemClick: () => 0                
+                    } 
                 
-                },{
+                });
 
+                e.items.push({
+                    text: 'Transferir con medicamentos',
+                    icon: 'chevrondoubleright',
+                    onItemClick: () => {
+
+                        let { billId } = e.row.data;
+                        dispatch(dialogPrivateTransferWithProduct({ open: true, id: billId }));
+
+                    }
+                });
+
+                e.items.push({
+                    text: 'Transferir a laboratorio',
+                    icon: 'chevrondoubleright',
+                    onItemClick: () => {
+
+                        let { billId, followId } = e.row.data;
+                        dispatch(dialogPrivateTransferWithService({ open: true, id: billId }));
+
+                    }
+                });
+
+                if(isLaboratorio)
+                    e.items.push({
+                        text: 'Registrar resultados',
+                        icon : 'fas fa-flask',
+                        onItemClick: () => {
+                            
+                            let { id, privateCustomerId } = e.row.data;                           
+                            dispatch(openDialogPrivateServiceTest({ id, customerId : privateCustomerId, followId: id }));
+                            
+                        }
+                    });
+
+                e.items.push({
                     text: 'Dar de alta',
                     icon : 'fas fa-wheelchair',
                     onItemClick: () => {
@@ -117,7 +146,7 @@ const FollowsPrivate = () => {
 
             if(e.column.dataField == "inss")
                 e.cellElement.classList.add('text-inss');
-            if(e.column.dataField == 'admissionId')
+            if(e.column.dataField == 'billId')
                 e.cellElement.classList.add('text-admision');
 
         }
@@ -158,7 +187,12 @@ const FollowsPrivate = () => {
                     <Button className="m0" type="default" text="Confirmar" onClick={anular} width="100%" ></Button>
             </Popup>
             <PopupWorkOrderPrivate areaId={areaId} />  
-            <TransferPrivate />          
+            <TransferPrivate />        
+
+            <TransferWithProduct />
+            <TransferWithService />
+            <PopupServiceTest user={user} />  
+            
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}

@@ -1,0 +1,3 @@
+import privateTransferWithProdcutDialogReducer from './privateTransferWithProdcutDialogReducer';
+
+export default privateTransferWithProdcutDialogReducer;

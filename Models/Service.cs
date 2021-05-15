@@ -11,6 +11,9 @@ namespace AtencionClinica.Models
         {
             AreaServices = new HashSet<AreaService>();
             BillDetails = new HashSet<BillDetail>();
+            PrivateServiceTestBaarDetails = new HashSet<PrivateServiceTestBaarDetail>();
+            PrivateServiceTestCultives = new HashSet<PrivateServiceTestCultive>();
+            PrivateServiceTestDetails = new HashSet<PrivateServiceTestDetail>();
             PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
             ServiceTestBaarDetails = new HashSet<ServiceTestBaarDetail>();
             ServiceTestCultives = new HashSet<ServiceTestCultive>();
@@ -29,6 +32,9 @@ namespace AtencionClinica.Models
         public virtual Currency Currency { get; set; }
         public virtual ICollection<AreaService> AreaServices { get; set; }
         public virtual ICollection<BillDetail> BillDetails { get; set; }
+        public virtual ICollection<PrivateServiceTestBaarDetail> PrivateServiceTestBaarDetails { get; set; }
+        public virtual ICollection<PrivateServiceTestCultive> PrivateServiceTestCultives { get; set; }
+        public virtual ICollection<PrivateServiceTestDetail> PrivateServiceTestDetails { get; set; }
         public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
         public virtual ICollection<ServiceTestBaarDetail> ServiceTestBaarDetails { get; set; }
         public virtual ICollection<ServiceTestCultive> ServiceTestCultives { get; set; }

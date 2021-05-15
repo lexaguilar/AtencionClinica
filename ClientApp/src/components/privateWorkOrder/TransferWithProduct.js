@@ -6,7 +6,7 @@ import Form, { GroupItem, SimpleItem, Label, RequiredRule, StringLengthRule } fr
 import { useDispatch, useSelector } from 'react-redux'
 import notify from 'devextreme/ui/notify';
 import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
-import { dialogTransferWithProduct } from '../../store/transferWithProduct/transferWithProdcutDialogReducer';
+import { dialogPrivateTransferWithProduct } from '../../store/privateTransferWithProduct/privateTransferWithProdcutDialogReducer';
 import { Button } from 'devextreme-react';
 import { editorOptionsSelect } from '../../data/app';
 import { createStoreLocal } from '../../utils/proxy';
@@ -22,7 +22,7 @@ const TransferWithProduct = () => {
     const exists = true;
     const active = true;
 
-    const { open, id } = useSelector(store => store.transferWithProdcut);
+    const { open, id } = useSelector(store => store.privateTransferWithProdcut);
 
     const [workPreOrder, setWorkPreOrder] = useState({});
     const [areaId, setAreaId] = useState(0);    
@@ -30,7 +30,7 @@ const TransferWithProduct = () => {
     const { products } = useProducts({ areaId, exists, active });
 
     const dispatch = useDispatch();
-    const onHiding = () => dispatch(dialogTransferWithProduct({ open: false, id: 0 }));
+    const onHiding = () => dispatch(dialogPrivateTransferWithProduct({ open: false, id: 0 }));
 
     let refForm = useRef();
     let refGrid = useRef();
@@ -42,8 +42,8 @@ const TransferWithProduct = () => {
         var result = refForm.current.instance.validate();
         if (result) {
 
-            http(`follows/post/withproduct/Admission/${id}/areaTarget/${workPreOrder.areaTargetId}`)
-            .asPost({ ...workPreOrder, workPreOrderDetails : details }).then(resp => {
+            http(`followsprivate/post/withproduct/Admission/${id}/areaTarget/${workPreOrder.areaTargetId}`)
+            .asPost({ ...workPreOrder, privateWorkPreOrderDetails : details }).then(resp => {
                 notify("Se realizo la transferencia con éxito");
                 refForm.current.instance.resetValues();
                 onHiding();
@@ -87,7 +87,7 @@ const TransferWithProduct = () => {
     }, [open]);
 
 
-    const title = 'Tranferir';
+    const title = 'Transferir privado';
 
     return (
         <div>

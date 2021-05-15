@@ -9,7 +9,10 @@ namespace AtencionClinica.Models
     {
         public FollowsPrivate()
         {
+            PrivateSendTests = new HashSet<PrivateSendTest>();
+            PrivateServiceTests = new HashSet<PrivateServiceTest>();
             PrivateWorkOrders = new HashSet<PrivateWorkOrder>();
+            PrivateWorkPreOrders = new HashSet<PrivateWorkPreOrder>();
         }
 
         public int Id { get; set; }
@@ -23,6 +26,9 @@ namespace AtencionClinica.Models
         public virtual Area AreaSource { get; set; }
         public virtual Area AreaTarget { get; set; }
         public virtual Bill Bill { get; set; }
+        public virtual ICollection<PrivateSendTest> PrivateSendTests { get; set; }
+        public virtual ICollection<PrivateServiceTest> PrivateServiceTests { get; set; }
         public virtual ICollection<PrivateWorkOrder> PrivateWorkOrders { get; set; }
+        public virtual ICollection<PrivateWorkPreOrder> PrivateWorkPreOrders { get; set; }
     }
 }

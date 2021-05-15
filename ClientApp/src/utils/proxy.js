@@ -13,7 +13,7 @@ const createProxyBase = root => createProxy(`${root}/get`, `${root}/post`, id =>
  */
 const createStore = ({ name, active }) => createCustomStore({url : `catalogos/${toCapital(name)}`, active})();
 
-const createStoreLocal = ({ name = required('name'), url = '', active = false }) => {
+const createStoreLocal = ({ name = required('name'), url = '', active = false, ck }) => {
     return {
         store: new CustomStore({
             key: "id",
@@ -31,16 +31,18 @@ const createStoreLocal = ({ name = required('name'), url = '', active = false })
 
                         let first = arr[0];
 
+                        let newArr = arr;
+
                         if(first.active && active)
-                            resolve(arr.filter(x => x.active))
-                        else
-                            resolve(arr);
+                            newArr = arr.filter(x => x.active);                      
+
+                        resolve(typeof ck == 'function' ? ck(newArr) : newArr)
                     }
                     else
                         http(endPoint)
                         .asGet({active})
                         .then(r => {
-                            resolve(r);
+                            resolve(typeof ck == 'function' ? ck(r) : r);
                         });
 
                 });

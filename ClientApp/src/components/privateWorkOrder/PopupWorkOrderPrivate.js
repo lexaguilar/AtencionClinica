@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
 import WorkOrders from '../../views/privateWorkOrders/WorkOrders';
 
-
 const PopupWorkOrderPrivate = ({ areaId }) => {
 
     const { open, id, customerId } = useSelector(store => store.workOrdersDialog);

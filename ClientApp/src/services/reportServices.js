@@ -8,6 +8,7 @@ const urlReport = () =>
         billbyClient : id => `${urlBase}/bill/billByClient?id=${id}`,
         appointment : id => `${urlBase}/appointments?id=${id}`,
         testsResult : id => `${urlBase}/testservices?id=${id}`,
+        privateTestsResult : id => `${urlBase}/testservices/privateTest?id=${id}`,
         compra : id => `${urlBase}/movimientos/compras?id=${id}`,
         saldoincial : id => `${urlBase}/movimientos/saldoinicial?id=${id}`,
         ajusteentrada : id => `${urlBase}/movimientos/ajusteentrada?id=${id}`,

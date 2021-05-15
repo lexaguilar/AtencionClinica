@@ -55,8 +55,18 @@ namespace AtencionClinica.Models
         public virtual DbSet<PrivateCustomer> PrivateCustomers { get; set; }
         public virtual DbSet<PrivateCustomerStat> PrivateCustomerStats { get; set; }
         public virtual DbSet<PrivateCustomerType> PrivateCustomerTypes { get; set; }
+        public virtual DbSet<PrivateSendTest> PrivateSendTests { get; set; }
+        public virtual DbSet<PrivateSendTestDetail> PrivateSendTestDetails { get; set; }
+        public virtual DbSet<PrivateServiceTest> PrivateServiceTests { get; set; }
+        public virtual DbSet<PrivateServiceTestBaarDetail> PrivateServiceTestBaarDetails { get; set; }
+        public virtual DbSet<PrivateServiceTestCultive> PrivateServiceTestCultives { get; set; }
+        public virtual DbSet<PrivateServiceTestCultiveAntiBiotic> PrivateServiceTestCultiveAntiBiotics { get; set; }
+        public virtual DbSet<PrivateServiceTestCultiveFresc> PrivateServiceTestCultiveFrescs { get; set; }
+        public virtual DbSet<PrivateServiceTestDetail> PrivateServiceTestDetails { get; set; }
         public virtual DbSet<PrivateWorkOrder> PrivateWorkOrders { get; set; }
         public virtual DbSet<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
+        public virtual DbSet<PrivateWorkPreOrder> PrivateWorkPreOrders { get; set; }
+        public virtual DbSet<PrivateWorkPreOrderDetail> PrivateWorkPreOrderDetails { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductState> ProductStates { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
@@ -1218,6 +1228,217 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<PrivateSendTest>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.HasOne(d => d.Doctor)
+                    .WithMany(p => p.PrivateSendTests)
+                    .HasForeignKey(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateSendTests_Doctors");
+
+                entity.HasOne(d => d.PrivateFollow)
+                    .WithMany(p => p.PrivateSendTests)
+                    .HasForeignKey(d => d.PrivateFollowId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateSendTests_Follows");
+            });
+
+            modelBuilder.Entity<PrivateSendTestDetail>(entity =>
+            {
+                entity.HasOne(d => d.PrivateSendTest)
+                    .WithMany(p => p.PrivateSendTestDetails)
+                    .HasForeignKey(d => d.PrivateSendTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateSendTestDetails_SendTests");
+            });
+
+            modelBuilder.Entity<PrivateServiceTest>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.HasOne(d => d.Doctor)
+                    .WithMany(p => p.PrivateServiceTests)
+                    .HasForeignKey(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTests_Doctors");
+
+                entity.HasOne(d => d.Follow)
+                    .WithMany(p => p.PrivateServiceTests)
+                    .HasForeignKey(d => d.FollowId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTests_FollowsPrivates");
+
+                entity.HasOne(d => d.SendTest)
+                    .WithMany(p => p.PrivateServiceTests)
+                    .HasForeignKey(d => d.SendTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTests_PrivateSendTests");
+            });
+
+            modelBuilder.Entity<PrivateServiceTestBaarDetail>(entity =>
+            {
+                entity.Property(e => e.Appearance)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AppearanceBio)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ObservationBk)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("ObservationBK");
+
+                entity.Property(e => e.TestDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.PrivateServiceTestBaarDetails)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestBaarDetails_Services");
+
+                entity.HasOne(d => d.ServiceTest)
+                    .WithMany(p => p.PrivateServiceTestBaarDetails)
+                    .HasForeignKey(d => d.ServiceTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestBaarDetails_ServiceTests");
+            });
+
+            modelBuilder.Entity<PrivateServiceTestCultive>(entity =>
+            {
+                entity.Property(e => e.Gram)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Isolated)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Mycologycal)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TestDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.PrivateServiceTestCultives)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestCultives_Services");
+
+                entity.HasOne(d => d.ServiceTest)
+                    .WithMany(p => p.PrivateServiceTestCultives)
+                    .HasForeignKey(d => d.ServiceTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestCultives_ServiceTests");
+            });
+
+            modelBuilder.Entity<PrivateServiceTestCultiveAntiBiotic>(entity =>
+            {
+                entity.Property(e => e.TestId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.ServiceTestCultive)
+                    .WithMany(p => p.PrivateServiceTestCultiveAntiBiotics)
+                    .HasForeignKey(d => d.ServiceTestCultiveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestCultiveAntiBiotics_ServiceTestCultives");
+            });
+
+            modelBuilder.Entity<PrivateServiceTestCultiveFresc>(entity =>
+            {
+                entity.Property(e => e.ResultId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TestId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.ServiceTestCultive)
+                    .WithMany(p => p.PrivateServiceTestCultiveFrescs)
+                    .HasForeignKey(d => d.ServiceTestCultiveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestCultiveFrescs_ServiceTestCultives");
+            });
+
+            modelBuilder.Entity<PrivateServiceTestDetail>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Reference)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Result)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ResultJson).IsUnicode(false);
+
+                entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("UM");
+
+                entity.HasOne(d => d.ServiceDetail)
+                    .WithMany(p => p.PrivateServiceTestDetails)
+                    .HasForeignKey(d => d.ServiceDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestDetails_ServiceDetails");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.PrivateServiceTestDetails)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestDetails_Services");
+
+                entity.HasOne(d => d.ServiceTest)
+                    .WithMany(p => p.PrivateServiceTestDetails)
+                    .HasForeignKey(d => d.ServiceTestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateServiceTestDetails_PrivateServiceTests");
+            });
+
             modelBuilder.Entity<PrivateWorkOrder>(entity =>
             {
                 entity.HasIndex(e => e.DoctorId, "IX_PrivateWorkOrders_Doctor");
@@ -1277,6 +1498,63 @@ namespace AtencionClinica.Models
                     .WithMany(p => p.PrivateWorkOrderDetails)
                     .HasForeignKey(d => d.ServiceId)
                     .HasConstraintName("FK_PrivateWorkOrderDetails_Services");
+            });
+
+            modelBuilder.Entity<PrivateWorkPreOrder>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Doctor)
+                    .WithMany(p => p.PrivateWorkPreOrders)
+                    .HasForeignKey(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateWorkPreOrders_Doctors");
+
+                entity.HasOne(d => d.FollowsPrivate)
+                    .WithMany(p => p.PrivateWorkPreOrders)
+                    .HasForeignKey(d => d.FollowsPrivateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateWorkPreOrders_Follows");
+            });
+
+            modelBuilder.Entity<PrivateWorkPreOrderDetail>(entity =>
+            {
+                entity.Property(e => e.Costo).HasColumnType("money");
+
+                entity.Property(e => e.Presentation)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.Total).HasColumnType("money");
+
+                entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.PrivateWorkOrder)
+                    .WithMany(p => p.PrivateWorkPreOrderDetails)
+                    .HasForeignKey(d => d.PrivateWorkOrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateWorkPreOrderDetails_WorkPreOrders");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.PrivateWorkPreOrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PrivateWorkPreOrderDetails_Products");
             });
 
             modelBuilder.Entity<Product>(entity =>

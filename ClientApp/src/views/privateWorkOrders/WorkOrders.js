@@ -58,7 +58,7 @@ const WorkOrders = (props) => {
     }
     
 
-    const title = `Ordenes de trabajo movimiento ${followId}`;
+    const title = `Ordenes de trabajo privado movimiento ${followId}`;
 
     let extraParameter = { key : 'followId', value : followId };
 

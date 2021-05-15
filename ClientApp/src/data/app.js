@@ -44,6 +44,7 @@ export const areaRestrict = {
     admision : 2,
     laboratorio : 4,
     farmacia : 7,
+    farmaciaPrivada : 9,
 
 }
 

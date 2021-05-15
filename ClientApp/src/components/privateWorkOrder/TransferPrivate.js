@@ -4,7 +4,6 @@ import { Popup  } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
 import Form, { SimpleItem, Label,RequiredRule, StringLengthRule } from 'devextreme-react/form';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
-import useAreas from '../../hooks/useAreas';
 import { Button } from 'devextreme-react';
 import { editorOptionsSelect } from '../../data/app';
 import { createStoreLocal } from '../../utils/proxy';
@@ -43,7 +42,7 @@ const TransferPrivate = () => {
     }, [open]);
 
     const active = true;
-    const title = 'Tranferir';
+    const title = 'Tranferir privado';
     
     return (
         <div>           
