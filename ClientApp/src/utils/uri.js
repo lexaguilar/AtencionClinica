@@ -4,6 +4,10 @@ const uri = {
     appointments : createProxyBase('appointments'),
     admisions : createProxyBase('admisions'),
     areas : createProxyBase('areas'),
+    groups : createProxyBase('groups'),
+    groupProducts : groupId => createProxyBase(`group/${groupId}/products`),
+    groupProductDays : groupId => createProxyBase(`group/${groupId}/days`),
+    groupPrivateCustomers : groupId => createProxyBase(`group/${groupId}/privateCustomers`),
     areaServices : areaId => createProxyBase(`area/${areaId}/services`),
     servicesDetails : serviceId => createProxyBase(`service/${serviceId}/details`),
     bill : createProxyBase('bill'),
@@ -34,6 +38,7 @@ const uri = {
 uri.privateCustomers = () => {
     let urls = createProxyBase('privateCustomers');
     urls.getAsCatalog = `privateCustomers/get/catalog`;
+    urls.getAsCatalogSingle = `privateCustomers/get/single`;
     urls.getInfo = customerId => `privateCustomers/get/${customerId}/information`
     return urls;
 }

@@ -10,6 +10,7 @@ namespace AtencionClinica.Models
         public PrivateCustomer()
         {
             Bills = new HashSet<Bill>();
+            GroupProductPrivateCustumers = new HashSet<GroupProductPrivateCustumer>();
         }
 
         public int Id { get; set; }
@@ -39,5 +40,6 @@ namespace AtencionClinica.Models
         public virtual Sex Sex { get; set; }
         public virtual PrivateCustomerType Type { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
+        public virtual ICollection<GroupProductPrivateCustumer> GroupProductPrivateCustumers { get; set; }
     }
 }

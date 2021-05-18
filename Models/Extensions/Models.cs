@@ -1,5 +1,9 @@
 namespace AtencionClinica.Models{
     public partial class Area : ModelExtension<Area>  {  }
+    public partial class Group : ModelExtension<Group>  {  }
+    public partial class GroupProduct : ModelExtension<GroupProduct>  {  }
+    public partial class GroupProductsByDay : ModelExtension<GroupProductsByDay>  {  }
+    public partial class GroupProductPrivateCustumer : ModelExtension<GroupProductPrivateCustumer>  {  }
     public partial class Specialty : ModelExtension<Specialty>  {  }
     public partial class Doctor : ModelExtension<Doctor>  {  }
     public partial class AreaService : ModelExtension<AreaService>  {  }

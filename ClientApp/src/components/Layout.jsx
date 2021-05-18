@@ -52,6 +52,9 @@ import initAdjustments from '../views/movimientos/initProducts/initAdjustments';
 import Stock from '../views/reports/stocks/Stock';
 import Navig from './navigator/Navig';
 import NuevoQuickly from '../views/bills/NuevoQuickly';
+import GroupProducts from '../views/groupProducts/GroupProducts';
+import GroupDays from '../views/groupProducts/GroupDays';
+import GroupPrivateCustomers from '../views/groupProducts/GroupPrivateCustomers';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -104,6 +107,10 @@ function Layout(props) {
         ,builRoute('inventario/reportes/existencias', Existencias)
         ,builRoute('inventario/reportes/stock', Stock)
         ,builRoute('navig', Navig)
+
+        ,builRoute('grupo-medicamentos', GroupProducts)
+        ,builRoute('grupo-calendario', GroupDays)
+        ,builRoute('grupo-hemo', GroupPrivateCustomers)
         
     ];
     return (

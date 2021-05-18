@@ -181,6 +181,18 @@ const menu = [{
                         { title: 'Tipo de convenios', url: `${_path.CLINICA}/tipo-convenio` },
                     ],
                 },]
+            },{
+                size: 6,
+                links: [{
+                    title: 'Hemodialisis',
+                    url: '',
+                    links: [
+                        { title: 'Grupos', url: `${_path.CLINICA}/grupos` },
+                        { title: 'Medicamentos por grupo', url: `${_path.CLINICA}/grupo-medicamentos` },
+                        { title: 'Calendario', url: `${_path.CLINICA}/grupo-calendario` },
+                        { title: 'Programar Hemodialisis', url: `${_path.CLINICA}/grupo-hemo` },
+                    ],
+                },]
             }]
         }
 

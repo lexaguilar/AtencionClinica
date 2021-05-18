@@ -132,6 +132,29 @@ namespace AtencionClinica.Controllers
             });
         }
 
+        [Route("api/privateCustomers/get/single")]
+        public IActionResult GetCatalogSingle() 
+        {
+             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers
+             .Include(x => x.Sex)
+             .Include(x => x.Contract)
+             .Include(x => x.Type) ;
+
+            
+
+            var items = _db.PrivateCustomers.Select(x => new {
+                Id = x.Id,
+                x.Identification,
+                Name = x.GetFullName(),
+                Sex = x.Sex.Name,
+                Contract = x.Contract.Name,
+                Type = x.Type.Name,
+            });
+
+            return Json(items);
+        }
+
+
         [Route("api/privateCustomers/post")]
         public IActionResult Post([FromBody] PrivateCustomer privateCustomer) 
         {           

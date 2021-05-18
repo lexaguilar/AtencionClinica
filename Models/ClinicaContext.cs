@@ -41,6 +41,10 @@ namespace AtencionClinica.Models
         public virtual DbSet<Family> Families { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
         public virtual DbSet<FollowsPrivate> FollowsPrivates { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<GroupProduct> GroupProducts { get; set; }
+        public virtual DbSet<GroupProductPrivateCustumer> GroupProductPrivateCustumers { get; set; }
+        public virtual DbSet<GroupProductsByDay> GroupProductsByDays { get; set; }
         public virtual DbSet<InPutProduct> InPutProducts { get; set; }
         public virtual DbSet<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual DbSet<InPutProductState> InPutProductStates { get; set; }
@@ -815,6 +819,53 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.BillId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FollowsPrivates_Bills");
+            });
+
+            modelBuilder.Entity<Group>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<GroupProduct>(entity =>
+            {
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.GroupProducts)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupProducts_Groups");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.GroupProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupProducts_Products");
+            });
+
+            modelBuilder.Entity<GroupProductPrivateCustumer>(entity =>
+            {
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.GroupProductPrivateCustumers)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupProductPrivateCustumers_GroupProductsByDays");
+
+                entity.HasOne(d => d.PrivateCustomer)
+                    .WithMany(p => p.GroupProductPrivateCustumers)
+                    .HasForeignKey(d => d.PrivateCustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupProductPrivateCustumers_PrivateCustomers");
+            });
+
+            modelBuilder.Entity<GroupProductsByDay>(entity =>
+            {
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.GroupProductsByDays)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupProductsByDays_GroupProducts");
             });
 
             modelBuilder.Entity<InPutProduct>(entity =>

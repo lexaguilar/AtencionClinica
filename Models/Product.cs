@@ -11,6 +11,7 @@ namespace AtencionClinica.Models
         {
             AreaProductStocks = new HashSet<AreaProductStock>();
             BillDetails = new HashSet<BillDetail>();
+            GroupProducts = new HashSet<GroupProduct>();
             InPutProductDetails = new HashSet<InPutProductDetail>();
             OutPutProductDetails = new HashSet<OutPutProductDetail>();
             PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
@@ -44,6 +45,7 @@ namespace AtencionClinica.Models
         public virtual UnitOfMeasure UnitOfMeasure { get; set; }
         public virtual ICollection<AreaProductStock> AreaProductStocks { get; set; }
         public virtual ICollection<BillDetail> BillDetails { get; set; }
+        public virtual ICollection<GroupProduct> GroupProducts { get; set; }
         public virtual ICollection<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }
         public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
