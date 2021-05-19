@@ -11,6 +11,7 @@ namespace AtencionClinica.Models
         {
             Bills = new HashSet<Bill>();
             GroupProductPrivateCustumers = new HashSet<GroupProductPrivateCustumer>();
+            HemoLogDetails = new HashSet<HemoLogDetail>();
         }
 
         public int Id { get; set; }
@@ -41,5 +42,6 @@ namespace AtencionClinica.Models
         public virtual PrivateCustomerType Type { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
         public virtual ICollection<GroupProductPrivateCustumer> GroupProductPrivateCustumers { get; set; }
+        public virtual ICollection<HemoLogDetail> HemoLogDetails { get; set; }
     }
 }

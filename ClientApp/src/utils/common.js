@@ -36,6 +36,8 @@ export const customizeTextAsPercent = data => `${data.value || 0} %`
 
 export const cellAsBold = value => <b>{value}</b>;
 
+export const formatDate = value => moment(value).format('DD/MM/YYYY')
+
 export const obtenerTasaCambio  = date => {
 
     let v = new Date(moment(date).format());

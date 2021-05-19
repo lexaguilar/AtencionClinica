@@ -42,6 +42,7 @@ namespace AtencionClinica
             services.AddWorkOrderServices();
             services.AddPrivateWorkOrderServices();
             services.AddBillServices();
+            services.AddHemoLogServices();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

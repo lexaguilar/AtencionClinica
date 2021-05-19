@@ -45,6 +45,8 @@ namespace AtencionClinica.Models
         public virtual DbSet<GroupProduct> GroupProducts { get; set; }
         public virtual DbSet<GroupProductPrivateCustumer> GroupProductPrivateCustumers { get; set; }
         public virtual DbSet<GroupProductsByDay> GroupProductsByDays { get; set; }
+        public virtual DbSet<HemoLog> HemoLogs { get; set; }
+        public virtual DbSet<HemoLogDetail> HemoLogDetails { get; set; }
         public virtual DbSet<InPutProduct> InPutProducts { get; set; }
         public virtual DbSet<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual DbSet<InPutProductState> InPutProductStates { get; set; }
@@ -827,6 +829,12 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Area)
+                    .WithMany(p => p.Groups)
+                    .HasForeignKey(d => d.AreaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Groups_Areas");
             });
 
             modelBuilder.Entity<GroupProduct>(entity =>
@@ -866,6 +874,47 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.GroupId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GroupProductsByDays_GroupProducts");
+            });
+
+            modelBuilder.Entity<HemoLog>(entity =>
+            {
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.HemoLogs)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HemoLogs_Groups");
+            });
+
+            modelBuilder.Entity<HemoLogDetail>(entity =>
+            {
+                entity.Property(e => e.Cost).HasColumnType("money");
+
+                entity.HasOne(d => d.HemoLog)
+                    .WithMany(p => p.HemoLogDetails)
+                    .HasForeignKey(d => d.HemoLogId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HemoLogDetails_HemoLogs");
+
+                entity.HasOne(d => d.PrivateCustomer)
+                    .WithMany(p => p.HemoLogDetails)
+                    .HasForeignKey(d => d.PrivateCustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HemoLogDetails_PrivateCustomers");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.HemoLogDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HemoLogDetails_Products");
             });
 
             modelBuilder.Entity<InPutProduct>(entity =>

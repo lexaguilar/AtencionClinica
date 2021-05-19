@@ -183,6 +183,43 @@ namespace AtencionClinica.Services
             
         }
 
+        public ModelValidationSource<OutPutProduct> CreateFrom(HemoLog hemoLog)
+        {
+             var group = _db.Groups.FirstOrDefault(x => x.Id == hemoLog.GroupId);  
+
+            var items = new List<OutPutProductDetail>();
+
+            var productsId = hemoLog.HemoLogDetails.Select(x => x.ProductId).Distinct();
+
+            foreach (var productId in productsId)
+            {
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == group.AreaId && x.ProductId == productId);
+
+                var quantity = hemoLog.HemoLogDetails.Where(x => x.ProductId == productId).Sum(x => x.Quantity);
+
+                items.Add(new OutPutProductDetail{
+                    ProductId = productId,
+                    Quantity = Convert.ToDouble(quantity),
+                    Cost = areaProducto.CostAvg,
+                    Price = areaProducto.Price,
+                    Discount = 0,
+                    CostAvg = areaProducto.CostAvg
+                });
+            } 
+
+            var outPutProduct = new OutPutProduct{
+                AreaId = group.AreaId,
+                TypeId = (int)OutputType.Hemodialisis,
+                Date = hemoLog.CreateAt,               
+                Observation = "Salida por hemodialisis",
+                CreateBy = hemoLog.CreateBy,               
+                OutPutProductDetails = items,
+            };
+
+            return this.Create(outPutProduct);
+            
+        }
+
 
         public int Delete(int id)
         {

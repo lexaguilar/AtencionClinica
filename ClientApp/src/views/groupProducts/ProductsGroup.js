@@ -10,7 +10,9 @@ import useProducts from '../../hooks/useProducts';
 
 const ProductsGroup = ({ user, groupId }) => {
 
-    const { products, reload } = useProducts({areaId: user.areaId});
+    const exists = true;
+
+    const { products, reload } = useProducts({areaId: user.areaId, exists});
 
     const onInitNewRow = (e) => {  
         e.data.groupId = groupId;  

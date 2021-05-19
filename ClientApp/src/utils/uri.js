@@ -11,6 +11,7 @@ const uri = {
     areaServices : areaId => createProxyBase(`area/${areaId}/services`),
     servicesDetails : serviceId => createProxyBase(`service/${serviceId}/details`),
     bill : createProxyBase('bill'),
+    hemoLogs : createProxyBase('hemologs'),
     customers: createProxyBase('customers'),
     compras: createProxyBase('compras'),
     cie10: createProxyBase('cie10'),

@@ -19,10 +19,6 @@ const catalogos = [{
     name: 'tipo-convenio',
     caption: 'Tipo de convenio',
     url: 'contracts'
-}, {
-    name: 'grupos',
-    caption: 'Grupos',
-    url: 'groups'
 }];
 
 const estadoGeneric = {

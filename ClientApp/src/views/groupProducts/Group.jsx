@@ -6,10 +6,12 @@ import {
     FilterRow,
     HeaderFilter,
     Column,
+    Lookup,
 } from 'devextreme-react/data-grid';
 
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
+import { createStoreLocal } from '../../utils/proxy';
 
 
 const Group = ({ onSelectionChanged }) => {
@@ -33,6 +35,9 @@ const Group = ({ onSelectionChanged }) => {
             <HeaderFilter visible={true} />
             <Column dataField="id" width={100} />
             <Column dataField="name" caption='Grupo' />
+            <Column dataField="areaId" caption="Area" width={100}>
+                <Lookup dataSource={createStoreLocal({name: 'area'})} valueExpr="id" displayExpr="name" />
+            </Column>
         </DataGrid>
 
 

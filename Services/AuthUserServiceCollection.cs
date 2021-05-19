@@ -39,5 +39,11 @@ namespace AtencionClinica.Services
 
             services.AddScoped<IProductServices<Bill>, BillServices>();
         }
+
+        public static void AddHemoLogServices(this IServiceCollection services)
+        {
+
+            services.AddScoped<IProductServices<HemoLog>, HemoLogServices>();
+        }
     }
 }

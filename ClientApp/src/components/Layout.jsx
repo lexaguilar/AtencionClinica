@@ -55,6 +55,8 @@ import NuevoQuickly from '../views/bills/NuevoQuickly';
 import GroupProducts from '../views/groupProducts/GroupProducts';
 import GroupDays from '../views/groupProducts/GroupDays';
 import GroupPrivateCustomers from '../views/groupProducts/GroupPrivateCustomers';
+import HemoLog from '../views/groupProducts/HemoLog';
+import GroupsCatalos from '../views/groups/GroupsCatalos';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -108,9 +110,11 @@ function Layout(props) {
         ,builRoute('inventario/reportes/stock', Stock)
         ,builRoute('navig', Navig)
 
+        ,builRoute('grupos', GroupsCatalos)
         ,builRoute('grupo-medicamentos', GroupProducts)
         ,builRoute('grupo-calendario', GroupDays)
         ,builRoute('grupo-hemo', GroupPrivateCustomers)
+        ,builRoute('hemo-products', HemoLog)
         
     ];
     return (

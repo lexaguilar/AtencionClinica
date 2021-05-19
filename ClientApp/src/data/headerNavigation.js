@@ -177,7 +177,7 @@ const menu = [{
                         { title: 'Areas', url: `${_path.CLINICA}/areas` },
                         { title: 'Doctores', url: `${_path.CLINICA}/doctores` },
                         { title: 'Doctores Horario', url: `${_path.CLINICA}/doctores/horarios` },
-                        { title: 'Especialidades', url: `${_path.CLINICA}/especialidades` },
+                        { title: 'Especialidades', url: `${_path.CLINICA}/especialielaydades` },
                         { title: 'Tipo de convenios', url: `${_path.CLINICA}/tipo-convenio` },
                     ],
                 },]
@@ -191,6 +191,7 @@ const menu = [{
                         { title: 'Medicamentos por grupo', url: `${_path.CLINICA}/grupo-medicamentos` },
                         { title: 'Calendario', url: `${_path.CLINICA}/grupo-calendario` },
                         { title: 'Programar Hemodialisis', url: `${_path.CLINICA}/grupo-hemo` },
+                        { title: 'Descargue Hemodialisis', url: `${_path.CLINICA}/hemo-products` },
                     ],
                 },]
             }]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace AtencionClinica
 {    
     public enum InputType { Compras = 1, AjusteEntrada = 2, SaldoInicial = 3, Traslado = 4 }
-    public enum OutputType { Facturacion = 1, AjusteSalida = 2, FarmaciaServicios = 3, Traslado = 4 }
+    public enum OutputType { Facturacion = 1, AjusteSalida = 2, FarmaciaServicios = 3, Traslado = 4, Hemodialisis = 5 }
     public enum AreaRestrict { Bodega = 1, Admision = 2, Farmacia = 7, Emergencia = 8}
     public enum Roles {None, Administrador }
     public enum ClientType { Private = 1, Contract = 2 }
