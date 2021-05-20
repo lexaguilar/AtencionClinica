@@ -1,6 +1,6 @@
 const urlReport = () => 
 {
-    const urlBase = process.env.NODE_ENV == "development" ? "http://lex-pc/ClinicaReportAPI" : "http://reports.clinicaflordesacuanjoche.com/";
+    const urlBase = process.env.NODE_ENV == "development" ? "http://lex-pc/ClinicaReportAPI" : "http://pre-reports.clinicaflordesacuanjoche.com/";
 
     return {
         admisionTicket : id => `${urlBase}/admisions?id=${id}`,

@@ -100,6 +100,7 @@ const Providers = () => {
                         </Item>
                         <Item dataField="email" colSpan={2}>
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
+                            <RequiredRule message="El campo es requerido" />     
                         </Item>
                         <Item  dataField="address" editorType="dxTextArea" colSpan={2}>
                             <RequiredRule message="El campo es requerido" />
