@@ -43,6 +43,9 @@ namespace AtencionClinica.Controllers
             {
                 var oldService = _db.ServiceDetails.FirstOrDefault(x => x.Id == serviceDetail.Id);
 
+                if(string.IsNullOrEmpty(serviceDetail.Um)) serviceDetail.Um = "";
+                if(string.IsNullOrEmpty(serviceDetail.Reference)) serviceDetail.Reference = "";
+
                 oldService.CopyFrom(serviceDetail, x => new
                 {
                     x.Name,
@@ -55,6 +58,9 @@ namespace AtencionClinica.Controllers
             else
             {
                
+               if(string.IsNullOrEmpty(serviceDetail.Um)) serviceDetail.Um = "";
+               if(string.IsNullOrEmpty(serviceDetail.Reference)) serviceDetail.Reference = "";
+
                 _db.ServiceDetails.Add(serviceDetail);
                 _db.SaveChanges();
                 

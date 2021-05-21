@@ -1,6 +1,6 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { Column, Editing, RequiredRule} from 'devextreme-react/data-grid';
+import { Column, Editing, RequiredRule, StringLengthRule} from 'devextreme-react/data-grid';
 
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
@@ -45,10 +45,10 @@ const Detalle = ({serviceId}) => {
                 <RequiredRule message="El campo es requerido"/>
             </Column>             
             <Column dataField="um" width={180} caption="UM" >
-                <RequiredRule message="El campo es requerido"/>
+                <StringLengthRule max={50} message="Maximo de caracteres 50" />
             </Column>              
             <Column dataField="reference" width={180} caption="Referencia" >
-                <RequiredRule message="El campo es requerido"/>
+               <StringLengthRule max={150} message="Maximo de caracteres 150" />
             </Column>              
             <Editing
                 mode="batch"
