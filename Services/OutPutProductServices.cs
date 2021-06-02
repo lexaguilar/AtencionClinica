@@ -52,6 +52,7 @@ namespace AtencionClinica.Services
             return model;
         }
 
+        
         public ModelValidationSource<OutPutProduct> CreateFrom(Traslate traslate)
         {
             var items = new List<OutPutProductDetail>();
@@ -197,14 +198,15 @@ namespace AtencionClinica.Services
 
                 var quantity = hemoLog.HemoLogDetails.Where(x => x.ProductId == productId).Sum(x => x.Quantity);
 
-                items.Add(new OutPutProductDetail{
-                    ProductId = productId,
-                    Quantity = Convert.ToDouble(quantity),
-                    Cost = areaProducto.CostAvg,
-                    Price = areaProducto.Price,
-                    Discount = 0,
-                    CostAvg = areaProducto.CostAvg
-                });
+                if(quantity > 0)
+                    items.Add(new OutPutProductDetail{
+                        ProductId = productId,
+                        Quantity = Convert.ToDouble(quantity),
+                        Cost = areaProducto.CostAvg,
+                        Price = areaProducto.Price,
+                        Discount = 0,
+                        CostAvg = areaProducto.CostAvg
+                    });
             } 
 
             var outPutProduct = new OutPutProduct{

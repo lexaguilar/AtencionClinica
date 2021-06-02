@@ -14,6 +14,10 @@ export const outPutProductDefault = {
     ...inPutProductDefault
 }
 
+export const workOrderDefault = {
+    date: new Date(moment().year(), moment().month(), moment().date(), 0, 0, 0, 0),
+}
+
 
 export const purchaseDefault = {
     areaId: 0,

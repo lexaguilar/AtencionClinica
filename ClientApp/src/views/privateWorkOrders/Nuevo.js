@@ -19,6 +19,7 @@ import 'react-tabs/style/react-tabs.css';
 import GridMedicamentos from '../workOrders/GridMedicamentos';
 import GridListaMedicamentoPte from '../workOrders/GridListaMedicamentoPte';
 import GridProcedimientos from '../workOrders/GridProcedimientos';
+import { workOrderDefault } from '../../data/defaultObject';
 
 const Nuevo = props => {   
     
@@ -28,7 +29,7 @@ const Nuevo = props => {
     const { privateWorkOrderDialog : { open, id }, user } = useSelector(store => store);
 
     const [tabIndex, setTabIndex] = useState(0);
-    const [ workOrder, setWorkOrder ] = useState({});
+    const [ workOrder, setWorkOrder ] = useState({ ...workOrderDefault });
     const [ saving, setSaving ] = useState(false);
     const [ detailsServices ] = useState([]);
     const [ details, setDetails ] = useState([]);

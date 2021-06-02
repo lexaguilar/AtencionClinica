@@ -19,14 +19,14 @@ function Topbar(props) {
     ];
 
     const accountLinks = [
-        { title: 'Password', url: '/account/password' },
+        { title: 'Contraseña', url: '/account/password' },
         { title: 'Salir', url: '/account/logout' },
     ];
 
     // const linksList = links.map((item, index) => (
     //     <div key={index} className="topbar__item topbar__item--link">
     //         <Link className="topbar-link" to={item.url}>{item.title}</Link>
-    //     </div>
+    //     </div>admin
     // ));
 
 

@@ -5,6 +5,7 @@ using System.Linq;
 using AtencionClinica.Extensions;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
+using AtencionClinica.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,14 @@ namespace AtencionClinica.Controllers
     {
         private ClinicaContext _db = null;
         private ProductsFactory factory = null;
-        public ProductsController(ClinicaContext db)
+        private IProductServices<OutPutProduct> _serviceOutPut;
+        private IProductServices<InPutProduct> _serviceInPut;
+        public ProductsController(ClinicaContext db, IProductServices<OutPutProduct> serviceOutPut, IProductServices<InPutProduct> serviceInPut)
         {
             this._db = db;
             factory = new ProductsFactory(this._db);
+            _serviceOutPut = serviceOutPut;
+            _serviceInPut = serviceInPut;
         }
 
         [Route("api/products/get/{id}")]
@@ -49,11 +54,11 @@ namespace AtencionClinica.Controllers
         // }
 
         [Route("api/products/getbyarea/{areaId}")]
-        public IActionResult GetCatalog(int areaId, bool active, bool exists, bool has,int skip, int take, IDictionary<string, string> values)
+        public IActionResult GetCatalog(int areaId, bool active, bool exists, bool has, int skip, int take, IDictionary<string, string> values)
         {
             var result = factory.GetByArea(areaId, active, exists, has);
 
-            return Json(result);         
+            return Json(result);
 
         }
 
@@ -108,7 +113,7 @@ namespace AtencionClinica.Controllers
         {
 
             var user = this.GetAppUser(_db);
-            if(user == null)
+            if (user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             if (product.Id > 0)
@@ -118,8 +123,9 @@ namespace AtencionClinica.Controllers
                 .ThenInclude(x => x.InPutProduct)
                 .FirstOrDefault(x => x.Id == product.Id);
 
-                if(oldProduct.CurrencyId != product.CurrencyId)
-                    if(oldProduct.InPutProductDetails.Any()){
+                if (oldProduct.CurrencyId != product.CurrencyId)
+                    if (oldProduct.InPutProductDetails.Any())
+                    {
                         return BadRequest("No se puede editar la moneda de este producto porque ya tiene movimientos");
                     }
 
@@ -179,6 +185,113 @@ namespace AtencionClinica.Controllers
             }
 
             return Json(new { n = id });
+        }
+
+        [HttpGet("api/products/{productId}/convert/{quantity}")]
+        public IActionResult Delete(int productId, int quantity)
+        {
+            var user = this.GetAppUser(_db);
+
+            var product = _db.Products.FirstOrDefault(x => x.Id == productId);
+
+            if (product == null)
+                return BadRequest($"No se encontro el producto con Id {productId}");
+
+            if (product.StateId != 1)
+                return BadRequest($"El producto con Id {productId} no esta activo");
+
+            if(product.ConvertProductId == null)
+                return BadRequest($"No se ha especificado un producto de conversion para el producto con Id {productId} ");
+
+            if(product.ConvertProductQuantity == null)
+                return BadRequest($"No se ha especificado la cantidad de conversion para el producto con Id {productId}");
+
+            if(product.ConvertProductQuantity <= 0)
+                return BadRequest($"La cantidad de conversion para el producto con Id {productId} debe ser mayor a 0");
+
+            var itemsOutPut = new List<OutPutProductDetail>();
+
+            var areaProductoOutPut = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == user.AreaId && x.ProductId == productId);
+
+            //Salidas
+            itemsOutPut.Add(new OutPutProductDetail
+            {
+                ProductId = productId,
+                Quantity = quantity,
+                Cost = areaProductoOutPut.CostAvg,
+                CostAvg = areaProductoOutPut.CostAvg,
+                Price = areaProductoOutPut.Price,
+                Discount = 0
+            });
+
+            var outPutProduct = new OutPutProduct
+            {
+                AreaId = user.AreaId,
+                TypeId = (int)OutputType.Conversion,
+                Date = DateTime.Today,
+                Observation = "Salida por conversion de unidades",
+                CreateBy = user.Username,
+                Reference = "",
+                OutPutProductDetails = itemsOutPut
+            };
+
+            var resultOutPut = _serviceOutPut.Create(outPutProduct);
+
+            if (!resultOutPut.IsValid)
+                return BadRequest(resultOutPut.Error);
+
+
+            //Entradas
+            var productIdInPut = (product.ConvertProductId??0);
+            var quantityInPut =  product.ConvertProductQuantity??0;
+            var areaProductoInPut = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == user.AreaId && x.ProductId == productIdInPut);
+
+
+            var cost = 0M;
+            var price = 0M;
+            if(areaProductoInPut != null){
+
+                cost = areaProductoInPut.CostAvg;
+                price = areaProductoInPut.Price;
+
+            }else{
+
+                cost = areaProductoOutPut.CostAvg / Convert.ToDecimal(quantityInPut);
+                price = areaProductoOutPut.Price / Convert.ToDecimal(quantityInPut);
+
+            }
+
+            var itemsInPut = new List<InPutProductDetail>();
+            
+            itemsInPut.Add(new InPutProductDetail
+            {
+                ProductId = productIdInPut,
+                Quantity = quantityInPut * quantity,
+                Cost = cost,
+                Price = price,
+                Discount = 0
+            });            
+
+            var inPutProduct = new InPutProduct
+            {
+                AreaId = user.AreaId,
+                TypeId = (int)InputType.Conversion,
+                Date = DateTime.Today,
+                Observation = "Entrada por conversion de unidades",
+                 CreateBy = user.Username,
+                Reference = "",
+                InPutProductDetails = itemsInPut
+            };
+
+
+            var resultInPut = _serviceInPut.Create(inPutProduct);
+
+             if (!resultInPut.IsValid)
+                return BadRequest(resultInPut.Error);
+
+            _db.SaveChanges();
+
+            return Json(new { n = productId });
         }
 
     }

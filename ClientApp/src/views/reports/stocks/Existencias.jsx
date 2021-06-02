@@ -145,6 +145,7 @@ const Existencias = () => {
                         id="gridContainer"
                         dataSource={stocks}
                         showBorders={true}
+                        hoverStateEnabled={true}
                         showRowLines={true}
                         onToolbarPreparing={onToolbarPreparing}
                     >                       

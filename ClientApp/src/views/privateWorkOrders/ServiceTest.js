@@ -73,7 +73,27 @@ const ServiceTest = ({ customerId, user, open, followId }) => {
 
                 e.items.push({
                     text: 'Imprimir examenes',
-                    icon: 'doc',
+                    icon: 'print',
+                    onItemClick: () => {
+
+                        report.print(`${report.privateTestsResult(e.row.data.id)}`);
+                 
+                    }
+                });
+
+            }
+        }
+    }
+
+    const addMenuItems2 = (e) => {
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+
+            if (e.row?.data) {
+
+                e.items.push({
+                    text: 'Imprimir examen',
+                    icon: 'print',
                     onItemClick: () => {
 
                         report.print(`${report.privateTestsResult(e.row.data.id)}`);
@@ -122,6 +142,7 @@ const ServiceTest = ({ customerId, user, open, followId }) => {
                         showRowLines={true}
                         allowColumnResizing={true}
                         allowColumnReordering={true}
+                        onContextMenuPreparing={addMenuItems2}
                         onSelectionChanged={onSelectionChangedExamen}
                     >
                         <Column dataField="name" caption="Procedimiento">

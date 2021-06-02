@@ -7,6 +7,7 @@ export const dialogDefault = {
 export const catalogsName = 'catalogs';
 
 export const DIALOG_AREAPRODUCT = 'DIALOG_AREAPRODUCT';
+export const DIALOG_CONVERTPRODUCT = 'DIALOG_CONVERTPRODUCT';
 
 export const DIALOG_PERCAPITA = 'DIALOG_PERCAPITA';
 export const DIALOG_CUSTOMER = 'DIALOG_CUSTOMER';

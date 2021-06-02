@@ -13,6 +13,7 @@ namespace AtencionClinica.Models
         public int ProductId { get; set; }
         public double Quantity { get; set; }
         public decimal Cost { get; set; }
+        public string Observation { get; set; }
 
         public virtual HemoLog HemoLog { get; set; }
         public virtual PrivateCustomer PrivateCustomer { get; set; }

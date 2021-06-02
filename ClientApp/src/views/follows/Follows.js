@@ -151,6 +151,51 @@ const Follows = () => {
 
     }
 
+    const onToolbarPreparing = (e) => {  
+
+        console.log(e);
+
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Nueva orden',
+                icon:'folder',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  {
+
+                    let data = dataGrid.current.instance.getSelectedRowsData();
+                    if(data?.length)
+                    {
+                        let { id, beneficiaryId } = data[0];
+                        dispatch(dialogWorkOrders({ open: true, id, beneficiaryId: beneficiaryId }));
+                    }
+
+                }
+            }
+        },{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Tranferir',
+                icon:'chevrondoubleright',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  {
+
+                    let data = dataGrid.current.instance.getSelectedRowsData();
+                    if(data?.length)
+                    {                       
+                        
+                        let { admissionId } =  data[0];
+                        dispatch(dialogTransfer({ open: true, id: admissionId }));
+                    }
+                }
+            }
+        });
+    }  
+
     const onHiding = () => {
         setAdmissionId(0);
         setVisible(false);
@@ -190,6 +235,7 @@ const Follows = () => {
                 hoverStateEnabled={true}
                 onCellPrepared={onCellPrepared}
                 onContextMenuPreparing={addMenuItems}
+                onToolbarPreparing={onToolbarPreparing}
                 noDataText='No se encontró ninguna transferencia'
                 remoteOperations={{
                     paging: true,

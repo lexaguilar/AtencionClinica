@@ -18,8 +18,11 @@ import GridProcedimientos from './GridProcedimientos';
 import GridListaMedicamentoPte from './GridListaMedicamentoPte';
 
 import 'react-tabs/style/react-tabs.css';
+import { workOrderDefault } from '../../data/defaultObject';
 
 const Nuevo = props => {   
+
+  
     
     const { followId, beneficiaryId } = props;
     const [ isClosing, setIsClosing]  = useState(false);
@@ -27,7 +30,7 @@ const Nuevo = props => {
     const { workOrderDialog : { open, id }, user } = useSelector(store => store);
 
     const [tabIndex, setTabIndex] = useState(0);
-    const [ workOrder, setWorkOrder ] = useState({});
+    const [ workOrder, setWorkOrder ] = useState({ ...workOrderDefault });
     const [ saving, setSaving ] = useState(false);
     const [ detailsServices, setDetailsServices ] = useState([]);
     const [ details, setDetails ] = useState([]);
@@ -41,7 +44,7 @@ const Nuevo = props => {
                 setWorkOrder({...workOrder, rate : rate.value});
         });  
 
-        setWorkOrder({areaId : user.areaId });
+        setWorkOrder({...workOrder, areaId : user.areaId });
         setDetails([]);
 
         if(followId > 0){

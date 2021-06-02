@@ -898,6 +898,10 @@ namespace AtencionClinica.Models
             {
                 entity.Property(e => e.Cost).HasColumnType("money");
 
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.HemoLog)
                     .WithMany(p => p.HemoLogDetails)
                     .HasForeignKey(d => d.HemoLogId)

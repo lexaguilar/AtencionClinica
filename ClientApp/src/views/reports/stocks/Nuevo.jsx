@@ -48,7 +48,6 @@ const Nuevo = props => {
         if (result.isValid) 
         {
             setSaving(true);
-            console.log(product);
             http(uri.areaProducts(areaId).insert).asPost({...product})
             .then(resp => {
                 setSaving(false);
@@ -87,7 +86,7 @@ const Nuevo = props => {
         <div>
              <Popup
                 width={650}
-                height={520}
+                height={480}
                 title={`Stock de inventario`}
                 onHiding={onHiding}
                 visible={open}
@@ -124,15 +123,7 @@ const Nuevo = props => {
                             <SimpleItem dataField="stockMin" colSpan={2} editorType="dxNumberBox" 
                                 editorOptions={{...editorOptionsNumberBox, disabled : product.inherit}}>
                                 <Label text="Mínimo" />
-                            </SimpleItem>    
-                            {/* <SimpleItem dataField="stockMax" colSpan={2} editorType="dxNumberBox" 
-                                editorOptions={{...editorOptionsNumberBox, disabled : product.inherit}} >
-                                <Label text="Máximo" />
-                            </SimpleItem>                      
-                            <SimpleItem dataField="discount" colSpan={2} editorType="dxNumberBox" 
-                                editorOptions={{...editorOptionsNumberBox, disabled : product.inherit, format:"#0%"}} >
-                                <Label text="% Descuento" />
-                            </SimpleItem> */}
+                            </SimpleItem>  
                         </GroupItem>
                       
                         

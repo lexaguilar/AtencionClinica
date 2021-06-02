@@ -21,7 +21,7 @@ namespace AtencionClinica.Controllers
         public HemoLogsController(ClinicaContext db, IProductServices<HemoLog> service)
         {
             this._db = db;
-             _service = service;
+            _service = service;
         }
 
         [Route("api/HemoLogs/get")]
@@ -40,13 +40,15 @@ namespace AtencionClinica.Controllers
             var result = _db.HemoLogDetails
             .Include(x => x.Product)
             .Include(x => x.PrivateCustomer)
-            .Where(x => x.HemoLogId == id).Select(x => new {
+            .Where(x => x.HemoLogId == id).Select(x => new
+            {
                 Customer = x.PrivateCustomer.GetFullName(),
                 ProductId = x.ProductId,
                 Product = x.Product.Name,
                 x.Quantity,
                 x.Cost,
-                Total = Convert.ToDecimal(x.Quantity)  * x.Cost
+                x.Observation,
+                Total = Convert.ToDecimal(x.Quantity) * x.Cost
             });
 
             return Json(result);
@@ -60,58 +62,64 @@ namespace AtencionClinica.Controllers
 
             var hoy = DateTime.Today;
 
-            if(_db.HemoLogs.Any(x => x.Date == hoy))
+            if (_db.HemoLogs.Any(x => x.Date == hoy))
                 return BadRequest("Ya existe un descargue de inventario el dia de hoy");
 
             var groups = (from g in _db.Groups
-                        join gd in _db.GroupProductsByDays on g.Id equals gd.GroupId
-                        where gd.DayOfWeek == (int)hoy.DayOfWeek
-                        select new {
-                            Id = g.Id,
-                            gd.DayOfWeek
-                        }).ToArray();
+                          join gd in _db.GroupProductsByDays on g.Id equals gd.GroupId
+                          where gd.DayOfWeek == (int)hoy.DayOfWeek
+                          select new
+                          {
+                              Id = g.Id,
+                              gd.DayOfWeek
+                          }).ToArray();
 
-            if(groups.Length == 0)
-                return BadRequest("No se encontró configuración para el dia de hoy"); 
-            
+            if (groups.Length == 0)
+                return BadRequest("No se encontró configuración para el dia de hoy");
+
 
             foreach (var group in groups)
             {
                 var groupProducts = _db.GroupProducts.Where(x => x.GroupId == group.Id).ToArray();
                 var groupClients = _db.GroupProductPrivateCustumers.Where(x => x.GroupId == group.Id).ToArray();
 
-                var hemo = new HemoLog{
+                var hemo = new HemoLog
+                {
                     GroupId = group.Id,
                     Date = hoy,
-                   CreateBy = user.Username                           
+                    CreateBy = user.Username
                 };
 
-                
+
                 foreach (var client in groupClients)
                 {
+
+                    var bill = _db.Bills.FirstOrDefault(x => x.CreateAt.Date == hoy && x.PrivateCustomerId == client.PrivateCustomerId);
+
                     foreach (var product in groupProducts)
                     {
                         var hemoDetail = new HemoLogDetail();
 
                         hemoDetail.PrivateCustomerId = client.PrivateCustomerId;
                         hemoDetail.ProductId = product.ProductId;
-                        hemoDetail.Quantity = product.Quantity;
-
+                        hemoDetail.Quantity = bill == null ? 0 : product.Quantity;
+                        hemoDetail.Observation = bill == null ? "Paciente no admisionado" : "";
                         hemo.HemoLogDetails.Add(hemoDetail);
                     }
+                    
                 }
 
 
                 var result = _service.Create(hemo);
 
-                if(!result.IsValid)
+                if (!result.IsValid)
                     return BadRequest(result.Error);
 
                 _db.SaveChanges();
             }
 
 
-            return Json(new{});
+            return Json(new { });
 
         }
 

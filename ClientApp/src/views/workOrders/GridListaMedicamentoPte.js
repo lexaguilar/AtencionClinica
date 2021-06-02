@@ -23,6 +23,7 @@ const GridListaMedicamentoPte = ({beneficiaryId}) => {
                 <Column dataField="date" caption="Fecha" width={170} dataType='date'  format={formatDate}/> 
                 <Column dataField="product" caption="Medicamento"/> 
                 <Column dataField="quantity" caption='Cantidad'  width={100} />        
+                <Column dataField="doctor" caption="Medico" width={130}/> 
                 <Column dataField="createBy" caption="Creado por" width={130}/> 
             </DataGrid>
         </div>

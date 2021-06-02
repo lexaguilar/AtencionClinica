@@ -26,6 +26,7 @@ const HemoLogDetails = ({ groupId }) => {
             <Column dataField="quantity" caption="Cantidad" width={120} />
             <Column dataField="cost" caption="Costo" width={120} cellRender={cellRender()} />
             <Column dataField="total" width={120} cellRender={cellRenderBold()} />
+            <Column dataField="observation" />
             <Summary>
                 <GroupItem
                     column="total"

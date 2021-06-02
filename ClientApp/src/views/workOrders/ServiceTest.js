@@ -75,7 +75,7 @@ const ServiceTest = ({ beneficiaryId, user, open, followId }) => {
 
                 e.items.push({
                     text: 'Imprimir examenes',
-                    icon: 'doc',
+                    icon: 'print',
                     onItemClick: () => {
 
                         report.print(`${report.testsResult(e.row.data.id)}`);
@@ -83,6 +83,26 @@ const ServiceTest = ({ beneficiaryId, user, open, followId }) => {
                         // let { id } = e.row.data;
                         // dispatch(openDialogServiceTest({ id, beneficiaryId}));
 
+                    }
+                });
+
+            }
+        }
+    }
+
+    const addMenuItems2 = (e) => {
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+
+            if (e.row?.data) {
+
+                e.items.push({
+                    text: 'Imprimir examen',
+                    icon: 'print',
+                    onItemClick: () => {
+
+                        report.print(`${report.privateTestsResult(e.row.data.id)}`);
+                 
                     }
                 });
 
@@ -128,6 +148,8 @@ const ServiceTest = ({ beneficiaryId, user, open, followId }) => {
                         allowColumnResizing={true}
                         allowColumnReordering={true}
                         onSelectionChanged={onSelectionChangedExamen}
+                        onContextMenuPreparing={addMenuItems2}
+
                     >
                         <Column dataField="name" caption="Procedimiento">
                         </Column>

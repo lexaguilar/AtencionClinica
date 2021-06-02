@@ -20,8 +20,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../../../services/store';
 import { createStore } from '../../../utils/proxy';
 import { dialogAreaProduct } from '../../../store/areaProduct/areaProductDialogReducer';
+import { dialogConvertProduct } from '../../../store/convertProduct/convertProductDialogReducer';
 import onExporting from '../../../components/grids/Importer';
 import Nuevo from './Nuevo';
+import ConvertProduct from './ConvertProduct';
 
 const Stock = () => {
 
@@ -49,7 +51,6 @@ const Stock = () => {
     });
 
     const openDialog = (e) => {
-        console.log(e);
         const { productId, product } = e.row.data;
         dispatch(dialogAreaProduct({open : true, productId, name : product.name}));
     } 
@@ -67,9 +68,30 @@ const Stock = () => {
             }
         });
     }
+
+    const addMenuItems = (e) => {
+
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
+
+            if (e.row?.data) {
+                
+                e.items.push({
+                    text: 'Convertir a otra UM',
+                    icon: 'indent',
+                    onItemClick: () => {
+
+                        let { productId, product } = e.row.data;
+                        dispatch(dialogConvertProduct({ open: true, productId, convertProductId : product.convertProductId }));
+
+                    }
+                });  
+
+            }
+        }
+    }
         
     const onSave = () => dataGrid.current.instance.refresh();
-
 
     const title = 'Inventario';
 
@@ -79,6 +101,7 @@ const Stock = () => {
             <BlockHeader title={title} >
             </BlockHeader>
             <Nuevo onSave={onSave} areaId={areaId}/>   
+            <ConvertProduct onSave={onSave}  areaId={areaId}/>   
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
@@ -87,8 +110,10 @@ const Stock = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onCellPrepared={onCellPrepared}
-                onToolbarPreparing={onToolbarPreparing}
+                onToolbarPreparing={onToolbarPreparing}                
+                onContextMenuPreparing={addMenuItems}
                 onExporting={(e) => onExporting(e, title)}
             >
                 <Paging defaultPageSize={20} />
@@ -113,9 +138,9 @@ const Stock = () => {
                 <Column dataField="product.unitOfMeasureId" caption="UM" width={120}>
                     <Lookup disabled={true} dataSource={createStore({ name: 'UnitOfMeasure' })} valueExpr="id" displayExpr="name" />
                 </Column>
-                <Column dataField="stock" caption='Existencias' />
-                <Column dataField="stockMin" />
-                <Column dataField="isLimit" caption="Necesita abastecer ?" />
+                <Column dataField="stock" caption='Existencias'width={110} />
+                <Column dataField="stockMin" width={110}/>
+                <Column dataField="isLimit" caption="Reabastecer ?" width={130}/>
                 <Column type="buttons" width={60}>
                    <ButtonGrid name="edit" onClick={e => openDialog(e)}/>
                 </Column>

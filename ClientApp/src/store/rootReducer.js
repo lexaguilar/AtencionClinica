@@ -32,6 +32,7 @@ import customDialogReducer from './customDialog';
 import serviceTestDialogReducer from './servicetest';
 import privateServiceTestDialogReducer from './privateServicetest';
 import areaProductDialogReducer from './areaProduct/areaProductDialogReducer';
+import convertProductDialogReducer from './convertProduct/convertProductDialogReducer';
 import traslateDialogReducer from './traslate';
 import purchaseDialogReducer from './inPutProductPurchase/purchaseDialogReducer';
 
@@ -66,6 +67,7 @@ export default combineReducers({
     serviceTestDialog : serviceTestDialogReducer,
     privateServiceTestDialog : privateServiceTestDialogReducer,
     areaProductDialog : areaProductDialogReducer,
+    convertProductDialog : convertProductDialogReducer,
     purchaseDialog : purchaseDialogReducer,
     traslateDialog : traslateDialogReducer,
     privateWorkOrderDialog : privateWorkOrderDialogReducer,
