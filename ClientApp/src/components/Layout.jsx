@@ -57,6 +57,7 @@ import GroupDays from '../views/groupProducts/GroupDays';
 import GroupPrivateCustomers from '../views/groupProducts/GroupPrivateCustomers';
 import HemoLog from '../views/groupProducts/HemoLog';
 import GroupsCatalos from '../views/groups/GroupsCatalos';
+import Areas from '../views/areas/Areas';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -115,6 +116,7 @@ function Layout(props) {
         ,builRoute('grupo-calendario', GroupDays)
         ,builRoute('grupo-hemo', GroupPrivateCustomers)
         ,builRoute('hemo-products', HemoLog)
+        ,builRoute('areas', Areas)
         
     ];
     return (

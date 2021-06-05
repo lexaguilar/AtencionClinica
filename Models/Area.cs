@@ -30,7 +30,9 @@ namespace AtencionClinica.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
+        public int TypeId { get; set; }
 
+        public virtual AreaType Type { get; set; }
         public virtual ICollection<Admission> Admissions { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
         public virtual ICollection<AreaProductStock> AreaProductStocks { get; set; }

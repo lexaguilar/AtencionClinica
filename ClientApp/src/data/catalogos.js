@@ -1,7 +1,4 @@
 const catalogos = [{
-    name: 'areas',
-    url: 'areas'
-}, {
     name: 'especialidades',
     url: 'especialidades'
 }, {

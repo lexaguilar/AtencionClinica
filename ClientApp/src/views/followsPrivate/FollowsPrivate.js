@@ -55,9 +55,7 @@ const FollowsPrivate = () => {
                 e.items.push({
                     text: 'Nueva orden de trabajo',
                     icon : 'folder',
-                    onItemClick: () => {
-
-                        console.log(e.row.data);
+                    onItemClick: () => {                       
 
                         if(e.row.data.billTypeId == billTypes.ingreso){
                             
@@ -168,6 +166,50 @@ const FollowsPrivate = () => {
         setVisible(false); 
     }
 
+
+    const onToolbarPreparing = (e) => {       
+
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Nueva orden',
+                icon:'folder',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  {
+
+                    let data = dataGrid.current.instance.getSelectedRowsData();
+                    if(data?.length)
+                    {
+                        let { billId } = data[0];
+                        dispatch(dialogTransfer({open : true, id : billId}));
+                    }
+
+                }
+            }
+        },{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Tranferir',
+                icon:'chevrondoubleright',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  {
+
+                    let data = dataGrid.current.instance.getSelectedRowsData();
+                    if(data?.length)
+                    {                       
+                        
+                        let { admissionId } =  data[0];
+                        dispatch(dialogTransfer({ open: true, id: admissionId }));
+                    }
+                }
+            }
+        });
+    }  
+
     const title = 'Servicios convenio y privados';
 
     return authorized(
@@ -204,6 +246,7 @@ const FollowsPrivate = () => {
                 hoverStateEnabled={true}
                 onCellPrepared={onCellPrepared}
                 onContextMenuPreparing={addMenuItems}
+                onToolbarPreparing={onToolbarPreparing}
                 noDataText='No se encontró ninguna transferencia'
                 remoteOperations={{
                     paging: true,

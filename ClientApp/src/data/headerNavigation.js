@@ -32,6 +32,7 @@ const menu = [{
         menu: [
             { title: 'Nueva', url: `${_path.CLINICA}/admisiones/nuevo` },
             { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },
+            { title: 'Puestos Médicos', url: `${_path.CLINICA}/puestos-medicos` },
             { 
                 title: 'Reportes', 
                 url: ``,

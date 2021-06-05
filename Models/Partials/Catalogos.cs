@@ -13,6 +13,7 @@ namespace AtencionClinica.Models
     public partial class Doctor : ICatalogo {  }
     public partial class PrivateCustomerStat : ICatalogo {  }
     public partial class BillType : ICatalogo {  }
+    public partial class AreaType : ICatalogo {  }
     public partial class Service : ICatalogo {  }
     public partial class InPutProductState : ICatalogo {  }
     public partial class InPutProductType : ICatalogo {  }

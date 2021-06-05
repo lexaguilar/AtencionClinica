@@ -151,9 +151,7 @@ const Follows = () => {
 
     }
 
-    const onToolbarPreparing = (e) => {  
-
-        console.log(e);
+    const onToolbarPreparing = (e) => {
 
         e.toolbarOptions.items.unshift({
             location: 'before',
@@ -194,6 +192,7 @@ const Follows = () => {
                 }
             }
         });
+        
     }  
 
     const onHiding = () => {

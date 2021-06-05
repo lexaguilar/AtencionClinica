@@ -24,6 +24,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<AreaProductStock> AreaProductStocks { get; set; }
         public virtual DbSet<AreaService> AreaServices { get; set; }
+        public virtual DbSet<AreaType> AreaTypes { get; set; }
         public virtual DbSet<Beneficiary> Beneficiaries { get; set; }
         public virtual DbSet<BeneficiaryStatus> BeneficiaryStatuses { get; set; }
         public virtual DbSet<Bill> Bills { get; set; }
@@ -330,6 +331,14 @@ namespace AtencionClinica.Models
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.TypeId).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.Areas)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Areas_AreaTypes");
             });
 
             modelBuilder.Entity<AreaProductStock>(entity =>
@@ -372,6 +381,16 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AreaServices_Services");
+            });
+
+            modelBuilder.Entity<AreaType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Beneficiary>(entity =>
@@ -2634,6 +2653,11 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Doctor)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Product)
                     .IsRequired()
