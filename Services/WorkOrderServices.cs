@@ -39,7 +39,30 @@ namespace AtencionClinica.Services
 
             //Crear salida          
             var outPutProductServices = new OutPutProductServices(_db);
-            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder);
+            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder, null);
+            if (!modelOnPutProducts.IsValid)
+                return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
+
+            return model;
+        }
+
+        public ModelValidationSource<WorkOrder> CreateFromAdmin(Admission admission)
+        {
+            var follow = admission.Follows.FirstOrDefault();
+            var workOrder = follow.WorkOrders.FirstOrDefault();  
+            
+            workOrder.Init(_db);
+
+            var model = workOrder.Validate(_db, validateAll: false, admission);
+            
+            if (!model.IsValid)
+                return model;
+
+            _db.Admissions.Add(admission);
+
+            //Crear salida          
+            var outPutProductServices = new OutPutProductServices(_db);
+            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder, admission.AreaId);
             if (!modelOnPutProducts.IsValid)
                 return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
 

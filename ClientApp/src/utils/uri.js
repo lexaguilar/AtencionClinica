@@ -3,6 +3,7 @@ import { createProxy, createProxyBase } from "./proxy";
 const uri = {
     appointments : createProxyBase('appointments'),
     admisions : createProxyBase('admisions'),
+    puestomedico : createProxyBase('admisions/puestomedico'),
     areas : createProxyBase('areas'),
     groups : createProxyBase('groups'),
     groupProducts : groupId => createProxyBase(`group/${groupId}/products`),

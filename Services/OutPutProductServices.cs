@@ -82,16 +82,22 @@ namespace AtencionClinica.Services
             
         }
 
-        public ModelValidationSource<OutPutProduct> CreateFrom(WorkOrder work)
+        public ModelValidationSource<OutPutProduct> CreateFrom(WorkOrder work, int? areaTargetId)
         {
+            int areaId = 0;
 
-            var follow = _db.Follows.FirstOrDefault(x => x.Id == work.FollowId);
+            if(areaTargetId == null){
+
+                var follow = _db.Follows.FirstOrDefault(x => x.Id == work.FollowId);
+                areaId = follow.AreaTargetId;
+            }else
+                areaId = areaTargetId.Value;
 
             var items = new List<OutPutProductDetail>();
             foreach (var item in work.WorkOrderDetails.Where(x => !x.IsService))
             {
 
-                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaTargetId && x.ProductId == item.ProductId);
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == areaId && x.ProductId == item.ProductId);
 
                 items.Add(new OutPutProductDetail{
                     ProductId = item.ProductId.Value,
@@ -105,7 +111,7 @@ namespace AtencionClinica.Services
             } 
 
             var outPutProduct = new OutPutProduct{
-                AreaId = follow.AreaTargetId,
+                AreaId = areaId,
                 TypeId = (int)OutputType.FarmaciaServicios,
                 Date = work.Date,
                 Observation = "Despacho por servicios",

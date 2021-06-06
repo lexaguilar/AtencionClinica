@@ -27,6 +27,7 @@ import Doctores from '../views/doctores';
 import DoctoresById from '../views/doctores/DoctoresById';
 import Appointments from '../views/appointments';
 import * as AppointmentsNuevo from '../views/appointments/Nuevo';
+import * as NuevoPuestoMedico from '../views/puestomedicos/Nuevo';
 import Paciente from './search/Paciente';
 import Bills, { BillNuevo } from '../views/bills';
 import Privados from '../views/privados';
@@ -58,6 +59,7 @@ import GroupPrivateCustomers from '../views/groupProducts/GroupPrivateCustomers'
 import HemoLog from '../views/groupProducts/HemoLog';
 import GroupsCatalos from '../views/groups/GroupsCatalos';
 import Areas from '../views/areas/Areas';
+import PuetosMedicos from '../views/puestomedicos/PuetosMedicos';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -117,6 +119,8 @@ function Layout(props) {
         ,builRoute('grupo-hemo', GroupPrivateCustomers)
         ,builRoute('hemo-products', HemoLog)
         ,builRoute('areas', Areas)
+        ,builRoute('puestos-medicos', PuetosMedicos)
+        ,builRoute('puestos-medicos/nuevo', NuevoPuestoMedico.default)
         
     ];
     return (

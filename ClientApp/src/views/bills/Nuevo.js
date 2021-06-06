@@ -23,6 +23,7 @@ import {
 } from 'devextreme-react/validator';
 import { DropDownBox, SelectBox, TextArea } from 'devextreme-react';
 import { DivForm } from '../../utils/divHelpers';
+import useClients from '../../hooks/useClients';
 
 const Nuevo = props => {
   
@@ -34,6 +35,7 @@ const Nuevo = props => {
     const [bill, setBill] = useState({ ...billDefault });
     const [procedimientos, setProcedimientos] = useState([]);
     const [services, setServices] = useState([]);
+    const { clients } = useClients();
 
     let dataGrid = React.createRef();      
 
@@ -118,30 +120,35 @@ const Nuevo = props => {
 
     }
 
-    const dataSource = new DataSource({
-        load: (loadOptions) => {
+    // const dataSource = new DataSource({
+    //     load: (loadOptions) => {
 
-            let params = {};
-            params.skip = loadOptions.skip || 0;
-            params.take = loadOptions.take || 10;
+    //         let params = {};
+    //         params.skip = loadOptions.skip || 0;
+    //         params.take = loadOptions.take || 10;
 
-            if (loadOptions.searchValue)
-                params.name = loadOptions.searchValue;
+    //         console.log(loadOptions);
 
-            return http(uri.privateCustomers().getAsCatalog)
-                .asGet(params).then(x => x.items);
+    //         if(loadOptions?.filter?.filterValue){
+    //             const property = loadOptions.filter[0]
+    //             params[property] = loadOptions.filter.filterValue;           
+    //         }
 
-        },
-        paginate: true,
-        pageSize: 10,
-        byKey: id => http(uri.privateCustomers().getById(id)).asGet()
-    });
+    //         return http(uri.privateCustomers().getAsCatalog)
+    //             .asGet(params).then(x => x.items);
+
+    //     },
+    //     paginate: true,
+    //     pageSize: 10,
+    //     byKey: id => http(uri.privateCustomers().getById(id)).asGet()
+    // });
 
 
     const dataGridRender = () => {
         return (
-            <DataGrid
-                dataSource={dataSource}
+            <DataGrid                
+                allowColumnResizing={true}
+                dataSource={clients}
                 hoverStateEnabled={true}
                 selectedRowKeys={gridBoxValue}
                 onSelectionChanged={dataGrid_onSelectionChanged}
@@ -153,7 +160,7 @@ const Nuevo = props => {
                 <Column visible={false} dataField="id" caption="Codigo" width={80} cellRender={dataFormatId} />
                 <Column dataField="type" caption="Tipo" width={80} allowFiltering={false} />
                 <Column dataField="contract" caption="Convenio" width={150} allowFiltering={false} />
-                <Column dataField="identification" caption="Identificacion" width={100} />
+                <Column dataField="identification" caption="Identificacion" width={130} />
                 <Column dataField="name" caption="Nombre" />
                 <Column dataField="sex" caption="Sexo" width={120} visible={false}></Column>
             </DataGrid>
@@ -196,12 +203,12 @@ const Nuevo = props => {
                         <DropDownBox
                             ref={dropDownBoxRef}
                             dropDownOptions={{ width: 700 }}
-                            dataSource={dataSource}
+                            dataSource={clients}
                             key="id"
                             placeholder="Selecciona un paciente"
                             showClearButton={true}
                             valueExpr="id"
-                            displayExpr={item => item ? `${item.id} - ${item.firstName} ${item.lastName}` : ''}
+                            displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
                             value={gridBoxValue}
                             onValueChanged={changeHandler}
                             contentRender={dataGridRender}

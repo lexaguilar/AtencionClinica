@@ -57,6 +57,9 @@ namespace AtencionClinica.Models{
             if(totalItems != this.OutPutProductDetails.Select(x => x.ProductId).Count())            
                 return modelValidation.AsError($"No se permite items duplicados");
 
+            if(this.OutPutProductDetails.Count == 0)
+                return modelValidation.AsError($"Debe agregar al menos un producto");
+
             foreach (var item in this.OutPutProductDetails)
             {
                 var product = _db.Products.FirstOrDefault(x => x.Id == item.ProductId);
