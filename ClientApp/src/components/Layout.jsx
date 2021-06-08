@@ -60,6 +60,7 @@ import HemoLog from '../views/groupProducts/HemoLog';
 import GroupsCatalos from '../views/groups/GroupsCatalos';
 import Areas from '../views/areas/Areas';
 import PuetosMedicos from '../views/puestomedicos/PuetosMedicos';
+import AdmisionesHoy from '../views/admision/AdmisionesHoy';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -77,6 +78,7 @@ function Layout(props) {
     const routes = [
         builRoute('', HomePage)
         ,builRoute('admisiones', Admisiones)
+        ,builRoute('admisiones-hoy', AdmisionesHoy)
         ,builRoute('admisiones/nuevo', Nuevo)
         ,builRoute('config/percapitas', Percapita)
         ,builRoute('citas', Appointments)

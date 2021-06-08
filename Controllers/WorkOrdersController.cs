@@ -79,5 +79,64 @@ namespace AtencionClinica.Controllers
             return Json(workOrder);
 
         }
+
+        [HttpPost("api/workOrders/post/outWithFollow")]
+        public IActionResult PostoOutWithFollow([FromBody] WorkOrder workOrder,[FromQuery]int id)
+        {            
+
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            var admision = _db.Admissions.FirstOrDefault(x => x.Id == id);
+            if(admision == null)
+                return BadRequest($"No se encontro la admsion con id {id}");
+
+            var newFollow = new Follow{
+
+                AdmissionId =id,               
+                AreaSourceId=admision.AreaId,
+                AreaTargetId=user.AreaId,
+                Observation="Autotranferido",
+                CreateAt=DateTime.Now,
+                CreateBy=user.Username,
+
+            };
+
+            _db.Follows.Add(newFollow);
+            _db.SaveChanges();
+
+            if (workOrder.Id == 0)
+            {
+
+                workOrder.CreateBy = user.Username;
+    	        workOrder.FollowId = newFollow.Id;
+
+                var result = _service.Create(workOrder);
+
+                if(!result.IsValid){
+                    
+                    _db.WorkOrders.Remove(result.model);
+        	        _db.Follows.Remove(newFollow);
+                    _db.SaveChanges();
+                    return BadRequest(result.Error);
+
+                }
+                
+            }         
+
+            _db.SaveChanges();
+
+            var lastOutPutProduct = _db.OutPutProducts.OrderByDescending(x=> x.Id).FirstOrDefault(x => x.CreateBy == user.Username && x.AreaId == user.AreaId);
+            
+            if(lastOutPutProduct != null){
+
+                lastOutPutProduct.Reference = workOrder.Id.ToString();
+                _db.SaveChanges();
+            }
+
+            return Json(workOrder);
+
+        }
     }
 }

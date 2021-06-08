@@ -67,7 +67,6 @@ namespace AtencionClinica.Controllers
                 admissions = admissions.Where(x => x.SpecialtyId == specialtyId);
             }
 
-
             if (values.ContainsKey("typeId"))
             {
                 var typeId = Convert.ToInt32(values["typeId"]);
@@ -105,7 +104,8 @@ namespace AtencionClinica.Controllers
                 x.CreateAt,
                 x.CreateBy,
                 x.Active,
-                x.Identification
+                x.Identification,
+                x.BeneficiaryId
             });
 
             return Json(new
@@ -177,6 +177,12 @@ namespace AtencionClinica.Controllers
             {
                 var createBy = Convert.ToString(values["createBy"]);
                 admissions = admissions.Where(x => x.CreateBy == createBy);
+            }            
+
+            if (values.ContainsKey("onlyNow"))
+            {
+                var onlyNow = DateTime.Today;
+                admissions = admissions.Where(x => x.CreateAt.Date == onlyNow);
             }
 
             var items = admissions.Skip(skip).Take(take).Select(x => new {
@@ -191,7 +197,8 @@ namespace AtencionClinica.Controllers
                 x.CreateAt,
                 x.CreateBy,
                 x.Active,
-                x.Identification
+                x.Identification,
+                x.BeneficiaryId
             });
 
             return Json(new

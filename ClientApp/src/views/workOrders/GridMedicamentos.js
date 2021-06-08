@@ -6,7 +6,16 @@ import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import useProducts from '../../hooks/useProducts';
 
 
-const GridMedicamentos = ({isClosing, details, user, showPrice= false, currencyId = 1, rate= 1, refresh = false}) => {
+const GridMedicamentos = ({validate, isClosing, details, user, showPrice= false, currencyId = 1, rate= 1, refresh = false}) => {
+
+    validate.push(() =>{
+
+        ref.current.instance.saveEditData();
+        const result = ref.current.instance.hasEditData();
+     
+        return !result;
+
+    });
 
     const exists = true;    
     const active = true;   
@@ -71,9 +80,9 @@ const GridMedicamentos = ({isClosing, details, user, showPrice= false, currencyI
             reload();
     }, [refresh]);
 
-    if(isClosing)
-        if(ref.current)
-            ref.current.instance.cancelEditData();
+    // if(isClosing)
+    //     if(ref.current)
+    // //         ref.current.instance.cancelEditData();
 
     return (
         <DataGrid id="gridDetails"

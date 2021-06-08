@@ -63,9 +63,7 @@ export const getPriceByCurrency = (currencyId, rate) => service => {
      
 }
 
-const fn = fx => data => {
-    return fx;
-}  
+export const validateGrid = (x, y) => x && y()
 
 export const cellDiff = data => {
     return(

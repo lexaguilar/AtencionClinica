@@ -19,6 +19,7 @@ import catalogReducer from './catalogs';
 import inPutProductDialogReducer from './inPutProduct';
 import outPutProductDialogReducer from './outPutProduct';
 import productDialogReducer from './product';
+import workOrderOutFollowDialogReducer from './workOrderOutFollow';
 import workOrderDialogReducer from './workOrder';
 import workOrdersDialogReducer from './workOrders';
 import privateWorkOrderDialogReducer from './privateWorkOrder';
@@ -53,6 +54,7 @@ export default combineReducers({
     beneficiaryDialog : beneficiaryDialogReducer,
     inPutProductDialog : inPutProductDialogReducer,
     outPutProductDialog : outPutProductDialogReducer,
+    workOrderOutFollowDialog : workOrderOutFollowDialogReducer,
     workOrderDialog : workOrderDialogReducer,
     workOrdersDialog : workOrdersDialogReducer,
     productDialog : productDialogReducer,

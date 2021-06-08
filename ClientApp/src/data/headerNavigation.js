@@ -71,6 +71,7 @@ const menu = [{
         menu: [
             { title: 'Asegurados', url: `${_path.CLINICA}/servicios` },
             { title: 'Privados y convenios', url: `${_path.CLINICA}/servicios-privados` },           
+            { title: 'Admisiones de hoy', url: `${_path.CLINICA}/admisiones-hoy` },           
             { title: 'Expediente clinico', url: `${_path.CLINICA}/servicios/expediente` },           
         ],
     },
@@ -154,7 +155,7 @@ const menu = [{
                         { title: 'Procedimientos', url: `${_path.CLINICA}/procedimientos` },
                         { title: 'Procedimientos por area', url: `${_path.CLINICA}/area/procedimientos` },
                         { title: 'Detalle de procedimientos', url: `${_path.CLINICA}/procedimientos/detalle` },
-                        { title: 'Perfiles', url: `${_path.CLINICA}/perfiles/procedimientos` }
+                        { title: 'Estandar', url: `${_path.CLINICA}/procedimientos/estandar` }
                     ],
                 },]
             },{

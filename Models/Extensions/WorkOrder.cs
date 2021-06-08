@@ -21,7 +21,7 @@ namespace AtencionClinica.Models{
             var modelValidation = new ModelValidationSource<WorkOrder>(this);
             modelValidation.model = this;
 
-            Area area = _db.Areas.FirstOrDefault(x => x.Id == admision.AreaId);
+            Area area = null;
 
             if(validateAll){
 
@@ -52,6 +52,8 @@ namespace AtencionClinica.Models{
             //}
 
 
+            }else{
+                area = _db.Areas.FirstOrDefault(x => x.Id == admision.AreaId);
             }
 
             
