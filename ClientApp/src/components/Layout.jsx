@@ -2,10 +2,9 @@
 import React from 'react';
 
 // third-party
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import HomePage from './home/HomePage';
-import { resources } from '../data/app';
 
 // application
 import Footer from './footer';
@@ -22,16 +21,17 @@ import Admisiones from '../views/admision';
 import Nuevo from '../views/admision/Nuevo';
 import Beneficiarios from '../views/beneficiarios';
 import Follows from '../views/follows';
+import FollowsPrivate from '../views/followsPrivate';
 import Subsidies from '../views/subsidies';
 import Doctores from '../views/doctores';
 import DoctoresById from '../views/doctores/DoctoresById';
 import Appointments from '../views/appointments';
 import * as AppointmentsNuevo from '../views/appointments/Nuevo';
+import * as NuevoPuestoMedico from '../views/puestomedicos/Nuevo';
 import Paciente from './search/Paciente';
 import Bills, { BillNuevo } from '../views/bills';
 import Privados from '../views/privados';
 import Procedimientos from '../views/procedimientos/Procedimientos';
-import ProcedimientosXarea from '../views/procedimientos/ProcedimientosXarea';
 import AreaProcedimientos from '../views/procedimientos/AreaProcedimientos';
 import Parameters from '../views/condig/Parameters';
 import OutPutProducts from '../views/movimientos/outPutProducts';
@@ -46,6 +46,22 @@ import initPurchases from '../views/movimientos/initProducts/initPurchases';
 import Providers from '../views/providers/Providers';
 import Traslates from '../views/movimientos/traslates';
 import Kardex from '../views/reports/kardex';
+import Customers from '../views/customers';
+import Existencias from '../views/reports/stocks';
+import ProcedimientoDetalle from '../views/procedimientos/ProcedimientoDetalle';
+import initAdjustments from '../views/movimientos/initProducts/initAdjustments';
+import Stock from '../views/reports/stocks/Stock';
+import Navig from './navigator/Navig';
+import NuevoQuickly from '../views/bills/NuevoQuickly';
+import GroupProducts from '../views/groupProducts/GroupProducts';
+import GroupDays from '../views/groupProducts/GroupDays';
+import GroupPrivateCustomers from '../views/groupProducts/GroupPrivateCustomers';
+import HemoLog from '../views/groupProducts/HemoLog';
+import GroupsCatalos from '../views/groups/GroupsCatalos';
+import Areas from '../views/areas/Areas';
+import PuetosMedicos from '../views/puestomedicos/PuetosMedicos';
+import AdmisionesHoy from '../views/admision/AdmisionesHoy';
+import ProcedimientoEstandar from '../views/procedimientos/ProcedimientoEstandar';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -63,28 +79,33 @@ function Layout(props) {
     const routes = [
         builRoute('', HomePage)
         ,builRoute('admisiones', Admisiones)
+        ,builRoute('admisiones-hoy', AdmisionesHoy)
         ,builRoute('admisiones/nuevo', Nuevo)
         ,builRoute('config/percapitas', Percapita)
         ,builRoute('citas', Appointments)
         ,builRoute('citas/nuevo', AppointmentsNuevo.default)
+        ,builRoute('asegurados/activos', Customers)
         ,builRoute('beneficiarios', Beneficiarios)
         ,builRoute('privados', Privados)
         ,builRoute('servicios', Follows)
+        ,builRoute('servicios-privados', FollowsPrivate)
         ,builRoute('subsidios', Subsidies)
         ,builRoute('doctores', Doctores)
         ,builRoute('doctores/horarios', DoctoresById)
         ,builRoute('paciente/:id', Paciente)
         ,builRoute('facturas', Bills)
         ,builRoute('facturas/nuevo', BillNuevo)
+        ,builRoute('facturas/nuevo-quickly', NuevoQuickly)
         ,builRoute('procedimientos', Procedimientos)
+        ,builRoute('procedimientos/estandar', ProcedimientoEstandar)
         ,builRoute('area/procedimientos', AreaProcedimientos)
+        ,builRoute('procedimientos/detalle', ProcedimientoDetalle)
         ,builRoute('config/parameters', Parameters)
+        ,builRoute('movimientos/entradas', initAdjustments)
         ,builRoute('movimientos/salidas', OutPutProducts)
         ,builRoute('movimientos/entradas', InPutProducts)
         ,builRoute('movimientos/inv-inicial', initProduct)
         ,builRoute('movimientos/compras', initPurchases)
-        // ,builRoute('movimientos/traslados', <TraslatesCreate />)
-        // ,builRoute('movimientos/despacho', <Traslates />)
         ,builRoute('productos', Products)
         ,builRoute('tasa-de-cambio', Rates)
         ,builRoute('proveedores', Providers)
@@ -92,6 +113,19 @@ function Layout(props) {
         ,builRoute('roles', Roles)
         ,builRoute('permisos', Resources)
         ,builRoute('inventario/reportes/kardex', Kardex)
+        ,builRoute('inventario/reportes/existencias', Existencias)
+        ,builRoute('inventario/reportes/stock', Stock)
+        ,builRoute('navig', Navig)
+
+        ,builRoute('grupos', GroupsCatalos)
+        ,builRoute('grupo-medicamentos', GroupProducts)
+        ,builRoute('grupo-calendario', GroupDays)
+        ,builRoute('grupo-hemo', GroupPrivateCustomers)
+        ,builRoute('hemo-products', HemoLog)
+        ,builRoute('areas', Areas)
+        ,builRoute('puestos-medicos', PuetosMedicos)
+        ,builRoute('puestos-medicos/nuevo', NuevoPuestoMedico.default)
+        
     ];
     return (
         <React.Fragment>          

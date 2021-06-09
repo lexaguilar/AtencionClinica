@@ -25,7 +25,7 @@ import { dataAccess, resources } from '../../data/app';
 
 const Providers = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     const title = 'Proveedores';
 
@@ -45,9 +45,7 @@ const Providers = () => {
         });
     }
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />
@@ -59,6 +57,7 @@ const Providers = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={20} />
@@ -98,6 +97,7 @@ const Providers = () => {
                         </Item>
                         <Item dataField="phoneNumber" colSpan={2}>
                             <StringLengthRule max={20} message="Máximo de caracteres 20" />
+                            <RequiredRule message="El campo es requerido" />     
                         </Item>
                         <Item dataField="email" colSpan={2}>
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
@@ -107,6 +107,7 @@ const Providers = () => {
                             <StringLengthRule max={150} message="Máximo de caracteres 150"/>
                         </Item>
                         <Item dataField="stateId" colSpan={2}>
+                        <RequiredRule message="El campo es requerido" />
                         </Item>
                     </Form>
                 </Editing>

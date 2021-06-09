@@ -24,9 +24,9 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/customers/get")]
-        public IActionResult Get(int year, int month) 
+        public IActionResult Get() 
         {
-            var result = _db.Customers;
+            var result = _db.Customers.Where(x => x.CustomerStatusId == 1);
 
             return Json(result);
         }

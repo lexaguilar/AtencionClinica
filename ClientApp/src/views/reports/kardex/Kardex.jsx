@@ -3,10 +3,7 @@ import { Box, DataGrid, DateBox, DropDownBox, SelectBox } from "devextreme-react
 import { Item } from "devextreme-react/box";
 import http from "../../../utils/http";
 import uri from "../../../utils/uri";
-import { store } from "../../../services/store";
-import { Column, Editing, Popup, Form,
-    Selection,
-    Paging, FilterRow, Scrolling, Export  } from "devextreme-react/data-grid";
+import { Column, Selection, Paging, FilterRow, Scrolling, Export  } from "devextreme-react/data-grid";
 import Title from "../../../components/shared/Title";
 import BlockHeader from "../../../components/shared/BlockHeader";
 import useProducts from "../../../hooks/useProducts";
@@ -50,7 +47,7 @@ const Kardex = () => {
             <FilterRow visible={true} />
             <Column dataField="id" caption="Codigo" width={80}/>
             <Column dataField="name" caption="Nombre" />
-            <Column dataField="presentation" caption="Presentacion" width={100}/>
+            <Column dataField="presentation" caption="Laboratorio" width={100}/>
             <Column dataField="um" caption="UM" width={80}/>
           </DataGrid>
         );
@@ -84,7 +81,7 @@ const Kardex = () => {
           );
     }
 
-    const title ='Recursos';    
+    const title ='Kardex';    
 
     return (
         <div className="container big">
@@ -135,8 +132,8 @@ const Kardex = () => {
                         showRowLines={true}
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-                        <Column dataField="type" caption="Saldo Antorior" width={120} />
-                        <Column dataField="id" caption="Documento" width={100} />
+                        <Column dataField="type" caption="Saldo Antorior" width={150} />
+                        <Column dataField="id" caption="Documento" width={100} alignment="right"/>
                         <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
                         <Column dataField="reference" caption="Referencia" />                        
                         <Column dataField="stocks" caption="Existencia"  width={80} />
@@ -148,7 +145,7 @@ const Kardex = () => {
                         showRowLines={true}
                     >                       
                         <Export enabled={false} fileName={title} allowExportSelectedData={true} />
-                        <Column dataField="type" caption="Tipo" width={120} />
+                        <Column dataField="type" caption="Tipo" width={150} />
                         <Column dataField="id" caption="Documento" width={100} />
                         <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
                         <Column dataField="reference" caption="Referencia" />

@@ -1,25 +1,23 @@
-import React, { Component, useRef } from "react";
+import React, { useRef } from "react";
 import {
     Column,
-    ColumnChooser,
     FilterRow,
     SearchPanel,
     Lookup,
     Pager,
     Paging,
     Export,
-    Button as ButtonGrid,
     Editing,
     Popup,
     Form,
     RequiredRule,
     StringLengthRule,
     EmailRule,
-    ToolbarItem
 }
     from 'devextreme-react/data-grid';
 import { DataGrid } from 'devextreme-react';
 import { createStore } from "../../utils/proxy";
+import { confirm } from 'devextreme/ui/dialog';
 
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from "../../components/shared/Title";
@@ -33,7 +31,7 @@ import useAuthorization from "../../hooks/useAuthorization";
 
 const Users = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
     const dataGrid = useRef();
 
@@ -54,10 +52,25 @@ const Users = () => {
                 onItemClick: () => {                    
 
                     http('users/update').asGet({username, active: !active}).then(resp => {
-                        this.reload();
+                        reload();
                         notify("Usuario actualizado correctamente");
                     });                    
 
+                }
+            },{
+                text: `Restablecer contraseña`,
+                icon :  'refresh',
+                onItemClick: () => {
+                    
+                    let result = confirm("<i>Estas seguro de restablecer la contraseña?</i>", "Confirmar");
+                    result.then((dialogResult) => {
+                        if(dialogResult)
+                            http('account/resetpassworddefault').asPost({username}).then(resp => {
+                                notify("Contraseña retablecida correctamente");
+                            });
+                    });
+
+                   
                 }
             });
         }
@@ -96,13 +109,11 @@ const Users = () => {
             msgDeleted: 'Usuario eliminado correctamente',
             remoteOperations: remoteOperations
         });
-
+   
     const title = "Usuarios";
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
-        <div className="container medium">
+    return authorized(
+        <div className="container">
                 <Title title={title} />
                 <BlockHeader title={title} />
                 <DataGrid
@@ -126,16 +137,16 @@ const Users = () => {
                     <SearchPanel visible={true} width={250} />
                     <FilterRow visible={true} />                 
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                    <Column dataField="username" width={120} allowEditing={false} />
+                    <Column dataField="username" width={140} allowEditing={false}/>
                     <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />
                     <Column dataField="areaId" width={150} caption="Area">
                         <Lookup disabled={true} dataSource={createStore({name :'area'})} valueExpr="id" displayExpr="name" />
                     </Column>
-                    <Column dataField="rolId" width={130} caption="Permisos">
+                    <Column dataField="rolId" width={160} caption="Permisos">
                         <Lookup disabled={true} dataSource={createStore({name :'rol'})} valueExpr="id" displayExpr="name" />
                     </Column>
-                    <Column dataField="active" caption="Activo" dataType="boolean"  width={90}/>
+                    <Column dataField="active" caption="Activo" dataType="boolean"  width={100}/>
                     <Editing
                         mode="popup"
                         allowUpdating={true}    
@@ -144,8 +155,7 @@ const Users = () => {
                         <Popup title={title} showTitle={true} width={400} height={390}>                           
                         </Popup>
                         <Form colCount={1}>
-                            <Item dataField="username" disabled={true}>
-                                
+                            <Item dataField="username">
                             </Item>
                             <Item dataField="fullName" >
                                 <RequiredRule message="El nombre es requerido" />

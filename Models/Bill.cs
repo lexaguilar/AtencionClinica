@@ -24,6 +24,8 @@ namespace AtencionClinica.Models
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public decimal Rate { get; set; }
+        public bool Finished { get; set; }
+        public string NameCustomer { get; set; }
 
         public virtual Area Area { get; set; }
         public virtual BillType BillType { get; set; }

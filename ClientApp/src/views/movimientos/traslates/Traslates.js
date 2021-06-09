@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import SelectBox from 'devextreme-react/select-box';
+import React, { useRef } from 'react';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import Title from '../../../components/shared/Title';
 import DataGrid, {
@@ -22,12 +21,17 @@ import Nuevo from './Nuevo';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
 import { openDialog } from '../../../store/customDialog/customDialogReducer';
-import { typeTraslate } from '../../../data/catalogos';
+import { inPutProductStates, stagesTraslate, typeTraslate } from '../../../data/catalogos';
 import useAuthorization from '../../../hooks/useAuthorization';
+import { dataFormatId, formatId } from '../../../utils/common';
+import { onToolbar } from '../../../components/grids/ToolBar';
+import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
+import urlReport from '../../../services/reportServices';
+import { addMenu } from '../../../components/grids/Menu';
 
 const Traslates = (props) => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.requisas, dataAccess.access ]);    
+    const { authorized } = useAuthorization([resources.requisas, dataAccess.access ]);    
 
     const {  areaId } = useSelector(store => store.user); 
 
@@ -42,16 +46,50 @@ const Traslates = (props) => {
 
     let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    const onRowPrepared = (e) => {
+        if (e.rowType == 'data') {
+            
+            if (e.data.stateId == inPutProductStates.noActivo) 
+                e.rowElement.classList.add('no-activo');
+            
+        }
+    }
+
+    const showDialog = (id, editing= false) => dispatch(dialogTraslate({ open: true, id, editing }))
+
+    const isEditVisible = e => type == typeTraslate.create && e.row.data.stageId == stagesTraslate.pendiente;
+    const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
+
+    const report = urlReport();
+
+    const addMenuItems = (e) => {
+        addMenu(e, [{
+            text: `Ver requisa`,
+            icon: 'find',
+            onItemClick: () => showDialog(e.row.data.id, false)
+        },{
+            text: `Imprimir requisa ${e.row.data.id}`,
+            icon: 'print',
+            onItemClick: () => {
+
+                if(type==typeTraslate.create)
+                    report.print(`${report.requisaSolicitud(e.row.data.id)}`);
+                else
+                    report.print(`${report.requisaDespacho(e.row.data.id)}`);
+
+            } 
+            
+        }])
+    }
+
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >
                 {type==typeTraslate.create && <CustomButton                                       
                     text='Nueva requisa'
                     icon='plus'
-                    onClick={()=>dispatch(openDialog({id : 0}))}
+                    onClick={()=>showDialog( 0 ) }
                 />}
             </BlockHeader>
             <Nuevo onSave={reload} stageId={1} type={type}/> 
@@ -64,6 +102,10 @@ const Traslates = (props) => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
+                onRowPrepared={onRowPrepared}
+                onToolbarPreparing={onToolbarPreparing}
+                onContextMenuPreparing={addMenuItems}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -79,7 +121,10 @@ const Traslates = (props) => {
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption='Numero' width={100}/>
+                <Column type="buttons">
+                    <Button hint="Ver" icon="find"onClick={e => showDialog(e.row.data.id, false)} />                  
+                </Column>
+                <Column dataField="id" caption='Numero' width={100}  cellRender={dataFormatId}/>
                 <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
                 <Column dataField="areaSourceId" caption="Bodega" width={250} visible={type==typeTraslate.create}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
@@ -96,8 +141,9 @@ const Traslates = (props) => {
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
                 <Column dataField="createBy" caption='Creado Por'/>
                 <Column type="buttons">
+                    <Button hint="Modificar" icon="edit"onClick={e => showDialog(e.row.data.id, true)} visible={isEditVisible} />
                     <Button name="delete" />
-                    <Button name="edit" text="Despachar" onClick={e => dispatch(openDialog({id : e.row.data.id}))}/>
+                    <Button hint="Despachar" name="edit" icon="bulletlist" onClick={e => showDialog(e.row.data.id)}/>
                 </Column>
                 <Editing
                     mode="popup"

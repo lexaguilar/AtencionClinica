@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AtencionClinica.Extensions;
+using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,11 @@ namespace AtencionClinica.Controllers
     public class ServicesController : Controller
     {
         private ClinicaContext _db = null;
+        private ServicesFactory factory = null;
         public ServicesController(ClinicaContext db)
         {
             this._db = db;
+            factory = new ServicesFactory(this._db);
         }
 
         [Route("api/services/get")]
@@ -50,9 +53,9 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/services/area/{areaId}/get")]
-        public IActionResult Get(int areaId)
+        public IActionResult Get(int areaId,bool active)
         {
-           var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId && x.Service.Active).Select(x => x.Service);
+           var result = factory.GetByArea(areaId, active);
 
            return Json(result);
 
@@ -82,11 +85,6 @@ namespace AtencionClinica.Controllers
                     if(hasWorkOrders)
                         return BadRequest("No se puede editar la moneda de este servicio porque ya tiene ordenes de trabajo");
 
-                    //Verificar que no tenga movimientos en facturas
-                    var hasFollowServices = _db.FollowServiceDetails.Any(x => x.ServiceId == service.Id);
-                    if(hasFollowServices)
-                        return BadRequest("No se puede editar la moneda de este servicio porque ya tiene descargues de trabajo");
-
                 }
 
                 oldService.CopyFrom(service, x => new
@@ -95,7 +93,9 @@ namespace AtencionClinica.Controllers
                     x.Price,
                     x.PriceCalculate,
                     x.Active,
-                    x.CurrencyId
+                    x.CurrencyId,
+                    x.IsCultive,
+                    x.TypeId
                 });
 
                 _db.SaveChanges();
@@ -125,6 +125,68 @@ namespace AtencionClinica.Controllers
             if (service != null)
             {
                 service.Active = false;
+                _db.SaveChanges();
+            }
+
+            return Json(new { n = id });
+        }
+
+        [Route("api/services/{serviceId}/products/get")]
+        public IActionResult Get(int serviceId)
+        {
+
+            IQueryable<ServiceProduct> serviceProducts = _db.ServiceProducts
+           .Where(x => x.ServiceId == serviceId);
+
+            return Json(serviceProducts);
+
+        }
+
+        [HttpPost("api/services/{serviceId}/products/post")]
+        public IActionResult Post([FromBody] ServiceProduct serviceProduct)
+        {
+
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            if (serviceProduct.Id > 0)
+            {
+                var oldService = _db.ServiceProducts.FirstOrDefault(x => x.Id == serviceProduct.Id);
+
+                oldService.CopyFrom(serviceProduct, x => new
+                {
+                    x.ServiceId,
+                    x.ProductId,
+                    x.Quantity,                    
+                });
+
+                _db.SaveChanges();
+            }
+            else
+            {
+                var existe = _db.ServiceProducts.Any(x => x.ServiceId == serviceProduct.ServiceId && x.ProductId == serviceProduct.ProductId);
+                if (!existe)
+                {
+                    _db.ServiceProducts.Add(serviceProduct);
+                    _db.SaveChanges();
+                }else{
+                    return BadRequest($"El producto {serviceProduct.ProductId} ya esta agregado a la lista");
+                }
+            }
+
+            return Json(serviceProduct);
+
+        }
+
+        [HttpGet("api/services/{serviceId}/products/{id}/delete")]
+        public IActionResult DeleteService(int id)
+        {
+            var serviceProduct = _db.ServiceProducts.FirstOrDefault(x => x.Id == id);
+
+            if (serviceProduct != null)
+            {
+                _db.ServiceProducts.Remove(serviceProduct);
                 _db.SaveChanges();
             }
 

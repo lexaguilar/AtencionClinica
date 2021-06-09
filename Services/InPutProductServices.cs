@@ -51,7 +51,9 @@ namespace AtencionClinica.Services
                         CostAvg = item.Cost,
                         CostReal = item.Cost,
                         Min = 0,
-                        Price = item.Price
+                        Price = item.Price,
+                        StockMin = 0,
+                        Inherit=true
                     };
 
                     item.CostAvg = item.Cost;

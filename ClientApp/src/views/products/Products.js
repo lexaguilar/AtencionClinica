@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Title from '../../components/shared/Title';
 import DataGrid, {
     Column,
@@ -12,7 +12,7 @@ import DataGrid, {
     Paging,
     Button as ButtonGrid 
   } from 'devextreme-react/data-grid';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStore } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
 import CustomButton from '../../components/buttons/CustomButton';
@@ -26,7 +26,7 @@ import { dataAccess, resources } from '../../data/app';
 
 const Products = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.inventarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.inventarios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -40,9 +40,7 @@ const Products = () => {
     const title = "Inventario";
     const active = true;
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title} >
@@ -61,6 +59,7 @@ const Products = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -82,7 +81,7 @@ const Products = () => {
                 <Column dataField="familyId" caption="Familia" width={150}>
                     <Lookup disabled={true} dataSource={createStore({name:'family'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="presentationId" caption="Presentacion" width={150}>
+                <Column dataField="presentationId" caption="Laboratorio" width={150}>
                     <Lookup disabled={true} dataSource={createStore({name:'Presentation'})} valueExpr="id" displayExpr="name" />
                 </Column>
                 <Column dataField="unitOfMeasureId" caption="UM" width={120}>
@@ -94,19 +93,19 @@ const Products = () => {
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStore({name: 'currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
-                <Column dataField="hasIva" caption='IVA ?' type="boolean" width={80} dataType="boolean"/>
-                <Column dataField="stockMin" caption='Stock' type="number" width={80}/>
-
+                <Column dataField="hasIva" caption='IVA ?' width={80} dataType="boolean"/>               
+                <Column dataField="stockMin" caption='Stock' width={80} />               
                 <Column dataField="createBy" caption='Creado Por' visible={false}/>
                 <Column dataField="createAt" caption='Creando el' visible={false} />
                 <Column dataField="lastModificationBy" caption='Modificado Por' visible={false}/>
                 <Column dataField="lastDateModificationAt" caption='Modificado el' visible={false} />
                 <Column type="buttons">
-                    <ButtonGrid name="modificar" text="Editar" onClick={e => openDialog(e.row.data.id)}/>
+                    <ButtonGrid name="edit" icon="edit" onClick={e => openDialog(e.row.data.id)}/>
                 </Column>
                 <Editing
                     mode="popup"
                     useIcons={true}
+                    allowUpdating={true}
                 >
                 </Editing>
             </DataGrid>

@@ -25,13 +25,16 @@ namespace AtencionClinica.Extensions
                         case AppClaimTypes.AreaId:
                             usr.AreaId = Convert.ToInt32(c.Value);
                             break;
+                        case AppClaimTypes.RolId:
+                            usr.RolId = Convert.ToInt32(c.Value);
+                            break;
                     }
                 }
             }
 
             var user = db.Users.FirstOrDefault(x => x.Username == usr.Username);
 
-            if(user.AreaId != usr.AreaId)
+            if(user.AreaId != usr.AreaId || user.RolId != usr.RolId)
                 return null;
 
             return usr;

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Box, DataGrid, SelectBox } from "devextreme-react";
+import React from "react";
+import { DataGrid } from "devextreme-react";
 import { Item } from "devextreme-react/box";
-import http from "../../utils/http";
 import uri from "../../utils/uri";
 import { store } from "../../services/store";
 import { Column, Editing, Popup, Form,
@@ -16,13 +15,11 @@ import useAuthorization from "../../hooks/useAuthorization";
 
 const Roles = props => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
     const title ='Roles'
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container small">
             <Title title={title} />
             <BlockHeader title={title} />
@@ -30,6 +27,7 @@ const Roles = props => {
                 dataSource={store({ uri: uri.roles })}
                 showBorders={true}
                 showRowLines={true}
+                hoverStateEnabled={true}
             >
                 <Column dataField="id" caption="Id" width={60} visible={false} allowEditing={false} />
                 <Column dataField="name" caption="Rol" />

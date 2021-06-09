@@ -23,6 +23,12 @@ namespace AtencionClinica.Controllers
         {
             this._db = db;
         }
+        [Route("api/privateCustomers/get/{id}")]
+        public IActionResult Get(int id) 
+        {
+            var result = _db.PrivateCustomers.FirstOrDefault(x => x.Id == id);
+            return Json(result);
+        }
 
         [Route("api/privateCustomers/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values) 
@@ -43,6 +49,18 @@ namespace AtencionClinica.Controllers
                 privates = privates.Where(x => x.LastName.StartsWith(LastName));
             }
 
+            if (values.ContainsKey("typeId"))
+            {
+                var typeId = Convert.ToInt32(values["typeId"]);
+                privates = privates.Where(x => x.TypeId == typeId);
+            }
+
+            if (values.ContainsKey("contractId"))
+            {
+                var contractId = Convert.ToInt32(values["contractId"]);
+                privates = privates.Where(x => x.ContractId == contractId);
+            }
+
             if (values.ContainsKey("createAt"))
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
@@ -58,10 +76,33 @@ namespace AtencionClinica.Controllers
             });
         }
 
+        [Route("api/privateCustomers/get/{customerId}/information")]
+        public IActionResult GetInformation(int customerId) 
+        {
+            
+            var customer = _db.PrivateCustomers
+            .Include(x => x.Type)
+            .Include(x => x.PrivateCustomerStatus)
+            .FirstOrDefault(x => x.Id == customerId);
+          
+            return Json(new {
+
+                Type = customer.Type.Name,
+                Name = customer.GetFullName(),
+                Status = customer.PrivateCustomerStatus.Name,
+                StatusId = customer.PrivateCustomerStatusId,
+
+            });
+        }
+
         [Route("api/privateCustomers/get/catalog")]
         public IActionResult GetCatalog(int skip, int take, IDictionary<string, string> values) 
         {
-             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers;
+             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers
+             .Include(x => x.Sex)
+             .Include(x => x.Contract)
+             .Include(x => x.Type)
+             ;
 
             if (values.ContainsKey("name"))
             {
@@ -69,9 +110,19 @@ namespace AtencionClinica.Controllers
                 privates = privates.Where(x => x.FirstName.StartsWith(name) || x.LastName.StartsWith(name));
             }
 
+            if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                privates = privates.Where(x => x.Identification.StartsWith(identification));
+            }
+
             var items = _db.PrivateCustomers.Skip(skip).Take(take).Select(x => new {
                 Id = x.Id,
-                Name = x.GetFullName()
+                x.Identification,
+                Name = x.GetFullName(),
+                Sex = x.Sex.Name,
+                Contract = x.Contract.Name,
+                Type = x.Type.Name,
             });
 
             return Json(new
@@ -81,6 +132,29 @@ namespace AtencionClinica.Controllers
             });
         }
 
+        [Route("api/privateCustomers/get/single")]
+        public IActionResult GetCatalogSingle() 
+        {
+             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers
+             .Include(x => x.Sex)
+             .Include(x => x.Contract)
+             .Include(x => x.Type) ;
+
+            
+
+            var items = _db.PrivateCustomers.Select(x => new {
+                Id = x.Id,
+                x.Identification,
+                Name = x.GetFullName(),
+                Sex = x.Sex.Name,
+                Contract = x.Contract.Name,
+                Type = x.Type.Name,
+            });
+
+            return Json(items);
+        }
+
+
         [Route("api/privateCustomers/post")]
         public IActionResult Post([FromBody] PrivateCustomer privateCustomer) 
         {           
@@ -88,6 +162,23 @@ namespace AtencionClinica.Controllers
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
+
+            if(privateCustomer.Id == 1)
+                return BadRequest("No se puede modificar este cliente ya que es para fines de facturas al contado");
+
+            if(privateCustomer.TypeId == (int)ClientType.Contract) //convenio
+            {
+                if(privateCustomer.ContractId == null)
+                    return BadRequest("Debe seleccionar el convenio cuando se estable como tipo Convenio");
+
+            }
+
+            if(privateCustomer.TypeId == (int)ClientType.Private) //privado
+            {
+                if(privateCustomer.ContractId != null)
+                    return BadRequest("No debe seleccionar el convenio cuando se estable como tipo privado");
+
+            }
             
             if(privateCustomer.Id > 0){
                 var oldprivateCustomer = _db.PrivateCustomers.FirstOrDefault(x => x.Id == privateCustomer.Id);
@@ -105,7 +196,11 @@ namespace AtencionClinica.Controllers
                     x.Identification,
                     x.SexId,
                     x.RegionId,
-                    x.CityId,                    
+                    x.CityId,    
+                    x.PrivateCustomerStatusId,
+                    x.Inss,
+                    x.TypeId,
+                    x.ContractId                
                 });
 
                 oldprivateCustomer.LastDateModificationAt = DateTime.Now;

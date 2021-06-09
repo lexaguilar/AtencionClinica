@@ -1,0 +1,3 @@
+import transferWithProdcutDialogReducer from './transferWithProdcutDialogReducer';
+
+export default transferWithProdcutDialogReducer;

@@ -1,0 +1,3 @@
+import privateServiceTestDialogReducer from './privateServiceTestDialogReducer';
+
+export default privateServiceTestDialogReducer;

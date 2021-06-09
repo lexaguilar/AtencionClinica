@@ -6,14 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import Customer from '../../components/customer';
 import { estadoCustomer } from '../../data/catalogos';
-import { createStore, createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { editorOptionsSelect, formatDate } from '../../data/app';
 import moment from 'moment';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
-import DropDownBox from 'devextreme-react/drop-down-box';
-import { store } from '../../services/store';
 import DataSource from "devextreme/data/data_source";
 
 const Nuevo = props => {
@@ -181,7 +179,7 @@ const Nuevo = props => {
                                     searchEnabled: true
                                 }} >
                                 <Label text="Dianostico" />
-                                <RequiredRule message="Seleccione el area" />
+                                <RequiredRule message="Seleccione el dianostico" />
                             </SimpleItem>
                         </GroupItem>
                         <GroupItem >

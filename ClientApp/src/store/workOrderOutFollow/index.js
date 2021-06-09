@@ -1,0 +1,3 @@
+import workOrderOutFollowDialogReducer from './workOrderOutFollowDialogReducer';
+
+export default workOrderOutFollowDialogReducer;

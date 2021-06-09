@@ -27,9 +27,20 @@ namespace AtencionClinica.Controllers
             if (app == null)
                 return BadRequest("Los valores iniciales de la aplicacion no estan establecidos");
 
-            app.Version = Program.version.ToString();            
+            app.Version = Program.version.ToString() + "*";            
 
             return Json(app);
+        }
+
+        [Authorize]  
+        [Route("api/about/info")]
+        public IActionResult GetInfo()
+        {
+
+            App app = db.Apps.FirstOrDefault();                   
+
+            return Json(app);
+            
         }
 
     }

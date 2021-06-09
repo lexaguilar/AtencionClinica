@@ -27,5 +27,23 @@ namespace AtencionClinica.Services
 
             services.AddScoped<IProductServices<WorkOrder>, WorkOrderServices>();
         }
+
+        public static void AddPrivateWorkOrderServices(this IServiceCollection services)
+        {
+
+            services.AddScoped<IProductServices<PrivateWorkOrder>, PrivateWorkOrderServices>();
+        }
+
+        public static void AddBillServices(this IServiceCollection services)
+        {
+
+            services.AddScoped<IProductServices<Bill>, BillServices>();
+        }
+
+        public static void AddHemoLogServices(this IServiceCollection services)
+        {
+
+            services.AddScoped<IProductServices<HemoLog>, HemoLogServices>();
+        }
     }
 }

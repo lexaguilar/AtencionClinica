@@ -135,5 +135,5 @@ namespace AtencionClinica.Models
 
     }
 
-    public partial class InPutProductDetail : ModelExtension<InPutProductDetail> { }
+    public partial class TraslateDetail : ModelExtension<TraslateDetail> { }
 }

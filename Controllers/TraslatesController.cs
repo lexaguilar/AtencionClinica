@@ -91,6 +91,82 @@ namespace AtencionClinica.Controllers
 
         }
 
+        
+
+        [HttpPost("api/[Controller]/post/asEdit")]
+        public IActionResult Edit([FromBody] Traslate traslate)
+        { 
+            var user = this.GetAppUser(_db);
+            if(user == null)
+                return BadRequest("La información del usuario cambio, inicie sesión nuevamente");
+
+            var oldTraslate = _db.Traslates.FirstOrDefault(x => x.Id == traslate.Id);
+
+            if(oldTraslate.StageId == (int)TraslateStages.Anulado)
+                return BadRequest("La solicitud esta anulada, no se puede editar");
+
+            if(oldTraslate.StageId == (int)TraslateStages.Procesado)
+                return BadRequest("La solicitud esta despachada, no se puede editar");
+
+            if(traslate.StateId != 1)
+                return BadRequest("No se puede editar el traslado ya que la solicitud esta anulada");
+
+            oldTraslate.CopyFrom(traslate, x=> new 
+            { 
+                x.AreaSourceId,
+                x.Observation,
+                x.Date                
+            });
+
+            var oldTraslateDetails = _db.TraslateDetails.Where(x => x.TraslateId == traslate.Id);
+
+            foreach (var item in oldTraslateDetails)
+            {
+                _db.TraslateDetails.Remove(item);
+            }
+
+            foreach (var item in traslate.TraslateDetails)
+            {             
+                var newItem = new TraslateDetail();
+
+                 var product = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == traslate.AreaSourceId && x.ProductId == item.ProductId);
+
+                item.SubTotal = Math.Round((Convert.ToDecimal(item.QuantityRequest) * item.Cost), 6);
+                item.Discount = 0;
+                item.QuantityResponse = 0;
+                item.Import = item.SubTotal - item.Discount;
+                item.Total = item.Import + item.Iva;
+                item.Price = product.Price;
+                item.CostAvg = item.Cost;
+
+                newItem.CopyFrom(item, x => new {
+                    x.ProductId,
+                    x.QuantityRequest,
+                    x.QuantityResponse,
+                    x.Cost,
+                    x.Price,
+                    x.SubTotal,
+                    x.Discount,
+                    x.Import,
+                    x.Iva,
+                    x.Total,
+                    x.CostAvg,
+                    x.Stocks,                   
+                });
+
+                newItem.TraslateId = traslate.Id;               
+
+                _db.TraslateDetails.Add(newItem);
+            }   
+
+            _db.SaveChanges();
+
+            return Json(traslate);
+
+        }
+
+        
+
         [HttpPost("api/traslates/post")]
         public IActionResult Post([FromBody] Traslate traslate)
         {            
@@ -135,12 +211,13 @@ namespace AtencionClinica.Controllers
             if(traslate.StateId != 1)
                 return BadRequest("No se puede anular el traslado");
 
-             if(traslate.StageId != 1)
-                return BadRequest("No se puede anular el traslado");
+            if(traslate.StageId != 1)
+                return BadRequest("No se puede anular un traslado que ya esta procesado");
 
             if (traslate != null)
             {
                 traslate.StateId = 2;
+                traslate.StageId = (int)TraslateStages.Anulado;
                 _db.SaveChanges();
             }
 

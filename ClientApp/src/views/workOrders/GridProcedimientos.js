@@ -21,7 +21,7 @@ const GridProcedimientos = ({detailsServices=[], open, user, rate}) => {
 
         const price = getPriceByCurrency(1, rate)(service);
       
-        newData.id = value;
+        newData.serviceId = value;
       
         newData.quantity = 1;     
         newData.price = price;
@@ -54,7 +54,7 @@ const GridProcedimientos = ({detailsServices=[], open, user, rate}) => {
             onToolbarPreparing={onToolbarPreparing}
             onCellPrepared={onCellPrepared}
         >
-            <Column dataField="id" caption="Procedimiento" setCellValue={setCellValue}>
+            <Column dataField="serviceId" caption="Procedimiento" setCellValue={setCellValue}>
                 <Lookup
                     disabled={true}
                     dataSource={services}
@@ -62,9 +62,11 @@ const GridProcedimientos = ({detailsServices=[], open, user, rate}) => {
                 />
             </Column>
             <Column dataField="quantity"
+                // allowEditing={false} 
                 caption="Cantidad"
                 dataType="number" width={120}
-                setCellValue={setCellValueCant}>
+                //setCellValue={setCellValueCant}
+                >
                 <RuleRequired />
             </Column>
             <Column dataField="price" allowEditing={false} caption='Precio' width={100} cellRender={cellRender()} />

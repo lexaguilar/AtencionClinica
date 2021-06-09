@@ -1,0 +1,3 @@
+import privateTransferWithServiceDialogReducer from './privateTransferWithServiceDialogReducer';
+
+export default privateTransferWithServiceDialogReducer;

@@ -1,11 +1,11 @@
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Popup  } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
-import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule, StringLengthRule } from 'devextreme-react/form';
+import Form, { SimpleItem, Label,RequiredRule, StringLengthRule } from 'devextreme-react/form';
 import { dialogTransfer } from '../../store/transfer/transferDialogReducer';
 import useAreas from '../../hooks/useAreas';
-import { Button, SelectBox } from 'devextreme-react';
+import { Button } from 'devextreme-react';
 import { editorOptionsSelect } from '../../data/app';
 import { createStoreLocal } from '../../utils/proxy';
 import http from '../../utils/http';
@@ -17,16 +17,14 @@ const Transfer = () => {
     const { open, id } = useSelector(store => store.transfer);
     const dispatch = useDispatch();
     const onHiding = () => dispatch(dialogTransfer({open :  false, id : 0}));
-    const [transfer] = useState({});
+    const [ transfer, setTransfer ] = useState({});
 
     let refForm = useRef();
-
-    const { areas } = useAreas();
 
     const transferir = () => {
         
         var result = refForm.current.instance.validate();
-        if(result){
+        if(result.isValid){
            
             http(uri.follows(0).insert).asPost({...transfer, admissionId : id}).then(resp => {
                 notify("Se realizo la transferencia con éxito");
@@ -40,6 +38,10 @@ const Transfer = () => {
 
     }
 
+    useEffect(() => {       
+        setTransfer({})    
+    }, [open]);
+
     const active = true;
     const title = 'Tranferir';
     
@@ -47,7 +49,7 @@ const Transfer = () => {
         <div>           
             <Popup
                 width={350}
-                height={240}
+                height={260}
                 onHiding={onHiding}
                 title={title}
                 visible={open}

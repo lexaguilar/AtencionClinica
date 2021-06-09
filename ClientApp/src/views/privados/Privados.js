@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DataGrid } from 'devextreme-react';
 import { 
     Paging, 
@@ -10,26 +10,23 @@ import {
     Lookup,
     Export, 
     Editing,
-    Popup,     
-    Form as FromGrid, 
-    RequiredRule,
-    StringLengthRule} from 'devextreme-react/data-grid';
-import { EmptyItem, Item } from 'devextreme-react/form';
+    Popup,
+    Form as FromGrid} from 'devextreme-react/data-grid';
+import {  RequiredRule, AsyncRule, StringLengthRule, EmptyItem, Item } from 'devextreme-react/form';
 import { store } from '../../services/store';
-import { createStore,createStoreLocal } from '../../utils/proxy';
+import { createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import BlockHeader from '../../components/shared/BlockHeader';
 import Title from '../../components/shared/Title';
-import { estadoAdmision,relationships,estadoBeneficiario } from '../../data/catalogos';
-import http from '../../utils/http';
 import { dataAccess, formatDate, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
+import { EmailRule } from 'devextreme-react/validator';
 
 
 
 const Privados = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();    
     
@@ -47,11 +44,14 @@ const Privados = () => {
         });
     }
 
-    const title = 'Pacientes privados';
+    const validateContract = (e) => {
+        console.log(e)
+        return false;
+    }
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    const title = 'Pacientes privados y convenios';
+
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} />           
@@ -63,7 +63,8 @@ const Privados = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-                noDataText='No se encontró ningun paciente privado'
+                hoverStateEnabled={true}
+                noDataText='No se encontró ningun paciente'
                 onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
@@ -74,19 +75,25 @@ const Privados = () => {
                 <Pager
                     showInfo={true}
                     showPageSizeSelector={true}
-                    allowedPageSizes={[10, 20, 50]}
+                    allowedPageSizes={[5,10, 20, 50]}
                 />
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
-                <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id"  width={80} />
+                <ColumnChooser enabled={true} />               
+                <Column dataField="id" width={140} visible={false} />
                 <Column dataField="identification" width={140} />
+                <Column dataField="inss" visible={false} dataType="number" />
                 <Column dataField="firstName" caption="Nombre"  />
                 <Column dataField="lastName" caption="Apellidos"  />
                 <Column dataField="birthDate" caption="Fecha Nac." width={140} dataType="date"  format={formatDate}/>
                 <Column dataField="sexId" width={100} caption="Sexo">
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'sex'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="typeId" caption="Tipo" width={150}>
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'privateCustomerType'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                <Column dataField="contractId" caption="Convenio" width={160}>
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'contract'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="phoneNumber"  visible={false} caption="Telefono" width={150} />
                 <Column dataField="cellNumber"  visible={false} caption="Celular" width={150} />
@@ -106,14 +113,20 @@ const Privados = () => {
                     allowUpdating={true}                       
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={850} height={530}>
+                    <Popup title={title} showTitle={true} width={850} height={580}>
 
                     </Popup>
-                    <FromGrid>                      
+                    <FromGrid>   
+                        <Item dataField="typeId" >
+                            <RequiredRule message="El campo es requerido" />
+                        </Item>                    
+                        <Item dataField="contractId" >
+                        </Item>                    
                         <Item dataField="identification" >
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
                         </Item>
-                        <EmptyItem/>
+                        <Item dataField="inss" >
+                        </Item>
                         <Item dataField="firstName" >
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
@@ -133,20 +146,20 @@ const Privados = () => {
                         </Item>
                         <Item dataField="cellNumber" >
                             <StringLengthRule max={50} message="Máximo de caracteres 50" />
+                        </Item>                
+                        <Item dataField="email" >
+                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
+                            <EmailRule></EmailRule>
                         </Item>
+                        <Item dataField="privateCustomerStatusId" >                            
+                            <RequiredRule message="El campo es requerido" />
+                        </Item>   
                         <Item dataField="regionId" >
                             <RequiredRule message="El campo es requerido" />
                         </Item>
                         <Item dataField="cityId" >
                             <RequiredRule message="El campo es requerido" />
-                        </Item>                        
-                        <Item dataField="email" >
-                            <StringLengthRule max={50} message="Máximo de caracteres 50" />
-                        </Item>
-                        <Item dataField="privateCustomerStatusId" >                            
-                            <RequiredRule message="El campo es requerido" />
-                        </Item>   
-                         
+                        </Item>  
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />
@@ -158,4 +171,4 @@ const Privados = () => {
     );
 }
 
-export default Privados;
+export default React.memo(Privados);

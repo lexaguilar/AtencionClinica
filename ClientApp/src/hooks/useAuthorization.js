@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { userService } from "../services/user.service";
-import { resources } from '../data/app';
+import MsgAuthorize from './MsgAuthorized';
+const Authorized = isAuthorization => component => {
+    return isAuthorization ? component : <MsgAuthorize/>
+}
 
 /**
  * Retorna el un componente si el usuario no tiene permiso al recurso actual
@@ -12,21 +15,16 @@ const useAuthorization = ([resourceId, action]) => {
     const user = userService.getUser();
 
     const resource = user.resources.find(x => x.resource == resourceId);
+
+    if(!resource)
+        alert("El recurso es requerido")
     
-    const [ isAuthorization ] = useState( (resource.action & action) > 0);
+    const isAuthorization = (resource.action & action) > 0;
 
     return {
         isAuthorization,
-        Unauthorized
+        authorized : Authorized(isAuthorization)
     }
-}
-
-const Unauthorized = props => {
-    return (
-        <div className="container small text-center text-danger mt-25">
-            <p>El usuario no tiene permisos para este recurso</p>
-        </div>
-    )
 }
 
 export default useAuthorization;

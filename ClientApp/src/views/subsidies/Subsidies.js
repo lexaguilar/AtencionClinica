@@ -8,7 +8,6 @@ import {
     ColumnChooser, 
     Column, 
     Lookup,
-    Export, 
     Editing
 } from 'devextreme-react/data-grid';
 import { store } from '../../services/store';
@@ -21,14 +20,13 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import onExporting from '../../components/grids/Importer';
-import { Resources } from 'devextreme-react/gantt';
 import { dataAccess, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
 
 
 const Subsidies = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.subsidios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.subsidios, dataAccess.access ]);
 
     let dataGrid = React.createRef();
     const dispatch = useDispatch();
@@ -81,9 +79,7 @@ const Subsidies = () => {
         }
 
     }
-
-    const title = 'Subsidios';
-
+    
     const onToolbarPreparing = (e) => {  
         e.toolbarOptions.items.unshift({
             location: 'before',
@@ -98,9 +94,9 @@ const Subsidies = () => {
         });
     }  
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    const title = 'Subsidios';
+
+    return authorized(
         <div className="container">
             <Title title={title} />
             <BlockHeader title={title} >
@@ -119,6 +115,7 @@ const Subsidies = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
                 onContextMenuPreparing={addMenuItems}
                 onCellPrepared={onCellPrepared}
                 onRowPrepared={onRowPrepared}
@@ -136,13 +133,13 @@ const Subsidies = () => {
                     allowedPageSizes={[10, 20, 50]}
                 />
                 <FilterRow visible={true} />
-                <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 {/* <Export enabled={true}  /> */}
                 <Column dataField="id"  width={80} />
                 <Column dataField="reference"  width={90} caption='Boleta' alignment='right'/>
                 <Column dataField="inss"  width={100} />
-                <Column dataField="nombre" caption='Nombre'/>
+                <Column dataField="identification" caption="Identificacion" width={130}/>
+                <Column dataField="nombre" caption='Nombre' allowFiltering={false}/>
                 <Column dataField="areaId" width={150} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore({name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 

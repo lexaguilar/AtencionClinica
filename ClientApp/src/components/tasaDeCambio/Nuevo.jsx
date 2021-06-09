@@ -1,13 +1,8 @@
 import React from 'react';
 import { Popup, FileUploader, Button } from 'devextreme-react';
-import Form, {
-    SimpleItem,
-    GroupItem
-} from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
-import http, { path } from '../../utils/http';
+import http from '../../utils/http';
 import uri from '../../utils/uri';
-import { RequiredRule } from 'devextreme-react/data-grid';
 
 class Nuevo extends React.Component {
     constructor(props) {

@@ -39,11 +39,102 @@ namespace AtencionClinica.Services
 
             //Crear salida          
             var outPutProductServices = new OutPutProductServices(_db);
-            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder);
+            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder, null);
             if (!modelOnPutProducts.IsValid)
                 return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
 
             return model;
+        }
+
+        public ModelValidationSource<WorkOrder> CreateFromAdmin(Admission admission)
+        {
+            var follow = admission.Follows.FirstOrDefault();
+            var workOrder = follow.WorkOrders.FirstOrDefault();  
+            
+            workOrder.Init(_db);
+
+            var model = workOrder.Validate(_db, validateAll: false, admission);
+            
+            if (!model.IsValid)
+                return model;
+
+            _db.Admissions.Add(admission);
+
+            //Crear salida          
+            var outPutProductServices = new OutPutProductServices(_db);
+            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder, admission.AreaId);
+            if (!modelOnPutProducts.IsValid)
+                return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
+
+            return model;
+        }
+
+        //SendTest sendTest
+        public void CreateTest(SendTest sendTest, Follow follow)
+        {
+
+            var serviceTest = new ServiceTest
+            {
+                SendTest = sendTest,
+                Date = DateTime.Now,
+                CreateAt = DateTime.Now,
+                CreateBy = sendTest.CreateBy,
+                DoctorId = sendTest.DoctorId,
+            };
+
+            foreach (var item in sendTest.SendTestDetails)
+            {
+                var service = _db.Services.FirstOrDefault(x => x.Id == item.Serviceid);
+
+                if (service.IsCultive)//Cultivo
+                {
+
+                    serviceTest.ServiceTestCultives.Add(new ServiceTestCultive
+                    {
+                        ServiceTest = serviceTest,
+                        ServiceId = item.Serviceid,
+                        Name = service.Name
+                    });
+
+                }
+                else if (item.Serviceid == 8)//BAAR
+                {
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        serviceTest.ServiceTestBaarDetails.Add(new ServiceTestBaarDetail
+                        {
+                            ServiceTest = serviceTest,
+                            ServiceId = item.Serviceid,
+                            TestNumber = i
+                        });
+                    }
+                }
+                else
+                {
+                    var serviceDetails = _db.ServiceDetails.Where(x => x.ServiceId == item.Serviceid);
+
+                    foreach (var item2 in serviceDetails)
+                    {
+                        serviceTest.ServiceTestDetails.Add(new ServiceTestDetail
+                        {
+                            ServiceTest = serviceTest,
+                            ServiceId = item.Serviceid,
+                            ServiceDetailId = item2.Id,
+
+                            Name = item2.Name,
+                            Um = item2.Um,
+                            Reference = item2.Reference,
+
+                            Result = "",
+                            ResultJson = "",
+                        });
+                    }
+                }
+
+            }
+
+            follow.ServiceTests.Add(serviceTest);
+
         }
 
         public int Delete(int id)

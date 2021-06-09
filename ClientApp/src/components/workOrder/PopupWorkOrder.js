@@ -1,17 +1,15 @@
 
 import React from 'react';
-import { Popup, ToolbarItem } from 'devextreme-react/popup';
-import Beneficiarios from '../../views/beneficiarios';
+import { Popup } from 'devextreme-react/popup';
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogWorkOrders } from '../../store/workOrders/workOrdersDialogReducer';
-import CustomButton from '../buttons/CustomButton';
 import WorkOrders from '../../views/workOrders/WorkOrders';
 
-const PopupWorkOrder = () => {
+const PopupWorkOrder = ({areaId}) => {
 
     const { open, id, beneficiaryId } = useSelector(store => store.workOrdersDialog);
     const dispatch = useDispatch();
-    const onHiding = () => dispatch(dialogWorkOrders({open :  false, id : 0}));
+    const onHiding = () => dispatch(dialogWorkOrders({open :  false, id : 0, beneficiaryId : 0}));
 
     const title = 'Servicios';
 
@@ -25,7 +23,7 @@ const PopupWorkOrder = () => {
                 title={title}
                 visible={open}
             >               
-                <WorkOrders followId={id} beneficiaryId={beneficiaryId}/>
+                <WorkOrders followId={id} beneficiaryId={beneficiaryId} areaId={areaId}/>
             </Popup>
         </div>
     );

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import SelectBox from 'devextreme-react/select-box';
+import React, { useRef } from 'react';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import Title from '../../../components/shared/Title';
 import DataGrid, {
@@ -12,44 +11,80 @@ import DataGrid, {
     Lookup,
     Pager,
     Paging,
+    Button as ButtonGrid,
   } from 'devextreme-react/data-grid';
 import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
-import { dataAccess, formatDate, formatDateTime, resources } from '../../../data/app';
-import Nuevo from './Nuevo';
+import { inPutProductStates } from '../../../data/catalogos';
+import { dataAccess, formatDate, formatDateTime } from '../../../data/app';
 import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
 import useAuthorization from '../../../hooks/useAuthorization';
+import { dataFormatId } from '../../../utils/common';
+import { addMenu } from '../../../components/grids/Menu';
+import { onToolbar } from '../../../components/grids/ToolBar';
+import urlReport from '../../../services/reportServices';
 
 const InPutProducts = (    
     { 
-        title= "Entrada de inventario", 
+        title= "Entrada de entrada inventario", 
         btnAddText= "Crear entrada",
         typeId= null,
-        Component= Nuevo
+        icon="",
+        Component= null,
+        resourcesId = null,
+        printName = null,
+        dialog = dialogInputProduct
     }) => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.movimientos, dataAccess.access ]);
+    const { authorized } = useAuthorization([resourcesId, dataAccess.access ]);
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
     const dispatch = useDispatch();
 
-    const reload = (params) => {
-        dataGrid.current.instance.refresh();
+    const reload = () => dataGrid.current.instance.refresh();    
+
+    const onRowPrepared = (e) => {
+        if (e.rowType == 'data') {
+            
+            if (e.data.stateId == inPutProductStates.noActivo) 
+                e.rowElement.classList.add('no-activo');
+            
+        }
     }
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    const showDialog = id => dispatch(dialog({ open: true, id }));  
+    
+    const report = urlReport();
+
+    const addMenuItems = (e) => {
+        addMenu(e, [{
+            text: `Ver ${title}`,
+            icon: 'find',
+            onItemClick: () => showDialog(e.row.data.id)
+        },{
+            text: `Imprimir ${title}`,
+            icon: 'print',
+            onItemClick: () => {
+
+                if(printName)
+                    report.print(`${report[printName](e.row.data.id)}`) ;
+            }
+        }])
+    }
+
+    const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
+
+    return authorized(
         <div className="container">
             <Title title={title}/>
-            <BlockHeader title={title} >
+            <BlockHeader title={title} icon={icon} >
                 <CustomButton                 
                     text={btnAddText}
                     icon='plus'
-                    onClick={()=>dispatch(dialogInputProduct({open : true}))}
+                    onClick={() => showDialog(0)}
                 />
             </BlockHeader>
             <Component onSave={reload} typeId={typeId}/> 
@@ -62,6 +97,10 @@ const InPutProducts = (
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
+                hoverStateEnabled={true}
+                onRowPrepared={onRowPrepared}
+                onContextMenuPreparing={addMenuItems}
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -77,23 +116,29 @@ const InPutProducts = (
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id" caption='Numero' width={100}/>
-                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
-                <Column dataField="areaId" caption="Area" width={200}>
+                <Column dataField="id" caption='Numero' width={100} cellRender={dataFormatId}/>
+                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={90} />
+                <Column dataField="areaId" caption="Area" width={170}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="typeId" caption="Tipo Entrada" width={160}>
+                <Column dataField="typeId" caption="Tipo Entrada" width={150}>
                     <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductType'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="reference" caption='Referencia' />
-                <Column dataField="stateId" caption="Estado" width={150}>
+                <Column dataField="reference" caption='Referencia' width={100}/>
+                <Column dataField="observation" caption='Observacion'/>
+                <Column dataField="stateId" caption="Estado" width={90}>
                     <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductState'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
-                <Column dataField="createBy" caption='Creado Por'/>
+                <Column dataField="createBy" caption='Creado Por'  width={120}/>
+                <Column type="buttons" width={60}>
+                    <ButtonGrid name="edit" icon="find" onClick={e => showDialog(e.row.data.id)}/>
+                    <ButtonGrid name="delete" />
+                </Column>
                 <Editing
                     mode="popup"
                     allowDeleting={true}
+                    allowUpdating={true}
                     useIcons={true}
                 >
                 </Editing>

@@ -1,0 +1,3 @@
+import transferWithServiceDialogReducer from './transferWithServiceDialogReducer';
+
+export default transferWithServiceDialogReducer;

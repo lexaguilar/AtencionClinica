@@ -1,6 +1,6 @@
 import React from 'react';
 import { DataGrid } from 'devextreme-react';
-import { Paging, Pager, FilterRow, HeaderFilter, Column, Export, Editing, RequiredRule } from 'devextreme-react/data-grid';
+import { Paging, Pager, FilterRow, Column, Export, Editing, RequiredRule } from 'devextreme-react/data-grid';
 
 import Title from '../../components/shared/Title';
 import { store } from '../../services/store';
@@ -10,20 +10,31 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import useAuthorization from '../../hooks/useAuthorization';
 import { dataAccess, resources } from '../../data/app';
 
-
 const Rates = () => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
-    const reload = () => dataGrid.current.instance.refresh();    
+    const reload = () => dataGrid.current.instance.refresh();   
+    
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'after',
+            widget: 'dxButton',
+            options: {
+                text: 'Agregar',
+                icon:'plus',
+                type:'default',
+                stylingMode:"outlined",
+                onClick: () =>  dataGrid.current.instance.addRow()
+            }
+        });
+    }  
 
     const title="Tasa de cambio";
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container small">
             <Title title={title}/>
             <BlockHeader title={title} />
@@ -42,10 +53,12 @@ const Rates = () => {
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-                remoteOperations={{
+                hoverStateEnabled={true}
+                remoteOperations={{                    
                     paging: true,
                     filtering: true
                 }}     
+                onToolbarPreparing={onToolbarPreparing}
             >
                 <Paging defaultPageSize={10} />
                 <Pager

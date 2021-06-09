@@ -52,6 +52,7 @@ namespace AtencionClinica.Services
             return model;
         }
 
+        
         public ModelValidationSource<OutPutProduct> CreateFrom(Traslate traslate)
         {
             var items = new List<OutPutProductDetail>();
@@ -81,13 +82,55 @@ namespace AtencionClinica.Services
             
         }
 
-        public ModelValidationSource<OutPutProduct> CreateFrom(WorkOrder work)
+        public ModelValidationSource<OutPutProduct> CreateFrom(WorkOrder work, int? areaTargetId)
         {
+            int areaId = 0;
 
-            var follow = _db.Follows.FirstOrDefault(x => x.Id == work.FollowId);
+            if(areaTargetId == null){
+
+                var follow = _db.Follows.FirstOrDefault(x => x.Id == work.FollowId);
+                areaId = follow.AreaTargetId;
+            }else
+                areaId = areaTargetId.Value;
 
             var items = new List<OutPutProductDetail>();
             foreach (var item in work.WorkOrderDetails.Where(x => !x.IsService))
+            {
+
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == areaId && x.ProductId == item.ProductId);
+
+                items.Add(new OutPutProductDetail{
+                    ProductId = item.ProductId.Value,
+                    Quantity = item.Quantity,
+                    Cost = areaProducto.CostAvg,
+                    CostAvg = areaProducto.CostAvg,
+                    Price = item.Price,
+                    Discount = 0
+                });
+
+            } 
+
+            var outPutProduct = new OutPutProduct{
+                AreaId = areaId,
+                TypeId = (int)OutputType.FarmaciaServicios,
+                Date = work.Date,
+                Observation = "Despacho por servicios",
+                CreateBy = work.CreateBy,
+                Reference = work.Reference,
+                OutPutProductDetails = items
+            };
+
+            return this.Create(outPutProduct);
+            
+        }
+
+        public ModelValidationSource<OutPutProduct> CreateFrom(PrivateWorkOrder work)
+        {
+
+            var follow = _db.FollowsPrivates.FirstOrDefault(x => x.Id == work.FollowsPrivateId);
+
+            var items = new List<OutPutProductDetail>();
+            foreach (var item in work.PrivateWorkOrderDetails.Where(x => !x.IsService))
             {
 
                 var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaTargetId && x.ProductId == item.ProductId);
@@ -107,7 +150,7 @@ namespace AtencionClinica.Services
                 AreaId = follow.AreaTargetId,
                 TypeId = (int)OutputType.FarmaciaServicios,
                 Date = work.Date,
-                Observation = "Despacho por servicios",
+                Observation = "Despacho por servicios privados",
                 CreateBy = work.CreateBy,
                 Reference = work.Reference,
                 OutPutProductDetails = items
@@ -116,6 +159,75 @@ namespace AtencionClinica.Services
             return this.Create(outPutProduct);
             
         }
+
+        public ModelValidationSource<OutPutProduct> CreateFrom(Bill bill)
+        {
+            var items = new List<OutPutProductDetail>();
+            foreach (var item in bill.BillDetails.Where(x => !x.IsService))
+            {
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == bill.AreaId && x.ProductId == item.ProductId);
+
+                items.Add(new OutPutProductDetail{
+                    ProductId = item.ProductId.Value,
+                    Quantity = Convert.ToDouble(item.Quantity),
+                    Cost = areaProducto.CostAvg,
+                    Price = item.Price,
+                    Discount = 0,
+                    CostAvg = areaProducto.CostAvg
+                });
+            } 
+
+            var outPutProduct = new OutPutProduct{
+                AreaId = bill.AreaId,
+                TypeId = (int)OutputType.Facturacion,
+                Date = bill.CreateAt,               
+                Observation = "Salida por factura",
+                CreateBy = bill.CreateBy,               
+                OutPutProductDetails = items,
+            };
+
+            return this.Create(outPutProduct);
+            
+        }
+
+        public ModelValidationSource<OutPutProduct> CreateFrom(HemoLog hemoLog)
+        {
+             var group = _db.Groups.FirstOrDefault(x => x.Id == hemoLog.GroupId);  
+
+            var items = new List<OutPutProductDetail>();
+
+            var productsId = hemoLog.HemoLogDetails.Select(x => x.ProductId).Distinct();
+
+            foreach (var productId in productsId)
+            {
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == group.AreaId && x.ProductId == productId);
+
+                var quantity = hemoLog.HemoLogDetails.Where(x => x.ProductId == productId).Sum(x => x.Quantity);
+
+                if(quantity > 0)
+                    items.Add(new OutPutProductDetail{
+                        ProductId = productId,
+                        Quantity = Convert.ToDouble(quantity),
+                        Cost = areaProducto.CostAvg,
+                        Price = areaProducto.Price,
+                        Discount = 0,
+                        CostAvg = areaProducto.CostAvg
+                    });
+            } 
+
+            var outPutProduct = new OutPutProduct{
+                AreaId = group.AreaId,
+                TypeId = (int)OutputType.Hemodialisis,
+                Date = hemoLog.CreateAt,               
+                Observation = "Salida por hemodialisis",
+                CreateBy = hemoLog.CreateBy,               
+                OutPutProductDetails = items,
+            };
+
+            return this.Create(outPutProduct);
+            
+        }
+
 
         public int Delete(int id)
         {

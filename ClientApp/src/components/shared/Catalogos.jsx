@@ -22,13 +22,13 @@ import Title from './Title';
 import BlockHeader from './BlockHeader';
 import { createProxyBase } from '../../utils/proxy';
 import useAuthorization from '../../hooks/useAuthorization';
-import { dataAccess, resources } from '../../data/app';
+import { dataAccess, editorOptionsSwitch, resources } from '../../data/app';
 
 function Catalogo(props) {
 
     const { name, url, caption } = props;
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.administracion, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
     let dataGrid = React.createRef();
 
@@ -45,10 +45,12 @@ function Catalogo(props) {
             }
         });
     }  
+
+    const onInitNewRow = (e) => {
+        e.data.active = true;
+    }
     
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container small">
             <Title title={caption||name}/>
             <BlockHeader title={toCapital(caption||name)}/>          
@@ -61,6 +63,7 @@ function Catalogo(props) {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 onToolbarPreparing={onToolbarPreparing}
+                onInitNewRow={onInitNewRow}
             >
                 <Paging defaultPageSize={20} />
                 <Pager
@@ -70,14 +73,14 @@ function Catalogo(props) {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <Export enabled={true} fileName={name} allowExportSelectedData={true} />
-                <Column dataField="name" />
+                <Column dataField="name" caption="Descripcion" />
                 <Column dataField="active" caption="Activo" dataType="boolean" width={100} />
                 <Editing
                     mode="popup"
                     allowUpdating={true}
                     useIcons={true}
                 >
-                    <Popup title={toCapital(name)} showTitle={true} width={450} height={250}>
+                    <Popup title={toCapital(caption||name)} showTitle={true} width={450} height={250}>
                         
                     </Popup>
                     <Form>
@@ -85,7 +88,7 @@ function Catalogo(props) {
                             <RequiredRule message="El campo es requerida"/>
                             <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
                         </Item>
-                        <Item  dataField="active" editorOptions={{ width:300 }}  colSpan={2}>
+                        <Item  dataField="active"  editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}  colSpan={2}>
                         </Item>  
                     </Form>
                 </Editing>

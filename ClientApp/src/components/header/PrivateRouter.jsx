@@ -7,7 +7,7 @@ const PrivateRoute = routeProps => {
 
       let {component: Component,render: Render, ...rest} = routeProps;
 
-      return (<Route {...rest} render= { props => 
+      return (<Route exact {...rest} render= { props => 
         userService.isLogged() 
           ? Component ? <Component {...props} /> : <Render {...props}/>
           : <Redirect to={{pathname:'/account/login', state:{from: props.location}}} />

@@ -53,6 +53,12 @@ namespace AtencionClinica.Controllers
                 appointments = appointments.Where(x => x.SpecialtyId == specialtyId);
             }
 
+             if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                appointments = appointments.Where(x => x.Identification.StartsWith(identification));
+            }
+
             if (values.ContainsKey("dateAppointment"))
             {
                 var dateAppointment = Convert.ToDateTime(values["dateAppointment"]);
@@ -80,7 +86,8 @@ namespace AtencionClinica.Controllers
                 x.SpecialtyId,
                 x.CreateAt,
                 x.CreateBy,
-                x.Active
+                x.Active,
+                x.Identification
             });
 
             return Json(new
@@ -148,6 +155,7 @@ namespace AtencionClinica.Controllers
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == appointment.BeneficiaryId);
             
             appointment.Inss = bene.Inss;
+            appointment.Identification = bene.Identification;
             appointment.Active = true;
             appointment.CreateAt = DateTime.Now;
             appointment.CreateBy = user.Username;

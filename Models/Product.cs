@@ -10,10 +10,17 @@ namespace AtencionClinica.Models
         public Product()
         {
             AreaProductStocks = new HashSet<AreaProductStock>();
+            BillDetails = new HashSet<BillDetail>();
+            GroupProducts = new HashSet<GroupProduct>();
+            HemoLogDetails = new HashSet<HemoLogDetail>();
             InPutProductDetails = new HashSet<InPutProductDetail>();
             OutPutProductDetails = new HashSet<OutPutProductDetail>();
+            PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
+            PrivateWorkPreOrderDetails = new HashSet<PrivateWorkPreOrderDetail>();
+            ServiceProducts = new HashSet<ServiceProduct>();
             TraslateDetails = new HashSet<TraslateDetail>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
+            WorkPreOrderDetails = new HashSet<WorkPreOrderDetail>();
         }
 
         public int Id { get; set; }
@@ -23,13 +30,15 @@ namespace AtencionClinica.Models
         public int PresentationId { get; set; }
         public int UnitOfMeasureId { get; set; }
         public bool HasIva { get; set; }
-        public decimal StockMin { get; set; }
         public int StateId { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public DateTime LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
         public int CurrencyId { get; set; }
+        public double? StockMin { get; set; }
+        public int? ConvertProductId { get; set; }
+        public double? ConvertProductQuantity { get; set; }
 
         public virtual Currency Currency { get; set; }
         public virtual Family Family { get; set; }
@@ -37,9 +46,16 @@ namespace AtencionClinica.Models
         public virtual ProductState State { get; set; }
         public virtual UnitOfMeasure UnitOfMeasure { get; set; }
         public virtual ICollection<AreaProductStock> AreaProductStocks { get; set; }
+        public virtual ICollection<BillDetail> BillDetails { get; set; }
+        public virtual ICollection<GroupProduct> GroupProducts { get; set; }
+        public virtual ICollection<HemoLogDetail> HemoLogDetails { get; set; }
         public virtual ICollection<InPutProductDetail> InPutProductDetails { get; set; }
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }
+        public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
+        public virtual ICollection<PrivateWorkPreOrderDetail> PrivateWorkPreOrderDetails { get; set; }
+        public virtual ICollection<ServiceProduct> ServiceProducts { get; set; }
         public virtual ICollection<TraslateDetail> TraslateDetails { get; set; }
         public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }
+        public virtual ICollection<WorkPreOrderDetail> WorkPreOrderDetails { get; set; }
     }
 }

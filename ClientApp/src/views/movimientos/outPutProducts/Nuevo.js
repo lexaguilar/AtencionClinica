@@ -1,49 +1,78 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Popup } from 'devextreme-react/popup';
-import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule, StringLengthRule} from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem, Label, RequiredRule, StringLengthRule} from 'devextreme-react/form';
 import { useDispatch, useSelector } from 'react-redux'
-import { dialogInputProduct } from '../../../store/inPutProduct/inPutProductDialogReducer';
+import { dialogOutputProduct } from '../../../store/outPutProduct/outPutProductDialogReducer';
 import { createStoreLocal } from '../../../utils/proxy';
 import { editorOptionsSelect } from '../../../data/app';
 import { DataGrid } from 'devextreme-react';
-import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, Summary, TotalItem } from 'devextreme-react/data-grid';
+import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../../components/dropdown/ProductDDBComponent';
 import uri from '../../../utils/uri';
-import { cellRender } from '../../../utils/common';
+import { cellRender, onCellPrepared } from '../../../utils/common';
 import http from '../../../utils/http';
 import useProducts from '../../../hooks/useProducts';
 import gridsHelper from '../../../utils/gridsHelper';
 import ButtonForm from '../../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
+import { outPutProductDefault } from '../../../data/defaultObject';
 
 const Nuevo = props => {    
 
     const { typeId } = props;
 
-    const { inPutProductDialog : { open }, user } = useSelector(store => store);
+    const { outPutProductDialog : { open, id }, user } = useSelector(store => store);
 
     const active = true;
+    const exists = true;
 
-    const { products, isLoading } = useProducts({areaId: user.areaId,  active });
-    const [ inPutProduct, setInPutProduct ] = useState({});
+    const { products } = useProducts({areaId: user.areaId,  active, exists });
+    const [ outPutProduct, setOutPutProduct ] = useState({...outPutProductDefault});
     const [ saving, setSaving ] = useState(false);
     const [ details, setDetails ] = useState([]);
+    const dispatch = useDispatch();
 
     let refForm = useRef();
     let refGrid = useRef();
 
-    useEffect(() => {        
-        setInPutProduct({areaId : user.areaId, typeId : typeId});
-        setDetails([]);
-    }, [open]);
+    useEffect(() => {          
 
-    const dispatch = useDispatch();
+        if(id > 0){
+            
+            http(uri.outPutProducts.getById(id)).asGet().then(resp => {
+
+                const { outPutProductDetails, ...rest } = resp;
+
+                outPutProductDetails.map(detail =>{
+
+                    let info = products.find(x => x.id == detail.productId);
+
+                    detail['presentation'] = info.presentation;
+                    detail['um'] = info.um;
+
+                    return detail;
+                })
+
+                setOutPutProduct({...outPutProduct, ...rest});              
+                setDetails([...outPutProductDetails]);
+
+            });
+
+        }else{
+
+            setOutPutProduct({...outPutProductDefault, areaId : user.areaId, typeId : typeId});
+            setDetails([]);       
+
+        }
+
+    }, [open]);
+    
     const onToolbarPreparing = gridsHelper(refGrid, { text : 'Agregar producto', icon:'plus' });
 
     const closeDialog = ( load ) => {
         refForm.current.instance.resetValues();  
         refGrid.current.instance.cancelEditData();
-        dispatch(dialogInputProduct({open : false}));
+        dispatch(dialogOutputProduct({open : false}));
         if (load) {
             let { onSave } = props;
             onSave();      
@@ -55,16 +84,16 @@ const Nuevo = props => {
         closeDialog(load);        
     }
 
-    const guardarEntrada = (e) => {
+    const guardarSalida = (e) => {
 
         let result = refForm.current.instance.validate();
 
         if (result.isValid) {
 
             setSaving(true);
-            let data = {...inPutProduct,inPutProductDetails:[...details] };
+            let data = {...outPutProduct,outPutProductDetails:[...details] };
 
-            http(uri.inPutProducts.insert).asPost(data).then(resp => {
+            http(uri.outPutProducts.insert).asPost(data).then(resp => {
                 setSaving(false);
                 notify('Entrada registrada correctamente');
                 closeDialog(true);
@@ -86,6 +115,7 @@ const Nuevo = props => {
             newData['presentation'] = info.presentation;
             newData['um'] = info.um
             newData['cost'] = info.cost;            
+            newData['price'] = info.price;            
             !currentRowData['quantity'] && (newData['quantity'] = 1);
             !currentRowData['total'] &&( newData['total'] = info.cost);
         }
@@ -96,18 +126,18 @@ const Nuevo = props => {
 
     }
 
-    const textSaving = 'Guardar Entrada';
+    const textSaving = 'Guardar Salida';
 
     return (
         <div>
              <Popup
                 width={1050}
                 height={550}
-                title={`Nueva entrada de inventario`}
+                title={`Nueva salida de inventario`}
                 onHiding={onHiding}
                 visible={open}                
             >
-                <Form formData={inPutProduct} ref={refForm}>
+                <Form formData={outPutProduct} ref={refForm}>
                     <GroupItem colCount={3}>                       
                         <SimpleItem dataField="areaId" editorType="dxSelectBox"
                             editorOptions={{
@@ -129,7 +159,7 @@ const Nuevo = props => {
                         <SimpleItem dataField="typeId" editorType="dxSelectBox"
                             editorOptions={{
                                 disabled: true,
-                                dataSource: createStoreLocal({name: 'inPutProductType'}),
+                                dataSource: createStoreLocal({name: 'outPutProductType'}),
                                 ...editorOptionsSelect
                             }} >
                             <Label text="Tipo" />
@@ -152,6 +182,7 @@ const Nuevo = props => {
                             allowColumnReordering={true}
                             height={320}
                             onToolbarPreparing={onToolbarPreparing}
+                            onCellPrepared={onCellPrepared}
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}
@@ -164,7 +195,7 @@ const Nuevo = props => {
                                     />
                                     <RuleRequired />
                             </Column>                          
-                            <Column dataField="presentation" caption="Presentac" width={120} allowEditing={false}>
+                            <Column dataField="presentation" caption="Lab" width={120} allowEditing={false}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="um" caption="Um" width={120} allowEditing={false}>
@@ -193,7 +224,7 @@ const Nuevo = props => {
                     </GroupItem>
                 </Form>
 
-                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada}/>
+                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarSalida}/>
                
             </Popup>
         </div>

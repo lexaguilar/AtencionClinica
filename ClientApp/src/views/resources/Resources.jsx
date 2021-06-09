@@ -4,19 +4,17 @@ import { Item } from "devextreme-react/box";
 import http from "../../utils/http";
 import uri from "../../utils/uri";
 import { store } from "../../services/store";
-import { Column, Editing, Popup, Form,
-    RequiredRule,
-    StringLengthRule } from "devextreme-react/data-grid";
+import { Column, Editing, Popup, Form } from "devextreme-react/data-grid";
 import Title from "../../components/shared/Title";
 import BlockHeader from "../../components/shared/BlockHeader";
 import useAuthorization from "../../hooks/useAuthorization";
-import { dataAccess, resources } from "../../data/app";
+import { dataAccess, editorOptionsSwitch, resources } from "../../data/app";
 
 
 
 const Resources = props => {
 
-    const { isAuthorization, Unauthorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
+    const { authorized } = useAuthorization([resources.usuarios, dataAccess.access ]);
 
     const [roles, setRoles] = useState([]);
     const [rolId, setRolId] = useState(0);
@@ -38,9 +36,7 @@ const Resources = props => {
 
     const title ='Recursos'
 
-    return !isAuthorization 
-    ?  <Unauthorized />  
-    : (
+    return authorized(
         <div className="container medium">
             <Title title={title} />
             <BlockHeader title={title} />
@@ -60,6 +56,10 @@ const Resources = props => {
                         dataSource={store({ uri: { get: uri.resources(rolId), insert: uri.resources(rolId) } })}
                         showBorders={true}
                         showRowLines={true}
+                        allowColumnResizing={true}
+                        allowColumnReordering={true}
+                        rowAlternationEnabled={true}
+                        hoverStateEnabled={true}
                     >
                         <Editing
                             mode="popup"
@@ -67,20 +67,18 @@ const Resources = props => {
                             allowDeleting={false}
                             allowAdding={false}
                             useIcons={true}
-
                         >
                             <Popup title="Configuracion" width={300} height={350}>
-
                             </Popup>
                             <Form colCount={1}>
                                 <Item dataField="name"/>                                             
-                                <Item dataField="canRead"/>                                             
-                                <Item dataField="canCreate"/>                                             
-                                <Item dataField="canUpdate"/>                                             
-                                <Item dataField="canDelete"/>                                             
+                                <Item dataField="canRead" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
+                                <Item dataField="canCreate" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
+                                <Item dataField="canUpdate" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
+                                <Item dataField="canDelete" editorType="dxSwitch" editorOptions={{...editorOptionsSwitch}}/>                                             
                             </Form>
                         </Editing>
-                        <Column dataField="name" caption="Recurso" width={200} allowEditing={false} />
+                        <Column dataField="name" caption="Recurso" allowEditing={false} />
                         <Column dataField="canRead" caption="Leer" allowFiltering={false} width={160} />
                         <Column dataField="canCreate" caption="Crear" allowFiltering={false} width={160} />
                         <Column dataField="canUpdate" caption="Actualizar" allowFiltering={false} width={160} />

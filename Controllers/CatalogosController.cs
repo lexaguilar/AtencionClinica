@@ -4,6 +4,7 @@ using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace AtencionClinica.Controllers
 {
@@ -23,6 +24,38 @@ namespace AtencionClinica.Controllers
             return Json(catalogoFactory.GetAll(name));            
 
         }
+
+        [Route("productsAsCatalog")]
+        public IActionResult Get(int skip, int take, IDictionary<string, string> values) 
+        {
+             IQueryable<Product> products = db.Products;
+
+            if (values.ContainsKey("name"))
+            {
+                var name = Convert.ToString(values["name"]);
+                products = products.Where(x => x.Name.Contains(name));
+            }
+
+            var items = products.Skip(skip).Take(take);
+
+            return Json(new
+            {
+                items,
+                totalCount = products.Count()
+            });
+
+        }    
+
+
+        [Route("products/{id}")]
+        public IActionResult Get(int id) 
+        {
+            var product = db.Products.FirstOrDefault(x => x.Id == id);
+           
+            return Json(product);
+
+        }    
+        
 
         
         [Route("get-catalog-gerenals")]
@@ -46,6 +79,9 @@ namespace AtencionClinica.Controllers
             var privateCustomerStat = db.PrivateCustomerStats.ToArray();
             var traslateState = db.TraslateStates.ToArray();
             var traslateStage = db.TraslateStages.ToArray();
+            var admissionType = db.AdmissionTypes.ToArray();
+            var privateCustomerType = db.PrivateCustomerTypes.ToArray();
+            var contract = db.Contracts.ToArray();
 
             return Json(new {
                 beneficiaryStatus,
@@ -65,7 +101,10 @@ namespace AtencionClinica.Controllers
                 billType,
                 privateCustomerStat,
                 traslateState,
-                traslateStage
+                traslateStage,
+                admissionType,
+                privateCustomerType,
+                contract
             });
 
         }

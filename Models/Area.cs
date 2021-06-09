@@ -18,6 +18,7 @@ namespace AtencionClinica.Models
             FollowAreaTargets = new HashSet<Follow>();
             FollowsPrivateAreaSources = new HashSet<FollowsPrivate>();
             FollowsPrivateAreaTargets = new HashSet<FollowsPrivate>();
+            Groups = new HashSet<Group>();
             InPutProducts = new HashSet<InPutProduct>();
             OutPutProducts = new HashSet<OutPutProduct>();
             Subsidies = new HashSet<Subsidy>();
@@ -29,7 +30,9 @@ namespace AtencionClinica.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
+        public int TypeId { get; set; }
 
+        public virtual AreaType Type { get; set; }
         public virtual ICollection<Admission> Admissions { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
         public virtual ICollection<AreaProductStock> AreaProductStocks { get; set; }
@@ -39,6 +42,7 @@ namespace AtencionClinica.Models
         public virtual ICollection<Follow> FollowAreaTargets { get; set; }
         public virtual ICollection<FollowsPrivate> FollowsPrivateAreaSources { get; set; }
         public virtual ICollection<FollowsPrivate> FollowsPrivateAreaTargets { get; set; }
+        public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<InPutProduct> InPutProducts { get; set; }
         public virtual ICollection<OutPutProduct> OutPutProducts { get; set; }
         public virtual ICollection<Subsidy> Subsidies { get; set; }

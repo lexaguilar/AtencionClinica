@@ -28,11 +28,15 @@ export const cellRenderBold = currencyId => data => cellAsBold(formatToMoney(dat
 
 export const formatId = value => numeral(value).format('000000');
 
+export const dataFormatId = data => formatId(data.value);
+
 export const formatToMoney = (value, currencyId) =>`${currency[currencyId || 1]} ${numeral(value).format('0,0.00')}`;
 
 export const customizeTextAsPercent = data => `${data.value || 0} %`
 
 export const cellAsBold = value => <b>{value}</b>;
+
+export const formatDate = value => moment(value).format('DD/MM/YYYY')
 
 export const obtenerTasaCambio  = date => {
 
@@ -59,9 +63,7 @@ export const getPriceByCurrency = (currencyId, rate) => service => {
      
 }
 
-const fn = fx => data => {
-    return fx;
-}  
+export const validateGrid = (x, y) => x && y()
 
 export const cellDiff = data => {
     return(

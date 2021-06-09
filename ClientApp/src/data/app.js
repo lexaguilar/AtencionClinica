@@ -7,6 +7,29 @@ export const editorOptionsSelect = {
 }
 
 
+export const editorOptionsSwitch = {
+    switchedOffText:"NO",
+    switchedOnText:"SI",
+}
+
+export const editorOptionsNumberBox={
+    showSpinButtons:true,
+    showClearButton:true
+}
+
+export const editorOptsTextBoxPhone={
+    mask: "0000-0000"
+}
+
+export const editorOptsTextBox={
+    showClearButton:true
+}
+
+export const types = {
+    private : 'private',
+    inss : 'inss'
+}
+
 export const cssClasses = {
     0 : '',
     1 : 'custome-active',
@@ -19,7 +42,10 @@ export const formatDate = 'dd/MM/yyyy';
 export const areaRestrict = {
     bodega : 1,
     admision : 2,
-    farmacia : 7
+    laboratorio : 4,
+    farmacia : 7,
+    farmaciaPrivada : 9,
+
 }
 
 export const resources = {
@@ -33,6 +59,7 @@ export const resources = {
     administracion : 8,
     usuarios : 9,
     requisas : 10,
+    compras : 11
 }
 
 export const dataAccess = {

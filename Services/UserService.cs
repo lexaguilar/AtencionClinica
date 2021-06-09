@@ -18,12 +18,13 @@ namespace AtencionClinica.Services
     public class AppClaimTypes
     {
         internal const string AreaId = "AreaId";
+        internal const string RolId = "RolId";
     }
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         User ChangePassword(ChangePasswordRequest model);
-        User ResetPassword(RestPasswordRequest model);
+        User ResetPassword(RestPasswordRequest model, bool isResetDefault);
         User GetById(string username);
     }
 
@@ -89,6 +90,7 @@ namespace AtencionClinica.Services
 
             //Agregar resursos
             identity.AddClaim(new Claim(AppClaimTypes.AreaId, user.AreaId.ToString()));
+            identity.AddClaim(new Claim(AppClaimTypes.RolId, user.RolId.ToString()));
 
             return identity;
         }
@@ -104,23 +106,30 @@ namespace AtencionClinica.Services
 
         }
 
-        public User ResetPassword(RestPasswordRequest model)
+        public User ResetPassword(RestPasswordRequest model, bool isResetDefault)
         {
             var user = userFactory.GetByIdOrEmail(model.Username);
             if (user == null) return null;
 
-            var newPassword = CreatePassword(8);
+            var newPassword = string.Empty;
+
+            if(isResetDefault)
+                newPassword = _appSettings.PassWord;
+            else
+                newPassword = CreatePassword(8);
 
             user.Password = UserHelpers.GetPasswordHashedSHA256(newPassword);
 
             userFactory.Save();
 
-            var mail = new MailMessage(_appSettings.From, user.Email);
+            if(!isResetDefault){
+                var mail = new MailMessage(_appSettings.From, user.Email);
 
-            mail.Subject = "Restablecer contraseña.";
-            mail.Body = $"Estimado usuario se ha restablecido su contraseña, favor ingresar al sistema con su usuario {user.Username} y la nueva contraseña {newPassword}";
+                mail.Subject = "Restablecer contraseña.";
+                mail.Body = $"Estimado usuario se ha restablecido su contraseña, favor ingresar al sistema con su usuario {user.Username} y la nueva contraseña {newPassword}";
 
-            _emailService.SendEmailAsync(mail);
+                _emailService.SendEmailAsync(mail);
+            }
 
             return user;
 
