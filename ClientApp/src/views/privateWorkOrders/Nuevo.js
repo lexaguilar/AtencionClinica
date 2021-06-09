@@ -6,7 +6,7 @@ import ScrollView from 'devextreme-react/scroll-view';
 import { Button } from 'devextreme-react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import uri from '../../utils/uri';
-import { obtenerTasaCambio } from '../../utils/common';
+import { obtenerTasaCambio, validateGrid } from '../../utils/common';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 import { dialogPrivateWorkOrder } from '../../store/privateWorkOrder/privateWorkOrderDialogReducer';
@@ -21,132 +21,125 @@ import GridListaMedicamentoPte from '../workOrders/GridListaMedicamentoPte';
 import GridProcedimientos from '../workOrders/GridProcedimientos';
 import { workOrderDefault } from '../../data/defaultObject';
 
-const Nuevo = props => {   
-    
-    const { followId, customerId } = props;
-    const [ isClosing, setIsClosing]  = useState(false);
+const Nuevo = props => {
 
-    const { privateWorkOrderDialog : { open, id }, user } = useSelector(store => store);
+    const { followId, customerId } = props;
+    const [isClosing, setIsClosing] = useState(false);
+
+    const { privateWorkOrderDialog: { open, id }, user } = useSelector(store => store);
 
     const [tabIndex, setTabIndex] = useState(0);
-    const [ workOrder, setWorkOrder ] = useState({ ...workOrderDefault });
-    const [ saving, setSaving ] = useState(false);
-    const [ detailsServices ] = useState([]);
-    const [ details, setDetails ] = useState([]);
+    const [workOrder, setWorkOrder] = useState({ ...workOrderDefault });
+    const [saving, setSaving] = useState(false);
+    const [detailsServices] = useState([]);
+    const [details, setDetails] = useState([]);
 
     let refForm = useRef();
+    let validate = [];
 
-    useEffect(() => {      
+    const isFarmacia = areaRestrict.farmacia == user.areaId;
 
-        obtenerTasaCambio(new Date()).then(rate =>{
-            if(rate)
-                setWorkOrder(workOrder => ({...workOrder, rate : rate.value}));
-        });  
+    useEffect(() => {
 
-        setWorkOrder({...workOrder, areaId : user.areaId,  date : new Date() });
+        if (isFarmacia)
+            setTabIndex(1);
+
+        obtenerTasaCambio(new Date()).then(rate => {
+            if (rate)
+                setWorkOrder(workOrder => ({ ...workOrder, rate: rate.value }));
+        });
+
+        setWorkOrder({ ...workOrder, areaId: user.areaId, date: new Date() });
         setDetails([]);
 
-        // if(followId > 0){
-        //     //verificar si trae productos preregistrados
-        //     http(`follows/${followId}/getWorkPreOrders`).asGet().then(resp=>{
-        //         console.log(resp);
-        //         if(resp){
-        //             const { doctorId,  } = resp;
-        //             setWorkOrder({...workOrder, doctorId });
-        //             setDetails(resp.workPreOrderDetails.map(x => ({ 
-        //                 productId : x.productId, 
-        //                 quantity : x.quantity, 
-        //                 price: x.price,
-        //                 presentation: x.presentation,
-        //                 um: x.um 
-        //             })))
-
-        //         }
-        //     });
-        // }
     }, [open]);
 
     const dispatch = useDispatch();
 
-    const closeDialog = ( load ) => {
-        
-        refForm.current.instance.resetValues();  
-        
-        dispatch(dialogPrivateWorkOrder({open : false}));
+    const closeDialog = (load) => {
+
+        refForm.current.instance.resetValues();
+
+        dispatch(dialogPrivateWorkOrder({ open: false }));
         setIsClosing(true);
 
         if (load) {
             let { onSave } = props;
-            onSave();      
-        }        
+            onSave();
+        }
     }
 
     const onHiding = ({ load }) => {
-       
+
         closeDialog(load);
     }
 
     const crearOrdenTrabajo = (e) => {
 
-        let result = refForm.current.instance.validate();
+        let result = validate.reduce(validateGrid, true);
 
-        if (result.isValid) {
+        if (result) {
 
-            setSaving(true);
+            result = refForm.current.instance.validate();
 
-            const workOrderDetails = [...details,...detailsServices];
-            
-            let data = {...workOrder, followsPrivateId: followId,  privateWorkOrderDetails: workOrderDetails };
+            if (result.isValid) {
 
-            http(`${uri.privateWorkOrders.insert}?followId=${followId}`).asPost(data).then(resp => {
+                setSaving(true);
 
-                setSaving(false);
-                notify('Orden de trabajo registrada correctamente');
-                closeDialog(true);
+                const workOrderDetails = [...details, ...detailsServices];
 
-            }).catch(err => {
-                setSaving(false);
-                notify(err, 'error', 5000);
-            });
+                let data = { ...workOrder, followsPrivateId: followId, privateWorkOrderDetails: workOrderDetails };
 
+                http(`${uri.privateWorkOrders.insert}?followId=${followId}`).asPost(data).then(resp => {
+
+                    setSaving(false);
+                    notify('Orden de trabajo registrada correctamente');
+                    closeDialog(true);
+
+                }).catch(err => {
+                    setSaving(false);
+                    notify(err, 'error', 5000);
+                });
+
+            }
         }
 
-    } 
+    }
 
-    const text = 'Guardar orden';   
+    const text = 'Guardar orden';
 
-    const isFarmacia = areaRestrict.farmacia == user.areaId;
+
 
     console.log(workOrder);
 
     return (
         <div>
-             <Popup
+            <Popup
                 width={1050}
                 height={695}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
-                visible={open}    
+                visible={open}
                 showCloseButton={!saving}
 
             >
-                <ScrollView id="scrollview">                    
-                    <Information customerId={customerId}/>
+                <ScrollView id="scrollview">
+                    <Information customerId={customerId} />
                     <br />
                     <Form formData={workOrder} ref={refForm}>
-                        <GroupItem colCount={3}>                      
-                            
+                        <GroupItem colCount={3}>
+
                             <SimpleItem dataField="date" editorType="dxDateBox"
                                 editorOptions={{
-                                    displayFormat : 'dd/MM/yyyy',
-                                    openOnFieldClick:true,
+                                    displayFormat: 'dd/MM/yyyy',
+                                    openOnFieldClick: true,
                                 }} >
                                 <Label text="Fecha" />
                                 <RequiredRule message="Seleccione la fecha" />
                             </SimpleItem>
                             <SimpleItem dataField="doctorId" colSpan={2} editorType="dxSelectBox"
                                 editorOptions={{
-                                    dataSource: createStoreLocal({name: 'Doctor', active : true}),
+                                    dataSource: createStoreLocal({ name: 'Doctor', active: true }),
                                     ...editorOptionsSelect
                                 }} >
                                 <Label text="Doctor" />
@@ -156,38 +149,22 @@ const Nuevo = props => {
                                 <Label text="Referencia" />
                                 <RequiredRule message="Ingrese una referencia" />
                                 <StringLengthRule max={20} message="Maximo 20 caracteres" />
-                            </SimpleItem>                           
+                            </SimpleItem>
                             <SimpleItem dataField="observation" colSpan={2}>
-                                <Label text="Observacion" />                               
+                                <Label text="Observacion" />
                                 <StringLengthRule max={150} message="Maximo 150 caracteres" />
                             </SimpleItem>
-                            
+
                         </GroupItem>
 
                         <GroupItem>
                             <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
-                                
+
                                 <TabList>
+                                    <Tab hidden={isFarmacia}>Procedimientos</Tab>
                                     <Tab>Productos</Tab>
-                                    <Tab hidden={isFarmacia}>Procedimientos</Tab>                               
                                 </TabList>
-
-                                <TabPanel>   
-                                    <GridMedicamentos
-                                        isClosing={isClosing}
-                                        
-                                        details={details}
-                                        user={user} refresh={open} />  
-
-                                    {isFarmacia &&
-                                       
-                                        <GridListaMedicamentoPte 
-                                            customerId={customerId} 
-                                            open={open}
-                                        />
-                                    }
-                                </TabPanel>
-                                <TabPanel hidden={isFarmacia}>                                    
+                                <TabPanel hidden={isFarmacia}>
                                     <GridProcedimientos
                                         isClosing={isClosing}
                                         detailsServices={detailsServices}
@@ -195,28 +172,47 @@ const Nuevo = props => {
                                         open={open}
                                         rate={workOrder.rate}
                                     />
-                                    
+
+                                </TabPanel>
+                                <TabPanel>
+                                    <GridMedicamentos
+                                        isClosing={isClosing}
+                                        useStandar={true}
+                                        refresh={open} 
+                                        details={details}
+                                        setDetails={setDetails}
+                                        details={details}
+                                        user={user} 
+                                        validate={validate}/>
+
+                                    {isFarmacia &&
+
+                                        <GridListaMedicamentoPte
+                                            customerId={customerId}
+                                            open={open}
+                                        />
+                                    }
                                 </TabPanel>
                             </Tabs>
                         </GroupItem>
                         <GroupItem>
-                            
-                        </GroupItem>
-                        <GroupItem>
-                           
 
                         </GroupItem>
-                        
-                    </Form>    
-                    <Button                    
-                        text={`${saving?'Guardando...':text}`}
+                        <GroupItem>
+
+
+                        </GroupItem>
+
+                    </Form>
+                    <Button
+                        text={`${saving ? 'Guardando...' : text}`}
                         type="success"
                         icon="save"
                         stylingMode="contained"
                         className="m-1"
                         disabled={saving}
                         onClick={crearOrdenTrabajo}
-                    /> 
+                    />
                 </ScrollView>
             </Popup>
         </div>

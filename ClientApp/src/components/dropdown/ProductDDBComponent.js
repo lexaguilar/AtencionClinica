@@ -132,7 +132,8 @@ export default class ProductDDBComponent extends React.Component {
         this.setState({ currentValue: e.selectedRowKeys[0] });
         this.props.data.setValue(this.state.currentValue);
         if (e.selectedRowKeys.length > 0) {   
-            this.dropDownBoxRef.current.instance.close();            
+            this.dropDownBoxRef.current.instance.close();     
+            this.props.data.component.editCell(this.props.data.rowIndex, 'quantity');       
         }
 
     }

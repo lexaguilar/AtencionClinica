@@ -62,7 +62,7 @@ const GridProcedimientos = ({detailsServices=[], open, user, rate}) => {
                 />
             </Column>
             <Column dataField="quantity"
-                allowEditing={false} 
+                // allowEditing={false} 
                 caption="Cantidad"
                 dataType="number" width={120}
                 //setCellValue={setCellValueCant}

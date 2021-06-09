@@ -182,8 +182,17 @@ const FollowsPrivate = () => {
                     let data = dataGrid.current.instance.getSelectedRowsData();
                     if(data?.length)
                     {
-                        let { billId } = data[0];
-                        dispatch(dialogTransfer({open : true, id : billId}));
+                        let { id, privateCustomerId, billTypeId } = data[0];
+                        
+                        
+                        if(billTypeId == billTypes.ingreso){                            
+                                             
+                            dispatch(dialogWorkOrders({open : true, id, customerId : privateCustomerId}));
+
+                        }else
+                            notify('Solo se permite ordenes de trabajo a ingreso Hospitalarios','error');
+                        
+
                     }
 
                 }

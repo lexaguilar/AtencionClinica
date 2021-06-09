@@ -88,12 +88,14 @@ namespace AtencionClinica.Models
         public virtual DbSet<SendTestDetail> SendTestDetails { get; set; }
         public virtual DbSet<Service> Services { get; set; }
         public virtual DbSet<ServiceDetail> ServiceDetails { get; set; }
+        public virtual DbSet<ServiceProduct> ServiceProducts { get; set; }
         public virtual DbSet<ServiceTest> ServiceTests { get; set; }
         public virtual DbSet<ServiceTestBaarDetail> ServiceTestBaarDetails { get; set; }
         public virtual DbSet<ServiceTestCultive> ServiceTestCultives { get; set; }
         public virtual DbSet<ServiceTestCultiveAntiBiotic> ServiceTestCultiveAntiBiotics { get; set; }
         public virtual DbSet<ServiceTestCultiveFresc> ServiceTestCultiveFrescs { get; set; }
         public virtual DbSet<ServiceTestDetail> ServiceTestDetails { get; set; }
+        public virtual DbSet<ServiceType> ServiceTypes { get; set; }
         public virtual DbSet<Sex> Sexs { get; set; }
         public virtual DbSet<Specialty> Specialties { get; set; }
         public virtual DbSet<Subsidy> Subsidies { get; set; }
@@ -1939,11 +1941,19 @@ namespace AtencionClinica.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.TypeId).HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.Services)
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Services_Currencies");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.Services)
+                    .HasForeignKey(d => d.TypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Services_ServiceTypes");
             });
 
             modelBuilder.Entity<ServiceDetail>(entity =>
@@ -1962,6 +1972,21 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("UM");
+            });
+
+            modelBuilder.Entity<ServiceProduct>(entity =>
+            {
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ServiceProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceProducts_Products");
+
+                entity.HasOne(d => d.Service)
+                    .WithMany(p => p.ServiceProducts)
+                    .HasForeignKey(d => d.ServiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServiceProducts_Services");
             });
 
             modelBuilder.Entity<ServiceTest>(entity =>
@@ -2156,6 +2181,16 @@ namespace AtencionClinica.Models
                     .HasForeignKey(d => d.ServiceTestId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ServiceTestDetails_ServiceTests");
+            });
+
+            modelBuilder.Entity<ServiceType>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Sex>(entity =>

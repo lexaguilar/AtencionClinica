@@ -35,7 +35,10 @@ const NuevoOutWithFollow = props => {
     let refForm = useRef();
     let validate = [];
 
-    useEffect(() => {      
+    useEffect(() => {    
+        
+        if(isFarmacia)
+            setTabIndex(1);
 
         obtenerTasaCambio(new Date()).then(rate =>{
             if(rate)
@@ -147,17 +150,30 @@ const NuevoOutWithFollow = props => {
                             <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
                                 
                                 <TabList>
-                                    <Tab>Productos</Tab>
                                     <Tab hidden={isFarmacia}>Procedimientos</Tab>                               
+                                    <Tab>Productos</Tab>
                                 </TabList>
 
+                               
+                                <TabPanel hidden={isFarmacia}>                                    
+                                    <GridProcedimientos 
+                                        isClosing={isClosing}
+                                        detailsServices={detailsServices}
+                                        user={user}
+                                        open={open}
+                                        rate={workOrder.rate}
+                                    />                                    
+                                </TabPanel>
                                 <TabPanel>   
                                     <GridMedicamentos     
-                                        validate={validate}                                   
                                         isClosing={isClosing}
+                                        useStandar={true}
                                         refresh={isClosing}
                                         details={details}
-                                        user={user}  />  
+                                        setDetails={setDetails}                                  
+                                        detailsServices={detailsServices}
+                                        user={user}  
+                                        validate={validate} />  
 
                                     {isFarmacia &&
                                        
@@ -166,16 +182,6 @@ const NuevoOutWithFollow = props => {
                                             open={open}
                                         />
                                     }
-                                </TabPanel>
-                                <TabPanel hidden={isFarmacia}>                                    
-                                    <GridProcedimientos 
-                                        isClosing={isClosing}
-                                        detailsServices={detailsServices}
-                                        user={user}
-                                        open={open}
-                                        rate={workOrder.rate}
-                                    />
-                                    
                                 </TabPanel>
                             </Tabs>
                         </GroupItem>

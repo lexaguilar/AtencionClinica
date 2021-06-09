@@ -15,6 +15,7 @@ namespace AtencionClinica.Models
             PrivateServiceTestCultives = new HashSet<PrivateServiceTestCultive>();
             PrivateServiceTestDetails = new HashSet<PrivateServiceTestDetail>();
             PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
+            ServiceProducts = new HashSet<ServiceProduct>();
             ServiceTestBaarDetails = new HashSet<ServiceTestBaarDetail>();
             ServiceTestCultives = new HashSet<ServiceTestCultive>();
             ServiceTestDetails = new HashSet<ServiceTestDetail>();
@@ -28,14 +29,17 @@ namespace AtencionClinica.Models
         public bool Active { get; set; }
         public int CurrencyId { get; set; }
         public bool IsCultive { get; set; }
+        public int TypeId { get; set; }
 
         public virtual Currency Currency { get; set; }
+        public virtual ServiceType Type { get; set; }
         public virtual ICollection<AreaService> AreaServices { get; set; }
         public virtual ICollection<BillDetail> BillDetails { get; set; }
         public virtual ICollection<PrivateServiceTestBaarDetail> PrivateServiceTestBaarDetails { get; set; }
         public virtual ICollection<PrivateServiceTestCultive> PrivateServiceTestCultives { get; set; }
         public virtual ICollection<PrivateServiceTestDetail> PrivateServiceTestDetails { get; set; }
         public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
+        public virtual ICollection<ServiceProduct> ServiceProducts { get; set; }
         public virtual ICollection<ServiceTestBaarDetail> ServiceTestBaarDetails { get; set; }
         public virtual ICollection<ServiceTestCultive> ServiceTestCultives { get; set; }
         public virtual ICollection<ServiceTestDetail> ServiceTestDetails { get; set; }

@@ -204,8 +204,7 @@ namespace AtencionClinica.Controllers
                 SendTest = sendTest,
                 Date = DateTime.Now,
                 CreateAt = DateTime.Now,
-                CreateBy = user.Username
-                ,
+                CreateBy = user.Username,
                 DoctorId = sendTest.DoctorId,
             };
 

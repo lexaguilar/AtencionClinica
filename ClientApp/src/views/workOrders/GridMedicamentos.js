@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DataGrid, { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid, TotalItem, Summary } from 'devextreme-react/data-grid';
 import gridsHelper from '../../utils/gridsHelper';
 import { cellRender, formatToMoney, onCellPrepared } from '../../utils/common';
 import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import useProducts from '../../hooks/useProducts';
+import http from '../../utils/http';
 
 
-const GridMedicamentos = ({validate, isClosing, details, user, showPrice= false, currencyId = 1, rate= 1, refresh = false}) => {
-
+const GridMedicamentos = ({useStandar = false, validate = [], detailsServices=[], isClosing, details,setDetails,  user, showPrice= false, currencyId = 1, rate= 1, refresh = false}) => {
+ 
     validate.push(() =>{
 
         ref.current.instance.saveEditData();
@@ -22,7 +23,104 @@ const GridMedicamentos = ({validate, isClosing, details, user, showPrice= false,
     let ref = useRef();    
 
     const { products, reload } = useProducts({areaId: user.areaId, exists, active});
-    const onToolbarPreparing = gridsHelper(ref, { text : 'Agregar productos', icon:'plus' });   
+
+    const onToolbarPreparing = (e) => {  
+
+        
+        if(useStandar)
+            e.toolbarOptions.items.unshift({
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    stylingMode:"outlined",
+                    text: 'Descargar Estandar',
+                    icon: 'arrowdown',
+                    type:'primary',
+                    onClick: () =>  {
+
+                        const services = detailsServices.map(x => http(`services/${x.serviceId}/products/get`).asGet());
+                        Promise.all([
+                            ...services
+                        ]).then(resp => {
+
+                            const listOfProducts = resp.flat();
+
+                            let result = listOfProducts.map(x => {     
+                                
+                                let product = {};
+
+                                let info = products.find(p => p.id == x.productId);
+
+                                const price = getPriceByCurrency(info);
+                    
+                    
+                                product['productId'] = x.productId;
+                                product['presentation'] = info.presentation;
+                                product['um'] = info.um
+                                product['cost'] = info.cost;
+                                product['price'] = price;
+                                product['quantity'] = x.quantity;
+                                product['serviceId'] = null;
+                    
+                                if(showPrice)
+                                    product['total'] = price;
+                                else
+                                    product['total'] = info.cost; 
+
+                                return product;
+
+                            });
+
+                            //details = [...result];
+
+                            setDetails([...result]);
+
+                            // result.forEach((prod, i) => {
+
+                            //     ref.current.instance.addRow().then(add =>{
+                            //         console.log(add);
+                            //         ref.current.instance.cellValue(0, 'productId', prod.productId);
+                            //         ref.current.instance.endUpdate();
+                            //         ref.current.instance.saveEditData();
+                            //     });
+                            //     //console.log(valor);
+                                
+                            //     // ref.current.instance.cellValue(0, 'presentation', prod.presentation);
+                            //     // ref.current.instance.cellValue(0, 'um', prod.um);
+                            //     // ref.current.instance.cellValue(0, 'cost', prod.cost);
+                            //     // ref.current.instance.cellValue(0, 'price', prod.price);
+                            //     // ref.current.instance.cellValue(0, 'quantity', prod.quantity);
+                            //     // ref.current.instance.cellValue(0, 'serviceId', prod.serviceId);
+                            //     // ref.current.instance.cellValue(0, 'total', prod.total);
+
+                                
+
+                            // })
+
+                            // console.log(result);
+
+                           
+
+
+                        });
+
+                    }
+                }
+            });
+
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                stylingMode:"outlined",
+                text: 'Agregar producto',
+                icon: 'plus',
+                type:'default',
+                onClick: () =>  ref.current.instance.addRow()
+            }
+        });
+
+    } 
 
     const getPriceByCurrency = product => {
 
@@ -60,9 +158,7 @@ const GridMedicamentos = ({validate, isClosing, details, user, showPrice= false,
             if(showPrice)
                 newData['total'] = price;
             else
-                newData['total'] = info.cost;
-                
-
+                newData['total'] = info.cost; 
             
 
         }
@@ -78,11 +174,12 @@ const GridMedicamentos = ({validate, isClosing, details, user, showPrice= false,
     useEffect(() => {
         if(refresh)
             reload();
-    }, [refresh]);
+    }, [refresh]); 
 
-    // if(isClosing)
-    //     if(ref.current)
-    // //         ref.current.instance.cancelEditData();
+
+    if(isClosing)
+        if(ref.current)
+           ref.current.instance.cancelEditData();
 
     return (
         <DataGrid id="gridDetails"
@@ -93,7 +190,7 @@ const GridMedicamentos = ({validate, isClosing, details, user, showPrice= false,
             showRowLines={true}
             allowColumnResizing={true}
             allowColumnReordering={true}
-            height={200}
+            height={300}
             onToolbarPreparing={onToolbarPreparing}
             onCellPrepared={onCellPrepared}
         >

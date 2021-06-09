@@ -61,6 +61,7 @@ import GroupsCatalos from '../views/groups/GroupsCatalos';
 import Areas from '../views/areas/Areas';
 import PuetosMedicos from '../views/puestomedicos/PuetosMedicos';
 import AdmisionesHoy from '../views/admision/AdmisionesHoy';
+import ProcedimientoEstandar from '../views/procedimientos/ProcedimientoEstandar';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -96,6 +97,7 @@ function Layout(props) {
         ,builRoute('facturas/nuevo', BillNuevo)
         ,builRoute('facturas/nuevo-quickly', NuevoQuickly)
         ,builRoute('procedimientos', Procedimientos)
+        ,builRoute('procedimientos/estandar', ProcedimientoEstandar)
         ,builRoute('area/procedimientos', AreaProcedimientos)
         ,builRoute('procedimientos/detalle', ProcedimientoDetalle)
         ,builRoute('config/parameters', Parameters)

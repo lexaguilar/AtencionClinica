@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DataGrid } from 'devextreme-react';
 import { Item } from 'devextreme-react/form';
 import { 
@@ -15,6 +15,7 @@ import {
     RequiredRule,
     StringLengthRule, Lookup} from 'devextreme-react/data-grid';
 
+import PopupDialog from 'devextreme-react/popup';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
 import Title from '../../components/shared/Title';
@@ -23,11 +24,14 @@ import { createStore } from '../../utils/proxy';
 import { cellRender } from '../../utils/common';
 import useAuthorization from '../../hooks/useAuthorization';
 import { dataAccess, editorOptionsSwitch, resources } from '../../data/app';
+import CustomButton from '../../components/buttons/CustomButton';
+import Tipos from './Tipos';
 
 const Procedimientos = () => {
 
     const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
     
+    const [open, setOpen] = useState(false);
 
     const title = 'Procedimientos';
 
@@ -45,7 +49,8 @@ const Procedimientos = () => {
                 onClick: () =>  dataGrid.instance.addRow()
             }
         });
-    }  
+       
+    } 
 
     const onInitNewRow = (e) => {
         e.data.active = true;
@@ -54,7 +59,22 @@ const Procedimientos = () => {
     return authorized(
         <div className="container medium">
             <Title title={title}/>
-            <BlockHeader title={title}/>          
+            <BlockHeader title={title}>
+                <CustomButton                                       
+                        text='Agrupaciones'
+                        icon='plus'
+                        onClick={()=> setOpen(true)}
+                    />
+            </BlockHeader>
+            <PopupDialog
+                width={500}
+                height={450}
+                onHiding={()=> setOpen(false)}
+                title={`Tipos de procedimientos`}
+                visible={open}
+            >                
+                <Tipos />
+            </PopupDialog>
             <DataGrid id="gridContainer"
                 ref={(ref) => dataGrid = ref}
                 selection={{ mode: 'single' }}
@@ -84,7 +104,9 @@ const Procedimientos = () => {
                 <Column dataField="id" width={100}/>
                 <Column dataField="name" caption='Nombre' />
                 <Column dataField="price" caption='Precio' width={120} allowFiltering={false} cellRender={cellRender()}/>          
-                <Column dataField="priceCalculate" caption='Precio Calculado' width={200} allowFiltering={false} />
+                <Column dataField="typeId" caption="Tipo" width={100}>
+                    <Lookup disabled={true} dataSource={createStore({name: 'ServiceType'})} valueExpr="id" displayExpr="name" />
+                </Column>
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStore({name: 'Currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
@@ -107,8 +129,8 @@ const Procedimientos = () => {
                         <Item  dataField="price" colSpan={2}>
                             <RequiredRule message="El campo es requerido"/>
                         </Item>
-                        <Item  dataField="priceCalculate" editorType="dxTextArea" colSpan={2}>
-                            <StringLengthRule max={250} message="Máximo de caracteres 250"/>
+                        <Item  dataField="typeId" colSpan={2}>
+                            <RequiredRule message="El campo es requerido"/>
                         </Item>
                         <Item  dataField="currencyId" colSpan={2}>
                             <RequiredRule message="El campo es requerido"/>

@@ -69,6 +69,74 @@ namespace AtencionClinica.Services
             return model;
         }
 
+        //SendTest sendTest
+        public void CreateTest(SendTest sendTest, Follow follow)
+        {
+
+            var serviceTest = new ServiceTest
+            {
+                SendTest = sendTest,
+                Date = DateTime.Now,
+                CreateAt = DateTime.Now,
+                CreateBy = sendTest.CreateBy,
+                DoctorId = sendTest.DoctorId,
+            };
+
+            foreach (var item in sendTest.SendTestDetails)
+            {
+                var service = _db.Services.FirstOrDefault(x => x.Id == item.Serviceid);
+
+                if (service.IsCultive)//Cultivo
+                {
+
+                    serviceTest.ServiceTestCultives.Add(new ServiceTestCultive
+                    {
+                        ServiceTest = serviceTest,
+                        ServiceId = item.Serviceid,
+                        Name = service.Name
+                    });
+
+                }
+                else if (item.Serviceid == 8)//BAAR
+                {
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        serviceTest.ServiceTestBaarDetails.Add(new ServiceTestBaarDetail
+                        {
+                            ServiceTest = serviceTest,
+                            ServiceId = item.Serviceid,
+                            TestNumber = i
+                        });
+                    }
+                }
+                else
+                {
+                    var serviceDetails = _db.ServiceDetails.Where(x => x.ServiceId == item.Serviceid);
+
+                    foreach (var item2 in serviceDetails)
+                    {
+                        serviceTest.ServiceTestDetails.Add(new ServiceTestDetail
+                        {
+                            ServiceTest = serviceTest,
+                            ServiceId = item.Serviceid,
+                            ServiceDetailId = item2.Id,
+
+                            Name = item2.Name,
+                            Um = item2.Um,
+                            Reference = item2.Reference,
+
+                            Result = "",
+                            ResultJson = "",
+                        });
+                    }
+                }
+
+            }
+
+            follow.ServiceTests.Add(serviceTest);
+
+        }
+
         public int Delete(int id)
         {
             throw new NotImplementedException();
