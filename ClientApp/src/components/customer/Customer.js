@@ -18,9 +18,9 @@ const Customer = props => {
 
     const buscarAsegurado = e =>{        
 
-        const { valueChanged } = props;
+        const { valueChanged, active = true } = props;
 
-        http(createProxyBase('customers').getById(inss)).asGet().then(data => {
+        http(createProxyBase('customers').getById(inss)).asGet(active).then(data => {
             
             if(valueChanged)
                 valueChanged(data);
@@ -55,11 +55,10 @@ const Customer = props => {
             
             <div className="dx-field">
                 <div className="dx-field-label">
-                    <label>Número de Inss o cédula</label>
                     <div className="row-elemet">
-                        <TextBox placeholder="Ingrese el numero INSS" value={inss} defaultValue={inss} onValueChanged={onValueChanged} />
+                        <TextBox placeholder="Número INSS o cédula" value={inss} defaultValue={inss} onValueChanged={onValueChanged} />
                         <Button
-                            width={120}
+                            width={150}
                             text="Buscar"
                             type="default"
                             icon='search'

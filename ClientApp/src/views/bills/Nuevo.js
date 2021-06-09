@@ -295,7 +295,8 @@ const Nuevo = props => {
                             <Lookup
                                 disabled={true}
                                 dataSource={services}
-                                valueExpr="id" displayExpr="name"
+                                valueExpr="id" 
+                                displayExpr="name"
                             />
                         </Column>
                         <Column dataField="quantity" caption='Cant' width={70} setCellValue={setCellValueCant} />

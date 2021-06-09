@@ -31,16 +31,23 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/beneficiaries/get/{inss}/catalog")]
-        public IActionResult GetCatalog(int inss) 
+        public IActionResult GetCatalog(int inss, bool active) 
         {
             
-            var result = _db.Beneficiaries.Include(x => x.Relationship).Where(x => x.Inss == inss && x.BeneficiaryStatusId == 1).Select(x => new {
+            var result = _db.Beneficiaries.Include(x => x.Relationship).Where(x => x.Inss == inss).ToArray();
+            
+            var _select = result.Select(x => new {
                 Id = x.Id,
+                x.BeneficiaryStatusId,
                 Name = x.GetFullName(),
-                Relationship = x.Relationship.Name
+                Relationship = x.Relationship.Name,   
+                Edad = $"{UserHelpers.CalculateEdad(x.BirthDate)} años" 
             });
 
-            return Json(result);
+            if(active)
+                return Json(_select);
+            else
+                return Json(_select.Where(x => x.BeneficiaryStatusId == 1));
         }
 
         [Route("api/beneficiaries/get/{beneficiaryId}/information")]

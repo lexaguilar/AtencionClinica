@@ -62,6 +62,7 @@ import Areas from '../views/areas/Areas';
 import PuetosMedicos from '../views/puestomedicos/PuetosMedicos';
 import AdmisionesHoy from '../views/admision/AdmisionesHoy';
 import ProcedimientoEstandar from '../views/procedimientos/ProcedimientoEstandar';
+import ExpedienteClinico from '../views/expediente/ExpedienteClinico';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -125,6 +126,8 @@ function Layout(props) {
         ,builRoute('areas', Areas)
         ,builRoute('puestos-medicos', PuetosMedicos)
         ,builRoute('puestos-medicos/nuevo', NuevoPuestoMedico.default)
+        ,builRoute('servicios/expediente', ExpedienteClinico)
+
         
     ];
     return (

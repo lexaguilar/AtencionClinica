@@ -7,7 +7,9 @@ import { formatDate } from '../../data/app';
 
 const GridListaMedicamentoPte = ({beneficiaryId}) => {
 
-    const title = 'Ultimos medicamentos despacho al paciente'
+    const title = 'Ultimos medicamentos despacho al paciente';
+
+    console.log(beneficiaryId);
 
     return (
         <div className="mr-10">

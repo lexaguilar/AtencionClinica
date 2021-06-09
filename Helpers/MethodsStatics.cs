@@ -27,6 +27,11 @@ namespace AtencionClinica
             System.Security.Cryptography.RandomNumberGenerator.Fill(buffer);
             return Convert.ToBase64String(buffer).Substring(0, 8);
         }
+
+        internal  static int CalculateEdad(DateTime birthDate)
+        {
+            return ((int.Parse(DateTime.Now.ToString("yyyyMMdd")) - int.Parse(birthDate.ToString("yyyyMMdd"))) / 10000);
+        }
     
     }
 }

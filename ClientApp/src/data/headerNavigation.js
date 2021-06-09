@@ -179,7 +179,7 @@ const menu = [{
                         { title: 'Areas', url: `${_path.CLINICA}/areas` },
                         { title: 'Doctores', url: `${_path.CLINICA}/doctores` },
                         { title: 'Doctores Horario', url: `${_path.CLINICA}/doctores/horarios` },
-                        { title: 'Especialidades', url: `${_path.CLINICA}/especialielaydades` },
+                        { title: 'Especialidades', url: `${_path.CLINICA}/especialidades` },
                         { title: 'Tipo de convenios', url: `${_path.CLINICA}/tipo-convenio` },
                     ],
                 },]
