@@ -31,8 +31,7 @@ const menu = [{
         type: 'menu',
         menu: [
             { title: 'Nueva', url: `${_path.CLINICA}/admisiones/nuevo` },
-            { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },
-            { title: 'Puestos Médicos', url: `${_path.CLINICA}/puestos-medicos` },
+            { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },            
             { 
                 title: 'Reportes', 
                 url: ``,
@@ -138,6 +137,10 @@ const menu = [{
         }
 
     },
+},{
+    layout: 'clinica',
+    title: 'Puestos Médicos',
+    url: `${_path.CLINICA}/puestos-medicos` ,
 },{
     layout: 'clinica',
     title: 'Ficheros',

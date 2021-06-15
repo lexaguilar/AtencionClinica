@@ -57,7 +57,7 @@ const Procedimientos = () => {
     }
 
     return authorized(
-        <div className="container medium">
+        <div className="container">
             <Title title={title}/>
             <BlockHeader title={title}>
                 <CustomButton                                       
@@ -104,7 +104,7 @@ const Procedimientos = () => {
                 <Column dataField="id" width={100}/>
                 <Column dataField="name" caption='Nombre' />
                 <Column dataField="price" caption='Precio' width={120} allowFiltering={false} cellRender={cellRender()}/>          
-                <Column dataField="typeId" caption="Tipo" width={100}>
+                <Column dataField="typeId" caption="Tipo" width={140}>
                     <Lookup disabled={true} dataSource={createStore({name: 'ServiceType'})} valueExpr="id" displayExpr="name" />
                 </Column>
                 <Column dataField="currencyId" caption="Moneda" width={100}>

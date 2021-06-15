@@ -42,6 +42,18 @@ namespace AtencionClinica.Controllers
                 services = services.Where(x => x.Name.StartsWith(name));
             }
 
+            if (values.ContainsKey("typeId"))
+            {
+                var typeId = Convert.ToInt32(values["typeId"]);
+                services = services.Where(x => x.TypeId == typeId);
+            }
+
+            if (values.ContainsKey("currencyId"))
+            {
+                var currencyId = Convert.ToInt32(values["currencyId"]);
+                services = services.Where(x => x.CurrencyId == currencyId);
+            }
+
             var items = services.Skip(skip).Take(take);
 
             return Json(new

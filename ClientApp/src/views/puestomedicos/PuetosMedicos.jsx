@@ -16,9 +16,12 @@ import uri from '../../utils/uri';
 import { _path } from '../../data/headerNavigation';
 import { createStoreLocal } from '../../utils/proxy';
 import CustomButton from '../../components/buttons/CustomButton';
-import { formatDateTime } from '../../data/app';
+import { dataAccess, formatDateTime, resources } from '../../data/app';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const PuetosMedicos = props => {
+
+    const { authorized } = useAuthorization([resources.puestoMedicos, dataAccess.create ]);
 
     let dataGrid = useRef();
 
@@ -46,7 +49,7 @@ const PuetosMedicos = props => {
 
     const title = 'Puesto Medicos';
 
-    return (
+    return authorized(
         <div className="container">
             <Title title={title}/>
             <BlockHeader title={title}>

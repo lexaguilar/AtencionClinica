@@ -181,7 +181,7 @@ const Nuevo = props => {
                                         refresh={open} 
                                         details={details}
                                         setDetails={setDetails}
-                                        details={details}
+                                        detailsServices={detailsServices}
                                         user={user} 
                                         validate={validate}/>
 

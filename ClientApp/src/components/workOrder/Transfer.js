@@ -32,7 +32,7 @@ const Transfer = () => {
                 onHiding();
             }).catch(err => {
                 notify(err, 'error')
-            })
+            });
 
         }
 
