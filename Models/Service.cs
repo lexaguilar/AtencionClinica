@@ -30,6 +30,7 @@ namespace AtencionClinica.Models
         public int CurrencyId { get; set; }
         public bool IsCultive { get; set; }
         public int TypeId { get; set; }
+        public string ReportName { get; set; }
 
         public virtual Currency Currency { get; set; }
         public virtual ServiceType Type { get; set; }

@@ -50,6 +50,17 @@ namespace AtencionClinica.Controllers
                 return Json(_select.Where(x => x.BeneficiaryStatusId == 1));
         }
 
+        [Route("api/beneficiaries/all/get")]
+        public IActionResult GetCatalogAll(bool active) 
+        {
+            
+            var result = _db.VwBeneficiariesActives.ToArray();
+           
+            
+            return Json(result);
+           
+        }
+
         [Route("api/beneficiaries/get/{beneficiaryId}/information")]
         public IActionResult GetInformation(int beneficiaryId) 
         {
@@ -93,7 +104,8 @@ namespace AtencionClinica.Controllers
                     x.RegionId,
                     x.CityId,
                     x.BeneficiaryStatusId,
-                    x.RelationshipId
+                    x.RelationshipId,
+                    x.InssAlternative
                 });
 
                 oldBeneficiario.LastDateModificationAt = DateTime.Now;

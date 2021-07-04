@@ -41,10 +41,21 @@ namespace AtencionClinica.Controllers
             if(success){
                 var result = _db.Customers.FirstOrDefault(x => x.Inss == id);
 
+                if(result==null){
+                    var beneficiary = _db.Beneficiaries.FirstOrDefault(x => x.InssAlternative == id);
+
+                    if(beneficiary == null)
+                        return BadRequest($"No se encontró el asegurado con el inss {inss}");
+
+                    result = _db.Customers.FirstOrDefault(x => x.Inss == beneficiary.Inss);
+                }
+
                 if(result==null)
                     return BadRequest($"No se encontró el asegurado con el inss {inss}");
 
-                return Json(result);
+                var percapita = _db.Percapitas.Where(x => x.Inss == result.Inss).OrderByDescending(x => x.Id).FirstOrDefault(); 
+
+                return Json(GetObject(result, percapita));
             }else{
 
                 var customer = _db.Customers.FirstOrDefault(x => x.Identification == inss);
@@ -54,10 +65,26 @@ namespace AtencionClinica.Controllers
                 else
                     return BadRequest($"No se encontró el asegurado con el identificador {inss}");
 
-                var result = _db.Customers.FirstOrDefault(x => x.Inss == id);                   
+                var result = _db.Customers.FirstOrDefault(x => x.Inss == id);     
 
-                return Json(result);
+                var percapita = _db.Percapitas.Where(x => x.Inss == result.Inss).OrderByDescending(x => x.Id).FirstOrDefault();              
+
+                return Json(GetObject(result, percapita));
             }
         } 
+
+        internal Object GetObject(Customer customer, Percapita percapita){
+            return new{
+                    customerStatusId= customer.CustomerStatusId,
+                    customerTypeId= customer.CustomerTypeId,
+                    dateAdd= customer.DateAdd,
+                    firstName= customer.FirstName,
+                    identification= customer.Identification,
+                    inss= customer.Inss,
+                    lastName= customer.LastName,
+                    patronalId= customer.PatronalId,
+                    patronal = percapita == null ? "" : percapita.Rason
+                };
+        }
     }
 }

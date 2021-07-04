@@ -19,5 +19,7 @@ namespace AtencionClinica.Models
         public int? Decimals { get; set; }
         public bool ValidatePriceGreaterCost { get; set; }
         public int AreaMainId { get; set; }
+        public int? AreaDoctorId { get; set; }
+        public int? MinAgeToAdmission { get; set; }
     }
 }

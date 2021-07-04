@@ -56,6 +56,12 @@ const WorkOrders = (props) => {
             }
         }
     }
+
+    const verOrdenTrabajo = e =>{
+
+        dispatch(dialogPrivateWorkOrder({id: e.data.id, open : true, followId}))
+
+    }
     
 
     const title = `Ordenes de trabajo privado movimiento ${followId}`;
@@ -87,6 +93,7 @@ const WorkOrders = (props) => {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 onContextMenuPreparing={addMenuItems}
+                onRowDblClick={verOrdenTrabajo}
                 remoteOperations={{
                     paging: true,
                     filtering: true

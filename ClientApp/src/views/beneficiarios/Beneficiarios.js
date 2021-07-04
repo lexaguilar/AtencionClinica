@@ -138,12 +138,13 @@ const Beneficiarios = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'beneficiaryStatus'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
+                <Column dataField='inssAlternative' caption="Inss Alternativo"></Column>
                 <Editing
                     mode="popup"
                     allowUpdating={customer.status}                       
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={850} height={530}>
+                    <Popup title={title} showTitle={true} width={850} height={550}>
 
                     </Popup>
                     <FromGrid>
@@ -188,7 +189,9 @@ const Beneficiarios = () => {
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />
-                        </Item>                      
+                        </Item>
+                        <Item dataField="inssAlternative" >
+                        </Item>                 
                     </FromGrid>
                 </Editing>
             </DataGrid>

@@ -105,6 +105,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<TraslateState> TraslateStates { get; set; }
         public virtual DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<VwBeneficiariesActive> VwBeneficiariesActives { get; set; }
         public virtual DbSet<VwBillFinished> VwBillFinisheds { get; set; }
         public virtual DbSet<VwBillFinishedByClient> VwBillFinishedByClients { get; set; }
         public virtual DbSet<VwBillProductsService> VwBillProductsServices { get; set; }
@@ -112,6 +113,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<VwFollowsPrivate> VwFollowsPrivates { get; set; }
         public virtual DbSet<VwKardex> VwKardices { get; set; }
         public virtual DbSet<VwLastMedicinesByBeneficiary> VwLastMedicinesByBeneficiaries { get; set; }
+        public virtual DbSet<VwLastMedicinesByPrivate> VwLastMedicinesByPrivates { get; set; }
         public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
         public virtual DbSet<VwStocksForArea> VwStocksForAreas { get; set; }
         public virtual DbSet<VwTestsResult> VwTestsResults { get; set; }
@@ -125,7 +127,7 @@ namespace AtencionClinica.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=LEX-PC\\PCLEX;Database=ClinicalCare;User Id=sa;Password=123;");
+                optionsBuilder.UseSqlServer("Data Source=SQL5097.site4now.net;Initial Catalog=db_a73688_preflorsacuanjoche;User Id=db_a73688_preflorsacuanjoche_admin;Password=UH_qTKTis3cPAeq");
             }
         }
 
@@ -402,6 +404,8 @@ namespace AtencionClinica.Models
                 entity.HasIndex(e => e.FirstName, "IX_Beneficiaries_FirstName");
 
                 entity.HasIndex(e => e.Id, "IX_Beneficiaries_Identification");
+
+                entity.HasIndex(e => e.InssAlternative, "IX_Beneficiaries_InssAlternative");
 
                 entity.HasIndex(e => e.LastName, "IX_Beneficiaries_LastName");
 
@@ -1941,6 +1945,10 @@ namespace AtencionClinica.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ReportName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.TypeId).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Currency)
@@ -2434,6 +2442,52 @@ namespace AtencionClinica.Models
                     .HasConstraintName("FK_Users_Rols");
             });
 
+            modelBuilder.Entity<VwBeneficiariesActive>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwBeneficiariesActives");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.BirthDate).HasColumnType("date");
+
+                entity.Property(e => e.CellNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Identification)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ralation)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<VwBillFinished>(entity =>
             {
                 entity.HasNoKey();
@@ -2681,6 +2735,30 @@ namespace AtencionClinica.Models
                 entity.HasNoKey();
 
                 entity.ToView("vwLastMedicinesByBeneficiary");
+
+                entity.Property(e => e.CreateBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Doctor)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Product)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwLastMedicinesByPrivate>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwLastMedicinesByPrivate");
 
                 entity.Property(e => e.CreateBy)
                     .IsRequired()

@@ -54,7 +54,7 @@ const Customer = props => {
         <div>
             
             <div className="dx-field">
-                <div className="dx-field-label">
+                <div className="dx-field-cutomer">
                     <div className="row-elemet">
                         <TextBox placeholder="Número INSS o cédula" value={inss} defaultValue={inss} onValueChanged={onValueChanged} />
                         <Button
@@ -64,6 +64,10 @@ const Customer = props => {
                             icon='search'
                             onClick={buscarAsegurado}
                         />
+                        <label className="label-customer">
+                            <span className="label-customer-inss">{custumer.inss}</span>
+                            <span className="label-customer-patronal">{custumer.patronal}</span>
+                        </label>
                     </div>
                 </div>
             </div>

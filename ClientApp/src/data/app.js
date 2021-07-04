@@ -61,6 +61,7 @@ export const resources = {
     requisas : 10,
     compras : 11,
     puestoMedicos : 12,
+    app : 13
 }
 
 export const dataAccess = {

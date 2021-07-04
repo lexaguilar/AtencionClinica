@@ -18,4 +18,5 @@ namespace AtencionClinica.Models{
     public partial class Provider : ModelExtension<Provider>  {  }
     public partial class Contract : ModelExtension<Contract>  {  }
     public partial class AreaProductStock : ModelExtension<AreaProductStock>  {  }
+    public partial class App : ModelExtension<App>  {  }
 }

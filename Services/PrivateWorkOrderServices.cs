@@ -38,10 +38,14 @@ namespace AtencionClinica.Services
             _db.PrivateWorkOrders.Add(workOrder);
 
             //Crear salida          
-            var outPutProductServices = new OutPutProductServices(_db);
-            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder);
-            if (!modelOnPutProducts.IsValid)
-                return new ModelValidationSource<PrivateWorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
+            if(workOrder.PrivateWorkOrderDetails.Any(x => !x.IsService)){
+
+                var outPutProductServices = new OutPutProductServices(_db);
+                var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder);
+                if (!modelOnPutProducts.IsValid)
+                    return new ModelValidationSource<PrivateWorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
+
+            }
 
             return model;
         }

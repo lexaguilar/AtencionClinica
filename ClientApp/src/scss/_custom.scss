@@ -499,3 +499,30 @@
         padding-left: 2px;
         opacity: 0.7;
     }
+    
+    .label-customer {
+        margin-top: 10px;
+    }
+    
+    .label-customer-inss {
+        font-weight: bold;
+        color: #f05b41;
+        margin: 0 10px;
+    }
+    
+    .label-customer-patronal {
+        font-weight: bold;
+        color: #141fbb;
+        margin: 0 10px;
+    }
+    
+    .dx-field-cutomer {
+        float: left;
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #333;
+        cursor: default;
+        padding: 8px 15px 9px 0;
+    }

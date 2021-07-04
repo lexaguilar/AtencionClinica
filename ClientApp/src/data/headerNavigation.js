@@ -71,7 +71,8 @@ const menu = [{
             { title: 'Asegurados', url: `${_path.CLINICA}/servicios` },
             { title: 'Privados y convenios', url: `${_path.CLINICA}/servicios-privados` },           
             { title: 'Admisiones de hoy', url: `${_path.CLINICA}/admisiones-hoy` },           
-            { title: 'Expediente clinico', url: `${_path.CLINICA}/servicios/expediente` },           
+            { title: 'Expediente Pte Inss', url: `${_path.CLINICA}/servicios/expediente` },           
+            { title: 'Expediente Pte Privado', url: `${_path.CLINICA}/servicios/expediente-privado` },           
         ],
     },
 },{
@@ -169,7 +170,8 @@ const menu = [{
                     links: [
                         { title: 'Percapita', url: `${_path.CLINICA}/config/percapitas` },
                         { title: 'Asegurados', url: `${_path.CLINICA}/asegurados/activos` },
-                        { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiarios` },
+                        { title: 'Beneficiarios por asegurado', url: `${_path.CLINICA}/beneficiarios` },
+                        { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiariosall` },
                         { title: 'Privados y convenios', url: `${_path.CLINICA}/privados` },
                     ],
                 },]

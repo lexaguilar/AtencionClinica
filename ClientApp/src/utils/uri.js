@@ -3,6 +3,7 @@ import { createProxy, createProxyBase } from "./proxy";
 const uri = {
     appointments : createProxyBase('appointments'),
     admisions : createProxyBase('admisions'),
+    beneficariosAll : createProxyBase('beneficiaries/all'),
     puestomedico : createProxyBase('admisions/puestomedico'),
     areas : createProxyBase('areas'),
     tipos : createProxyBase('tipos'),
@@ -57,6 +58,8 @@ uri.beneficarios = inss => {
     urls.getInfo = beneficiaryId => `beneficiaries/get/${beneficiaryId}/information`
     return urls;
 };
+
+
 
 uri.follows = areaId =>  createProxy(`follows/get/${areaId}`,`follows/post`);
 uri.followsPrivate = areaId =>  createProxy(`followsprivate/get/${areaId}`,`followsprivate/post`);
