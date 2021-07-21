@@ -250,7 +250,7 @@ namespace AtencionClinica.Controllers
             var minAgeToAdmission = app.MinAgeToAdmission.Value;
 
             if(bene.RelationshipId == 2) //Hijo
-                if( (bene.BirthDate - DateTime.Today).Days/365 >= minAgeToAdmission)
+                if( (DateTime.Today - bene.BirthDate).Days/365 >= minAgeToAdmission)
                     return BadRequest("Solo se permiten admisiones para los hijos edad igual 13 años o menor");
 
             admission.Inss = bene.Inss;
