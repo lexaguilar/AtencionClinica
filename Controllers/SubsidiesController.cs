@@ -72,7 +72,7 @@ namespace AtencionClinica.Controllers
                 x.BeneficiaryId,
                 Nombre = $"{x.Beneficiary.FirstName} {x.Beneficiary.LastName}",
                 x.AreaId,
-                Cie10 = x.Cie10.Name,
+                Cie10 =$"{x.Cie10.Id}-{x.Cie10.Name}",
                 x.DoctorId,
                 x.DateStart,
                 x.DateEnd,
