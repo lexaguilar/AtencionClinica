@@ -24,7 +24,7 @@ import GridMedicamentos from '../workOrders/GridMedicamentos';
 
 const Nuevo = props => {    
 
-    const { authorized } = useAuthorization([resources.admision, dataAccess.create ]);
+    const { authorized } = useAuthorization([resources.puestoMedicos, dataAccess.create ]);
 
     const { clear } = useSelector(store => store.customerClear);
     const dispatch = useDispatch();

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AtencionClinica.Models;
 
 namespace AtencionClinica.Services
@@ -11,27 +12,33 @@ namespace AtencionClinica.Services
             _db = db;
 
         }
-           
+
         public ModelValidationSource<Bill> Create(Bill bill)
-        { 
+        {
+
             bill.Init(_db);
 
             var model = bill.Validate(_db);
-            
+
             if (!model.IsValid)
-                return model;            
+                return model;
 
             _db.Bills.Add(bill);
 
-            var outPutProductServices = new OutPutProductServices(_db);
-            var modelOnPutProducts =  outPutProductServices.CreateFrom(bill);
-            if (!modelOnPutProducts.IsValid)
-                return new ModelValidationSource<Bill>(bill).AsError(modelOnPutProducts.Error);
+            var containsProducts = bill.BillDetails.Any(x => !x.IsService);
 
-           
+            if (containsProducts)
+            {
 
-           return model;
-            
+                var outPutProductServices = new OutPutProductServices(_db);
+                var modelOnPutProducts = outPutProductServices.CreateFrom(bill);
+                if (!modelOnPutProducts.IsValid)
+                    return new ModelValidationSource<Bill>(bill).AsError(modelOnPutProducts.Error);
+
+            }
+
+            return model;
+
         }
 
         public int Delete(int id)
@@ -54,6 +61,6 @@ namespace AtencionClinica.Services
             throw new NotImplementedException();
         }
 
-        
+
     }
 }

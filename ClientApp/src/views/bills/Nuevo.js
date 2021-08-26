@@ -10,11 +10,10 @@ import notify from 'devextreme/ui/notify';
 import { _path } from "../../data/headerNavigation";
 import { billDefault } from '../../data/bill';
 import PopupPrivado from '../../components/beneficiary/PopupPrivado';
-import DataSource from "devextreme/data/data_source";
+import DropDownClients from '../../components/dropdown/DropDownClients';
 import DataGrid, { Column, Editing, Lookup, Selection, Paging, FilterRow, Scrolling, Summary, TotalItem } from 'devextreme-react/data-grid';
 import { cellRender, cellRenderBold, dataFormatId, obtenerTasaCambio, formatToMoney } from '../../utils/common';
 import urlReport from '../../services/reportServices';
-import Resumen from '../../components/footer/Resumen';
 import useAuthorization from '../../hooks/useAuthorization';
 
 import {
@@ -23,7 +22,6 @@ import {
 } from 'devextreme-react/validator';
 import { DropDownBox, SelectBox, TextArea } from 'devextreme-react';
 import { DivForm } from '../../utils/divHelpers';
-import useClients from '../../hooks/useClients';
 
 const Nuevo = props => {
   
@@ -35,7 +33,7 @@ const Nuevo = props => {
     const [bill, setBill] = useState({ ...billDefault });
     const [procedimientos, setProcedimientos] = useState([]);
     const [services, setServices] = useState([]);
-    const { clients } = useClients();
+    const [ customerId, setCustomerId ] = useState();
 
     let dataGrid = React.createRef();      
 
@@ -109,69 +107,17 @@ const Nuevo = props => {
         setProcedimientos([...procedimientos]);
     }
 
-    const [gridBoxValue, setGridBoxValue] = useState([]);
-    const changeHandler = (e) => {
-        setGridBoxValue(e.value);
-    }
-
-    const dataGrid_onSelectionChanged = (e) => {
-        setGridBoxValue(e.selectedRowKeys[0].id);
-        dropDownBoxRef.current.instance.close();
-
-    }
-
-    // const dataSource = new DataSource({
-    //     load: (loadOptions) => {
-
-    //         let params = {};
-    //         params.skip = loadOptions.skip || 0;
-    //         params.take = loadOptions.take || 10;
-
-    //         console.log(loadOptions);
-
-    //         if(loadOptions?.filter?.filterValue){
-    //             const property = loadOptions.filter[0]
-    //             params[property] = loadOptions.filter.filterValue;           
-    //         }
-
-    //         return http(uri.privateCustomers().getAsCatalog)
-    //             .asGet(params).then(x => x.items);
-
-    //     },
-    //     paginate: true,
-    //     pageSize: 10,
-    //     byKey: id => http(uri.privateCustomers().getById(id)).asGet()
-    // });
-
-
-    const dataGridRender = () => {
-        return (
-            <DataGrid                
-                allowColumnResizing={true}
-                dataSource={clients}
-                hoverStateEnabled={true}
-                selectedRowKeys={gridBoxValue}
-                onSelectionChanged={dataGrid_onSelectionChanged}
-                height="100%">
-                <Selection mode="single" />
-                <Scrolling mode="infinite" />
-                <Paging enabled={true} pageSize={10} />
-                <FilterRow visible={true} />
-                <Column visible={false} dataField="id" caption="Codigo" width={80} cellRender={dataFormatId} />
-                <Column dataField="type" caption="Tipo" width={80} allowFiltering={false} />
-                <Column dataField="contract" caption="Convenio" width={150} allowFiltering={false} />
-                <Column dataField="identification" caption="Identificacion" width={130} />
-                <Column dataField="name" caption="Nombre" />
-                <Column dataField="sex" caption="Sexo" width={120} visible={false}></Column>
-            </DataGrid>
-        );
-    }
+    
+    const changeHandler = value => {
+        console.log(value);
+        setCustomerId(value);
+    } 
 
     const onFormSubmit = (e) => {
         e.preventDefault();
 
         setLoading(true);
-        http(uri.bill.insert).asPost({ ...bill,privateCustomerId: gridBoxValue, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
+        http(uri.bill.insert).asPost({ ...bill,privateCustomerId: customerId, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
             if (resp) {
 
                 setLoading(false); 
@@ -200,23 +146,7 @@ const Nuevo = props => {
             <form onSubmit={onFormSubmit}>
                 <div className="dx-fieldset">
                     <DivForm title='Asegurado' required>
-                        <DropDownBox
-                            ref={dropDownBoxRef}
-                            dropDownOptions={{ width: 700 }}
-                            dataSource={clients}
-                            key="id"
-                            placeholder="Selecciona un paciente"
-                            showClearButton={true}
-                            valueExpr="id"
-                            displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
-                            value={gridBoxValue}
-                            onValueChanged={changeHandler}
-                            contentRender={dataGridRender}
-                        >
-                            <Validator>
-                                <RequiredRule message="Seleccione este campo" />
-                            </Validator>
-                        </DropDownBox>
+                        <DropDownClients dropDownBoxRef={dropDownBoxRef} changeHandler={changeHandler} />
                     </DivForm>
 
                     <DivForm title='Tipo Ingreso' required>
@@ -295,7 +225,8 @@ const Nuevo = props => {
                             <Lookup
                                 disabled={true}
                                 dataSource={services}
-                                valueExpr="id" displayExpr="name"
+                                valueExpr="id" 
+                                displayExpr="name"
                             />
                         </Column>
                         <Column dataField="quantity" caption='Cant' width={70} setCellValue={setCellValueCant} />

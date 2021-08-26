@@ -31,7 +31,7 @@ const Nuevo = props => {
     const [tabIndex, setTabIndex] = useState(0);
     const [workOrder, setWorkOrder] = useState({ ...workOrderDefault });
     const [saving, setSaving] = useState(false);
-    const [detailsServices] = useState([]);
+    const [detailsServices, setDetailsServices] = useState([]);
     const [details, setDetails] = useState([]);
 
     let refForm = useRef();
@@ -51,6 +51,7 @@ const Nuevo = props => {
 
         setWorkOrder({ ...workOrder, areaId: user.areaId, date: new Date() });
         setDetails([]);
+        setDetailsServices([]);
 
     }, [open]);
 
@@ -60,14 +61,14 @@ const Nuevo = props => {
 
         refForm.current.instance.resetValues();
 
-        dispatch(dialogPrivateWorkOrder({ open: false }));
+        dispatch(dialogPrivateWorkOrder({ open: false, id : 0 }));
         setIsClosing(true);
 
         if (load) {
             let { onSave } = props;
             onSave();
         }
-    }
+    } 
 
     const onHiding = ({ load }) => {
 
@@ -106,11 +107,47 @@ const Nuevo = props => {
 
     }
 
+    const transformData = data => {
+
+        data.um = 'Otros';
+        data.presentation = 'Otros';
+
+        return data;
+
+
+    }
+
+    useEffect(() => {
+
+        console.log(id);
+
+        if(id > 0){
+
+            http(uri.privateWorkOrders.getById(id)).asGet().then(resp =>{
+                
+                const {date, doctorId, rate, reference } = resp;
+
+                const servicios = resp.privateWorkOrderDetails.filter(x => x.isService).map(transformData);
+
+                const productos = resp.privateWorkOrderDetails.filter(x => !x.isService).map(transformData);
+
+                setWorkOrder({
+                    areaId : user.areaId,
+                    id,
+                    date, doctorId, rate, reference 
+                });
+
+                setDetailsServices([...servicios]);
+
+                setDetails([...productos]);
+                
+            })
+
+        }
+        
+    }, [id]);
+
     const text = 'Guardar orden';
-
-
-
-    console.log(workOrder);
 
     return (
         <div>
@@ -181,15 +218,13 @@ const Nuevo = props => {
                                         refresh={open} 
                                         details={details}
                                         setDetails={setDetails}
-                                        details={details}
+                                        detailsServices={detailsServices}
                                         user={user} 
                                         validate={validate}/>
 
                                     {isFarmacia &&
-
                                         <GridListaMedicamentoPte
                                             customerId={customerId}
-                                            open={open}
                                         />
                                     }
                                 </TabPanel>

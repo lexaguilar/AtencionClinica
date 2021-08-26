@@ -32,7 +32,7 @@ namespace AtencionClinica.Controllers
             if (values.ContainsKey("name"))
             {
                 var name = Convert.ToString(values["name"]);
-                cie10 = cie10.Where(x => x.Name.Contains(name));
+                cie10 = cie10.Where(x => x.Name.Contains(name) || x.Id.Contains(name));
             }
 
             var items = cie10.Skip(skip).Take(take);

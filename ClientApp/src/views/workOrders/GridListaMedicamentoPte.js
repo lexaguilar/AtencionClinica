@@ -5,16 +5,24 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import { createProxy } from '../../utils/proxy';
 import { formatDate } from '../../data/app';
 
-const GridListaMedicamentoPte = ({beneficiaryId}) => {
+const GridListaMedicamentoPte = ({ beneficiaryId=0, customerId=0 }) => {
 
-    const title = 'Ultimos medicamentos despacho al paciente'
+    let store = [];
+
+    if(beneficiaryId > 0)
+        store = store({uri : createProxy(`beneficiaries/${beneficiaryId}/products`) });
+        
+    if(customerId > 0)
+        store = store({uri : createProxy(`privateCustomers/${customerId}/products`) });
+
+    const title = 'Ultimos medicamentos despacho al paciente';
 
     return (
         <div className="mr-10">
             <BlockHeader title={title}/>
             <DataGrid id="gridContainer"
                 selection={{ mode: 'single' }}
-                dataSource={beneficiaryId == 0 ? [] : store({uri : createProxy(`beneficiaries/${beneficiaryId}/products`) })}
+                dataSource={store}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}

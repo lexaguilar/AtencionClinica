@@ -31,8 +31,7 @@ const menu = [{
         type: 'menu',
         menu: [
             { title: 'Nueva', url: `${_path.CLINICA}/admisiones/nuevo` },
-            { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },
-            { title: 'Puestos Médicos', url: `${_path.CLINICA}/puestos-medicos` },
+            { title: 'Admisiones', url: `${_path.CLINICA}/admisiones` },            
             { 
                 title: 'Reportes', 
                 url: ``,
@@ -72,7 +71,8 @@ const menu = [{
             { title: 'Asegurados', url: `${_path.CLINICA}/servicios` },
             { title: 'Privados y convenios', url: `${_path.CLINICA}/servicios-privados` },           
             { title: 'Admisiones de hoy', url: `${_path.CLINICA}/admisiones-hoy` },           
-            { title: 'Expediente clinico', url: `${_path.CLINICA}/servicios/expediente` },           
+            { title: 'Expediente Pte Inss', url: `${_path.CLINICA}/servicios/expediente` },           
+            { title: 'Expediente Pte Privado', url: `${_path.CLINICA}/servicios/expediente-privado` },           
         ],
     },
 },{
@@ -140,6 +140,10 @@ const menu = [{
     },
 },{
     layout: 'clinica',
+    title: 'Puestos Médicos',
+    url: `${_path.CLINICA}/puestos-medicos` ,
+},{
+    layout: 'clinica',
     title: 'Ficheros',
     url: ``,
     submenu: {
@@ -166,7 +170,8 @@ const menu = [{
                     links: [
                         { title: 'Percapita', url: `${_path.CLINICA}/config/percapitas` },
                         { title: 'Asegurados', url: `${_path.CLINICA}/asegurados/activos` },
-                        { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiarios` },
+                        { title: 'Beneficiarios por asegurado', url: `${_path.CLINICA}/beneficiarios` },
+                        { title: 'Beneficiarios', url: `${_path.CLINICA}/beneficiariosall` },
                         { title: 'Privados y convenios', url: `${_path.CLINICA}/privados` },
                     ],
                 },]
@@ -179,7 +184,7 @@ const menu = [{
                         { title: 'Areas', url: `${_path.CLINICA}/areas` },
                         { title: 'Doctores', url: `${_path.CLINICA}/doctores` },
                         { title: 'Doctores Horario', url: `${_path.CLINICA}/doctores/horarios` },
-                        { title: 'Especialidades', url: `${_path.CLINICA}/especialielaydades` },
+                        { title: 'Especialidades', url: `${_path.CLINICA}/especialidades` },
                         { title: 'Tipo de convenios', url: `${_path.CLINICA}/tipo-convenio` },
                     ],
                 },]

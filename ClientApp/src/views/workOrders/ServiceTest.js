@@ -101,7 +101,11 @@ const ServiceTest = ({ beneficiaryId, user, open, followId }) => {
                     icon: 'print',
                     onItemClick: () => {
 
-                        report.print(`${report.privateTestsResult(e.row.data.id)}`);
+                        const { id } = e.row?.data;
+
+                        console.log(e.row?.data);
+
+                        report.print(`${report.testsResult(ids.id)}&testId=${id}`);
                  
                     }
                 });

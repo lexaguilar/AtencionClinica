@@ -110,4 +110,8 @@ namespace AtencionClinica.Models{
         }
     
     }
+
+    public partial class PrivateWorkOrderDetail : ModelExtension<PrivateWorkOrderDetail>  {
+
+    }
 }

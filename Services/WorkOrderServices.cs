@@ -46,6 +46,7 @@ namespace AtencionClinica.Services
             return model;
         }
 
+        
         public ModelValidationSource<WorkOrder> CreateFromAdmin(Admission admission)
         {
             var follow = admission.Follows.FirstOrDefault();

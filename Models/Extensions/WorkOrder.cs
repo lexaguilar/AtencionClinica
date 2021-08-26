@@ -44,7 +44,7 @@ namespace AtencionClinica.Models{
                 if(string.IsNullOrEmpty(this.Reference))
                     return modelValidation.AsError($"La referencia de la orden es necesaria");
 
-                if(admision.TypeId == (int)AdmisionTypes.IngresoHops && admision.Finished)                
+                if(admision.TypeId == (int)AdmisionTypes.IngresoHops && admision.Finished)
                     return modelValidation.AsError($"La admision del paciente ya no es válida");
 
                 area = _db.Areas.FirstOrDefault(x => x.Id == follow.AreaTargetId);                

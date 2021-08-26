@@ -13,9 +13,7 @@ import Dropdown from './Dropdown';
 function Topbar(props) {
     let  { user } = props;
     const links = [
-        { title: <FormattedMessage id="topbar.aplicacion" defaultMessage="Aplicación" />, url: '/app/inicio' },
-        { title: <FormattedMessage id="topbar.inventario" defaultMessage="Inventario" />, url: '/inv' },
-        { title: <FormattedMessage id="topbar.contabilidad" defaultMessage="Contabilidad" />, url: '/conta' }
+        { title: <FormattedMessage id="topbar.aplicacion" defaultMessage="Aplicación" />, url: '/clinica/app' }
     ];
 
     const accountLinks = [
@@ -23,17 +21,18 @@ function Topbar(props) {
         { title: 'Salir', url: '/account/logout' },
     ];
 
-    // const linksList = links.map((item, index) => (
-    //     <div key={index} className="topbar__item topbar__item--link">
-    //         <Link className="topbar-link" to={item.url}>{item.title}</Link>
-    //     </div>admin
-    // ));
+    const linksList = links.map((item, index) => (
+        <div key={index} className="topbar__item topbar__item--link">
+            <Link className="topbar-link" to={item.url}>{item.title}</Link>
+        </div>
+    ));
 
 
     return (
         <div className="site-header__topbar topbar">
             <div className="topbar__container container">
                 <div className="topbar__row">
+                    {linksList}
                     <div className="topbar__spring" />
                     <div className="topbar__item">
                         <Dropdown

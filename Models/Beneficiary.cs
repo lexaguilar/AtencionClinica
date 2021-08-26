@@ -34,6 +34,7 @@ namespace AtencionClinica.Models
         public string CreateBy { get; set; }
         public DateTime? LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
+        public int? InssAlternative { get; set; }
 
         public virtual BeneficiaryStatus BeneficiaryStatus { get; set; }
         public virtual City City { get; set; }

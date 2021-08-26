@@ -221,5 +221,15 @@ namespace AtencionClinica.Controllers
             return Json(privateCustomer);
 
         }
+
+        [Route("api/privateCustomers/{customerId}/products")]
+        public IActionResult Products(int customerId) 
+        {
+            var products = _db.VwLastMedicinesByPrivates.Where(x => x.PrivateCustomerId == customerId)
+            .OrderByDescending(x => x.WorkOrderId)
+            .Take(20);
+            return Json(products);
+
+        }
     }
 }

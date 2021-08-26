@@ -216,6 +216,8 @@ namespace AtencionClinica.Controllers
             if(user == null)
                 return BadRequest("La información del usuario cambio, inicie sesion nuevamente");
 
+            var app = _db.Apps.FirstOrDefault();
+
             if(user.AreaId != (int)AreaRestrict.Admision && user.AreaId != (int)AreaRestrict.Emergencia)
                 return BadRequest("Solo se permite admisionar desde el area de admision");
 
@@ -242,9 +244,13 @@ namespace AtencionClinica.Controllers
             if(asegurado.CustomerStatusId == 2)
                 return BadRequest($"El asegurado con inss {bene.Inss} ya no esta en el sistema");
 
+            if(app.MinAgeToAdmission == null)
+                return BadRequest($"No se he configurado los años permitidos para beneficiarios hijo");
+
+            var minAgeToAdmission = app.MinAgeToAdmission.Value;
 
             if(bene.RelationshipId == 2) //Hijo
-                if( (bene.BirthDate - DateTime.Today).Days/365 >= 13)
+                if( (DateTime.Today - bene.BirthDate).Days/365 >= minAgeToAdmission)
                     return BadRequest("Solo se permiten admisiones para los hijos edad igual 13 años o menor");
 
             admission.Inss = bene.Inss;

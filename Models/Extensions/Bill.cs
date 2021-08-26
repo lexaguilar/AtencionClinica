@@ -50,12 +50,13 @@ namespace AtencionClinica.Models
 
             var app = _db.Apps.FirstOrDefault();
 
-            var totalItems = this.BillDetails.Select(x => x.ProductId).Distinct().Count();
+            var totalProducts = this.BillDetails.Select(x => x.ProductId).Where(x => x.HasValue).Distinct().Count();
+            var totalServices = this.BillDetails.Select(x => x.ServiceId).Where(x => x.HasValue).Distinct().Count();
 
-            if (totalItems == 0)
-                return modelValidation.AsError($"Debe agregar al menos un producto");
+            if (totalProducts == 0 && totalServices == 0)
+                return modelValidation.AsError($"Debe agregar al menos un producto o procedimiento");
 
-            if (totalItems != this.BillDetails.Select(x => x.ProductId).Count())
+            if ((totalProducts + totalServices) != this.BillDetails.Select(x => x.Id).Count())
                 return modelValidation.AsError($"No se permite items duplicados");
 
             var lastInPutProduct = _db.InPutProducts.Where(x => AreaId == this.AreaId).OrderByDescending(x => x.Id).FirstOrDefault();

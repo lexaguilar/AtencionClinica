@@ -35,6 +35,13 @@ namespace AtencionClinica.Controllers
 
         }     
 
+        [HttpGet("api/groups/{id}/delete")]
+        public IActionResult Delete(int id) {
+            
+            throw new NotImplementedException();
+
+        }
+
     
     }
 }

@@ -59,7 +59,9 @@ export const resources = {
     administracion : 8,
     usuarios : 9,
     requisas : 10,
-    compras : 11
+    compras : 11,
+    puestoMedicos : 12,
+    app : 13
 }
 
 export const dataAccess = {

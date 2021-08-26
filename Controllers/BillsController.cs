@@ -80,6 +80,7 @@ namespace AtencionClinica.Controllers
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
             
+            var app = _db.Apps.FirstOrDefault();
             //admission.Inss = bene.Inss;
             bill.Active = true;
             bill.Total = bill.BillDetails.Sum(x => x.Total);
@@ -96,7 +97,7 @@ namespace AtencionClinica.Controllers
                 bill.NameCustomer = string.IsNullOrEmpty(bill.NameCustomer) ? cliente.GetFullName() : bill.NameCustomer;
             }
 
-             var result = _service.Create(bill);
+            var result = _service.Create(bill);
 
             if(!result.IsValid)
                 return BadRequest(result.Error);
@@ -110,6 +111,11 @@ namespace AtencionClinica.Controllers
 
             if(bill.PrivateCustomerId != (int)PrivateCustomers.ClienteContado)
             {
+                if(app.AreaDoctorId == null)
+                    return BadRequest("No se encuetra un medico configurado para los ingresos de hemodialisis");
+
+                var areaDoctorId = app.AreaDoctorId.Value;
+
                 var follow = new FollowsPrivate{
                     BillId = bill.Id,
                     AreaSourceId = 3, //caja
@@ -118,6 +124,37 @@ namespace AtencionClinica.Controllers
                     CreateAt = DateTime.Now,
                     CreateBy = user.Username                
                 };
+
+                if(bill.BillDetails.Any(x => x.ServiceId != null)){
+
+                    var work = new PrivateWorkOrder{
+
+                        Date = DateTime.Now,
+                        CreateAt = DateTime.Now,
+                        CreateBy = user.Username,
+                        DoctorId = areaDoctorId,
+                        Active = true,   
+                        Reference = bill.Id.ToString()        
+                        
+                    };
+
+                    foreach (var item in bill.BillDetails)
+                    {
+                        work.PrivateWorkOrderDetails.Add(new PrivateWorkOrderDetail{
+
+                            IsService = true,
+                            ServiceId = item.ServiceId,
+                            Quantity = Convert.ToDouble(item.Quantity),
+                            Price = item.Price,
+                            Total = item.Total,
+                            Costo = 0,
+
+                        });
+                    }
+
+                    follow.PrivateWorkOrders.Add(work);
+                    
+                }
 
                 _db.FollowsPrivates.Add(follow);
 

@@ -32,6 +32,26 @@ namespace AtencionClinica.Controllers
             return Json(app);
         }
 
+        [HttpPost("api/about/set-info")]
+        public IActionResult SetInfo([FromBody] App app)
+        {
+            App oldApp = db.Apps.FirstOrDefault();
+
+            if (oldApp == null)
+                return BadRequest("Los valores iniciales de la aplicacion no estan establecidos");            
+                
+            oldApp.CopyFrom(app, x=> 
+                new {  
+                    x.ValidatePriceGreaterCost, 
+                    x.MinAgeToAdmission, 
+                    x.AreaDoctorId 
+                });
+
+            db.SaveChanges();
+
+            return Json(app);
+        }
+
         [Authorize]  
         [Route("api/about/info")]
         public IActionResult GetInfo()

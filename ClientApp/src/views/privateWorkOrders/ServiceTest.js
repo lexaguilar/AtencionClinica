@@ -96,7 +96,9 @@ const ServiceTest = ({ customerId, user, open, followId }) => {
                     icon: 'print',
                     onItemClick: () => {
 
-                        report.print(`${report.privateTestsResult(e.row.data.id)}`);
+                        const { id } = e.row?.data;
+
+                        report.print(`${report.privateTestsResult(ids.id)}&testId=${id}`);
                  
                     }
                 });

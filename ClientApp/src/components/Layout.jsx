@@ -62,6 +62,10 @@ import Areas from '../views/areas/Areas';
 import PuetosMedicos from '../views/puestomedicos/PuetosMedicos';
 import AdmisionesHoy from '../views/admision/AdmisionesHoy';
 import ProcedimientoEstandar from '../views/procedimientos/ProcedimientoEstandar';
+import ExpedienteClinico from '../views/expediente/ExpedienteClinico';
+import ExpedienteClinicoPrivado from '../views/expediente/ExpedienteClinicoPrivado';
+import AppConfig from '../views/app/AppConfig';
+import BeneficiariosAll from '../views/beneficiarios/BeneficiariosAll';
 
 function Layout(props) {
     const { match, headerLayout } = props;
@@ -77,7 +81,8 @@ function Layout(props) {
     const builRoute = (path, component) => <PrivateRoute key={path} {...prop(path, component) } /> ;
 
     const routes = [
-        builRoute('', HomePage)
+        builRoute('app', AppConfig)
+        ,builRoute('', HomePage)
         ,builRoute('admisiones', Admisiones)
         ,builRoute('admisiones-hoy', AdmisionesHoy)
         ,builRoute('admisiones/nuevo', Nuevo)
@@ -86,6 +91,7 @@ function Layout(props) {
         ,builRoute('citas/nuevo', AppointmentsNuevo.default)
         ,builRoute('asegurados/activos', Customers)
         ,builRoute('beneficiarios', Beneficiarios)
+        ,builRoute('beneficiariosall', BeneficiariosAll)
         ,builRoute('privados', Privados)
         ,builRoute('servicios', Follows)
         ,builRoute('servicios-privados', FollowsPrivate)
@@ -125,6 +131,9 @@ function Layout(props) {
         ,builRoute('areas', Areas)
         ,builRoute('puestos-medicos', PuetosMedicos)
         ,builRoute('puestos-medicos/nuevo', NuevoPuestoMedico.default)
+        ,builRoute('servicios/expediente', ExpedienteClinico)
+        ,builRoute('servicios/expediente-privado', ExpedienteClinicoPrivado)
+
         
     ];
     return (
