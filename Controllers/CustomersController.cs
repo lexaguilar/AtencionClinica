@@ -39,7 +39,34 @@ namespace AtencionClinica.Controllers
             var success = Int32.TryParse(inss, out id);
 
             if(success){
-                var result = _db.Customers.FirstOrDefault(x => x.Inss == id);
+
+                var percapitaResult = _db.Percapitas
+                .Where(x => x.InssPareja == id
+                    || x.InssHijo1 == id
+                    || x.InssHijo2 == id
+                    || x.InssHijo3 == id
+                    || x.InssHijo4 == id
+                    )
+                .OrderByDescending(x => x.Id).FirstOrDefault(); 
+
+                Customer result = null;
+                if(percapitaResult != null){
+
+                      //search by inss or id
+                    //var result = _db.Customers.Where(x => x.Inss == inss || x.Id == id);
+                    result = _db.Customers.FirstOrDefault(x => x.Inss == percapitaResult.Inss);
+                
+                }else{
+
+                    //search by inss or id
+                    //var result = _db.Customers.Where(x => x.Inss == inss || x.Id == id);
+                    result = _db.Customers.FirstOrDefault(x => x.Inss == id);
+
+                }
+
+                
+
+
 
                 if(result==null){
                     var beneficiary = _db.Beneficiaries.FirstOrDefault(x => x.InssAlternative == id);
@@ -53,7 +80,9 @@ namespace AtencionClinica.Controllers
                 if(result==null)
                     return BadRequest($"No se encontró el asegurado con el inss {inss}");
 
-                var percapita = _db.Percapitas.Where(x => x.Inss == result.Inss).OrderByDescending(x => x.Id).FirstOrDefault(); 
+                var percapita = _db.Percapitas
+                .Where(x => x.Inss == result.Inss)
+                .OrderByDescending(x => x.Id).FirstOrDefault(); 
 
                 return Json(GetObject(result, percapita));
             }else{

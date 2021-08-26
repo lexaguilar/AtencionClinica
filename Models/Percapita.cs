@@ -21,5 +21,10 @@ namespace AtencionClinica.Models
         public string Address { get; set; }
         public int? SexId { get; set; }
         public int? CityId { get; set; }
+        public int? InssPareja { get; set; }
+        public int? InssHijo1 { get; set; }
+        public int? InssHijo2 { get; set; }
+        public int? InssHijo3 { get; set; }
+        public int? InssHijo4 { get; set; }
     }
 }

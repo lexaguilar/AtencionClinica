@@ -9,6 +9,7 @@ using AtencionClinica.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AtencionClinica.Controllers
 {
@@ -16,9 +17,11 @@ namespace AtencionClinica.Controllers
     public class AppointmentsController : Controller
     {
         private readonly ClinicaContext _db = null;
-        public AppointmentsController(ClinicaContext db)
+        public ILogger<AppointmentsController> _logger =null;
+        public AppointmentsController(ClinicaContext db, ILogger<AppointmentsController> log)
         {
             this._db = db;
+            this._logger = log;
         }
 
         [Route("api/appointments/get")]
@@ -139,6 +142,7 @@ namespace AtencionClinica.Controllers
        [HttpPost("api/appointments/post")]
         public IActionResult Post([FromBody] Appointment appointment) 
         {
+
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
@@ -154,9 +158,20 @@ namespace AtencionClinica.Controllers
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == appointment.BeneficiaryId);
             
+            _logger.LogInformation(TimeZoneInfo.Local.ToString());
             appointment.Inss = bene.Inss;
             appointment.Identification = bene.Identification;
             appointment.Active = true;
+
+
+
+            var local = TimeZoneInfo.FindSystemTimeZoneById("Central America Standard Time");
+
+            //TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById(easternZoneId);
+            _logger.LogInformation($"{local.ToString()} IsDaylightSavingTime: {local.IsDaylightSavingTime(DateTime.Now).ToString()} StandardName:{local.StandardName} SupportsDaylightSavingTime: {local.SupportsDaylightSavingTime} DisplayName:{local.DisplayName}");
+
+            _logger.LogInformation(TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, local).ToString());
+
             appointment.CreateAt = DateTime.Now;
             appointment.CreateBy = user.Username;
             _db.Appointments.Add(appointment);  

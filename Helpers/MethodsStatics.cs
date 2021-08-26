@@ -32,6 +32,20 @@ namespace AtencionClinica
         {
             return ((int.Parse(DateTime.Now.ToString("yyyyMMdd")) - int.Parse(birthDate.ToString("yyyyMMdd"))) / 10000);
         }
+
+        //get only numbers from string
+        internal static string GetNumbersFromString(string text){
+            string numbers = "";
+            foreach (char c in text)
+            {
+                if (char.IsDigit(c))
+                    numbers += c;
+                else
+                    break;
+            }
+            return numbers;
+        }
+
     
     }
 }

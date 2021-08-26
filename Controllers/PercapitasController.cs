@@ -112,6 +112,18 @@ namespace AtencionClinica.Controllers
                             string Address = row.GetCell(9).StringCellValue;
                             string SexString = row.GetCell(10).StringCellValue;
 
+                            string InssPareja = row.GetCell(11)?.NumericCellValue.ToString();
+                            string InssHijo1 = row.GetCell(14)?.StringCellValue;
+                            string InssHijo2 = row.GetCell(15)?.StringCellValue;
+                            string InssHijo3 = row.GetCell(16)?.StringCellValue;
+                            string InssHijo4 = row.GetCell(17)?.StringCellValue;
+
+                            var InnsIntPareja = GetInss(InssPareja);
+                            var InssIntHijo1 = GetInss(InssHijo1);
+                            var InssIntHijo2 = GetInss(InssHijo2);
+                            var InssIntHijo3 = GetInss(InssHijo3);
+                            var InssIntHijo4 = GetInss(InssHijo4);
+                           
                             int sexId = SexString == "FEMENINO" ? 2 : 1;
 
                             int cityId = 0;
@@ -134,7 +146,12 @@ namespace AtencionClinica.Controllers
                                 Identification = string.IsNullOrEmpty(Identification) ? string.Empty : Identification,
                                 Address = string.IsNullOrEmpty(Address) ? string.Empty : Address,
                                 SexId = sexId,
-                                CityId = cityId
+                                CityId = cityId,
+                                InssPareja = InnsIntPareja,
+                                InssHijo1 = InssIntHijo1,
+                                InssHijo2 = InssIntHijo2,
+                                InssHijo3 = InssIntHijo3,
+                                InssHijo4 = InssIntHijo4
                             });
 
                         }
@@ -156,6 +173,19 @@ namespace AtencionClinica.Controllers
                 name = file.FileName,
                 size = file.Length
             });
+        }
+
+        private int? GetInss(string inss){
+
+            if(inss== null) return null;
+
+            string InnsIntResult = UserHelpers.GetNumbersFromString(inss);
+            int? InnsInt = null;
+            if(InnsIntResult.Length > 0)
+                InnsInt = int.Parse(InnsIntResult);
+
+            return InnsInt;
+
         }
 
         [Route("api/percapitas/delete/year/{year}/month/{month}")]
