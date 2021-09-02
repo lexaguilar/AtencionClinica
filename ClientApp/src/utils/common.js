@@ -90,6 +90,30 @@ export const onCellPrepared = e => {
 
 }
 
+export const validateReferenceValues = ref => {
+
+    return new Promise((resolve, reject) => {
+
+        
+        let resultValidate = ref.current.instance.validate();
+        
+        const { complete, isValid } = resultValidate;
+        
+        if(!isValid){
+            
+            if(complete){
+                resultValidate.complete.then(result => {
+                    resolve(result.isValid);
+                })
+            }else
+                resolve(isValid);
+            
+        }else
+            resolve(isValid);
+
+    });
+
+}
 
 const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
 export const getMonthName = index => months[index-1]; 

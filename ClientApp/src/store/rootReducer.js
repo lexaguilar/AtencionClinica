@@ -15,6 +15,7 @@ import subsidioReducer from './subsidio';
 import dialogReducer from './dialog';
 import customerClearReducer from './customer';
 import beneficiaryDialogReducer from './beneficiary';
+import factultativoDialogReducer from './factultativo';
 import catalogReducer from './catalogs';
 import inPutProductDialogReducer from './inPutProduct';
 import outPutProductDialogReducer from './outPutProduct';
@@ -52,6 +53,7 @@ export default combineReducers({
     dialog: dialogReducer,
     customerClear : customerClearReducer,
     beneficiaryDialog : beneficiaryDialogReducer,
+    factultativoDialog : factultativoDialogReducer,
     inPutProductDialog : inPutProductDialogReducer,
     outPutProductDialog : outPutProductDialogReducer,
     workOrderOutFollowDialog : workOrderOutFollowDialogReducer,
