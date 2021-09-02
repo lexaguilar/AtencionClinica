@@ -113,7 +113,7 @@ namespace AtencionClinica.Controllers
             {
                 if(app.AreaDoctorId == null)
                     return BadRequest("No se encuetra un medico configurado para los ingresos de hemodialisis");
-
+                //TODO: Hemodialisis #60 Agregar combo de doctor en pantalla Caja->Nuevo y sacar el Id del POST
                 var areaDoctorId = app.AreaDoctorId.Value;
 
                 var follow = new FollowsPrivate{

@@ -2225,6 +2225,8 @@ namespace AtencionClinica.Models
 
                 entity.HasIndex(e => e.Inss, "IX_Subsidies_Inss");
 
+                entity.HasIndex(e => e.OrderNumber, "IX_Subsidies_OrderNumber");
+
                 entity.HasIndex(e => e.Reference, "IX_Subsidies_Referencia");
 
                 entity.Property(e => e.Cie10Id)
@@ -2249,6 +2251,10 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.Observation)
                     .HasMaxLength(150)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OrderNumber)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Reference)

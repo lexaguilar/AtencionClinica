@@ -59,6 +59,12 @@ namespace AtencionClinica.Controllers
                 subsidies = subsidies.Where(x => x.Identification.StartsWith(identification));
             }
 
+            if (values.ContainsKey("orderNumber"))
+            {
+                var identification = Convert.ToString(values["orderNumber"]);
+                subsidies = subsidies.Where(x => x.OrderNumber.StartsWith(identification));
+            }
+
             if (values.ContainsKey("createAt"))
             {
                 var createAt = Convert.ToDateTime(values["createAt"]);
@@ -80,7 +86,8 @@ namespace AtencionClinica.Controllers
                 x.CreateAt,
                 x.CreateBy,
                 x.Active,
-                x.Identification
+                x.Identification,
+                x.OrderNumber
             });
 
             return Json(new
