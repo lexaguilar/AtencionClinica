@@ -35,9 +35,9 @@ namespace AtencionClinica.Controllers
              .Include(x => x.PrivateCustomer)            
             .OrderByDescending(x => x.CreateAt);
 
-            if (values.ContainsKey("name"))
+            if (values.ContainsKey("nombre"))
             {
-                var name = Convert.ToString(values["name"]);
+                var name = Convert.ToString(values["nombre"]);
                 bills = bills.Where(x => x.PrivateCustomer.FirstName.StartsWith(name) || x.PrivateCustomer.LastName.StartsWith(name));
             }
 
