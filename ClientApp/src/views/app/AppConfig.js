@@ -60,7 +60,7 @@ const AppConfig = () => {
         <div className="container small">
             <form onSubmit={onFormSubmit}>
                 <div className="dx-fieldset">
-                    <div className="dx-fieldset-header">Configuracion de la aplicacion</div>
+                    <div className="dx-fieldset-header">Configuracion de la Aplicación</div>
                     <DivFormColumns title='Validar precio'
                         description="Validar que el precio sea mayor al costo?">                        
                         <Switch style={{ float : "left" }}                        
@@ -93,20 +93,7 @@ const AppConfig = () => {
                                 <RequiredRule message="Este campo es requerido" />
                             </Validator>
                         </NumberBox>
-                    </DivFormColumns>
-                    <DivFormColumns title='Doctor Hemodialisis' required
-                        description="Seleccione el doc que de hemodialisis">                      
-                        <SelectBox                                       
-                            dataSource= {createStoreLocal({ name: 'Doctor', active: true })}
-                            value={app.areaDoctorId}                            
-                            onValueChanged={e => setApp(app => ({ ...app, areaDoctorId: e.value }))}
-                            {...editorOptionsSelect}
-                        >
-                            <Validator>
-                                <RequiredRule message="Este campo es requerido" />
-                            </Validator>
-                        </SelectBox>
-                    </DivFormColumns>
+                    </DivFormColumns>                    
                     
                 </div>
                 <Button 
