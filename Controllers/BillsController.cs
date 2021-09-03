@@ -35,9 +35,9 @@ namespace AtencionClinica.Controllers
              .Include(x => x.PrivateCustomer)            
             .OrderByDescending(x => x.CreateAt);
 
-            if (values.ContainsKey("name"))
+            if (values.ContainsKey("nombre"))
             {
-                var name = Convert.ToString(values["name"]);
+                var name = Convert.ToString(values["nombre"]);
                 bills = bills.Where(x => x.PrivateCustomer.FirstName.StartsWith(name) || x.PrivateCustomer.LastName.StartsWith(name));
             }
 
@@ -113,7 +113,7 @@ namespace AtencionClinica.Controllers
             {
                 if(app.AreaDoctorId == null)
                     return BadRequest("No se encuetra un medico configurado para los ingresos de hemodialisis");
-
+                //TODO: Hemodialisis #60 Agregar combo de doctor en pantalla Caja->Nuevo y sacar el Id del POST
                 var areaDoctorId = app.AreaDoctorId.Value;
 
                 var follow = new FollowsPrivate{

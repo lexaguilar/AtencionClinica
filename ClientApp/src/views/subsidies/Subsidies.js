@@ -140,6 +140,7 @@ const Subsidies = () => {
                 <Column dataField="inss"  width={100} />
                 <Column dataField="identification" caption="Identificacion" width={130}/>
                 <Column dataField="nombre" caption='Nombre' allowFiltering={false}/>
+                <Column dataField="orderNumber" caption="Numero de Orden" width={130}/>
                 <Column dataField="areaId" width={150} caption="Area procedencia">
                     <Lookup disabled={true} dataSource={createStore({name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 

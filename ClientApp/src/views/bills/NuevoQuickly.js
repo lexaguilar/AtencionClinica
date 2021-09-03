@@ -30,16 +30,16 @@ const NuevoQuickly = props => {
 
     //const { user } = useSelector(store => store);
 
-    const billDefaultQuickly = {...billDefault, areaId: areaRestrict.farmacia, billTypeId : billTypes.expontanea }
-  
-    const { authorized } = useAuthorization([resources.caja, dataAccess.create]);    
+    const billDefaultQuickly = { ...billDefault, areaId: areaRestrict.farmaciaPrivada, billTypeId: billTypes.expontanea }
+
+    const { authorized } = useAuthorization([resources.caja, dataAccess.create]);
 
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState({ ...billDefaultQuickly });
     const [procedimientos, setProcedimientos] = useState([]);
     const [services, setServices] = useState([]);
 
-    let dataGrid = React.createRef();      
+    let dataGrid = React.createRef();
 
     const loadServices = (areaId) => {
         http(`services/area/${areaId}/get`).asGet({ active: true }).then(resp => setServices(resp))
@@ -51,22 +51,22 @@ const NuevoQuickly = props => {
                 setBill({ ...bill, rate: rate.value });
         });
     }, [0]);
-    
+
 
     const onFormSubmit = (e) => {
-        
-       
+
+
         e.preventDefault();
 
         setLoading(true);
 
-        http(uri.bill.insert).asPost({ ...bill,privateCustomerId: 1, billDetails : [...procedimientos]}).then(resp => {
+        http(uri.bill.insert).asPost({ ...bill, privateCustomerId: 1, billDetails: [...procedimientos] }).then(resp => {
             if (resp) {
 
-                setLoading(false); 
+                setLoading(false);
                 const report = urlReport();
                 report.print(`${report.billTicket(resp.id)}`);
-                
+
                 routeReset(props);
 
             }
@@ -78,25 +78,25 @@ const NuevoQuickly = props => {
         });
     }
 
-    const onlyFarmacias = data =>data.filter(x => x.id == areaRestrict.farmacia || x.id  == areaRestrict.farmaciaPrivada);
-    
+    const onlyFarmacias = data => data.filter(x => x.id == areaRestrict.farmacia || x.id == areaRestrict.farmaciaPrivada);
+
     const title = 'Nueva factura';
 
     return authorized(
         <div className="container medium">
             <Title title={title} />
-            <BlockHeader title={title} >               
+            <BlockHeader title={title} >
             </BlockHeader>
             <form onSubmit={onFormSubmit}>
                 <div className="dx-fieldset">
-                    <DivForm title='Cliente'>                        
+                    <DivForm title='Cliente'>
                         <TextBox
                             placeholder="Ingrese el nombre del cliente"
                             defaultValue={bill.nameCustomer}
                             value={bill.nameCustomer}
                             onValueChanged={e => {
-                                setBill({ ...bill, nameCustomer: e.value })                             
-                        }}>
+                                setBill({ ...bill, nameCustomer: e.value })
+                            }}>
 
                         </TextBox>
                     </DivForm>
@@ -118,6 +118,7 @@ const NuevoQuickly = props => {
                     <DivForm title='Area' required>
                         <SelectBox
                             //disabled={true}
+                            defaultValue={bill.areaId}
                             value={bill.areaId}
                             onValueChanged={e => {
 
@@ -153,23 +154,23 @@ const NuevoQuickly = props => {
                     </DivForm>
                     <DivForm title='Observacion' >
                         <TextArea
-                         defaultValue={bill.observaction}
-                         value={bill.observaction}
-                         onValueChanged={e => {
-                             setBill({ ...bill, observaction: e.value })                             
-                         }}>
+                            defaultValue={bill.observaction}
+                            value={bill.observaction}
+                            onValueChanged={e => {
+                                setBill({ ...bill, observaction: e.value })
+                            }}>
 
                         </TextArea>
                     </DivForm>
-                    
+
                     <GridMedicamentos isClosing={true}
                         details={procedimientos}
-                        user={{ areaId : bill.areaId}} 
+                        user={{ areaId: bill.areaId }}
                         showPrice={true}
-                        currencyId = {bill.currencyId} 
+                        currencyId={bill.currencyId}
                         rate={bill.rate}
                     />
-                   
+
 
                 </div>
                 <Button
@@ -178,9 +179,9 @@ const NuevoQuickly = props => {
                     type="success"
                     icon='save'
                     disabled={loading}
-                    useSubmitBehavior={true}                
+                    useSubmitBehavior={true}
                 />
-            </form>            
+            </form>
         </div>
     );
 }
