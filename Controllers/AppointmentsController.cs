@@ -164,15 +164,9 @@ namespace AtencionClinica.Controllers
             appointment.Active = true;
 
 
+            var now = UserHelpers.GetTimeInfo();
 
-            var local = TimeZoneInfo.FindSystemTimeZoneById("Central America Standard Time");
-
-            //TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById(easternZoneId);
-            _logger.LogInformation($"{local.ToString()} IsDaylightSavingTime: {local.IsDaylightSavingTime(DateTime.Now).ToString()} StandardName:{local.StandardName} SupportsDaylightSavingTime: {local.SupportsDaylightSavingTime} DisplayName:{local.DisplayName}");
-
-            _logger.LogInformation(TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, local).ToString());
-
-            appointment.CreateAt = DateTime.Now;
+            appointment.CreateAt = now;
             appointment.CreateBy = user.Username;
             _db.Appointments.Add(appointment);  
            
