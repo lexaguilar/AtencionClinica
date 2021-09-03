@@ -82,6 +82,18 @@ const AppConfig = () => {
                             </Validator>
                         </NumberBox>
                     </DivFormColumns>
+                    <DivFormColumns title='Hora de diferencias'
+                        description="Indica hasta cuantas horas el beneficiario puede retirar medicamentos">                        
+                        <NumberBox                            
+                            value={app.admissionHoursDifferent}                           
+                            onValueChanged={e => setApp(app => ({ ...app, admissionHoursDifferent: e.value }))}
+                            {...editorOptionsNumberBox}
+                        >
+                            <Validator>
+                                <RequiredRule message="Este campo es requerido" />
+                            </Validator>
+                        </NumberBox>
+                    </DivFormColumns>
                     <DivFormColumns title='Doctor Hemodialisis' required
                         description="Seleccione el doc que de hemodialisis">                      
                         <SelectBox                                       
