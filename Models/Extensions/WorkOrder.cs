@@ -6,7 +6,7 @@ namespace AtencionClinica.Models{
 
         public void Init(ClinicaContext _db){
 
-            this.CreateAt = DateTime.Now;
+            this.CreateAt = UserHelpers.GetTimeInfo();
             this.Active = true;
 
         }
@@ -45,7 +45,7 @@ namespace AtencionClinica.Models{
 
                 if(admision.TypeId == (int)AdmisionTypes.Consulta)
                     if(admision.CreateAt.Date != DateTime.Today)
-                        if(Math.Abs((admision.CreateAt - DateTime.Now).TotalHours) > hours)
+                        if(Math.Abs((admision.CreateAt - UserHelpers.GetTimeInfo()).TotalHours) > hours)
                             return modelValidation.AsError($"No se puede despachar sin una admisión previa de hoy");
             
                 if(string.IsNullOrEmpty(this.Reference))

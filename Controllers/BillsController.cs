@@ -84,7 +84,7 @@ namespace AtencionClinica.Controllers
             //admission.Inss = bene.Inss;
             bill.Active = true;
             bill.Total = bill.BillDetails.Sum(x => x.Total);
-            bill.CreateAt = DateTime.Now;
+            bill.CreateAt = UserHelpers.GetTimeInfo();
             bill.CreateBy = user.Username;
           
 
@@ -121,7 +121,7 @@ namespace AtencionClinica.Controllers
                     AreaSourceId = 3, //caja
                     AreaTargetId = bill.AreaId,
                     Observation = "Tranferencia automatica desde caja",
-                    CreateAt = DateTime.Now,
+                    CreateAt = UserHelpers.GetTimeInfo(),
                     CreateBy = user.Username                
                 };
 
@@ -129,8 +129,8 @@ namespace AtencionClinica.Controllers
 
                     var work = new PrivateWorkOrder{
 
-                        Date = DateTime.Now,
-                        CreateAt = DateTime.Now,
+                        Date = UserHelpers.GetTimeInfo(),
+                        CreateAt = UserHelpers.GetTimeInfo(),
                         CreateBy = user.Username,
                         DoctorId = areaDoctorId,
                         Active = true,   

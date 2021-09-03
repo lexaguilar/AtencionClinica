@@ -107,7 +107,7 @@ namespace AtencionClinica.Controllers
                 AreaSourceId = admision.AreaId,
                 AreaTargetId = user.AreaId,
                 Observation = "Autotranferido",
-                CreateAt = DateTime.Now,
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username,
 
             };
@@ -161,9 +161,9 @@ namespace AtencionClinica.Controllers
 
             SendTest sendTest = new SendTest
             {
-                Date = DateTime.Now,
+                Date = UserHelpers.GetTimeInfo(),
                 DoctorId = workOrder.DoctorId,
-                CreateAt = DateTime.Now,
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username,
             };
 

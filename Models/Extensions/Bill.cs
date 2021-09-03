@@ -11,7 +11,7 @@ namespace AtencionClinica.Models
             var app = _db.Apps.FirstOrDefault();
 
             this.Active = true;
-            this.CreateAt = DateTime.Now;
+            this.CreateAt = UserHelpers.GetTimeInfo();
 
             var rate = _db.Rates.FirstOrDefault(x => x.Date == this.CreateAt);
             if (rate != null)

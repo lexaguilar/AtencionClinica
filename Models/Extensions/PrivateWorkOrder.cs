@@ -6,7 +6,7 @@ namespace AtencionClinica.Models{
 
         public void Init(ClinicaContext _db){
 
-            this.CreateAt = DateTime.Now;
+            this.CreateAt = UserHelpers.GetTimeInfo();
             this.Active = true;
 
         }

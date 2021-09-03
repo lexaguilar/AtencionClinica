@@ -148,7 +148,7 @@ namespace AtencionClinica.Controllers
                 });
 
                 oldProduct.LastModificationBy = user.Username;
-                oldProduct.LastDateModificationAt = DateTime.Now;
+                oldProduct.LastDateModificationAt = UserHelpers.GetTimeInfo();
 
                 _db.SaveChanges();
             }
@@ -162,8 +162,8 @@ namespace AtencionClinica.Controllers
                 product.CreateBy = user.Username;
                 product.LastModificationBy = user.Username;
 
-                product.CreateAt = DateTime.Now;
-                product.LastDateModificationAt = DateTime.Now;
+                product.CreateAt = UserHelpers.GetTimeInfo();
+                product.LastDateModificationAt = UserHelpers.GetTimeInfo();
 
                 product.CurrencyId = 1;
 
@@ -391,11 +391,11 @@ namespace AtencionClinica.Controllers
                                 StockMin = stock,
 
                                 CreateBy = user.Username,
-                                CreateAt = DateTime.Now,
+                                CreateAt = UserHelpers.GetTimeInfo(),
                                 HasIva = false,
                                 StateId = 1,
                                 LastModificationBy = user.Username,
-                                LastDateModificationAt = DateTime.Now,                              
+                                LastDateModificationAt = UserHelpers.GetTimeInfo(),                              
 
                             });
 

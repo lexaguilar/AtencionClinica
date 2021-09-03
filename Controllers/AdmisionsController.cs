@@ -257,7 +257,7 @@ namespace AtencionClinica.Controllers
             admission.Identification = bene.Identification;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
-            admission.CreateAt = DateTime.Now;
+            admission.CreateAt = UserHelpers.GetTimeInfo();
             admission.CreateBy = user.Username;
             _db.Admissions.Add(admission);    
 
@@ -266,7 +266,7 @@ namespace AtencionClinica.Controllers
                 AreaSourceId = user.AreaId,
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
-                CreateAt = DateTime.Now,
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username                
             };
 
@@ -337,7 +337,7 @@ namespace AtencionClinica.Controllers
             admission.Identification = bene.Identification;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
-            admission.CreateAt = DateTime.Now;
+            admission.CreateAt = UserHelpers.GetTimeInfo();
             admission.CreateBy = user.Username;            
 
             var follow = new Follow{
@@ -346,7 +346,7 @@ namespace AtencionClinica.Controllers
                 AreaSourceId = user.AreaId,
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
-                CreateAt = DateTime.Now,
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username          
 
             }; 

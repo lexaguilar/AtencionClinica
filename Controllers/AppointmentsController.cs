@@ -158,11 +158,9 @@ namespace AtencionClinica.Controllers
 
             var bene = _db.Beneficiaries.FirstOrDefault(x => x.Id == appointment.BeneficiaryId);
             
-            _logger.LogInformation(TimeZoneInfo.Local.ToString());
             appointment.Inss = bene.Inss;
             appointment.Identification = bene.Identification;
             appointment.Active = true;
-
 
             var now = UserHelpers.GetTimeInfo();
 

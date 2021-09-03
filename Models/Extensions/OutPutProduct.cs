@@ -10,7 +10,7 @@ namespace AtencionClinica.Models{
             this.CurrencyId = app.DefaultCurrency;
             
             this.StateId = 1;
-            this.CreateAt = DateTime.Now;
+            this.CreateAt = UserHelpers.GetTimeInfo();
 
             var rate = _db.Rates.FirstOrDefault(x => x.Date == this.Date);
             if(rate != null)

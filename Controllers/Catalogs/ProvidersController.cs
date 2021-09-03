@@ -42,8 +42,8 @@ namespace AtencionClinica.Controllers
              
             provider.ToUpperCase();
 
-            provider.CreateAt = DateTime.Now;
-            provider.LastDateModificationAt = DateTime.Now;
+            provider.CreateAt = UserHelpers.GetTimeInfo();
+            provider.LastDateModificationAt = UserHelpers.GetTimeInfo();
 
             if(provider.Id == 0){
                 provider.CreateBy = user.Username;

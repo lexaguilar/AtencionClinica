@@ -112,7 +112,7 @@ namespace AtencionClinica.Controllers
                 return BadRequest("La admision ya no esta valida porque ya ha sido egresado el paciente");
 
             follow.AreaSourceId = user.AreaId;
-            follow.CreateAt = DateTime.Now;
+            follow.CreateAt = UserHelpers.GetTimeInfo();
             follow.CreateBy = user.Username;
 
             _db.Follows.Add(follow);
@@ -138,7 +138,7 @@ namespace AtencionClinica.Controllers
             if (admission.Finished)
                 return BadRequest("La admision ya no esta valida porque ya ha sido egresado el paciente");
 
-            workPreOrder.CreateAt = DateTime.Now;
+            workPreOrder.CreateAt = UserHelpers.GetTimeInfo();
             workPreOrder.CreateBy = user.Username;
             workPreOrder.Used = false;
 
@@ -147,7 +147,7 @@ namespace AtencionClinica.Controllers
             follow.AreaTargetId = areaTargetId;
             follow.AreaSourceId = user.AreaId;
             follow.Observation = workPreOrder.Observation;
-            follow.CreateAt = DateTime.Now;
+            follow.CreateAt = UserHelpers.GetTimeInfo();
             follow.CreateBy = user.Username;
             follow.WorkPreOrders.Add(workPreOrder);
 
@@ -185,16 +185,16 @@ namespace AtencionClinica.Controllers
 
 
 
-            sendTest.CreateAt = DateTime.Now;
+            sendTest.CreateAt = UserHelpers.GetTimeInfo();
             sendTest.CreateBy = user.Username;
-            sendTest.Date = DateTime.Now;
+            sendTest.Date = UserHelpers.GetTimeInfo();
 
             var follow = new Follow();
             follow.AdmissionId = admissionId;
             follow.AreaTargetId = areaTargetId;
             follow.AreaSourceId = user.AreaId;
             follow.Observation = "Transferencia a laboratorio";
-            follow.CreateAt = DateTime.Now;
+            follow.CreateAt = UserHelpers.GetTimeInfo();
             follow.CreateBy = user.Username;
             follow.SendTests.Add(sendTest);
 
@@ -202,8 +202,8 @@ namespace AtencionClinica.Controllers
             var serviceTest = new ServiceTest
             {
                 SendTest = sendTest,
-                Date = DateTime.Now,
-                CreateAt = DateTime.Now,
+                Date = UserHelpers.GetTimeInfo(),
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username,
                 DoctorId = sendTest.DoctorId,
             };
