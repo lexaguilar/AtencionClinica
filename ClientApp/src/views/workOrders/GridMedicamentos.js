@@ -190,7 +190,7 @@ const GridMedicamentos = ({useStandar = false, validate = [], detailsServices=[]
             showRowLines={true}
             allowColumnResizing={true}
             allowColumnReordering={true}
-            height={300}
+            height={230}
             onToolbarPreparing={onToolbarPreparing}
             onCellPrepared={onCellPrepared}
         >

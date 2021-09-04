@@ -50,7 +50,7 @@ const GridProcedimientos = ({detailsServices=[], open, user, rate}) => {
             showRowLines={true}
             allowColumnResizing={true}
             allowColumnReordering={true}
-            height={200}
+            height={160}
             onToolbarPreparing={onToolbarPreparing}
             onCellPrepared={onCellPrepared}
         >

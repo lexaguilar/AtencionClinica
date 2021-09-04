@@ -189,11 +189,17 @@ namespace AtencionClinica.Controllers
                 if(bill.Finished)
                     return BadRequest("No se puede anular una factura que ya fue procesada por las areas");
 
-                var follow = _db.FollowsPrivates.Include(x => x.PrivateWorkOrders).Where(x => x.BillId == id);
+                var follow = _db.FollowsPrivates.Include(x => x.PrivateWorkOrders).ThenInclude(x => x.PrivateWorkOrderDetails)
+                .Where(x => x.BillId == id);
+
                 foreach (var item in follow)
                 {
-                    if(item.PrivateWorkOrders.Count > 0)
-                    return BadRequest("No se puede anular la factura porque ya tiene ordenes de trabajo realizadas");
+
+                    foreach (var work in item.PrivateWorkOrders){
+                        if(work.PrivateWorkOrderDetails.Any(x => !x.IsService))
+                            return BadRequest("No se puede anular la factura porque ya tiene ordenes de trabajo con productos realizadas");
+                    }
+
                 }
 
                 bill.Active = false;

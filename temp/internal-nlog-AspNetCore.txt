@@ -150,3 +150,7 @@
 2021-09-02 22:33:17.8365 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.10.13013. Product version: 4.7.10+8142cd035d2c212fd82a4eb0081aed68da713b9e. GlobalAssemblyCache: False
 2021-09-02 22:33:17.9441 Info AppDomain Shutting down. Logger closing...
 2021-09-02 22:33:17.9628 Info Logger has been shut down.
+2021-09-03 20:25:49.9289 Info Message Template Auto Format enabled
+2021-09-03 20:25:49.9289 Info Loading assembly: NLog.Web.AspNetCore
+2021-09-03 20:25:49.9893 Info Adding target DatabaseTarget(Name=db)
+2021-09-03 20:25:50.0210 Info Validating config: TargetNames=db, ConfigItems=34, FilePath=C:\Users\Lex Aguilar\Documents\Proyectos\Clinica\AtencionClinica\bin\Debug\net5.0\nlog.config

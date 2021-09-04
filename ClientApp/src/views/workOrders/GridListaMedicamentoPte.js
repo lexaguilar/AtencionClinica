@@ -5,34 +5,34 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import { createProxy } from '../../utils/proxy';
 import { formatDate } from '../../data/app';
 
-const GridListaMedicamentoPte = ({ beneficiaryId=0, customerId=0 }) => {
+const GridListaMedicamentoPte = ({ beneficiaryId = 0, customerId = 0 }) => {
 
-    let store = [];
+    let localStore = [];
 
-    if(beneficiaryId > 0)
-        store = store({uri : createProxy(`beneficiaries/${beneficiaryId}/products`) });
-        
-    if(customerId > 0)
-        store = store({uri : createProxy(`privateCustomers/${customerId}/products`) });
+    if (beneficiaryId > 0)
+        localStore = store({ uri: createProxy(`beneficiaries/${beneficiaryId}/products`) });
+
+    if (customerId > 0)
+        localStore = store({ uri: createProxy(`privateCustomers/${customerId}/products`) });
 
     const title = 'Ultimos medicamentos despacho al paciente';
 
     return (
         <div className="mr-10">
-            <BlockHeader title={title}/>
+            <BlockHeader title={title} />
             <DataGrid id="gridContainer"
                 selection={{ mode: 'single' }}
-                dataSource={store}
+                dataSource={localStore}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
                 allowColumnReordering={true}
-            >          
-                <Column dataField="date" caption="Fecha" width={170} dataType='date'  format={formatDate}/> 
-                <Column dataField="product" caption="Medicamento"/> 
-                <Column dataField="quantity" caption='Cantidad'  width={100} />        
-                <Column dataField="doctor" caption="Medico" width={130}/> 
-                <Column dataField="createBy" caption="Creado por" width={130}/> 
+            >
+                <Column dataField="date" caption="Fecha" width={170} dataType='date' format={formatDate} />
+                <Column dataField="product" caption="Medicamento" />
+                <Column dataField="quantity" caption='Cantidad' width={100} />
+                <Column dataField="doctor" caption="Medico" width={130} />
+                <Column dataField="createBy" caption="Creado por" width={130} />
             </DataGrid>
         </div>
     );
