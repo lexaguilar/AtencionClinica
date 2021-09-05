@@ -7,7 +7,7 @@ namespace AtencionClinica.Models
     {
         public void Init()
         {
-            this.CreateAt = DateTime.Now;
+            this.CreateAt = UserHelpers.GetTimeInfo();
         }
 
 

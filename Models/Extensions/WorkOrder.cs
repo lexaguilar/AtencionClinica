@@ -6,7 +6,7 @@ namespace AtencionClinica.Models{
 
         public void Init(ClinicaContext _db){
 
-            this.CreateAt = DateTime.Now;
+            this.CreateAt = UserHelpers.GetTimeInfo();
             this.Active = true;
 
         }
@@ -22,6 +22,12 @@ namespace AtencionClinica.Models{
             modelValidation.model = this;
 
             Area area = null;
+
+            App app = _db.Apps.FirstOrDefault();
+            
+            var hours = 8;
+            if(app != null)
+                hours = app.AdmissionHoursDifferent??8;
 
             if(validateAll){
 
@@ -39,7 +45,8 @@ namespace AtencionClinica.Models{
 
                 if(admision.TypeId == (int)AdmisionTypes.Consulta)
                     if(admision.CreateAt.Date != DateTime.Today)
-                        return modelValidation.AsError($"No se puede despachar sin una admisión previa de hoy");
+                        if(Math.Abs((admision.CreateAt - UserHelpers.GetTimeInfo()).TotalHours) > hours)
+                            return modelValidation.AsError($"No se puede despachar sin una admisión previa de hoy");
             
                 if(string.IsNullOrEmpty(this.Reference))
                     return modelValidation.AsError($"La referencia de la orden es necesaria");

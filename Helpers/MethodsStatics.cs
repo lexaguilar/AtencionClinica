@@ -46,6 +46,17 @@ namespace AtencionClinica
             return numbers;
         }
 
+        //Get TimeInfo
+        internal static DateTime GetTimeInfo(){
+
+            var central = TimeZoneInfo.FindSystemTimeZoneById("Central America Standard Time");
+          
+            var newDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, central);
+
+            return newDate;
+
+        }
+
     
     }
 }

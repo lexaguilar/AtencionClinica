@@ -12,6 +12,7 @@ namespace AtencionClinica
     public enum ClientType { Private = 1, Contract = 2 }
     public enum AdmisionTypes { Consulta = 1, IngresoHops = 2 }
     public enum BillTypes { FacturaIngreso = 1, Expontanea = 2 }
+    public enum CustomerTypes { Inss = 1, Facultativo = 4 }
     public enum PrivateCustomers { ClienteContado = 1 }
     public enum TraslateStages { Pendiente = 1, Anulado = 2, Procesado = 3 }
 

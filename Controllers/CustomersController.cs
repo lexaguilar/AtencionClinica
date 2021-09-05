@@ -24,11 +24,54 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/customers/get")]
-        public IActionResult Get() 
+        public IActionResult Get(bool active) 
         {
-            var result = _db.Customers.Where(x => x.CustomerStatusId == 1);
+            IQueryable<Customer> result = _db.Customers;
+            if (active)
+                result = result.Where(x => x.CustomerStatusId == 1);   
+            else
+                result = result.Where(x => x.CustomerStatusId == 2);         
 
             return Json(result);
+        }
+
+        [Route("api/customers/get/{inss}/principal")]
+        public IActionResult GetPrincipal(int inss) 
+        {
+           
+            var result = _db.Customers.FirstOrDefault(x => x.Inss == inss);            
+
+            return Json(result);
+        }
+
+        [Route("api/customers/post")]
+        public IActionResult Get([FromBody]Customer customer)
+        {
+
+            var customerUpdate = _db.Customers.FirstOrDefault(x => x.Inss == customer.Inss);
+            if (customerUpdate == null)
+            {
+
+                customer.DateAdd = DateTime.Today;
+                customer.CustomerStatusId = 1;
+                customer.CustomerTypeId = (int)CustomerTypes.Facultativo;
+
+                _db.Customers.Add(customer);                
+             
+
+            }else{
+
+                if (customerUpdate.CustomerTypeId != (int)CustomerTypes.Facultativo)
+                    return BadRequest("El asegurado no es facultativo, no se puede editar");
+
+                customerUpdate.CopyFrom(customer, x => new { x.FirstName, x.LastName, x.PatronalId, x.Identification, x.CustomerStatusId });
+
+            }
+
+            _db.SaveChanges();
+
+            return Json(customer);
+           
         }
 
         [Route("api/customers/get/{inss}")]
@@ -112,7 +155,7 @@ namespace AtencionClinica.Controllers
                     inss= customer.Inss,
                     lastName= customer.LastName,
                     patronalId= customer.PatronalId,
-                    patronal = percapita == null ? "" : percapita.Rason
+                    patronal = percapita == null ? "Facultativo" : percapita.Rason
                 };
         }
     }

@@ -44,7 +44,8 @@ namespace AtencionClinica.Controllers
                 new {  
                     x.ValidatePriceGreaterCost, 
                     x.MinAgeToAdmission, 
-                    x.AreaDoctorId 
+                    x.AreaDoctorId ,
+                    x.AdmissionHoursDifferent
                 });
 
             db.SaveChanges();

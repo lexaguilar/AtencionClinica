@@ -22,6 +22,7 @@ import BlockHeader from '../../components/shared/BlockHeader';
 import Nuevo from './Nuevo';
 import useAuthorization from '../../hooks/useAuthorization';
 import { dataAccess, resources } from '../../data/app';
+import FromExcel from './FromExcel';
 
 
 const Products = () => {
@@ -49,6 +50,7 @@ const Products = () => {
                     icon='plus'
                     onClick={openDialog}
                 />
+                <FromExcel  onSave={reload}/>
             </BlockHeader>
             <Nuevo onSave={reload}/>
             <DataGrid id="gridContainer"

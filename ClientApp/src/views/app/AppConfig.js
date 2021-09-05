@@ -60,7 +60,7 @@ const AppConfig = () => {
         <div className="container small">
             <form onSubmit={onFormSubmit}>
                 <div className="dx-fieldset">
-                    <div className="dx-fieldset-header">Configuracion de la aplicacion</div>
+                    <div className="dx-fieldset-header">Configuracion de la Aplicación</div>
                     <DivFormColumns title='Validar precio'
                         description="Validar que el precio sea mayor al costo?">                        
                         <Switch style={{ float : "left" }}                        
@@ -82,19 +82,18 @@ const AppConfig = () => {
                             </Validator>
                         </NumberBox>
                     </DivFormColumns>
-                    <DivFormColumns title='Doctor Hemodialisis' required
-                        description="Seleccione el doc que de hemodialisis">                      
-                        <SelectBox                                       
-                            dataSource= {createStoreLocal({ name: 'Doctor', active: true })}
-                            value={app.areaDoctorId}                            
-                            onValueChanged={e => setApp(app => ({ ...app, areaDoctorId: e.value }))}
-                            {...editorOptionsSelect}
+                    <DivFormColumns title='Hora de diferencias'
+                        description="Indica hasta cuantas horas el beneficiario puede retirar medicamentos">                        
+                        <NumberBox                            
+                            value={app.admissionHoursDifferent}                           
+                            onValueChanged={e => setApp(app => ({ ...app, admissionHoursDifferent: e.value }))}
+                            {...editorOptionsNumberBox}
                         >
                             <Validator>
                                 <RequiredRule message="Este campo es requerido" />
                             </Validator>
-                        </SelectBox>
-                    </DivFormColumns>
+                        </NumberBox>
+                    </DivFormColumns>                    
                     
                 </div>
                 <Button 

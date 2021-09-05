@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace AtencionClinica.Controllers
 {
@@ -145,7 +148,7 @@ namespace AtencionClinica.Controllers
                 });
 
                 oldProduct.LastModificationBy = user.Username;
-                oldProduct.LastDateModificationAt = DateTime.Now;
+                oldProduct.LastDateModificationAt = UserHelpers.GetTimeInfo();
 
                 _db.SaveChanges();
             }
@@ -159,8 +162,8 @@ namespace AtencionClinica.Controllers
                 product.CreateBy = user.Username;
                 product.LastModificationBy = user.Username;
 
-                product.CreateAt = DateTime.Now;
-                product.LastDateModificationAt = DateTime.Now;
+                product.CreateAt = UserHelpers.GetTimeInfo();
+                product.LastDateModificationAt = UserHelpers.GetTimeInfo();
 
                 product.CurrencyId = 1;
 
@@ -200,13 +203,13 @@ namespace AtencionClinica.Controllers
             if (product.StateId != 1)
                 return BadRequest($"El producto con Id {productId} no esta activo");
 
-            if(product.ConvertProductId == null)
+            if (product.ConvertProductId == null)
                 return BadRequest($"No se ha especificado un producto de conversion para el producto con Id {productId} ");
 
-            if(product.ConvertProductQuantity == null)
+            if (product.ConvertProductQuantity == null)
                 return BadRequest($"No se ha especificado la cantidad de conversion para el producto con Id {productId}");
 
-            if(product.ConvertProductQuantity <= 0)
+            if (product.ConvertProductQuantity <= 0)
                 return BadRequest($"La cantidad de conversion para el producto con Id {productId} debe ser mayor a 0");
 
             var itemsOutPut = new List<OutPutProductDetail>();
@@ -242,19 +245,22 @@ namespace AtencionClinica.Controllers
 
 
             //Entradas
-            var productIdInPut = (product.ConvertProductId??0);
-            var quantityInPut =  product.ConvertProductQuantity??0;
+            var productIdInPut = (product.ConvertProductId ?? 0);
+            var quantityInPut = product.ConvertProductQuantity ?? 0;
             var areaProductoInPut = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == user.AreaId && x.ProductId == productIdInPut);
 
 
             var cost = 0M;
             var price = 0M;
-            if(areaProductoInPut != null){
+            if (areaProductoInPut != null)
+            {
 
                 cost = areaProductoInPut.CostAvg;
                 price = areaProductoInPut.Price;
 
-            }else{
+            }
+            else
+            {
 
                 cost = areaProductoOutPut.CostAvg / Convert.ToDecimal(quantityInPut);
                 price = areaProductoOutPut.Price / Convert.ToDecimal(quantityInPut);
@@ -262,7 +268,7 @@ namespace AtencionClinica.Controllers
             }
 
             var itemsInPut = new List<InPutProductDetail>();
-            
+
             itemsInPut.Add(new InPutProductDetail
             {
                 ProductId = productIdInPut,
@@ -270,7 +276,7 @@ namespace AtencionClinica.Controllers
                 Cost = cost,
                 Price = price,
                 Discount = 0
-            });            
+            });
 
             var inPutProduct = new InPutProduct
             {
@@ -278,7 +284,7 @@ namespace AtencionClinica.Controllers
                 TypeId = (int)InputType.Conversion,
                 Date = DateTime.Today,
                 Observation = "Entrada por conversion de unidades",
-                 CreateBy = user.Username,
+                CreateBy = user.Username,
                 Reference = "",
                 InPutProductDetails = itemsInPut
             };
@@ -286,13 +292,132 @@ namespace AtencionClinica.Controllers
 
             var resultInPut = _serviceInPut.Create(inPutProduct);
 
-             if (!resultInPut.IsValid)
+            if (!resultInPut.IsValid)
                 return BadRequest(resultInPut.Error);
 
             _db.SaveChanges();
 
             return Json(new { n = productId });
         }
+
+
+
+        [HttpPost("api/products/post/file")]
+        public IActionResult PostFile(int year, int month, IFormFile file)
+        {
+
+            var user = this.GetAppUser(_db);
+
+            var families = _db.Families.ToArray();
+            var ums = _db.UnitOfMeasures.ToArray();
+            var presentations = _db.Presentations.ToArray();
+            var currencies = _db.Currencies.ToArray();
+
+
+            if (file.Length > 0)
+            {
+                ISheet sheet;
+                using (var stream = file.OpenReadStream())
+                {
+                    var sFileExtension = file.FileName.Split(".").Last();
+
+                    if (string.IsNullOrEmpty(sFileExtension))
+                        return NotFound("No se encontro la extension del archivo");
+
+                    stream.Position = 0;
+                    if (sFileExtension == "xls")
+                    {
+                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
+                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
+                    }
+                    else
+                    {
+                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
+                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
+                    }
+
+                    IRow headerRow = sheet.GetRow(0); //Get Header Row
+                    int cellCount = headerRow.LastCellNum;
+                    for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++) //Read Excel File
+                    {
+                        IRow row = sheet.GetRow(i);
+                        if (row == null) continue;
+
+                        if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+
+                        try
+                        {
+                            string name = row.GetCell(0).ToString();
+                            string description = row.GetCell(1).StringCellValue;
+
+                            string familyName = row.GetCell(2).StringCellValue;
+                            string laboratoryName = row.GetCell(3).StringCellValue;
+                            string umName = row.GetCell(4).StringCellValue;
+                            string currencyName = row.GetCell(5).StringCellValue;
+
+                            double stock = row.GetCell(6).NumericCellValue;
+
+                            var product = _db.Products.FirstOrDefault(x => x.Name == name.Trim());
+                            if (product != null)
+                                return BadRequest($"El producto {product.Name} ya existe");
+
+                            var familyId = families.FirstOrDefault(x => x.Name == familyName.Trim())?.Id;
+                            if (familyId == null)
+                                return BadRequest($"No se encontro la familia con nombre {familyName}");
+
+                            var umId = ums.FirstOrDefault(x => x.Name == umName.Trim())?.Id;
+                            if (umId == null)
+                                return BadRequest($"No se encontro la unidad de medida con nombre {umName}");
+
+                            var presentationId = presentations.FirstOrDefault(x => x.Name == laboratoryName.Trim())?.Id;
+                            if (presentationId == null)
+                                return BadRequest($"No se encontro el laboratorio con nombre {laboratoryName}");
+
+                            var currencyId = currencies.FirstOrDefault(x => x.Name == currencyName.Trim())?.Id;
+                            if (currencyId == null)
+                                return BadRequest($"No se encontro la moneda con nombre {currencyName}");
+
+
+                            _db.Products.Add(new Product
+                            {
+                                Name = name,
+                                Description = description,
+
+                                FamilyId = familyId.Value,
+                                PresentationId = presentationId.Value,
+                                UnitOfMeasureId = umId.Value,
+                                CurrencyId = currencyId.Value,
+
+                                StockMin = stock,
+
+                                CreateBy = user.Username,
+                                CreateAt = UserHelpers.GetTimeInfo(),
+                                HasIva = false,
+                                StateId = 1,
+                                LastModificationBy = user.Username,
+                                LastDateModificationAt = UserHelpers.GetTimeInfo(),                              
+
+                            });
+
+                        }
+                        catch (FormatException ex)
+                        {
+                            return BadRequest($"Un error ocurrio " + ex.Message);
+                        }
+                    }
+
+                    _db.SaveChanges();
+
+                }
+            }
+
+            return Json(new
+            {
+                name = file.FileName,
+                size = file.Length
+            });
+        }
+
 
     }
 }

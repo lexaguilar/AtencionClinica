@@ -116,7 +116,7 @@ namespace AtencionClinica.Controllers
             subsidy.Inss = bene.Inss;
             subsidy.Identification = bene.Identification;
             subsidy.Active = true;
-            subsidy.CreateAt = DateTime.Now;
+            subsidy.CreateAt = UserHelpers.GetTimeInfo();
             subsidy.CreateBy = user.Username;
             _db.Subsidies.Add(subsidy);    
 

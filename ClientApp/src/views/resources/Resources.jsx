@@ -48,7 +48,7 @@ const Resources = props => {
                         showClearButton={true} valueExpr="id" displayExpr="name" onValueChanged={changeHandler} />
                 </Item>
             </Box>
-            <Box direction="row" width="100%" height={75}>
+            <Box direction="row" width="100%">
 
                 <Item ratio={1}>
                     <label>Acceso a recursos</label>

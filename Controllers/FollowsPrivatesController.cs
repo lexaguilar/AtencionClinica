@@ -80,7 +80,7 @@ namespace AtencionClinica.Controllers
                 return BadRequest("La factura ya no es valida porque ya ha sido egresado el paciente");
                 
             follow.AreaSourceId = user.AreaId;
-            follow.CreateAt = DateTime.Now;
+            follow.CreateAt = UserHelpers.GetTimeInfo();
             follow.CreateBy = user.Username;
 
             _db.FollowsPrivates.Add(follow);
@@ -108,7 +108,7 @@ namespace AtencionClinica.Controllers
             if (bill.Finished)
                 return BadRequest("La factura ya no esta valida porque ya ha sido egresado el paciente");
 
-            workPreOrder.CreateAt = DateTime.Now;
+            workPreOrder.CreateAt = UserHelpers.GetTimeInfo();
             workPreOrder.CreateBy = user.Username;
             workPreOrder.Used = false;
 
@@ -117,7 +117,7 @@ namespace AtencionClinica.Controllers
             follow.AreaTargetId = areaTargetId;
             follow.AreaSourceId = user.AreaId;
             follow.Observation = workPreOrder.Observation;
-            follow.CreateAt = DateTime.Now;
+            follow.CreateAt = UserHelpers.GetTimeInfo();
             follow.CreateBy = user.Username;
             follow.PrivateWorkPreOrders.Add(workPreOrder);
 
@@ -156,16 +156,16 @@ namespace AtencionClinica.Controllers
 
 
 
-            sendTest.CreateAt = DateTime.Now;
+            sendTest.CreateAt = UserHelpers.GetTimeInfo();
             sendTest.CreateBy = user.Username;
-            sendTest.Date = DateTime.Now;
+            sendTest.Date = UserHelpers.GetTimeInfo();
 
             var follow = new FollowsPrivate();
             follow.BillId = billId;
             follow.AreaTargetId = areaTargetId;
             follow.AreaSourceId = user.AreaId;
             follow.Observation = "Transferencia a laboratorio";
-            follow.CreateAt = DateTime.Now;
+            follow.CreateAt = UserHelpers.GetTimeInfo();
             follow.CreateBy = user.Username;
             follow.PrivateSendTests.Add(sendTest);
 
@@ -173,8 +173,8 @@ namespace AtencionClinica.Controllers
             var serviceTest = new PrivateServiceTest
             {
                 SendTest = sendTest,
-                Date = DateTime.Now,
-                CreateAt = DateTime.Now,
+                Date = UserHelpers.GetTimeInfo(),
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username
                 ,
                 DoctorId = sendTest.DoctorId,

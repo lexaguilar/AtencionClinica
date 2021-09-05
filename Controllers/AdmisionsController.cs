@@ -251,13 +251,13 @@ namespace AtencionClinica.Controllers
 
             if(bene.RelationshipId == 2) //Hijo
                 if( (DateTime.Today - bene.BirthDate).Days/365 >= minAgeToAdmission)
-                    return BadRequest("Solo se permiten admisiones para los hijos edad igual 13 años o menor");
+                    return BadRequest($"Solo se permiten admisiones para los hijos edad igual {minAgeToAdmission} años o menor");
 
             admission.Inss = bene.Inss;
             admission.Identification = bene.Identification;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
-            admission.CreateAt = DateTime.Now;
+            admission.CreateAt = UserHelpers.GetTimeInfo();
             admission.CreateBy = user.Username;
             _db.Admissions.Add(admission);    
 
@@ -266,7 +266,7 @@ namespace AtencionClinica.Controllers
                 AreaSourceId = user.AreaId,
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
-                CreateAt = DateTime.Now,
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username                
             };
 
@@ -337,7 +337,7 @@ namespace AtencionClinica.Controllers
             admission.Identification = bene.Identification;
             admission.Active = true;
             admission.NumberOfDay = getMaxAdmissionOfDay();
-            admission.CreateAt = DateTime.Now;
+            admission.CreateAt = UserHelpers.GetTimeInfo();
             admission.CreateBy = user.Username;            
 
             var follow = new Follow{
@@ -346,7 +346,7 @@ namespace AtencionClinica.Controllers
                 AreaSourceId = user.AreaId,
                 AreaTargetId = admission.AreaId,
                 Observation = "Tranferencia automatica de admision",
-                CreateAt = DateTime.Now,
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = user.Username          
 
             }; 

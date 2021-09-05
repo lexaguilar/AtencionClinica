@@ -108,13 +108,13 @@ namespace AtencionClinica.Controllers
                     x.InssAlternative
                 });
 
-                oldBeneficiario.LastDateModificationAt = DateTime.Now;
+                oldBeneficiario.LastDateModificationAt = UserHelpers.GetTimeInfo();
                 oldBeneficiario.LastModificationBy = user.Username;
 
                 _db.SaveChanges();
             }else{
 
-                beneficiario.CreateAt = DateTime.Now;
+                beneficiario.CreateAt = UserHelpers.GetTimeInfo();
                 beneficiario.CreateBy = user.Username;
 
                 _db.Beneficiaries.Add(beneficiario);

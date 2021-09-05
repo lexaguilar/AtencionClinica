@@ -203,7 +203,7 @@ namespace AtencionClinica.Controllers
                     x.ContractId                
                 });
 
-                oldprivateCustomer.LastDateModificationAt = DateTime.Now;
+                oldprivateCustomer.LastDateModificationAt = UserHelpers.GetTimeInfo();
                 oldprivateCustomer.LastModificationBy = user.Username;
 
                 _db.SaveChanges();
@@ -211,7 +211,7 @@ namespace AtencionClinica.Controllers
 
                 privateCustomer.ToUpperCase();
 
-                privateCustomer.CreateAt = DateTime.Now;
+                privateCustomer.CreateAt = UserHelpers.GetTimeInfo();
                 privateCustomer.CreateBy = user.Username;
 
                 _db.PrivateCustomers.Add(privateCustomer);

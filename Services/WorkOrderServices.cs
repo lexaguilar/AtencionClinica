@@ -77,8 +77,8 @@ namespace AtencionClinica.Services
             var serviceTest = new ServiceTest
             {
                 SendTest = sendTest,
-                Date = DateTime.Now,
-                CreateAt = DateTime.Now,
+                Date = UserHelpers.GetTimeInfo(),
+                CreateAt = UserHelpers.GetTimeInfo(),
                 CreateBy = sendTest.CreateBy,
                 DoctorId = sendTest.DoctorId,
             };
