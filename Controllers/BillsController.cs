@@ -111,8 +111,7 @@ namespace AtencionClinica.Controllers
 
             if(bill.PrivateCustomerId != (int)PrivateCustomers.ClienteContado)
             {
-                if(app.AreaDoctorId == null)
-                    return BadRequest("No se encuetra un medico configurado para los ingresos de hemodialisis");
+               
 
                 var areaDoctorId = bill.AreaDoctorId;
 
