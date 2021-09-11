@@ -138,7 +138,7 @@ const Beneficiarios = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'beneficiaryStatus'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
-                <Column dataField='inssAlternative' caption="Inss Alternativo"></Column>
+                <Column dataField='createAt' caption="Fecha Creación" dataType="date" format={formatDate}></Column>
                 <Editing
                     mode="popup"
                     allowUpdating={customer.status}                       
@@ -190,7 +190,7 @@ const Beneficiarios = () => {
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />
                         </Item>
-                        <Item dataField="inssAlternative" >
+                        <Item dataField="createAt" disabled={true} >
                         </Item>                 
                     </FromGrid>
                 </Editing>
