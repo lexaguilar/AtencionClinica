@@ -112,7 +112,7 @@ const Customers = () => {
                 <HeaderFilter visible={true} />
                 <Column dataField="inss"  width={110} />              
                 <Column dataField="identification" width={140} />
-                <Column dataField="ptronalId" caption="# Patronal" width={140} />
+                <Column dataField="patronalId" caption="# Patronal" width={140} />
                 <Column dataField="firstName" caption="Nombre"  />
                 <Column dataField="lastName" caption="Apellidos"  />
                 <Column dataField="dateAdd" caption="Fecha" width={140} dataType="date"  format={formatDate}/>     
