@@ -27,7 +27,25 @@ namespace AtencionClinica.Controllers
         public IActionResult Get(int year, int month,int skip, int take, IDictionary<string, string> values)
         {
             var result = _db.Percapitas.Where(x => x.Year == year && x.Month == month);
-            
+
+            if (values.ContainsKey("patronalId"))
+            {
+                string patronalId = values["patronalId"];
+                result = result.Where(x => x.PatronalId != null && x.PatronalId.StartsWith(patronalId));
+            }
+
+            if (values.ContainsKey("firstName"))
+            {
+                string firstName = values["firstName"];
+                result = result.Where(x => x.FirstName!=null && x.FirstName.StartsWith(firstName));
+            }
+
+            if (values.ContainsKey("lastName"))
+            {
+                string lastName = values["lastName"];
+                result = result.Where(x => x.LastName != null && x.LastName.StartsWith(lastName));
+            }
+
             if (values.ContainsKey("inss"))
             {
                 var inss = Convert.ToInt32(values["inss"]);
