@@ -19,7 +19,7 @@ const ExpedienteClinicoPrivado = () => {
     let dropDownBoxRef = useRef();
 
     const changeHandler = (e) => {
-        setCustomerId(e.value);
+        setCustomerId(e);
     } 
 
 
@@ -48,6 +48,9 @@ const ExpedienteClinicoPrivado = () => {
                         </TabList>
                         <TabPanel>
                             <GridListaMedicamentoPte customerId={customerId} />
+                        </TabPanel>
+                        <TabPanel>
+
                         </TabPanel>
                         <TabPanel>
 
