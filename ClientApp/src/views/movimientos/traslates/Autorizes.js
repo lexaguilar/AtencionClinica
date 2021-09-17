@@ -17,21 +17,19 @@ import {  createStoreLocal } from '../../../utils/proxy';
 import uri from '../../../utils/uri';
 import { store } from '../../../services/store';
 import { dataAccess, formatDate, formatDateTime, resources } from '../../../data/app';
-import Nuevo from './Nuevo';
-import CustomButton from '../../../components/buttons/CustomButton';
 import { useDispatch, useSelector } from 'react-redux'
-import { openDialog } from '../../../store/customDialog/customDialogReducer';
 import { inPutProductStates, stagesTraslate, typeTraslate } from '../../../data/catalogos';
 import useAuthorization from '../../../hooks/useAuthorization';
-import { dataFormatId, formatId } from '../../../utils/common';
+import { dataFormatId } from '../../../utils/common';
 import { onToolbar } from '../../../components/grids/ToolBar';
 import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
 import urlReport from '../../../services/reportServices';
 import { addMenu } from '../../../components/grids/Menu';
+import Autorize from './Autorize';
 
-const Traslates = (props) => {
+const Autorizes = (props) => {
 
-    const { authorized } = useAuthorization([resources.requisas, dataAccess.access ]);    
+    const { authorized } = useAuthorization([resources.autorizarRequiasas, dataAccess.access ]);    
 
     const {  areaId } = useSelector(store => store.user); 
 
@@ -42,12 +40,12 @@ const Traslates = (props) => {
 
     const reload = (params) => dataGrid.current.instance.refresh();    
 
-    const title = type==typeTraslate.create ? "Traslado de inventario" : "Despacho de inventario";
+    const title = "Autorizar despacho";
 
     let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
 
     const onRowPrepared = (e) => {
-
+        
         if (e.rowType == 'data') {
             
             if (e.data.stateId == inPutProductStates.noActivo) 
@@ -62,30 +60,33 @@ const Traslates = (props) => {
             if(e.column.dataField == 'id')
                 e.cellElement.classList.add('trastateId');
 
-                if(e.column.dataField == 'stageId'){
-                    if(e.data.stageId === stagesTraslate.pendiente)
-                        e.cellElement.classList.add('trastateStege1');
-                    if(e.data.stageId === stagesTraslate.anulado)
-                        e.cellElement.classList.add('trastateStege2');
-                    if(e.data.stageId === stagesTraslate.procesado)
-                        e.cellElement.classList.add('trastateStege3');
-                    if(e.data.stageId === stagesTraslate.autorizado)
-                        e.cellElement.classList.add('trastateStege4');
-                }
+            if(e.column.dataField == 'stageId'){
+                if(e.data.stageId === stagesTraslate.pendiente)
+                    e.cellElement.classList.add('trastateStege1');
+                if(e.data.stageId === stagesTraslate.anulado)
+                    e.cellElement.classList.add('trastateStege2');
+                if(e.data.stageId === stagesTraslate.procesado)
+                    e.cellElement.classList.add('trastateStege3');
+                if(e.data.stageId === stagesTraslate.autorizado)
+                    e.cellElement.classList.add('trastateStege4');
+            }
 
-        }       
+        }
 
     }
 
     const showDialog = (id, editing= false) => dispatch(dialogTraslate({ open: true, id, editing }))
 
-    const isEditVisible = e => type == typeTraslate.create && e.row.data.stageId == stagesTraslate.pendiente;
     const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
 
     const report = urlReport();
 
     const addMenuItems = (e) => {
         addMenu(e, [{
+            text: `Autorizar requisa`,
+            icon: 'check',
+            onItemClick: () => showDialog(e.row.data.id, false)
+        },{
             text: `Ver requisa`,
             icon: 'find',
             onItemClick: () => showDialog(e.row.data.id, false)
@@ -94,10 +95,12 @@ const Traslates = (props) => {
             icon: 'print',
             onItemClick: () => {
 
+                const id = e.row.data.id;
+
                 if(type==typeTraslate.create)
-                    report.print(`${report.requisaSolicitud(e.row.data.id)}`);
+                    report.print(`${report.requisaSolicitud(id)}`);
                 else
-                    report.print(`${report.requisaDespacho(e.row.data.id)}`);
+                    report.print(`${report.requisaDespacho(id)}`);
 
             } 
             
@@ -107,14 +110,9 @@ const Traslates = (props) => {
     return authorized(
         <div className="container">
             <Title title={title}/>
-            <BlockHeader title={title} >
-                {type==typeTraslate.create && <CustomButton                                       
-                    text='Nueva requisa'
-                    icon='plus'
-                    onClick={()=>showDialog( 0 ) }
-                />}
+            <BlockHeader title={title} >               
             </BlockHeader>
-            <Nuevo onSave={reload} stageId={1} type={type}/> 
+            <Autorize onSave={reload} stageId={1} type={type}/> 
             
             <DataGrid id="gridContainer"
                 ref={dataGrid}
@@ -143,16 +141,13 @@ const Traslates = (props) => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column type="buttons">
-                    <Button hint="Ver" icon="find"onClick={e => showDialog(e.row.data.id, false)} />                  
-                </Column>
+                <Export enabled={true} fileName={title} allowExportSelectedData={true} />               
                 <Column dataField="id" caption='Numero' width={100}  cellRender={dataFormatId}/>
-                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
-                <Column dataField="areaSourceId" caption="Bodega" width={200} visible={type==typeTraslate.create}>
-                    <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
-                </Column>
+                <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={100} />
                 <Column dataField="areaTargetId" caption="Area Solicitante" width={200} visible={type==typeTraslate.update}>
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
+                </Column>             
+                <Column dataField="areaSourceId" caption="Bodega" width={200}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column>
                 <Column dataField="stageId" caption="Proceso" width={100}>
@@ -166,9 +161,7 @@ const Traslates = (props) => {
                 <Column dataField="authorizedBy" caption='Autorizado Por'/>
                 <Column dataField="authorizedAt" caption='Autorizado el' dataType='date' format={formatDateTime} width={150}/>
                 <Column type="buttons">
-                    <Button hint="Modificar" icon="edit"onClick={e => showDialog(e.row.data.id, true)} visible={isEditVisible} />
-                    <Button name="delete" />
-                    <Button hint="Despachar" name="edit" icon="bulletlist" onClick={e => showDialog(e.row.data.id)}/>
+                    <Button hint="Autorizar" name="edit" icon="check" onClick={e => showDialog(e.row.data.id)}/>
                 </Column>
                 <Editing
                     mode="popup"
@@ -182,4 +175,4 @@ const Traslates = (props) => {
     );
 }
 
-export default Traslates;
+export default Autorizes;

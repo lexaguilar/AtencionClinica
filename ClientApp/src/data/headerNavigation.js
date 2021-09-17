@@ -106,6 +106,7 @@ const menu = [{
                     url: '',
                     links: [
                         { title: 'Ajuste de salida', url: `${_path.CLINICA}/movimientos/salidas` },
+                        { title: 'Autorizar Despacho', url: `${_path.CLINICA}/movimientos/autorizar-despacho` },    
                         { title: 'Despacho', url: `${_path.CLINICA}/movimientos/despacho` },    
                     ],
                 },]

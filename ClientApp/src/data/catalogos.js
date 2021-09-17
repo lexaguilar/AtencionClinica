@@ -154,7 +154,8 @@ export const testFrescs = ['SIN MUESTRA'
 export const stagesTraslate = {
     pendiente: 1,
     anulado: 2,
-    procesado: 3
+    procesado: 3,
+    autorizado: 4,
 }
 
 export default catalogos;

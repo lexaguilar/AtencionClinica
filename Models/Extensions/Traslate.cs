@@ -49,6 +49,7 @@ namespace AtencionClinica.Models
         {
             this.StageId = 3;
             this.LastDateModificationAt = UserHelpers.GetTimeInfo();
+            this.AuthorizedAt = UserHelpers.GetTimeInfo();
         }
 
         public ModelValidationSource<Traslate> ValidatePrev(ClinicaContext _db)
@@ -56,8 +57,12 @@ namespace AtencionClinica.Models
 
             var modelValidation = new ModelValidationSource<Traslate>(this);
             modelValidation.model = this;
-            if (this.StageId == 3)
-                return modelValidation.AsError($"No se puede ejecutar la accion porque el traslado esta ya esta procesado");
+
+            if (this.StageId == (int)TraslateStages.Procesado)
+                return modelValidation.AsError($"No se puede ejecutar la acción porque el traslado esta ya esta procesado");
+
+            if (this.StageId != (int)TraslateStages.Autorizado)
+                return modelValidation.AsError($"No se puede ejecutar la acción porque el traslado aun no está autorizada");
 
             return modelValidation.AsOk();
         }

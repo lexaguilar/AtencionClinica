@@ -8,7 +8,7 @@ function Title(props) {
     const { title, app } = props;
 
     return  <Helmet>
-                <title>{app.name} - {title}</title>
+                <title>{title} - {app.name}</title>
             </Helmet>
 }
 

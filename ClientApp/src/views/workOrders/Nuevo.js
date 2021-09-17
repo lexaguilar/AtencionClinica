@@ -132,8 +132,8 @@ const Nuevo = props => {
     return (
         <div>
             <Popup
-                width={1050}
-                height={695}
+                width={950}
+                height={655}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
                 visible={open}

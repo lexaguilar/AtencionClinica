@@ -18,16 +18,15 @@ import { typeTraslate, stagesTraslate } from '../../../data/catalogos';
 import { traslateDefault } from '../../../data/defaultObject';
 import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
 
-const Nuevo = props => {    
+const Autorize = props => {    
 
     const exists = true;
     const active = true;
-
     const  {stageId, type}  = props;
 
     const isCreate = type == typeTraslate.create;
 
-    const { traslateDialog : { open, id, editing }, user } = useSelector(store => store);
+    const { traslateDialog : { open, id }, user } = useSelector(store => store);
 
     const [ areaSourceId, setAreaSourceId ] = useState(0);
     const { products, setProducts } = useProducts({areaId: areaSourceId, exists, active });
@@ -41,7 +40,7 @@ const Nuevo = props => {
     useEffect(() => {   
 
         if(id == 0){
-            setTraslate({...traslateDefault, stageId : 1, areaId : user.areaId, stageId});
+            setTraslate({...traslate, areaId : user.areaId, stageId});
             setDetails([]);
         }        
 
@@ -51,7 +50,7 @@ const Nuevo = props => {
 
                 setTraslate({ ...withOutDetaill(resp) });
 
-                http(uri.products.getByArea(resp.areaSourceId)).asGet({exists, active }).then(data =>{
+                http(uri.products.getByArea(resp.areaSourceId)).asGet().then(data =>{
                     
                     setProducts(data);
 
@@ -92,51 +91,19 @@ const Nuevo = props => {
 
     const onHiding = ({ load }) => close(load);
 
-    const crearTraslado = (e) => {
-
-        
-        let result = refForm.current.instance.validate();
-
-        if (result.isValid) {
-
-            setSaving(true);
-            let data = {...traslate, traslateDetails:[...details] };
-            const url = editing ? `${uri.traslates.insert}/asEdit` : uri.traslates.insert; 
-
-            http(url).asPost(data).then(resp => {
-
-                setSaving(false);
-                notify('Soliictud de traslado registrado correctamente');
-                close(true);
-
-            }).catch(err => {
-
-                setSaving(false);
-                notify(err, 'error', 5000);
-
-            });
-
-        }
-
-    }
-
-    const despacharTraslado = (e) => {
+    const autorizar = (e) => {
 
         setSaving(true);
-            let data = {...traslate, traslateDetails:[...details] };
-        
-        http(uri.traslates.insert).asPost(data).then(resp => {
 
-            setSaving(false);
-            notify('Traslado registrado correctamente');
+        http(`traslates/${id}/autorize`).asGet().then(resp => {
+            setSaving(false)
+            notify('Solictud de traslado autorizada correctamente');
             close(true);
 
         }).catch(err => {
-
-            setSaving(false);
-            notify(err, 'error', 5000);
-
-        });
+            setSaving(false)
+            notify(err, 'error', 5000)
+        });        
 
     }
 
@@ -160,24 +127,12 @@ const Nuevo = props => {
 
     }
 
-    const setCellValueForResponse = (prop, newData, value, currentRowData) => {
-
-        newData[prop] = value || 0;
-        if(prop == 'quantityResponse' && (+value) >= 0)
-            newData['total'] = currentRowData['cost'] * value;
-
-    }
-
-    const onValueChangedArea = (e) => {       
+    const onValueChangedArea = (e) => {
         setAreaSourceId(e.value);
         setDetails([]);
     }
 
     const withOutDetaill = ({traslateDetails,...rest}) => rest;
-
-    const textCreating = editing ? 'Modificar traslado ' + formatId(id) : 'Solicitar traslado';
-    const textEditing = 'Despachar traslado';
-
 
     var itemHTML = isCreate ?  <SimpleItem dataField="areaSourceId" editorType="dxSelectBox"
                                         editorOptions={{
@@ -198,15 +153,12 @@ const Nuevo = props => {
                                     <RequiredRule message="Seleccione la bodega" />
                                 </SimpleItem>
 
-    const txtTitle = isCreate ? `${!editing ? 'Nueva solicitud de traslado' : `Modificar solicitud de traslado ${formatId(id)}`}`                    
-                    : `Despachar solicitud ${formatId(id)}`;                            
-
     return (
         <div>
              <Popup
                 width={1050}
                 height={500}
-                title={txtTitle}
+                title={'Autorizar traslado ' + formatId(id)}
                 onHiding={onHiding}
                 visible={open}                
             >
@@ -252,7 +204,7 @@ const Nuevo = props => {
                         >
                             <Column dataField="productId" caption="Producto"
                                 setCellValue={setCellValue.bind(null,"productId")}
-                                editCellComponent={props => <ProductDDBComponent {...props} quantity='quantityRequest' />}>
+                                editCellComponent={ProductDDBComponent}>
                                     <Lookup 
                                         dataSource={products}
                                         valueExpr="id" 
@@ -273,14 +225,7 @@ const Nuevo = props => {
                                 allowEditing={isCreate}                 
                                 setCellValue={setCellValue.bind(null,"quantityRequest")}>
                                 <RuleRequired />
-                            </Column>
-                            <Column dataField="quantityResponse" 
-                                caption="Cantidad" 
-                                dataType="number" width={80} 
-                                visible={!isCreate}
-                                setCellValue={setCellValueForResponse.bind(null,"quantityResponse")}>
-                                <RuleRequired />
-                            </Column>
+                            </Column>                           
                             <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
                                 <RuleRequired />
                             </Column>
@@ -302,19 +247,14 @@ const Nuevo = props => {
                 </Form>
 
                 <ButtonForm 
+                    icon="check"
                     saving={saving} 
-                    textSaving={textCreating} 
-                    visible={isCreate && traslate.stageId == stagesTraslate.pendiente} 
-                    onClick={crearTraslado}/>
-                <ButtonForm 
-                    saving={saving} 
-                    textSaving={textEditing} 
-                    visible={!isCreate && traslate.stageId == stagesTraslate.autorizado} 
-                    onClick={despacharTraslado}/>
-               
+                    textSaving={'Autorizar'} 
+                    visible={traslate.stageId == stagesTraslate.pendiente} 
+                    onClick={autorizar}/>      
             </Popup>
         </div>
     );
 }
 
-export default Nuevo;
+export default Autorize;

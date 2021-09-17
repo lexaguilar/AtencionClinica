@@ -1,8 +1,8 @@
 import React from "react";
 import { userService } from "../services/user.service";
 import MsgAuthorize from './MsgAuthorized';
-const Authorized = isAuthorization => component => {
-    return isAuthorization ? component : <MsgAuthorize/>
+const Authorized = (isAuthorization,resourceId) => component => {
+    return isAuthorization ? component : <MsgAuthorize resourceId={resourceId}/>
 }
 
 /**
@@ -23,7 +23,7 @@ const useAuthorization = ([resourceId, action]) => {
 
     return {
         isAuthorization,
-        authorized : Authorized(isAuthorization)
+        authorized : Authorized(isAuthorization, resourceId)
     }
 }
 

@@ -13,6 +13,9 @@ import http from '../../utils/http';
 const dropDownOptions = { width: 930 };
 
 export default class ProductDDBComponent extends React.Component {
+
+    quantity = 'quantity';
+
     constructor(props) {
         super(props);
         this.state = {
@@ -22,6 +25,8 @@ export default class ProductDDBComponent extends React.Component {
         this.onSelectionChanged = this.onSelectionChanged.bind(this);
         this.contentRender = this.contentRender.bind(this);
         this.showPrice = props.showPrice;
+
+        this.quantity = props.quantity || this.quantity;
     }
 
     customStore(url){
@@ -133,7 +138,7 @@ export default class ProductDDBComponent extends React.Component {
         this.props.data.setValue(this.state.currentValue);
         if (e.selectedRowKeys.length > 0) {   
             this.dropDownBoxRef.current.instance.close();     
-            this.props.data.component.editCell(this.props.data.rowIndex, 'quantity');       
+            this.props.data.component.editCell(this.props.data.rowIndex, this.quantity);       
         }
 
     }

@@ -48,8 +48,12 @@ const ProcedimientoDetalle = () => {
                         allowColumnResizing={true}
                         allowColumnReordering={true}
                         onSelectionChanged={onSelectionChanged}
+                        remoteOperations={{
+                            paging: true,
+                            filtering: true
+                        }}    
                     >
-                        <Paging defaultPageSize={20} />
+                        <Paging defaultPageSize={10} />
                         <Pager
                             showPageSizeSelector={true}
                             allowedPageSizes={[10, 20, 50]}

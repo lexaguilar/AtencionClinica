@@ -66,9 +66,10 @@ import ExpedienteClinico from '../views/expediente/ExpedienteClinico';
 import ExpedienteClinicoPrivado from '../views/expediente/ExpedienteClinicoPrivado';
 import AppConfig from '../views/app/AppConfig';
 import BeneficiariosAll from '../views/beneficiarios/BeneficiariosAll';
+import Autorizes from '../views/movimientos/traslates/Autorizes';
 
 function Layout(props) {
-    const { match, headerLayout } = props;
+    const { headerLayout } = props;
 
     const PrintCatalogos = catalogos.map(c => {
         return  <PrivateRoute key={c.name} exact path={`${_path[String(headerLayout).toUpperCase()]}/${c.name}`} render={(props) => (
@@ -159,6 +160,7 @@ function Layout(props) {
                         {routes}   
                         <PrivateRoute key={1} exact path={`${_path.CLINICA}/movimientos/traslados`} render={props => <Traslates {...props} type={typeTraslate.create} /> } />                         
                         <PrivateRoute key={2} exact path={`${_path.CLINICA}/movimientos/despacho`} render={props => <Traslates {...props} type={typeTraslate.update}/> } />                         
+                        <PrivateRoute key={3} exact path={`${_path.CLINICA}/movimientos/autorizar-despacho`} render={props => <Autorizes {...props} type={typeTraslate.update}/> } />                         
                     </Switch>
                 </div>
 

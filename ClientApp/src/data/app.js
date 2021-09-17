@@ -62,7 +62,8 @@ export const resources = {
     compras : 11,
     puestoMedicos : 12,
     app : 13,
-    addFacultative : 14
+    addFacultative : 14,
+    autorizarRequiasas : 15,
 }
 
 export const dataAccess = {

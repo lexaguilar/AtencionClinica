@@ -103,13 +103,16 @@ namespace AtencionClinica.Controllers
             var oldTraslate = _db.Traslates.FirstOrDefault(x => x.Id == traslate.Id);
 
             if(oldTraslate.StageId == (int)TraslateStages.Anulado)
-                return BadRequest("La solicitud esta anulada, no se puede editar");
+                return BadRequest("La solicitud está anulada, no se puede editar");
 
             if(oldTraslate.StageId == (int)TraslateStages.Procesado)
-                return BadRequest("La solicitud esta despachada, no se puede editar");
+                return BadRequest("La solicitud está despachada, no se puede editar");
+
+            if(oldTraslate.StageId == (int)TraslateStages.Autorizado)
+                return BadRequest("La solicitud ya está autorizada, no se puede editar");
 
             if(traslate.StateId != 1)
-                return BadRequest("No se puede editar el traslado ya que la solicitud esta anulada");
+                return BadRequest("No se puede editar el traslado ya que la solicitud está anulada");
 
             oldTraslate.CopyFrom(traslate, x=> new 
             { 
@@ -190,6 +193,7 @@ namespace AtencionClinica.Controllers
             else
             {
                 traslate.LastModificationBy = user.Username;     
+                traslate.AuthorizedBy = user.Username;     
                 var result = _service.Update(traslate);
 
                 if(!result.IsValid)
@@ -218,6 +222,23 @@ namespace AtencionClinica.Controllers
             {
                 traslate.StateId = 2;
                 traslate.StageId = (int)TraslateStages.Anulado;
+                _db.SaveChanges();
+            }
+
+            return Json(new { n = id });
+        }
+
+        [HttpGet("api/traslates/{id}/autorize")]
+        public IActionResult Autorize(int id)
+        {
+            var traslate = _db.Traslates.FirstOrDefault(x => x.Id == id);
+
+            if(traslate.StageId != (int)TraslateStages.Pendiente)
+                return BadRequest("No se puede autorizar el traslado");
+
+            if (traslate != null)
+            {
+                traslate.StageId = (int)TraslateStages.Autorizado;
                 _db.SaveChanges();
             }
 
