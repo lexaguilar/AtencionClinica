@@ -84,7 +84,7 @@ function GroupsCatalos(props) {
                     allowUpdating={true}
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={450} height={300}>
+                    <Popup title={title} showTitle={true} width={350} height={230}>
                         
                     </Popup>
                     <Form>

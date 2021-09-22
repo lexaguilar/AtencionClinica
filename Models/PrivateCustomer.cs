@@ -27,6 +27,7 @@ namespace AtencionClinica.Models
         public int SexId { get; set; }
         public int RegionId { get; set; }
         public int CityId { get; set; }
+        public DateTime? AddAt { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public DateTime? LastDateModificationAt { get; set; }

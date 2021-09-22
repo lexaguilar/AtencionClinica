@@ -84,7 +84,7 @@ function Areas(props) {
                     allowUpdating={true}
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={450} height={300}>
+                    <Popup title={title} showTitle={true} width={400} height={230}>
                         
                     </Popup>
                     <Form>

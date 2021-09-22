@@ -67,14 +67,14 @@ const Nuevo = props => {
                 onClick={showPopup}
             />
             <Popup
-                width={500}
-                height={500}
+                width={620}
+                height={350}
                 title="Subir archivo"
                 onHiding={hideInfo}
                 visible={open}
             >
                 <form id="form" method="post" encType="multipart/form-data">
-                    <img width={480} src={require('../../svg/formatxlx.png')}></img>
+                    <img width={600} src={require('../../svg/formatxlx.png')}></img>
                     <FileUploader ref={formElement}
                         selectButtonText="Seleccione un archivo"
                         labelText=""
@@ -87,7 +87,7 @@ const Nuevo = props => {
                         type="date"
                         onValueChanged={onChange}
                         displayFormat={"MM/yyyy"} />
-                        
+                    <br/>
                     <Button disabled={loading} className="button" text={loading? 'Subiendo...' : 'Subir archivo'} type="success" onClick={onClick} />
                 </form>
             </Popup>

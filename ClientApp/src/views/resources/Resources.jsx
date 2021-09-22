@@ -68,7 +68,7 @@ const Resources = props => {
                             allowAdding={false}
                             useIcons={true}
                         >
-                            <Popup title="Configuracion" width={300} height={350}>
+                            <Popup title="Configuracion" width={300} height={310}>
                             </Popup>
                             <Form colCount={1}>
                                 <Item dataField="name"/>                                             

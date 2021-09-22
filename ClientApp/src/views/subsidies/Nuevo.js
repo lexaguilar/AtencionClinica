@@ -94,8 +94,8 @@ const Nuevo = props => {
     return (
         <div>
             <Popup
-                width={950}
-                height={550}
+                width={880}
+                height={420}
                 title={`Nuevo subsidio`}
                 onHiding={onHiding}
                 visible={open}

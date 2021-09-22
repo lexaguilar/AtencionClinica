@@ -80,11 +80,11 @@ function Catalogo(props) {
                     allowUpdating={true}
                     useIcons={true}
                 >
-                    <Popup title={toCapital(caption||name)} showTitle={true} width={450} height={250}>
+                    <Popup title={toCapital(caption||name)} showTitle={true} width={390} height={190}>
                         
                     </Popup>
                     <Form>
-                        <Item  dataField="name" editorOptions={{ width:300 }} colSpan={2} >
+                        <Item  dataField="name" colSpan={2} >
                             <RequiredRule message="El campo es requerida"/>
                             <StringLengthRule max={50} min={2} message="Máximo de caracteres 50 y 2 mínimo"/>
                         </Item>

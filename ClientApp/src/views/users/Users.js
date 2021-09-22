@@ -152,7 +152,7 @@ const Users = () => {
                         allowUpdating={true}    
                         useIcons={true}                        
                     >
-                        <Popup title={title} showTitle={true} width={400} height={390}>                           
+                        <Popup title={title} showTitle={true} width={360} height={300}>                           
                         </Popup>
                         <Form colCount={1}>
                             <Item dataField="username">

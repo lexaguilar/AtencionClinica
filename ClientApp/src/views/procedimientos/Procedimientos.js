@@ -118,7 +118,7 @@ const Procedimientos = () => {
                     allowDeleting={true}
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={450} height={470}>
+                    <Popup title={title} showTitle={true} width={420} height={330}>
                         
                     </Popup>
                     <Form>

@@ -92,7 +92,7 @@ const Doctores = (props) => {
                     allowDeleting={true}
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={500} height={420}>
+                    <Popup title={title} showTitle={true} width={450} height={310}>
                         
                     </Popup>
                     <Form>

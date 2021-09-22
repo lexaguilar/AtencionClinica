@@ -85,7 +85,7 @@ const DoctoresById = () => {
                     allowDeleting={true}
                     useIcons={true}
                 >       
-                    <Popup title={title} showTitle={true} width={450} height={400}>                    
+                    <Popup title={title} showTitle={true} width={420} height={310}>                    
                     </Popup>
                     <Form>
                         <Item dataField="doctorId" colSpan={2}>

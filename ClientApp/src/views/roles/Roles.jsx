@@ -39,7 +39,7 @@ const Roles = props => {
                     allowAdding={true}
                     useIcons={true}
                 >
-                    <Popup width={300} height={250}>
+                    <Popup  title='Perfiles' width={280} height={180} showTitle={true}>
                     </Popup>
                     <Form colCount={1}>
                         <Item dataField="id" >

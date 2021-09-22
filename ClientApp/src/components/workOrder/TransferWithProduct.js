@@ -92,8 +92,8 @@ const TransferWithProduct = () => {
     return (
         <div>
             <Popup
-                width={700}
-                height={570}
+                width={600}
+                height={500}
                 onHiding={onHiding}
                 title={title}
                 visible={open}

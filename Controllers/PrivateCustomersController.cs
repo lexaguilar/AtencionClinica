@@ -200,7 +200,8 @@ namespace AtencionClinica.Controllers
                     x.PrivateCustomerStatusId,
                     x.Inss,
                     x.TypeId,
-                    x.ContractId                
+                    x.ContractId,
+                    x.AddAt         
                 });
 
                 oldprivateCustomer.LastDateModificationAt = UserHelpers.GetTimeInfo();

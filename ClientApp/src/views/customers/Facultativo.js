@@ -110,7 +110,7 @@ const Facultativo = props => {
         <Popup
             fullScreen={false}
             width={400} 
-            height={450}
+            height={320}
             onHiding={onHiding}
             title={title}
             visible={open}

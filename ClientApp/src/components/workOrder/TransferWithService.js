@@ -75,8 +75,8 @@ const TransferWithService = () => {
     return (
         <div>
             <Popup
-                width={700}
-                height={570}
+                width={550}
+                height={350}
                 onHiding={onHiding}
                 title={title}
                 visible={open}

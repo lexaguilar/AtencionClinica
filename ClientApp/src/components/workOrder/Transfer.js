@@ -49,7 +49,7 @@ const Transfer = () => {
         <div>           
             <Popup
                 width={350}
-                height={260}
+                height={210}
                 onHiding={onHiding}
                 title={title}
                 visible={open}

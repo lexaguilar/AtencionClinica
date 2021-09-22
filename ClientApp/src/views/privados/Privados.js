@@ -96,10 +96,11 @@ const Privados = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'contract'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="phoneNumber"  visible={false} caption="Telefono" width={150} />
+                <Column dataField="addAt"  visible={false}  dataType="date"  format={formatDate} caption='Ingreso' />
                 <Column dataField="cellNumber"  visible={false} caption="Celular" width={150} />
                 <Column dataField="regionId"  visible={false} width={100} caption="Departamento">
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'region'})} valueExpr="id" displayExpr="name" />
-                </Column> 
+                </Column>
                 <Column dataField="cityId"  visible={false} width={100} caption="Ciudad">
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'city'})} valueExpr="id" displayExpr="name" />
                 </Column> 
@@ -113,7 +114,7 @@ const Privados = () => {
                     allowUpdating={true}                       
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={850} height={580}>
+                    <Popup title={title} showTitle={true} width={700} height={420}>
 
                     </Popup>
                     <FromGrid>   
@@ -160,6 +161,9 @@ const Privados = () => {
                         <Item dataField="cityId" >
                             <RequiredRule message="El campo es requerido" />
                         </Item>  
+                        <Item dataField="addAt" >
+                            <RequiredRule message="El campo es requerido" />
+                        </Item>
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />

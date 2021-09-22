@@ -144,7 +144,7 @@ const Beneficiarios = () => {
                     allowUpdating={customer.status}                       
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={850} height={550}>
+                    <Popup title={title} showTitle={true} width={710} height={450}>
 
                     </Popup>
                     <FromGrid>

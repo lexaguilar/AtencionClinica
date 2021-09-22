@@ -208,3 +208,30 @@
 2021-09-21 20:07:38.1483 Info Loading assembly: NLog.Web.AspNetCore
 2021-09-21 20:07:38.2289 Info Adding target DatabaseTarget(Name=db)
 2021-09-21 20:07:38.2783 Info Validating config: TargetNames=db, ConfigItems=34, FilePath=C:\Users\Lex Aguilar\Documents\Proyectos\Clinica\AtencionClinica\bin\Debug\net5.0\nlog.config
+2021-09-21 22:01:07.3410 Info Shutdown() called. Logger closing...
+2021-09-21 22:01:07.3410 Info Closing old configuration.
+2021-09-21 22:01:07.3477 Info Logger has been closed down.
+2021-09-21 22:01:07.3477 Info AppDomain Shutting down. Logger closing...
+2021-09-21 22:01:07.3477 Info Logger has been shut down.
+2021-09-21 22:01:27.5691 Info Message Template Auto Format enabled
+2021-09-21 22:01:27.5809 Info Loading assembly: NLog.Web.AspNetCore
+2021-09-21 22:01:27.6370 Info Adding target DatabaseTarget(Name=db)
+2021-09-21 22:01:27.6789 Info Validating config: TargetNames=db, ConfigItems=34, FilePath=C:\Users\Lex Aguilar\Documents\Proyectos\Clinica\AtencionClinica\bin\Debug\net5.0\nlog.config
+2021-09-21 22:03:38.2869 Info Shutdown() called. Logger closing...
+2021-09-21 22:03:38.2869 Info Closing old configuration.
+2021-09-21 22:03:38.3120 Info Logger has been closed down.
+2021-09-21 22:03:38.3252 Info AppDomain Shutting down. Logger closing...
+2021-09-21 22:03:38.3252 Info Logger has been shut down.
+2021-09-21 22:03:52.8474 Info Message Template Auto Format enabled
+2021-09-21 22:03:52.8474 Info Loading assembly: NLog.Web.AspNetCore
+2021-09-21 22:03:52.9165 Info Adding target DatabaseTarget(Name=db)
+2021-09-21 22:03:52.9520 Info Validating config: TargetNames=db, ConfigItems=34, FilePath=C:\Users\Lex Aguilar\Documents\Proyectos\Clinica\AtencionClinica\bin\Debug\net5.0\nlog.config
+2021-09-21 22:22:27.6722 Info Shutdown() called. Logger closing...
+2021-09-21 22:22:27.6733 Info Closing old configuration.
+2021-09-21 22:22:27.6733 Info Logger has been closed down.
+2021-09-21 22:22:27.6733 Info AppDomain Shutting down. Logger closing...
+2021-09-21 22:22:27.6733 Info Logger has been shut down.
+2021-09-21 22:42:33.4718 Info Message Template Auto Format enabled
+2021-09-21 22:42:33.4718 Info Loading assembly: NLog.Web.AspNetCore
+2021-09-21 22:42:33.5290 Info Adding target DatabaseTarget(Name=db)
+2021-09-21 22:42:33.5609 Info Validating config: TargetNames=db, ConfigItems=34, FilePath=C:\Users\Lex Aguilar\Documents\Proyectos\Clinica\AtencionClinica\bin\Debug\net5.0\nlog.config
