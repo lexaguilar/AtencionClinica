@@ -22,18 +22,21 @@ import {
 } from 'devextreme-react/validator';
 import { DropDownBox, SelectBox, TextArea } from 'devextreme-react';
 import { DivForm } from '../../utils/divHelpers';
+import DropDownDoctors from '../../components/dropdown/DropDownDoctors';
 
 const Nuevo = props => {
   
     const { authorized } = useAuthorization([resources.caja, dataAccess.create]);
 
     let dropDownBoxRef = useRef();
+    let dropDownBoxDoctorRef=useRef();
 
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState({ ...billDefault });
     const [procedimientos, setProcedimientos] = useState([]);
     const [services, setServices] = useState([]);
     const [ customerId, setCustomerId ] = useState();
+    const [ doctorId, setDoctorId ] = useState();
 
     let dataGrid = React.createRef();      
 
@@ -113,11 +116,16 @@ const Nuevo = props => {
         setCustomerId(value);
     } 
 
+    const doctorChangeHandler = value => {
+        console.log(value);
+        setDoctorId(value);
+    } 
+
     const onFormSubmit = (e) => {
         e.preventDefault();
 
         setLoading(true);
-        http(uri.bill.insert).asPost({ ...bill,privateCustomerId: customerId, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
+        http(uri.bill.insert).asPost({ ...bill,privateCustomerId: customerId,areaDoctorId:doctorId, billDetails: procedimientos.map(x => ({ ...x, ...{ serviceId: x.id, id: 0 } })) }).then(resp => {
             if (resp) {
 
                 setLoading(false); 
@@ -179,6 +187,10 @@ const Nuevo = props => {
                                 <RequiredRule message="Este campo es requerido" />
                             </Validator>
                         </SelectBox>
+                    </DivForm>
+
+                    <DivForm title='Doctor' required>
+                        <DropDownDoctors dropDownBoxRef={dropDownBoxDoctorRef} changeHandler={doctorChangeHandler} />
                     </DivForm>
 
                     <DivForm title='Moneda' required>
