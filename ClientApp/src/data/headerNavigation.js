@@ -17,7 +17,7 @@ const menu = [{
                 title: 'Reportes', 
                 url: ``,
                 submenu : [
-                    { title: 'Reporte 1', url: `${_path.CLINICA}/admision/reportes/1` },
+                    { title: 'Nefrologia', url: `${_path.CLINICA}/facturas/nefrologia` },
                     { title: 'Reporte 2', url: `${_path.CLINICA}/admision/reportes/2` },
                 ]
             },   

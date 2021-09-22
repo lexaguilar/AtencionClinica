@@ -18,6 +18,7 @@ const urlReport = () =>
         ajustesalida : id => `${urlBase}movimientos/ajustesalida?id=${id}`,
         requisaSolicitud : id => `${urlBase}movimientos/requisaSolicitud?id=${id}`,
         requisaDespacho : id => `${urlBase}movimientos/requisaDespacho?id=${id}`,
+        hemodialisis : (start, end) => `${urlBase}bill/resumen?start=${start}&end=${end}`,
         print : (url) =>  window.open(`${url}`,'_blank')
     }
 

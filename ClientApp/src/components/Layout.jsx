@@ -67,6 +67,7 @@ import ExpedienteClinicoPrivado from '../views/expediente/ExpedienteClinicoPriva
 import AppConfig from '../views/app/AppConfig';
 import BeneficiariosAll from '../views/beneficiarios/BeneficiariosAll';
 import Autorizes from '../views/movimientos/traslates/Autorizes';
+import Nefrologia from '../views/reports/hemo/Nefrologia';
 
 function Layout(props) {
     const { headerLayout } = props;
@@ -134,6 +135,10 @@ function Layout(props) {
         ,builRoute('puestos-medicos/nuevo', NuevoPuestoMedico.default)
         ,builRoute('servicios/expediente', ExpedienteClinico)
         ,builRoute('servicios/expediente-privado', ExpedienteClinicoPrivado)
+        
+        ,builRoute('facturas/nefrologia', Nefrologia)
+
+
 
         
     ];
