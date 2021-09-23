@@ -21,6 +21,7 @@ namespace AtencionClinica.Models
             Groups = new HashSet<Group>();
             InPutProducts = new HashSet<InPutProduct>();
             OutPutProducts = new HashSet<OutPutProduct>();
+            Purchases = new HashSet<Purchase>();
             Subsidies = new HashSet<Subsidy>();
             TraslateAreaSources = new HashSet<Traslate>();
             TraslateAreaTargets = new HashSet<Traslate>();
@@ -45,6 +46,7 @@ namespace AtencionClinica.Models
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<InPutProduct> InPutProducts { get; set; }
         public virtual ICollection<OutPutProduct> OutPutProducts { get; set; }
+        public virtual ICollection<Purchase> Purchases { get; set; }
         public virtual ICollection<Subsidy> Subsidies { get; set; }
         public virtual ICollection<Traslate> TraslateAreaSources { get; set; }
         public virtual ICollection<Traslate> TraslateAreaTargets { get; set; }

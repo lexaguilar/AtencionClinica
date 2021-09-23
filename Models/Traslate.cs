@@ -30,8 +30,8 @@ namespace AtencionClinica.Models
         public string CreateBy { get; set; }
         public DateTime? LastDateModificationAt { get; set; }
         public string LastModificationBy { get; set; }
-        public DateTime? AuthorizedAt { get; set; }
         public string AuthorizedBy { get; set; }
+        public DateTime? AuthorizedAt { get; set; }
 
         public virtual Area AreaSource { get; set; }
         public virtual Area AreaTarget { get; set; }
