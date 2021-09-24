@@ -10,6 +10,7 @@ namespace AtencionClinica.Models
         public Provider()
         {
             InPutProducts = new HashSet<InPutProduct>();
+            Purchases = new HashSet<Purchase>();
         }
 
         public int Id { get; set; }
@@ -27,5 +28,6 @@ namespace AtencionClinica.Models
 
         public virtual ProviderState State { get; set; }
         public virtual ICollection<InPutProduct> InPutProducts { get; set; }
+        public virtual ICollection<Purchase> Purchases { get; set; }
     }
 }

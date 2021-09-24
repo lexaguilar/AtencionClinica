@@ -17,6 +17,7 @@ namespace AtencionClinica.Models
             OutPutProductDetails = new HashSet<OutPutProductDetail>();
             PrivateWorkOrderDetails = new HashSet<PrivateWorkOrderDetail>();
             PrivateWorkPreOrderDetails = new HashSet<PrivateWorkPreOrderDetail>();
+            PurchaseDetails = new HashSet<PurchaseDetail>();
             ServiceProducts = new HashSet<ServiceProduct>();
             TraslateDetails = new HashSet<TraslateDetail>();
             WorkOrderDetails = new HashSet<WorkOrderDetail>();
@@ -53,6 +54,7 @@ namespace AtencionClinica.Models
         public virtual ICollection<OutPutProductDetail> OutPutProductDetails { get; set; }
         public virtual ICollection<PrivateWorkOrderDetail> PrivateWorkOrderDetails { get; set; }
         public virtual ICollection<PrivateWorkPreOrderDetail> PrivateWorkPreOrderDetails { get; set; }
+        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }
         public virtual ICollection<ServiceProduct> ServiceProducts { get; set; }
         public virtual ICollection<TraslateDetail> TraslateDetails { get; set; }
         public virtual ICollection<WorkOrderDetail> WorkOrderDetails { get; set; }

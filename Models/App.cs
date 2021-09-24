@@ -21,6 +21,6 @@ namespace AtencionClinica.Models
         public int AreaMainId { get; set; }
         public int? AreaDoctorId { get; set; }
         public int? MinAgeToAdmission { get; set; }
-        public int? AdmissionHoursDifferent { get; set; }
+        public int AdmissionHoursDifferent { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace AtencionClinica.Models
             InPutProducts = new HashSet<InPutProduct>();
             OutPutProducts = new HashSet<OutPutProduct>();
             Products = new HashSet<Product>();
+            Purchases = new HashSet<Purchase>();
             Services = new HashSet<Service>();
             Traslates = new HashSet<Traslate>();
         }
@@ -25,6 +26,7 @@ namespace AtencionClinica.Models
         public virtual ICollection<InPutProduct> InPutProducts { get; set; }
         public virtual ICollection<OutPutProduct> OutPutProducts { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Purchase> Purchases { get; set; }
         public virtual ICollection<Service> Services { get; set; }
         public virtual ICollection<Traslate> Traslates { get; set; }
     }

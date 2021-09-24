@@ -27,7 +27,6 @@ namespace AtencionClinica.Models
         public int SexId { get; set; }
         public int RegionId { get; set; }
         public int CityId { get; set; }
-        public DateTime? AddAt { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public DateTime? LastDateModificationAt { get; set; }
@@ -36,6 +35,7 @@ namespace AtencionClinica.Models
         public int? Inss { get; set; }
         public int TypeId { get; set; }
         public int? ContractId { get; set; }
+        public DateTime? AddAt { get; set; }
 
         public virtual Contract Contract { get; set; }
         public virtual PrivateCustomerStat PrivateCustomerStatus { get; set; }
