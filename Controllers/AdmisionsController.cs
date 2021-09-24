@@ -449,6 +449,20 @@ namespace AtencionClinica.Controllers
 
         }      
 
+        [Route("api/admisions/convertToHosp/{id}")]
+        public IActionResult ConvertToHosp(int id) {
+
+            var admision = _db.Admissions.FirstOrDefault(x => x.Id == id);
+
+            if(admision != null)
+            {
+                admision.TypeId = (int)AdmisionTypes.IngresoHops;
+                _db.SaveChanges();
+            }
+
+            return Json(new { n = id });
+        } 
+
         private int getMaxAdmissionOfDay(){
 
             var max = _db.Admissions.Where(x => x.CreateAt > DateTime.Today)

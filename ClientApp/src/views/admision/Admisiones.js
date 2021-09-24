@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DataGrid } from 'devextreme-react';
 import { 
     Paging, 
@@ -19,11 +19,13 @@ import { _path } from "../../data/headerNavigation";
 import { formatDateTime, resources, dataAccess } from '../../data/app';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
+import { estadoAdmision, typeAdmision } from '../../data/catalogos';
+import http from '../../utils/http';
 
 
 const Admisiones = props => {
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
 
     const { authorized } = useAuthorization([resources.admision, dataAccess.access ]);    
 
@@ -35,9 +37,20 @@ const Admisiones = props => {
             if (!e.items) e.items = [];
  
             // Add a custom menu item
-            if(e.rowIndex >= 0)
-                e.items.push({
+            if(e.rowIndex >= 0){
 
+                if(e.row?.data?.typeId ==  typeAdmision.consulta){
+                    e.items.push({
+                        text: 'Convertir a Hospitalizacion',
+                        icon: 'pin',
+                        onItemClick: () => {
+                            http(`admisions/convertToHosp/${e.row.data.id}`).asGet().then(res => dataGrid.current.instance.refresh())
+                        }
+                    });
+                } 
+
+                e.items.push({
+                    
                     text: 'Re-imprimir ticket admision',
                     icon : 'print',
                     onItemClick: () => {
@@ -46,12 +59,13 @@ const Admisiones = props => {
                     }
                     
                 },{
-
+                    
                     text: 'Anular admision',
                     icon : 'remove',
-                    onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex),
+                    onItemClick: () => dataGrid.current.instance.deleteRow(e.rowIndex),
                     color : 'red'
                 });
+            }
         }
     }
 
@@ -90,7 +104,7 @@ const Admisiones = props => {
                 />
             </BlockHeader>
             <DataGrid id="gridContainer"
-                ref={(ref) => dataGrid = ref}
+                ref={dataGrid}
                 selection={{ mode: 'single' }}
                 dataSource={store({uri : uri.admisions, remoteOperations: true})}
                 showBorders={true}

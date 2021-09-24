@@ -32,6 +32,8 @@ export const tipoMovimiento = { entrada: 1, salida: 2 }
 
 export const estadoAdmision = { ...estadoGeneric };
 
+export const typeAdmision = { consulta: 1, Hospitalizacion: 2 };
+
 export const estadoCustomer = { ...estadoGeneric };
 
 export const estadoBeneficiario = { ...estadoGeneric };
