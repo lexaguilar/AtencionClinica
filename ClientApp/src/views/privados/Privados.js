@@ -71,7 +71,7 @@ const Privados = () => {
                     filtering: true
                 }}
             >
-                <Paging defaultPageSize={20} />
+                <Paging defaultPageSize={10} />
                 <Pager
                     showInfo={true}
                     showPageSizeSelector={true}
@@ -109,12 +109,13 @@ const Privados = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'privateCustomerStat'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
+                <Column dataField='observation' caption="Dirección" visible={false}></Column>
                 <Editing
                     mode="popup"
                     allowUpdating={true}                       
                     useIcons={true}
                 >
-                    <Popup title={title} showTitle={true} width={700} height={420}>
+                    <Popup title={title} showTitle={true} width={700} height={490}>
 
                     </Popup>
                     <FromGrid>   
@@ -164,9 +165,16 @@ const Privados = () => {
                         <Item dataField="addAt" >
                             <RequiredRule message="El campo es requerido" />
                         </Item>
+                        <Item dataField="addAt" >
+                            <RequiredRule message="El campo es requerido" />
+                        </Item>
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />
+                        </Item>                      
+                        <Item dataField="observation" editorType='dxTextArea' colSpan={2}>                            
+                            <RequiredRule message="El campo es requerido" />
+                            <StringLengthRule max={100} message="Máximo de caracteres 100" />
                         </Item>                      
                     </FromGrid>
                 </Editing>

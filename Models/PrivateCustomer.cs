@@ -36,6 +36,7 @@ namespace AtencionClinica.Models
         public int TypeId { get; set; }
         public int? ContractId { get; set; }
         public DateTime? AddAt { get; set; }
+        public string Observation { get; set; }
 
         public virtual Contract Contract { get; set; }
         public virtual PrivateCustomerStat PrivateCustomerStatus { get; set; }

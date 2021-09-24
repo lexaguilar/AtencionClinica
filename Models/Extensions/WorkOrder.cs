@@ -27,7 +27,7 @@ namespace AtencionClinica.Models{
             
             var hours = 8;
             if(app != null)
-                hours = app.AdmissionHoursDifferent??8;
+                hours = app.AdmissionHoursDifferent;
 
             if(validateAll){
 
