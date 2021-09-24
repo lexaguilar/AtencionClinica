@@ -42,7 +42,7 @@ const Autorizes = (props) => {
 
     const title = "Autorizar despacho";
 
-    let extraParameter = { key : type == typeTraslate.create ? 'areaTargetId':'areaSourceId', value : areaId };
+    //let extraParameter = { key : 'areaTargetId':'areaSourceId', value : areaId };
 
     const onRowPrepared = (e) => {
         
@@ -117,7 +117,7 @@ const Autorizes = (props) => {
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
-                dataSource={store({ uri : uri.traslates, remoteOperations : true, extraParameter})}
+                dataSource={store({ uri : uri.traslates, remoteOperations : true })}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DateBox, Button } from "devextreme-react";
+import { DateBox, Button, Switch } from "devextreme-react";
 import Box, {  Item } from 'devextreme-react/box';
 import moment from 'moment';
 
@@ -10,7 +10,7 @@ import urlReport from '../../../services/reportServices';
   
 const Nefrologia = () => {
 
-    const [date, setDate] = useState({from: null, to: null});   
+    const [date, setDate] = useState({ from: null, to: null, onlyIngreso: true });   
 
     const generateReport = () => {
 
@@ -18,7 +18,7 @@ const Nefrologia = () => {
         const to = moment(date.to).format('YYYY-MM-DD');
 
         const report = urlReport();
-        report.print(`${report.hemodialisis(from, to)}`);
+        report.print(`${report.hemodialisis(from, to, date.onlyIngreso)}`);
 
     }
 
@@ -42,6 +42,12 @@ const Nefrologia = () => {
                     <Item ratio={1}>
                         <div className="p-10">
                             <DateBox type="date" name="to" displayFormat={formatDate} openOnFieldClick={true} onValueChanged={e => setDate({...date, to: e.value})}/>
+                        </div>
+                    </Item>
+                    <Item ratio={1}>
+                        <div className="p-10">
+                            Aplicar solo ingreso?
+                            <Switch switchedOnText='Si' switchedOffText='No' defaultValue={date.onlyIngreso} onValueChanged={e => setDate({ ...date, onlyIngreso: e.value })}  />
                         </div>
                     </Item>
                     <Item ratio={1}>
