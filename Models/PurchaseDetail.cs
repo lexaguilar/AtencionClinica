@@ -8,7 +8,7 @@ namespace AtencionClinica.Models
     public partial class PurchaseDetail
     {
         public int Id { get; set; }
-        public int InPutProductId { get; set; }
+        public int PurchaseId { get; set; }
         public int ProductId { get; set; }
         public double Quantity { get; set; }
         public double Royalty { get; set; }
@@ -22,7 +22,7 @@ namespace AtencionClinica.Models
         public decimal CostAvg { get; set; }
         public double Stocks { get; set; }
 
-        public virtual Purchase InPutProduct { get; set; }
         public virtual Product Product { get; set; }
+        public virtual Purchase Purchase { get; set; }
     }
 }

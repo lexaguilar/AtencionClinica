@@ -10,6 +10,7 @@ namespace AtencionClinica.Models
         public int Id { get; set; }
         public long? RowNumber { get; set; }
         public int ClientId { get; set; }
+        public int? DetalleId { get; set; }
         public string CreateBy { get; set; }
         public DateTime CreateAt { get; set; }
         public string FirstName { get; set; }
