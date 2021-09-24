@@ -1929,17 +1929,17 @@ namespace AtencionClinica.Models
 
                 entity.Property(e => e.Total).HasColumnType("money");
 
-                entity.HasOne(d => d.InPutProduct)
-                    .WithMany(p => p.PurchaseDetails)
-                    .HasForeignKey(d => d.InPutProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_PurchaseDetails_Purchases");
-
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.PurchaseDetails)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PurchaseDetails_Products");
+
+                entity.HasOne(d => d.Purchase)
+                    .WithMany(p => p.PurchaseDetails)
+                    .HasForeignKey(d => d.PurchaseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PurchaseDetails_Purchases");
             });
 
             modelBuilder.Entity<PurchaseStatus>(entity =>
@@ -2740,9 +2740,14 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FullName)
+                entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(101)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Price).HasColumnType("money");
