@@ -26,6 +26,7 @@ const uri = {
     estados: createProxyBase('estados'),
     file: createProxy('', 'percapitas/post/file'),
     fileRates: createProxy('', 'rates/post/file'),
+    purchases:createProxyBase('purchases'), 
     inPutProducts: createProxyBase('inPutProducts'),  
     outPutProducts: createProxyBase('outPutProducts'),  
     traslates: createProxyBase('traslates'),  

@@ -17,11 +17,11 @@ namespace AtencionClinica.Controllers
     public class PurchasesController : Controller
     {
         private ClinicaContext _db = null;
-        //private IProductServices<InPutProduct> _service;
-        public PurchasesController(ClinicaContext db)
+        private IPurchaseService _service;
+        public PurchasesController(ClinicaContext db,IPurchaseService service)
         {
             this._db = db;
-            //_service = service;
+            _service = service;
         }
 
          [Route("api/[Controller]/get/{id}")]
@@ -71,44 +71,44 @@ namespace AtencionClinica.Controllers
         }
 
         [HttpPost("api/[Controller]/post")]
-        public IActionResult Post([FromBody] InPutProduct inPutProduct)
+        public IActionResult Post([FromBody] Purchase purchase)
         {            
 
             var user = this.GetAppUser(_db);
             if(user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
-            if (inPutProduct.Id == 0)
+            if (purchase.Id == 0)
             {
 
-                inPutProduct.CreateBy = user.Username;                
+                purchase.CreateBy = user.Username;                
 
-                // var result = BadRequest();//  _service.Create(inPutProduct);
+                 var result =   _service.Create(purchase);
 
-                // if(!result.IsValid)
-                //     return BadRequest(result.Error);
+                 if(!result.IsValid)
+                     return BadRequest(result.Error);
                 
             }
             else
             {
-                // var result =BadRequest(); //_service.Update(inPutProduct);
+                 var result = _service.Update(purchase);
 
-                // if(!result.IsValid)
-                //     return BadRequest(result.cleanError);
+                 if(!result.IsValid)
+                    return BadRequest(result.Error);
             }
 
             _db.SaveChanges();
 
-            return Json(inPutProduct);
+            return Json(purchase);
 
         }
         
         [HttpGet("api/[Controller]/{id}/delete")]
         public IActionResult Delete(int id)
         {
-            var inPutProduct = _db.Purchases.Include(x => x.PurchaseDetails).FirstOrDefault(x => x.Id == id);            
+            var purchase = _db.Purchases.Include(x => x.PurchaseDetails).FirstOrDefault(x => x.Id == id);            
 
-            //_service.Revert(inPutProduct);
+            //_service.Revert(purchase);
 
             _db.SaveChanges();            
 

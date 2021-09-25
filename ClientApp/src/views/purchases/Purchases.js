@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import BlockHeader from '../../../components/shared/BlockHeader';
-import Title from '../../../components/shared/Title';
+import BlockHeader from '../../components/shared/BlockHeader';
+import Title from '../../components/shared/Title';
 import DataGrid, {
     Column,
     ColumnChooser,
@@ -26,6 +26,8 @@ import { dataFormatId } from '../../utils/common';
 import { addMenu } from '../../components/grids/Menu';
 import { onToolbar } from '../../components/grids/ToolBar';
 import urlReport from '../../services/reportServices';
+import { resources } from '../../data/app';
+import NewPurchase from './NewPurchase';
 
 const Purchases = (    
     { 
@@ -33,8 +35,8 @@ const Purchases = (
         btnAddText= "Crear entrada",
         typeId= null,
         icon="",
-        Component= null,
-        resourcesId = null,
+        Component= NewPurchase,
+        resourcesId = resources.compras,
         printName = null,
         dialog = dialogPurchase
     }) => {
@@ -92,7 +94,7 @@ const Purchases = (
             <DataGrid id="gridContainer"
                 ref={dataGrid}
                 selection={{ mode: 'single' }}
-                dataSource={store({ uri : uri.inPutProducts, remoteOperations : true, extraParameter: typeId ? { key : 'typeId', value : typeId } : null })}
+                dataSource={store({ uri : uri.purchases, remoteOperations : true, extraParameter: typeId ? { key : 'typeId', value : typeId } : null })}
                 showBorders={true}
                 showRowLines={true}
                 allowColumnResizing={true}
@@ -121,14 +123,17 @@ const Purchases = (
                 <Column dataField="areaId" caption="Area" width={170}>
                     <Lookup disabled={true} dataSource={createStoreLocal({ name: 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 
-                <Column dataField="typeId" caption="Tipo Entrada" width={150}>
-                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductType'})} valueExpr="id" displayExpr="name" />
-                </Column> 
                 <Column dataField="reference" caption='Referencia' width={100}/>
                 <Column dataField="observation" caption='Observacion'/>
-                <Column dataField="stateId" caption="Estado" width={90}>
-                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'inPutProductState'})} valueExpr="id" displayExpr="name" />
+
+                <Column dataField="purchaseTypeId" caption="Tipo Compra" width={90}>
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'purchaseTypes'})} valueExpr="id" displayExpr="name" />
                 </Column> 
+
+                <Column dataField="statusId" caption="Estado" width={90}>
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'purchaseStatuses'})} valueExpr="id" displayExpr="name" />
+                </Column> 
+                
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
                 <Column dataField="createBy" caption='Creado Por'  width={120}/>
                 <Column type="buttons" width={60}>
