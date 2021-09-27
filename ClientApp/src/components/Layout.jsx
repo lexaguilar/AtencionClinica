@@ -68,6 +68,7 @@ import AppConfig from '../views/app/AppConfig';
 import BeneficiariosAll from '../views/beneficiarios/BeneficiariosAll';
 import Autorizes from '../views/movimientos/traslates/Autorizes';
 import Nefrologia from '../views/reports/hemo/Nefrologia';
+import Purchases from '../views/purchases';
 
 function Layout(props) {
     const { headerLayout } = props;
@@ -113,7 +114,7 @@ function Layout(props) {
         ,builRoute('movimientos/salidas', OutPutProducts)
         ,builRoute('movimientos/entradas', InPutProducts)
         ,builRoute('movimientos/inv-inicial', initProduct)
-        ,builRoute('movimientos/compras', initPurchases)
+        ,builRoute('movimientos/compras', Purchases)
         ,builRoute('productos', Products)
         ,builRoute('tasa-de-cambio', Rates)
         ,builRoute('proveedores', Providers)

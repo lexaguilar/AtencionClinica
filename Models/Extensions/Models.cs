@@ -20,4 +20,7 @@ namespace AtencionClinica.Models{
     public partial class AreaProductStock : ModelExtension<AreaProductStock>  {  }
     public partial class App : ModelExtension<App>  {  }
     public partial class Customer : ModelExtension<Customer>  {  }
+
+    public partial class Purchase:ModelExtension<Purchase>{}
+    public partial class PurchaseDetail:ModelExtension<PurchaseDetail>{}
 }
