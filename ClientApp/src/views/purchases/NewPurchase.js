@@ -16,6 +16,7 @@ import ButtonForm from '../../components/buttons/ButtonForm';
 import notify from 'devextreme/ui/notify';
 import { purchaseDefault } from '../../data/defaultObject';
 import { dialogPurchase } from '../../store/inPutProductPurchase/purchaseDialogReducer';
+import { purchaseStates } from '../../data/catalogos';
 
 const NewPurchase = props => {
 
@@ -91,7 +92,7 @@ const NewPurchase = props => {
         closeDialog(load);
     }
 
-    const guardarEntrada = (e) => {
+    const guardarEntrada = (e,successCallback) => {
 
         let result = refForm.current.instance.validate();
 
@@ -102,8 +103,16 @@ const NewPurchase = props => {
 
             http(uri.purchases.insert).asPost(data).then(resp => {
                 setSaving(false);
-                notify('Compra registrada correctamente');
-                closeDialog(true);
+
+                if(successCallback){
+                    successCallback(data);
+                }
+                else{
+                    notify('Compra registrada correctamente');
+                    closeDialog(true);
+                }
+
+               
             }).catch(err => {
                 setSaving(false);
                 notify(err, 'error', 5000);
@@ -111,6 +120,17 @@ const NewPurchase = props => {
 
         }
 
+    }
+
+    const procesarCompra = (e) => {
+
+        guardarEntrada(e,(data)=>{
+            http(uri.purchaseProcess).asPost(data).then(resp => {
+                notify('Compra procesada en inventario correctamente');
+                closeDialog(true);
+            });
+        });
+    
     }
 
     const setCellValue = (prop, newData, value, currentRowData) => {
@@ -145,6 +165,8 @@ const NewPurchase = props => {
     const isNew = id == 0;
 
     const textSaving = 'Guardar Entrada';
+
+    const canProcess = !isNew && purchase.statusId == purchaseStates.pendiente;
 
     return (
         <div>
@@ -262,7 +284,10 @@ const NewPurchase = props => {
                     </GroupItem>
                 </Form>
 
+
                 <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada} />
+
+                <ButtonForm saving={saving} textSaving="Procesar compra" onClick={procesarCompra} visible={canProcess} icon="check"/>
 
             </Popup>
         </div>

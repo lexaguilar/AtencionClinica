@@ -1,3 +1,4 @@
+import useAuthorization from "../hooks/useAuthorization";
 import { createProxy, createProxyBase } from "./proxy";
 
 const uri = {
@@ -60,7 +61,7 @@ uri.beneficarios = inss => {
     return urls;
 };
 
-
+uri.purchaseProcess="purchases/Process"
 
 uri.follows = areaId =>  createProxy(`follows/get/${areaId}`,`follows/post`);
 uri.followsPrivate = areaId =>  createProxy(`followsprivate/get/${areaId}`,`followsprivate/post`);

@@ -40,6 +40,8 @@ export const inPutProductStates = { ...estadoGeneric };
 
 export const outPutProductStates = { ...estadoGeneric };
 
+export const purchaseStates={pendiente:1,procesada:2,anulada:3}
+
 export const monedaSymbol = {
     1: "C$",
     2: "$"

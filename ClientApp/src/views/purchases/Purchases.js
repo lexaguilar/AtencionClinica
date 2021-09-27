@@ -16,7 +16,7 @@ import DataGrid, {
 import {  createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-import { inPutProductStates } from '../../data/catalogos';
+import { inPutProductStates, purchaseStates } from '../../data/catalogos';
 import { dataAccess, formatDate, formatDateTime } from '../../data/app';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
@@ -51,7 +51,7 @@ const Purchases = (
     const onRowPrepared = (e) => {
         if (e.rowType == 'data') {
             
-            if (e.data.stateId == inPutProductStates.noActivo) 
+            if (e.data.stateId == purchaseStates.anulada) 
                 e.rowElement.classList.add('no-activo');
             
         }

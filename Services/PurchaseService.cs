@@ -19,8 +19,10 @@ namespace AtencionClinica.Services
 {
     public interface IPurchaseService
     {
-        ModelValidationSource<Purchase> Create(Purchase purchase);
-        ModelValidationSource<Purchase> Update(Purchase purchase);
+        (bool IsSuccess, string Error) Create(Purchase purchase);
+        (bool IsSuccess, string Error) Delete(int id);
+        (bool IsSuccess, string Error) Process(string userName, int id);
+        (bool IsSuccess, string Error) Update(Purchase purchase);
     }
 
     public class PurchaseService : IPurchaseService
@@ -30,96 +32,140 @@ namespace AtencionClinica.Services
         {
             _db = db;
         }
-        public ModelValidationSource<Purchase> Create(Purchase purchase)
+        public (bool IsSuccess, string Error) Create(Purchase purchase)
         {
 
             Init(purchase);
 
-            var model =Validate( purchase);
+            var model = Validate(purchase);
 
-            if (!model.IsValid)
+            if (!model.IsSuccess)
                 return model;
 
             _db.Purchases.Add(purchase);
 
-            foreach (var item in purchase.PurchaseDetails)
-            {
-                var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == purchase.AreaId && x.ProductId == item.ProductId);
+            _db.SaveChanges();
 
-                if (stock == null)
-                {
-                    var areaProductStock = new AreaProductStock
-                    {
-                        AreaId = purchase.AreaId,
-                        ProductId = item.ProductId,
-                        Stock = item.Quantity,
-                        CostAvg = item.Cost,
-                        CostReal = item.Cost,
-                        Min = 0,
-                        Price = item.Price,
-                        StockMin = 0,
-                        Inherit = true
-                    };
-
-                    item.CostAvg = item.Cost;
-                    item.Stocks = item.Quantity;
-
-                    _db.AreaProductStocks.Add(areaProductStock);
-                }
-                else
-                {
-                    var costoPromedioAnt = stock.CostAvg;
-                    var existencias = stock.Stock;
-
-                    stock.Price = item.Price;
-                    stock.Stock += item.Quantity;
-                    stock.CostReal = item.Cost;
-                    stock.CostAvg = ((costoPromedioAnt * Convert.ToDecimal(existencias)) + (Convert.ToDecimal(item.Quantity) * item.Cost)) / (Convert.ToDecimal(item.Quantity) + Convert.ToDecimal(existencias));
-
-                    item.CostAvg = stock.CostAvg;
-                    item.Stocks = stock.Stock;
-
-                }
-            }
-
-            //_db.SaveChanges();
-
-            return model;
+            return (true, null);
         }
 
-        //public ModelValidationSource<InPutProduct> CreateFrom(Traslate traslate)
-        //{
-        //    var items = new List<InPutProductDetail>();
-        //    foreach (var item in traslate.TraslateDetails)
-        //    {
-        //        items.Add(new InPutProductDetail
-        //        {
-        //            ProductId = item.ProductId,
-        //            Quantity = item.QuantityResponse,
-        //            Cost = item.Cost,
-        //            Price = item.Price,
-        //            Discount = item.Discount
-        //        });
-        //    }
-
-        //    var inPutProduct = new InPutProduct
-        //    {
-        //        AreaId = traslate.AreaTargetId,
-        //        TypeId = (int)InputType.Traslado,
-        //        Date = traslate.Date,
-        //        Observation = "Entrada por traslado",
-        //        CreateBy = traslate.CreateBy,
-        //        Reference = traslate.Id.ToString(),
-        //        InPutProductDetails = items
-        //    };
-
-        //    return this.Create(inPutProduct);
-
-        //}
-
-        public int Delete(int id)
+        public (bool IsSuccess, string Error) Update(Purchase source)
         {
-            throw new NotImplementedException();
+            var model = Validate(source);
+
+            if (!model.IsSuccess)
+                return model;
+
+            var purchase = _db.Purchases.Include(x => x.PurchaseDetails).FirstOrDefault(x => x.Id == source.Id);
+
+            purchase.CopyAllFromExcept(source, x => new
+            {
+                x.Id,
+                x.CreateAt,
+                x.Area,
+                x.Currency,
+                x.Provider,
+                x.PurchaseType,
+                x.Status,
+                x.PurchaseDetails
+            });
+
+            //Actualizar entradas
+            foreach (var detail in purchase.PurchaseDetails)
+            {
+                var sourceDetail = source.PurchaseDetails.FirstOrDefault(x => x.Id == detail.Id);
+                //Si no existe, marcar para eliminacion
+                if (sourceDetail == null)
+                {
+                    _db.PurchaseDetails.Remove(detail);
+                    continue;
+                }
+                detail.CopyAllFromExcept(sourceDetail, x => new
+                {
+                    x.Id,
+                    x.Product,
+                    x.Purchase
+                });
+            }
+
+            //Agregar entradas nuevas
+            source.PurchaseDetails.Where(x => x.Id == 0).ToList().ForEach(x => purchase.PurchaseDetails.Add(x));
+
+            _db.SaveChanges();
+
+            return (true, null);
+        }
+
+        public (bool IsSuccess, string Error) Process(string userName, int id)
+        {
+            var purchase = _db.Purchases.Include(x => x.PurchaseDetails).FirstOrDefault(x => x.Id == id);
+            if (purchase == null)
+                return (false, "El registro no ha sido encontrado.");
+
+            if (purchase.StatusId != (int)PurchaseStatuses.Pendiente)
+                return (false, "El estado del registro actual no permite ser procesado para su traslado a invertario.");
+
+            var now = UserHelpers.GetTimeInfo();
+
+            InPutProduct inPutProduct = new InPutProduct
+            {
+                AreaId = purchase.AreaId,
+                TypeId = (int)InputType.Compras,
+                Date = now,
+                SubTotal = purchase.SubTotal,
+                Discount = purchase.Discount,
+                Import = purchase.Import,
+                Iva = purchase.Iva,
+                Total = purchase.Total,
+                Rate = purchase.Rate,
+                Observation = purchase.Observation,
+                CurrencyId = purchase.CurrencyId,
+                StateId = 1,
+                CreateAt = now,
+                CreateBy = userName,
+                Reference = purchase.Reference,
+                ProviderId = purchase.ProviderId
+            };
+
+            foreach (var item in purchase.PurchaseDetails)
+            {
+                inPutProduct.InPutProductDetails.Add(new InPutProductDetail
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity + item.Royalty,
+                    Cost = item.Cost,
+                    Price = item.Price,
+                    SubTotal = item.SubTotal,
+                    Discount = item.Discount,
+                    Import = item.Import,
+                    Iva = item.Iva,
+                    Total = item.Total,
+                    CostAvg = item.CostAvg,
+                    Stocks = item.Stocks
+                });
+
+                ComputeAreStock(item);
+            }
+            purchase.StatusId=(int)PurchaseStatuses.Procesado;
+            _db.SaveChanges();
+
+            return (true, null);
+        }
+
+
+        public (bool IsSuccess, string Error) Delete(int id)
+        {
+            var reg = _db.Purchases.FirstOrDefault(x => x.Id == id);
+            if (reg == null)
+                return new(false, "No se encontro el registro indicado.");
+
+            if (reg.StatusId != (int)PurchaseStatuses.Pendiente)
+                return (false, "El estado actual no permite anular este registro.");
+
+            reg.StatusId = (int)PurchaseStatuses.Anulado;
+            _db.SaveChanges();
+
+            return (true, null);
         }
 
         public InPutProduct GetById(int id)
@@ -127,53 +173,9 @@ namespace AtencionClinica.Services
             throw new NotImplementedException();
         }
 
-        public ModelValidationSource<InPutProduct> Revert(InPutProduct inPutProduct)
+
+        private void Init(Purchase p)
         {
-
-
-            var model = inPutProduct.ValidateRevert(_db);
-
-            inPutProduct.Revert();
-
-            foreach (var item in inPutProduct.InPutProductDetails)
-            {
-
-                var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == inPutProduct.AreaId && x.ProductId == item.ProductId);
-
-                var lastInput = _db.InPutProductDetails
-                .Include(x => x.InPutProduct).OrderByDescending(x => x.InPutProductId)
-                .FirstOrDefault(x => x.ProductId == item.ProductId && x.InPutProduct.StateId == 1 && x.InPutProductId < inPutProduct.Id);
-
-                if (lastInput == null)
-                {
-
-                    _db.AreaProductStocks.Remove(stock);
-
-                }
-                else
-                {
-                    stock.Stock = lastInput.Stocks;
-                    stock.CostAvg = lastInput.CostAvg;
-                    stock.CostReal = lastInput.Cost;
-                    stock.Price = lastInput.Price;
-                }
-
-            }
-
-            if (!model.IsValid)
-                return model;
-
-            return model;
-
-
-        }
-
-        public ModelValidationSource<Purchase> Update(Purchase purchase)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Init(Purchase p) {
             var app = _db.Apps.SingleOrDefault();
 
             p.CurrencyId = app.DefaultCurrency;
@@ -188,7 +190,7 @@ namespace AtencionClinica.Services
             foreach (var item in p.PurchaseDetails)
             {
 
-                item.SubTotal = Math.Round(Convert.ToDecimal(item.Quantity+item.Royalty) * item.Cost, 6);
+                item.SubTotal = Math.Round(Convert.ToDecimal(item.Quantity + item.Royalty) * item.Cost, 6);
                 item.Discount = 0;
                 item.Import = item.SubTotal - item.Discount;
                 item.Total = item.Import + item.Iva;
@@ -202,60 +204,103 @@ namespace AtencionClinica.Services
             p.Total = p.PurchaseDetails.Sum(x => x.Total);
         }
 
-        public ModelValidationSource<Purchase> Validate(Purchase p)
+        private (bool IsSuccess, string Msg) Validate(Purchase p)
         {
 
             var modelValidation = new ModelValidationSource<Purchase>(p);
             modelValidation.model = p;
 
             if (p.Rate == 0)
-                return modelValidation.AsError($"No se encontró la tasa de cambio para la fecha {p.Date}");
+                return (false, $"No se encontrï¿½ la tasa de cambio para la fecha {p.Date}");
 
             var area = _db.Areas.FirstOrDefault(x => x.Id == p.AreaId);
 
             if (area == null)
-                return modelValidation.AsError($"No se encontró el area");
+                return (false, $"No se encontrï¿½ el area");
 
             if (!area.Active)
-                return modelValidation.AsError($"El area {area.Name} no esta activa");
+                return (false, $"El area {area.Name} no esta activa");
 
             var app = _db.Apps.FirstOrDefault();
 
-            if ( area.Id != app.AreaMainId)
-                return modelValidation.AsError($"El area {area.Name} no esta habilitada para ingreso de compras");
+            if (area.Id != app.AreaMainId)
+                return (false, $"El area {area.Name} no esta habilitada para ingreso de compras");
 
             var totalItems = p.PurchaseDetails.Select(x => x.ProductId).Distinct().Count();
             if (totalItems != p.PurchaseDetails.Select(x => x.ProductId).Count())
-                return modelValidation.AsError($"No se permite items duplicados");
+                return (false, $"No se permite items duplicados");
 
             var lastPurchase = _db.Purchases.Where(x => x.AreaId == p.AreaId).OrderByDescending(x => x.Id).FirstOrDefault();
             if (lastPurchase != null)
                 if (lastPurchase.Date > p.Date)
-                    return modelValidation.AsError($"No se puede crear una entrada de inventario con fecha menor a {lastPurchase.Date}");
+                    return (false, $"No se puede crear una entrada de inventario con fecha menor a {lastPurchase.Date}");
 
             foreach (var item in p.PurchaseDetails)
             {
                 var product = _db.Products.FirstOrDefault(x => x.Id == item.ProductId);
                 if (product.StateId != 1)
-                    return modelValidation.AsError($"El producto {product.Name} no esta activo");
+                    return (false, $"El producto {product.Name} no esta activo");
 
                 if (item.Quantity <= 0)
-                    return modelValidation.AsError($"La cantidad del item {product.Name} no debe ser menor o igual a 0");
+                    return (false, $"La cantidad del item {product.Name} no debe ser menor o igual a 0");
 
-                if ( item.Cost <= 0)
-                    return modelValidation.AsError($"El costo del producto {product.Name} no debe ser menor o igual a 0");
+                if (item.Cost <= 0)
+                    return (false, $"El costo del producto {product.Name} no debe ser menor o igual a 0");
 
                 if (item.Price <= 0)
-                    return modelValidation.AsError($"El precio del producto {product.Name} no debe ser menor o igual a 0");
+                    return (false, $"El precio del producto {product.Name} no debe ser menor o igual a 0");
 
                 if (app.ValidatePriceGreaterCost && item.Price <= item.Cost)
-                    return modelValidation.AsError($"El precio del producto {product.Name} es menor al costo");
-                               
+                    return (false, $"El precio del producto {product.Name} es menor al costo");
+
 
             }
 
-            return modelValidation.AsOk();
+            return (true, null);
         }
+
+
+        private void ComputeAreStock(PurchaseDetail item)
+        {
+            var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == item.Purchase.AreaId && x.ProductId == item.ProductId);
+
+            if (stock == null)
+            {
+                var areaProductStock = new AreaProductStock
+                {
+                    AreaId = item.Purchase.AreaId,
+                    ProductId = item.ProductId,
+                    Stock = item.Quantity,
+                    CostAvg = item.Cost,
+                    CostReal = item.Cost,
+                    Min = 0,
+                    Price = item.Price,
+                    StockMin = 0,
+                    Inherit = true
+                };
+
+                item.CostAvg = item.Cost;
+                item.Stocks = item.Quantity;
+
+                _db.AreaProductStocks.Add(areaProductStock);
+            }
+            else
+            {
+                var costoPromedioAnt = stock.CostAvg;
+                var existencias = stock.Stock;
+
+                stock.Price = item.Price;
+                stock.Stock += item.Quantity;
+                stock.CostReal = item.Cost;
+                stock.CostAvg = ((costoPromedioAnt * Convert.ToDecimal(existencias)) + (Convert.ToDecimal(item.Quantity) * item.Cost)) / (Convert.ToDecimal(item.Quantity) + Convert.ToDecimal(existencias));
+
+                item.CostAvg = stock.CostAvg;
+                item.Stocks = stock.Stock;
+
+            }
+        }
+
+
     }
 
     public static class PurchaseServiceCollectionExtensions
