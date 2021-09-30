@@ -8,11 +8,11 @@ import { createStore } from '../../utils/proxy';
 import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import useProducts from '../../hooks/useProducts';
 
-const ProductsProcedimientos = ({ user, serviceId }) => {
+const ProductsProcedimientos = ({ areaId, serviceId }) => {
 
     const exists = true;
 
-    const { products } = useProducts({areaId: user.areaId, exists});
+    const { products } = useProducts({areaId, exists});
 
     const onInitNewRow = (e) => {  
         e.data.serviceId = serviceId;  

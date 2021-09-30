@@ -91,7 +91,7 @@ const ProcedimientoEstandar = () => {
                         <Column dataField="name" caption='Procedimiento' />
                     </DataGrid>          
                 </div>
-                <ProductsProcedimientos serviceId={serviceId} user={user} />
+                <ProductsProcedimientos serviceId={serviceId} areaId={areaId} />
             </div>
         </div>
     );
