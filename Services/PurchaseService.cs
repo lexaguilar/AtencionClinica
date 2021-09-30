@@ -147,6 +147,7 @@ namespace AtencionClinica.Services
                 ComputeAreStock(item);
             }
             purchase.StatusId=(int)PurchaseStatuses.Procesado;
+            _db.InPutProducts.Add(inPutProduct);
             _db.SaveChanges();
 
             return (true, null);
