@@ -181,8 +181,8 @@ namespace AtencionClinica.Controllers
 
             if (values.ContainsKey("onlyNow"))
             {
-                var onlyNow = DateTime.Today;
-                admissions = admissions.Where(x => x.CreateAt.Date == onlyNow);
+                var onlyNow = DateTime.Today.AddHours(-8);
+                admissions = admissions.Where(x => x.CreateAt >= onlyNow);
             }
 
             var items = admissions.Skip(skip).Take(take).Select(x => new {

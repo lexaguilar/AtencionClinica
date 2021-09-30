@@ -127,8 +127,6 @@ const Nuevo = props => {
 
     const text = 'Guardar orden';
 
-
-
     return (
         <div>
             <Popup
