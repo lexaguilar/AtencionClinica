@@ -127,11 +127,11 @@ const Purchases = (
                 <Column dataField="observation" caption='Observacion'/>
 
                 <Column dataField="purchaseTypeId" caption="Tipo Compra" width={90}>
-                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'purchaseTypes'})} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'PurchaseType'})} valueExpr="id" displayExpr="name" />
                 </Column> 
 
                 <Column dataField="statusId" caption="Estado" width={90}>
-                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'purchaseStatuses'})} valueExpr="id" displayExpr="name" />
+                    <Lookup disabled={true} dataSource={createStoreLocal({name: 'PurchaseStatus'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>

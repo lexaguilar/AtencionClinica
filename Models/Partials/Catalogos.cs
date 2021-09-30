@@ -34,4 +34,5 @@ namespace AtencionClinica.Models
     public partial class PrivateCustomerType : ICatalogo {  }
     public partial class ServiceType : ICatalogo {  }
     public partial class PurchaseType : ICatalogo { }
+    public partial class PurchaseStatus : ICatalogo { }
 }

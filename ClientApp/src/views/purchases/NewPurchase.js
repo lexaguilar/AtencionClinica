@@ -171,8 +171,8 @@ const NewPurchase = props => {
     return (
         <div>
             <Popup
-                width={1050}
-                height={580}
+                width={950}
+                height={520}
                 title={isNew ? `Nueva compra de inventario` : `Compra #${formatId(id)}`}
                 onHiding={onHiding}
                 visible={open}
