@@ -23,7 +23,9 @@ export const purchaseDefault = {
     areaId: 0,
     date : new Date(moment().year(), moment().month(), moment().date(), 0, 0, 0, 0),
     typeId:0,
-    providerId: 0,
+    purchaseTypeId:1,//Contado
+    providerId: null,
     observaction: '',
     rate : 0,
+
 }

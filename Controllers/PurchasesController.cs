@@ -17,14 +17,14 @@ namespace AtencionClinica.Controllers
     public class PurchasesController : Controller
     {
         private ClinicaContext _db = null;
-        //private IProductServices<InPutProduct> _service;
-        public PurchasesController(ClinicaContext db)
+        private IPurchaseService _service;
+        public PurchasesController(ClinicaContext db, IPurchaseService service)
         {
             this._db = db;
-            //_service = service;
+            _service = service;
         }
 
-         [Route("api/[Controller]/get/{id}")]
+        [Route("api/[Controller]/get/{id}")]
 
         public IActionResult GetById(int id)
         {
@@ -37,13 +37,13 @@ namespace AtencionClinica.Controllers
         {
 
             var user = this.GetAppUser(_db);
-            if(user == null)
+            if (user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
             IQueryable<Purchase> purchases = _db.Purchases.Where(x => x.AreaId == user.AreaId)
-           .OrderByDescending(x => x.Id);            
+           .OrderByDescending(x => x.Id);
 
-            
+
 
             if (values.ContainsKey("reference"))
             {
@@ -64,55 +64,66 @@ namespace AtencionClinica.Controllers
         [Route("api/[Controller]/area/{areaId}/get")]
         public IActionResult Get(int areaId)
         {
-           var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId).Select(x => x.Service);
+            var result = _db.AreaServices.Include(x => x.Service).Where(x => x.AreaId == areaId).Select(x => x.Service);
 
-           return Json(result);
+            return Json(result);
 
         }
 
         [HttpPost("api/[Controller]/post")]
-        public IActionResult Post([FromBody] InPutProduct inPutProduct)
-        {            
+        public IActionResult Post([FromBody] Purchase purchase)
+        {
 
             var user = this.GetAppUser(_db);
-            if(user == null)
+            if (user == null)
                 return BadRequest("La informacion del usuario cambio, inicie sesion nuevamente");
 
-            if (inPutProduct.Id == 0)
+            if (purchase.Id == 0)
             {
 
-                inPutProduct.CreateBy = user.Username;                
+                purchase.CreateBy = user.Username;
 
-                // var result = BadRequest();//  _service.Create(inPutProduct);
+                var result = _service.Create(purchase);
 
-                // if(!result.IsValid)
-                //     return BadRequest(result.Error);
-                
+                if (!result.IsSuccess)
+                    return BadRequest(result.Error);
+
             }
             else
             {
-                // var result =BadRequest(); //_service.Update(inPutProduct);
+                var result = _service.Update(purchase);
 
-                // if(!result.IsValid)
-                //     return BadRequest(result.cleanError);
+                if (!result.IsSuccess)
+                    return BadRequest(result.Error);
             }
 
             _db.SaveChanges();
 
-            return Json(inPutProduct);
+            return Json(purchase);
 
         }
-        
+
+        [HttpPost("api/[Controller]/[action]")]
+        public IActionResult Process([FromBody] Purchase purchase)
+        {
+            var result = _service.Process(this.User.Identity.Name, purchase.Id);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Json(new {purchase.Id});
+
+        }
+
         [HttpGet("api/[Controller]/{id}/delete")]
         public IActionResult Delete(int id)
         {
-            var inPutProduct = _db.Purchases.Include(x => x.PurchaseDetails).FirstOrDefault(x => x.Id == id);            
+            var purchase = _db.Purchases.Include(x => x.PurchaseDetails).FirstOrDefault(x => x.Id == id);
 
-            //_service.Revert(inPutProduct);
+            var result = _service.Delete(id);
 
-            _db.SaveChanges();            
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
 
-            return Json(new { n = id });
+            return Json(new {id});
         }
 
     }

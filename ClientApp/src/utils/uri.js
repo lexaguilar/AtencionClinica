@@ -1,3 +1,4 @@
+import useAuthorization from "../hooks/useAuthorization";
 import { createProxy, createProxyBase } from "./proxy";
 
 const uri = {
@@ -26,6 +27,7 @@ const uri = {
     estados: createProxyBase('estados'),
     file: createProxy('', 'percapitas/post/file'),
     fileRates: createProxy('', 'rates/post/file'),
+    purchases:createProxyBase('purchases'), 
     inPutProducts: createProxyBase('inPutProducts'),  
     outPutProducts: createProxyBase('outPutProducts'),  
     traslates: createProxyBase('traslates'),  
@@ -59,7 +61,7 @@ uri.beneficarios = inss => {
     return urls;
 };
 
-
+uri.purchaseProcess="purchases/Process"
 
 uri.follows = areaId =>  createProxy(`follows/get/${areaId}`,`follows/post`);
 uri.followsPrivate = areaId =>  createProxy(`followsprivate/get/${areaId}`,`followsprivate/post`);

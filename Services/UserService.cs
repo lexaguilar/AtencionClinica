@@ -86,7 +86,8 @@ namespace AtencionClinica.Services
         private ClaimsIdentity CreateClaims(User user)
         {
             //Crear identidad principal
-            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, user.Username) });
+            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, user.Username),
+            new Claim(ClaimTypes.Name, user.Username) });
 
             //Agregar resursos
             identity.AddClaim(new Claim(AppClaimTypes.AreaId, user.AreaId.ToString()));

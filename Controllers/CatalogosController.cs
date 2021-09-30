@@ -73,6 +73,8 @@ namespace AtencionClinica.Controllers
             var InPutProductType = db.InPutProductTypes.ToArray();
             var outPutProductType = db.OutPutProductTypes.ToArray();
             var productState = db.ProductStates.ToArray();
+            var purchaseStatuses=db.PurchaseStatuses.ToArray();
+            var purchaseTypes=db.PurchaseTypes.ToArray();
             var area = db.Areas.ToArray();
             var currency = db.Currencies.ToArray();
             var billType = db.BillTypes.ToArray();
@@ -96,6 +98,8 @@ namespace AtencionClinica.Controllers
                 outPutProductState,
                 outPutProductType,
                 productState,
+                purchaseStatuses,
+                purchaseTypes,
                 area,
                 currency,
                 billType,
