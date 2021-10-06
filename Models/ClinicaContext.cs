@@ -1077,7 +1077,7 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
-
+            
             modelBuilder.Entity<OutPutProduct>(entity =>
             {
                 entity.HasIndex(e => e.AreaId, "IX_OutPutProducts_Area");
