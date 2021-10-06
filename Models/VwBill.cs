@@ -29,5 +29,6 @@ namespace AtencionClinica.Models
         public bool Active { get; set; }
         public decimal? Value { get; set; }
         public DateTime? AddAt { get; set; }
+        public string Observation { get; set; }
     }
 }
