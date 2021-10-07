@@ -108,8 +108,14 @@ const NewPurchase = props => {
                     successCallback(data);
                 }
                 else{
-                    notify('Compra registrada correctamente');
-                    closeDialog(true);
+                    if( isNew){
+                        notify('Compra registrada correctamente');
+                        closeDialog(true);
+                    }
+                    else{
+                        notify('Compra actualizada correctamente');
+                    }
+                    
                 }
 
                
@@ -167,6 +173,8 @@ const NewPurchase = props => {
     const textSaving = 'Guardar Entrada';
 
     const canProcess = !isNew && purchase.statusId == purchaseStates.pendiente;
+
+    const canSave = isNew || purchase.statusId == purchaseStates.pendiente;
 
     return (
         <div>
@@ -285,10 +293,9 @@ const NewPurchase = props => {
                 </Form>
 
 
-                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada} />
-
+                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada} visible={canSave} />
                 <ButtonForm saving={saving} textSaving="Procesar compra" onClick={procesarCompra} visible={canProcess} icon="check"/>
-
+               
             </Popup>
         </div>
     );
