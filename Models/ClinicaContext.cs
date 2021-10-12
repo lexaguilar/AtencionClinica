@@ -121,6 +121,7 @@ namespace AtencionClinica.Models
         public virtual DbSet<VwLastMedicinesByPrivate> VwLastMedicinesByPrivates { get; set; }
         public virtual DbSet<VwProductInfo> VwProductInfos { get; set; }
         public virtual DbSet<VwStocksForArea> VwStocksForAreas { get; set; }
+        public virtual DbSet<VwTestsByPrivate> VwTestsByPrivates { get; set; }
         public virtual DbSet<VwTestsResult> VwTestsResults { get; set; }
         public virtual DbSet<WorkOrder> WorkOrders { get; set; }
         public virtual DbSet<WorkOrderDetail> WorkOrderDetails { get; set; }
@@ -1076,7 +1077,7 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
-
+            
             modelBuilder.Entity<OutPutProduct>(entity =>
             {
                 entity.HasIndex(e => e.AreaId, "IX_OutPutProducts_Area");
@@ -1326,6 +1327,10 @@ namespace AtencionClinica.Models
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.PhoneNumber)
@@ -2669,6 +2674,10 @@ namespace AtencionClinica.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Observation)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.RegisterAt).HasColumnType("date");
@@ -3037,6 +3046,25 @@ namespace AtencionClinica.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Um)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwTestsByPrivate>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTestsByPrivate");
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Doctor)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TestName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);

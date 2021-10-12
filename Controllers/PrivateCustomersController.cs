@@ -233,5 +233,26 @@ namespace AtencionClinica.Controllers
             return Json(products);
 
         }
+
+        [Route("api/privateCustomers/{customerId}/tests")]
+        public IActionResult Tests(int customerId,int skip=0, int take=20, IDictionary<string, string> values=null) 
+        {
+            var products = _db.VwTestsByPrivates.Where(x => x.PrivateCustomerId == customerId)
+            .OrderByDescending(x => x.CreateAt)
+            .Skip(skip).Take(take);
+            return Json(products);
+
+        }
+
+        [Route("api/privateCustomers/{customerId}/bills")]
+        public IActionResult Bills(int customerId,int skip=0, int take=20, IDictionary<string, string> values=null) 
+        {
+            var products = _db.Bills.Where(x => x.PrivateCustomerId == customerId)
+            .OrderByDescending(x => x.CreateAt)
+            .Skip(skip).Take(take)
+            .Select(x=>new {x.Id,x.CreateAt,Currency=x.Currency.Name ,x.Total});
+            return Json(products);
+
+        }
     }
 }

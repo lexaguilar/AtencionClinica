@@ -191,7 +191,7 @@ namespace AtencionClinica.Services
             foreach (var item in p.PurchaseDetails)
             {
 
-                item.SubTotal = Math.Round(Convert.ToDecimal(item.Quantity + item.Royalty) * item.Cost, 6);
+                item.SubTotal = Math.Round(Convert.ToDecimal(item.Quantity ) * item.Cost, 6);
                 item.Discount = 0;
                 item.Import = item.SubTotal - item.Discount;
                 item.Total = item.Import + item.Iva;

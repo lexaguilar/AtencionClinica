@@ -7,6 +7,8 @@ import { estadoAdmision } from '../../data/catalogos';
 import { createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import GridListaMedicamentoPte from '../workOrders/GridListaMedicamentoPte';
+import GridListaExamenesPte from '../workOrders/GridListaExamenesPte';
+import GridListaFacturasPte from '../workOrders/GridListaFacturasPte';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import DropDownClients from '../../components/dropdown/DropDownClients';
@@ -50,10 +52,10 @@ const ExpedienteClinicoPrivado = () => {
                             <GridListaMedicamentoPte customerId={customerId} />
                         </TabPanel>
                         <TabPanel>
-
+                            <GridListaExamenesPte customerId={customerId} />
                         </TabPanel>
                         <TabPanel>
-
+                            <GridListaFacturasPte customerId={customerId} />
                         </TabPanel>
                     </Tabs>
             </form>

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createStore, createStoreLocal } from '../../utils/proxy';
 import { editorOptionsSelect } from '../../data/app';
 import { DataGrid } from 'devextreme-react';
-import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid } from 'devextreme-react/data-grid';
+import { Column, Editing, Lookup, RequiredRule as RuleRequired, Button as ButtonGrid ,Summary,TotalItem} from 'devextreme-react/data-grid';
 import ProductDDBComponent from '../../components/dropdown/ProductDDBComponent';
 import uri from '../../utils/uri';
 import { cellRender, formatId, onCellPrepared } from '../../utils/common';
@@ -92,7 +92,7 @@ const NewPurchase = props => {
         closeDialog(load);
     }
 
-    const guardarEntrada = (e,successCallback) => {
+    const guardarEntrada = (e, successCallback) => {
 
         let result = refForm.current.instance.validate();
 
@@ -104,15 +104,21 @@ const NewPurchase = props => {
             http(uri.purchases.insert).asPost(data).then(resp => {
                 setSaving(false);
 
-                if(successCallback){
+                if (successCallback) {
                     successCallback(data);
                 }
-                else{
-                    notify('Compra registrada correctamente');
-                    closeDialog(true);
+                else {
+                    if (isNew) {
+                        notify('Compra registrada correctamente');
+                        closeDialog(true);
+                    }
+                    else {
+                        notify('Compra actualizada correctamente');
+                    }
+
                 }
 
-               
+
             }).catch(err => {
                 setSaving(false);
                 notify(err, 'error', 5000);
@@ -124,13 +130,13 @@ const NewPurchase = props => {
 
     const procesarCompra = (e) => {
 
-        guardarEntrada(e,(data)=>{
+        guardarEntrada(e, (data) => {
             http(uri.purchaseProcess).asPost(data).then(resp => {
                 notify('Compra procesada en inventario correctamente');
                 closeDialog(true);
             });
         });
-    
+
     }
 
     const setCellValue = (prop, newData, value, currentRowData) => {
@@ -149,15 +155,15 @@ const NewPurchase = props => {
         }
 
         if (prop == 'quantity' && (+value) >= 0) {
-            newData['total'] = currentRowData['cost'] * value + currentRowData['royalty'] * currentRowData['cost'];
+            newData['total'] = currentRowData['cost'] * value;
         }
 
-        if (prop == 'royalty' && (+value) >= 0) {
-            newData['total'] = currentRowData['cost'] * value + currentRowData['quantity'] * currentRowData['cost'];
-        }
+        // if (prop == 'royalty' && (+value) >= 0) {
+        //     newData['total'] = currentRowData['cost'] * value + currentRowData['quantity'] * currentRowData['cost'];
+        // }
 
         if (prop == 'cost' && (+value) >= 0) {
-            newData['total'] = currentRowData['quantity'] * value + currentRowData['royalty'] * value;
+            newData['total'] = currentRowData['quantity'] * value;
         }
 
     }
@@ -167,6 +173,8 @@ const NewPurchase = props => {
     const textSaving = 'Guardar Entrada';
 
     const canProcess = !isNew && purchase.statusId == purchaseStates.pendiente;
+
+    const canSave = isNew || purchase.statusId == purchaseStates.pendiente;
 
     return (
         <div>
@@ -220,7 +228,7 @@ const NewPurchase = props => {
                         {/* <EmptyItem></EmptyItem> */}
                         <SimpleItem dataField="observation" colSpan={3} editorType="dxTextArea">
                             <Label text="Observacion" />
-                            <RequiredRule message="Ingrese una observacion" />
+                            {/* <RequiredRule message="Ingrese una observacion" /> */}
                             <StringLengthRule max={500} message="Maximo 500 caracteres" />
                         </SimpleItem>
                     </GroupItem>
@@ -280,14 +288,20 @@ const NewPurchase = props => {
                                 selectTextOnEditStart={true}
                                 useIcons={true}
                             ></Editing>
+                            <Summary>
+                                <TotalItem
+                                    column="total"
+                                    summaryType="sum"
+                                    valueFormat="currency" 
+                                    displayFormat="Total: {0}"/>
+                            </Summary>
                         </DataGrid>
                     </GroupItem>
                 </Form>
 
 
-                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada} />
-
-                <ButtonForm saving={saving} textSaving="Procesar compra" onClick={procesarCompra} visible={canProcess} icon="check"/>
+                <ButtonForm saving={saving} textSaving={textSaving} onClick={guardarEntrada} visible={canSave} />
+                <ButtonForm saving={saving} textSaving="Procesar compra" onClick={procesarCompra} visible={canProcess} icon="check" />
 
             </Popup>
         </div>
