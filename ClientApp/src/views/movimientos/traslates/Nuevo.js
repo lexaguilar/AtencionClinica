@@ -51,8 +51,9 @@ const Nuevo = props => {
 
                 setTraslate({ ...withOutDetaill(resp) });
 
-                http(uri.products.getByArea(resp.areaSourceId)).asGet({exists, active }).then(data =>{
+                http(uri.products.getByArea(resp.areaSourceId)).asGet({exists:!exists, active }).then(data =>{
                     
+                    console.log(data);
                     setProducts(data);
 
                     let arr = resp.traslateDetails.map(prod => {
@@ -61,6 +62,7 @@ const Nuevo = props => {
 
                         prod['presentation'] = info.presentation;
                         prod['um'] = info.um;
+                        prod['stock'] = info.stock;
 
                         return prod;
                     })
@@ -279,6 +281,13 @@ const Nuevo = props => {
                                 dataType="number" width={80} 
                                 visible={!isCreate}
                                 setCellValue={setCellValueForResponse.bind(null,"quantityResponse")}>
+                                <RuleRequired />
+                            </Column>
+                            <Column dataField="stock" 
+                                caption="Existencia" 
+                                dataType="number" width={80} 
+                                visible={!isCreate}
+                                allowEditing={false}>
                                 <RuleRequired />
                             </Column>
                             <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
