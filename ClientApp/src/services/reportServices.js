@@ -3,7 +3,7 @@ const urlReport = () =>
     const urlPre = "http://pre-reports.clinicaflordesacuanjoche.com/";
     const urlPro = "http://reports.clinicaflordesacuanjoche.com/";
 
-    const urlBase = process.env.NODE_ENV == "development" ? urlPre : urlPre;    
+    const urlBase = process.env.NODE_ENV == "development" ? urlPro : urlPro;    
 
     return {
         admisionTicket : id => `${urlBase}admisions?id=${id}`,

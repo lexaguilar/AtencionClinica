@@ -220,7 +220,9 @@ namespace AtencionClinica.Controllers
 
             var area = _db.Areas.FirstOrDefault(x => x.Id == admission.AreaId);
 
-            if(area.TypeId != (int)AreaTypes.Admision)
+            var areaUsuario = _db.Areas.FirstOrDefault(x => x.Id == user.AreaId);
+
+            if(areaUsuario.TypeId != (int)AreaTypes.Admision)
                 return BadRequest("Solo se permite admisionar desde el area de admision");
 
             var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > DateTime.Today && x.Active && x.TypeId == (int)AdmisionTypes.Consulta);

@@ -68,7 +68,7 @@ const Nuevo = props => {
             />
             <Popup
                 width={620}
-                height={350}
+                height={400}
                 title="Subir archivo"
                 onHiding={hideInfo}
                 visible={open}
