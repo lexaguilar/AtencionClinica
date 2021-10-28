@@ -53,13 +53,12 @@ const Nuevo = props => {
 
                 http(uri.products.getByArea(resp.areaSourceId)).asGet({exists:!exists, active }).then(data =>{
                     
-                    console.log(data);
                     setProducts(data);
 
                     let arr = resp.traslateDetails.map(prod => {
 
                         let info = data.find(x => x.id == prod.productId);
-
+                        console.log(info);
                         prod['presentation'] = info.presentation;
                         prod['um'] = info.um;
                         prod['stock'] = info.stock;
@@ -148,10 +147,15 @@ const Nuevo = props => {
         if(prop == 'productId' && value){
 
             let info = products.find(x => x.id == value);
+
+            console.log(info);
+
             newData['presentation'] = info.presentation;
             newData['um'] = info.um
             newData['cost'] = info.cost;        
-            newData['quantityResponse'] = 0;  
+            newData['quantityResponse'] = 0;
+            newData['stock'] = info.stock;
+
             !currentRowData['quantityRequest'] && (newData['quantityRequest'] = 1);
             !currentRowData['total'] &&( newData['total'] = info.cost);
 

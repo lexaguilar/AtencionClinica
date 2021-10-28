@@ -146,6 +146,7 @@ const Admisiones = props => {
                 <Column dataField="specialtyId" width={150} caption="Especialidad">
                     <Lookup disabled={true} dataSource={createStoreLocal({name : 'specialty'})} valueExpr="id" displayExpr="name" />
                 </Column> 
+                <Column dataField="Finished" caption='Cerrado' width={80} visible={false} />
                 <Column dataField="createBy" caption='Creado por' width={80}  allowHeaderFiltering={false} visible={false}/>
                 <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150}  allowHeaderFiltering={false}/>
                 <Column dataField="active" caption='Estado' width={80} visible={false} />

@@ -109,7 +109,7 @@ const Privados = () => {
                     <Lookup disabled={true} dataSource={createStoreLocal({ name:'privateCustomerStat'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField='address' caption="Dirección" visible={false}></Column>
-                <Column dataField='observation' caption="Dirección" visible={false}></Column>
+                <Column dataField='observation' caption="Observation" visible={false}></Column>
                 <Editing
                     mode="popup"
                     allowUpdating={true}                       

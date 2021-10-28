@@ -75,7 +75,7 @@ namespace AtencionClinica.Controllers
         }
 
         [Route("api/customers/get/{inss}")]
-        public IActionResult GetById(string inss)
+        public IActionResult GetById(string inss, [FromQuery] bool onlyBeneficary)
         {
 
             var id = 0;
@@ -83,33 +83,30 @@ namespace AtencionClinica.Controllers
 
             if(success){
 
-                var percapitaResult = _db.Percapitas
-                .Where(x => x.InssPareja == id
-                    || x.InssHijo1 == id
-                    || x.InssHijo2 == id
-                    || x.InssHijo3 == id
-                    || x.InssHijo4 == id
-                    )
-                .OrderByDescending(x => x.Id).FirstOrDefault(); 
+                Percapita percapitaResult = null;
+
+                if(onlyBeneficary)
+                    percapitaResult = _db.Percapitas
+                    .Where(x => x.InssPareja == id
+                        || x.InssHijo1 == id
+                        || x.InssHijo2 == id
+                        || x.InssHijo3 == id
+                        || x.InssHijo4 == id
+                        )
+                    .OrderByDescending(x => x.Id).FirstOrDefault(); 
+                else
+                    percapitaResult = _db.Percapitas.FirstOrDefault(x => x.Inss == id);     
+
+                if(percapitaResult == null)
+                    return BadRequest($"No se encontró el asegurado con el inss {inss}");
 
                 Customer result = null;
-                if(percapitaResult != null){
-
-                      //search by inss or id
-                    //var result = _db.Customers.Where(x => x.Inss == inss || x.Id == id);
-                    result = _db.Customers.FirstOrDefault(x => x.Inss == percapitaResult.Inss);
+                result = _db.Customers.FirstOrDefault(x => x.Inss == percapitaResult.Inss);
                 
-                }else{
+                // }else{
+                //     result = _db.Customers.FirstOrDefault(x => x.Inss == id);
 
-                    //search by inss or id
-                    //var result = _db.Customers.Where(x => x.Inss == inss || x.Id == id);
-                    result = _db.Customers.FirstOrDefault(x => x.Inss == id);
-
-                }
-
-                
-
-
+                // }
 
                 if(result==null){
                     var beneficiary = _db.Beneficiaries.FirstOrDefault(x => x.InssAlternative == id);

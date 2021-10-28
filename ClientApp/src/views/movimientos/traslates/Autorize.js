@@ -60,6 +60,8 @@ const Autorize = props => {
 
                         prod['presentation'] = info.presentation;
                         prod['um'] = info.um;
+                        prod['stock'] = info.stock;
+
 
                         return prod;
                     })
@@ -225,7 +227,13 @@ const Autorize = props => {
                                 allowEditing={isCreate}                 
                                 setCellValue={setCellValue.bind(null,"quantityRequest")}>
                                 <RuleRequired />
-                            </Column>                           
+                            </Column>       
+                            <Column dataField="stock" 
+                                caption="Existencia" 
+                                dataType="number" width={80} 
+                                allowEditing={false}>
+                                <RuleRequired />
+                            </Column>                    
                             <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} cellRender={cellRender()} >
                                 <RuleRequired />
                             </Column>

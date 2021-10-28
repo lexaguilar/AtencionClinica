@@ -7,20 +7,22 @@ import Form, { SimpleItem, GroupItem, Label } from 'devextreme-react/form';
 import { createProxyBase, createStoreLocal } from '../../utils/proxy';
 import notify from 'devextreme/ui/notify';
 import { useSelector } from 'react-redux'
-import { TextBox } from 'devextreme-react';
+import { TextBox, But } from 'devextreme-react/text-box';
+import { CheckBox } from 'devextreme-react';
 
 const Customer = props => {
 
     const { clear } = useSelector(store => store.customerClear);
     
     const [inss, setInss] = useState(null);
+    const [onlyBeneficary, setOnlyBeneficary] = useState(false);
     const [custumer, setCustumer] = useState({...custumerDefault});
 
     const buscarAsegurado = e =>{        
 
         const { valueChanged, active = true } = props;
 
-        http(createProxyBase('customers').getById(inss)).asGet(active).then(data => {
+        http(createProxyBase('customers').getById(inss)).asGet({active, onlyBeneficary}).then(data => {
             
             if(valueChanged)
                 valueChanged(data);
@@ -42,6 +44,7 @@ const Customer = props => {
     }
 
     const onValueChanged = e =>  setInss(e.value);
+    const handleBene = e =>  setOnlyBeneficary(e.value);
 
     useEffect(()=>{
         
@@ -64,6 +67,7 @@ const Customer = props => {
                             icon='search'
                             onClick={buscarAsegurado}
                         />
+                        <CheckBox text='Buscar por beneficiario' rtlEnabled={true} defaultValue={false} value={onlyBeneficary} onValueChanged={handleBene}/>
                         <label className="label-customer">
                             <span className="label-customer-inss">{custumer.inss}</span>
                             <span className="label-customer-patronal">{custumer.patronal}</span>

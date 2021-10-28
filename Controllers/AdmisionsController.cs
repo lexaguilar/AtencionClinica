@@ -198,7 +198,8 @@ namespace AtencionClinica.Controllers
                 x.CreateBy,
                 x.Active,
                 x.Identification,
-                x.BeneficiaryId
+                x.BeneficiaryId,
+                x.Finished
             });
 
             return Json(new
@@ -310,10 +311,10 @@ namespace AtencionClinica.Controllers
                 Observation = "Puesto medico"
             };
 
-            var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > admissionModel.Date.Date && x.Active && x.TypeId == (int)AdmisionTypes.Consulta);
+            // var existe = _db.Admissions.Any(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > admissionModel.Date.Date && x.Active && x.TypeId == (int)AdmisionTypes.Consulta);
             
-            if(existe && user.AreaId != (int)AreaRestrict.Admision)
-                return BadRequest("El beneficiario ya tiene una admisión activa el dia de hoy");
+            // if(existe && user.AreaId != (int)AreaRestrict.Admision)
+            //     return BadRequest("El beneficiario ya tiene una admisión activa el dia de hoy");
             
             //TODO configurar el 3, parametrizar
             var countAdmisions = _db.Admissions.Where(x => x.BeneficiaryId == admission.BeneficiaryId && x.CreateAt > admissionModel.Date.Date && x.Active && x.TypeId == (int)AdmisionTypes.Consulta).Count();
@@ -467,7 +468,9 @@ namespace AtencionClinica.Controllers
 
         private int getMaxAdmissionOfDay(){
 
-            var max = _db.Admissions.Where(x => x.CreateAt > DateTime.Today)
+            var today = UserHelpers.GetTimeInfo();
+
+            var max = _db.Admissions.Where(x => x.CreateAt > today.Date)
             .OrderByDescending(x => x.NumberOfDay)
             .Select(x => x.NumberOfDay)
             .FirstOrDefault();
