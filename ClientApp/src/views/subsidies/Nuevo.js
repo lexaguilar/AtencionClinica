@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Popup } from 'devextreme-react/popup';
 import { Button } from 'devextreme-react/button';
-import Form, { SimpleItem, GroupItem, Label, AsyncRule,RequiredRule } from 'devextreme-react/form';
+import Form, { SimpleItem, GroupItem, Label, StringLengthRule,RequiredRule } from 'devextreme-react/form';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import Customer from '../../components/customer';
@@ -195,6 +195,7 @@ const Nuevo = props => {
                             </SimpleItem>
                         </GroupItem>
                         <SimpleItem dataField="observation" colSpan={3}>
+                            <StringLengthRule max={150} message="Maximo 150 caracteres" />
                             <Label text="Observacion" />
                         </SimpleItem>    
                     </GroupItem>
