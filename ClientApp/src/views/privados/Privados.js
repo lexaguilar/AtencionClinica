@@ -165,9 +165,6 @@ const Privados = () => {
                         <Item dataField="addAt" >
                             <RequiredRule message="El campo es requerido" />
                         </Item>
-                        <Item dataField="addAt" >
-                            <RequiredRule message="El campo es requerido" />
-                        </Item>
                         <Item dataField="address" editorType='dxTextArea' colSpan={2}>                            
                             <RequiredRule message="El campo es requerido" />
                             <StringLengthRule max={150} message="Máximo de caracteres 50" />

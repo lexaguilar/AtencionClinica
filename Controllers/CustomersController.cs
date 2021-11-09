@@ -97,11 +97,16 @@ namespace AtencionClinica.Controllers
                 else
                     percapitaResult = _db.Percapitas.FirstOrDefault(x => x.Inss == id);     
 
-                if(percapitaResult == null)
-                    return BadRequest($"No se encontró el asegurado con el inss {inss}");
-
                 Customer result = null;
-                result = _db.Customers.FirstOrDefault(x => x.Inss == percapitaResult.Inss);
+                if(percapitaResult == null)
+                {
+                    //buscar facultativo
+                    result = _db.Customers.FirstOrDefault(x => x.Inss == id);
+                }else
+                {
+                    result = _db.Customers.FirstOrDefault(x => x.Inss == percapitaResult.Inss);                    
+                }
+
                 
                 // }else{
                 //     result = _db.Customers.FirstOrDefault(x => x.Inss == id);

@@ -55,6 +55,12 @@ namespace AtencionClinica.Controllers
                 privates = privates.Where(x => x.TypeId == typeId);
             }
 
+            if (values.ContainsKey("identification"))
+            {
+                var identification = Convert.ToString(values["identification"]);
+                privates = privates.Where(x => x.Identification.StartsWith(identification));
+            }
+
             if (values.ContainsKey("contractId"))
             {
                 var contractId = Convert.ToInt32(values["contractId"]);

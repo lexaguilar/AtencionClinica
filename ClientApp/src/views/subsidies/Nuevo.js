@@ -191,7 +191,7 @@ const Nuevo = props => {
                             <SimpleItem dataField="days" editorOptions={{disabled:true}}><Label text="Dias" /></SimpleItem>
 
                             <SimpleItem dataField="orderNumber"><Label text="Número de Orden" />
-                                
+                                <RequiredRule message="El numero de la Orden" />
                             </SimpleItem>
                         </GroupItem>
                         <SimpleItem dataField="observation" colSpan={3}>
