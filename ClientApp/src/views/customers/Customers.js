@@ -8,6 +8,7 @@ import {
     ColumnChooser, 
     Column,     
     Editing, 
+    Lookup,
     Button as ButtonGrid 
    } from 'devextreme-react/data-grid';
    import { useDispatch } from 'react-redux'
@@ -18,6 +19,7 @@ import Title from '../../components/shared/Title';
 import { formatDate } from '../../data/app';
 import Facultativo from './Facultativo';
 import { openDialogFactultativo } from '../../store/factultativo/factultativoDialogReducer';
+import { createStoreLocal } from '../../utils/proxy';
 
 const title = 'Asegurados Activos';
 
@@ -48,7 +50,7 @@ const Customers = () => {
                     icon:'group',
                     type:'default',
                     stylingMode:"outlined",
-                    onClick: (id=0) => dispatch(openDialogFactultativo({open : true }))
+                    onClick: (id=0) => dispatch(openDialogFactultativo({open : true, id:0 }))
                 }
 
             });
@@ -115,7 +117,10 @@ const Customers = () => {
                 <Column dataField="patronalId" caption="# Patronal" width={140} />
                 <Column dataField="firstName" caption="Nombre"  />
                 <Column dataField="lastName" caption="Apellidos"  />
-                <Column dataField="dateAdd" caption="Fecha" width={140} dataType="date"  format={formatDate}/>     
+                <Column dataField="dateAdd" caption="Fecha" width={140} dataType="date"  format={formatDate}/>   
+                <Column dataField="customerTypeId" width={180} caption="Tipo">
+                    <Lookup disabled={true} dataSource={createStoreLocal({ name:'CustomerType'})} valueExpr="id" displayExpr="name" />
+                </Column>   
                 <Column type="buttons">
                     <ButtonGrid name="edit" icon="edit" onClick={e => openDialog(e.row.data.inss)}/>
                 </Column>    

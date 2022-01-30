@@ -1,7 +1,7 @@
 const urlReport = () => 
 {
     const urlPre = "http://pre-reports.clinicaflordesacuanjoche.com/";
-    const urlPro = "http://reports.clinicaflordesacuanjoche.com/";
+    const urlPro = "http://192.168.1.251/reportes/";
 
     const urlBase = process.env.NODE_ENV == "development" ? urlPro : urlPro;    
 

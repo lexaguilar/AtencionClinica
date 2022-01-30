@@ -82,6 +82,8 @@ const Facultativo = props => {
                 .then(resp => {
                     setFacultativo({ ...resp });
                 })
+        }else{
+            setFacultativo({ ...facultativoDefault });
         }
 
     }, [open]);

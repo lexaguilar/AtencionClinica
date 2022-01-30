@@ -61,10 +61,20 @@ namespace AtencionClinica.Controllers
 
             }else{
 
-                if (customerUpdate.CustomerTypeId != (int)CustomerTypes.Facultativo)
+                if (customerUpdate.CustomerTypeId != (int)CustomerTypes.Facultativo && customer.CustomerStatusId == 1)
                     return BadRequest("El asegurado no es facultativo, no se puede editar");
 
-                customerUpdate.CopyFrom(customer, x => new { x.FirstName, x.LastName, x.PatronalId, x.Identification, x.CustomerStatusId });
+                customer.CustomerTypeId = (int)CustomerTypes.Facultativo;
+
+                customerUpdate.CopyFrom(customer, x => 
+                    new { 
+                        x.FirstName,
+                        x.LastName,
+                        x.PatronalId, 
+                        x.Identification, 
+                        x.CustomerStatusId, 
+                        x.CustomerTypeId                                
+                    });
 
             }
 
