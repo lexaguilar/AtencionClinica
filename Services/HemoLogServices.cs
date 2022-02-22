@@ -1,4 +1,5 @@
 using System;
+using AtencionClinica.Extensions;
 using AtencionClinica.Models;
 
 namespace AtencionClinica.Services
@@ -32,17 +33,17 @@ namespace AtencionClinica.Services
             
         }
 
-        public int Delete(int id)
+        public ModelValidationSource<HemoLog> Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Bill GetById(int id)
+        public ModelValidationSource<HemoLog> Delete(int id, AppUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ModelValidationSource<Bill> Revert(Bill model)
+        public HemoLog GetById(int id)
         {
             throw new NotImplementedException();
         }
@@ -50,12 +51,7 @@ namespace AtencionClinica.Services
         public ModelValidationSource<HemoLog> Revert(HemoLog model)
         {
             throw new NotImplementedException();
-        }
-
-        public ModelValidationSource<Bill> Update(Bill model)
-        {
-            throw new NotImplementedException();
-        }
+        } 
 
         public ModelValidationSource<HemoLog> Update(HemoLog model)
         {

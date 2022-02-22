@@ -24,7 +24,7 @@ const NewPurchase = props => {
 
     const { purchaseDialog: { open, id }, user } = useSelector(store => store);
 
-    const { products, setProducts } = useProducts({ areaId: user.areaId, active });
+    const { products, setProducts, reload } = useProducts({ areaId: user.areaId, active });
     const [purchase, setPurchase] = useState({ ...purchaseDefault });
     const [saving, setSaving] = useState(false);
     const [details, setDetails] = useState([]);
@@ -67,6 +67,8 @@ const NewPurchase = props => {
             setDetails([]);
 
         }
+
+        if(open) reload();
 
     }, [open]);
 
@@ -164,6 +166,7 @@ const NewPurchase = props => {
 
         if (prop == 'cost' && (+value) >= 0) {
             newData['total'] = currentRowData['quantity'] * value;
+            newData['price'] = value * (1.3);
         }
 
     }
@@ -179,8 +182,8 @@ const NewPurchase = props => {
     return (
         <div>
             <Popup
-                width={950}
-                height={520}
+                width={1000}
+                height={600}
                 title={isNew ? `Nueva compra de inventario` : `Compra #${formatId(id)}`}
                 onHiding={onHiding}
                 visible={open}

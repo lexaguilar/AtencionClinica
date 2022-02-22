@@ -1,3 +1,4 @@
+using AtencionClinica.Extensions;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using AtencionClinica.ViewModel;
@@ -108,7 +109,48 @@ namespace AtencionClinica.Services
 
         }
 
-        public int Delete(int id)
+        public ModelValidationSource<InPutProduct> CreateFrom(WorkOrder workOrder, AppUser user)
+        {
+
+            var follow = _db.Follows.FirstOrDefault(x => x.Id == workOrder.FollowId);
+
+            var items = new List<InPutProductDetail>();
+            foreach (var item in workOrder.WorkOrderDetails.Where(x => !x.IsService))
+            {
+
+                var stock = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaTargetId 
+                && x.ProductId == item.ProductId);
+
+
+                items.Add(new InPutProductDetail{
+                    ProductId = item.ProductId??0,
+                    Quantity = item.Quantity,
+                    Cost = stock.CostAvg,
+                    Price = item.Price,
+                    Discount = 0
+                });
+            } 
+
+            var inPutProduct = new InPutProduct{
+                AreaId = follow.AreaTargetId,
+                TypeId = (int)InputType.AjusteEntrada,
+                Date = DateTime.Now,               
+                Observation = "Ajuste por anulacion",
+                CreateBy = user.Username,
+                Reference = workOrder.Id.ToString(),                
+                InPutProductDetails = items
+            };
+
+            return this.Create(inPutProduct);
+
+        }
+
+        public ModelValidationSource<InPutProduct> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ModelValidationSource<InPutProduct> Delete(int id, AppUser user)
         {
             throw new NotImplementedException();
         }

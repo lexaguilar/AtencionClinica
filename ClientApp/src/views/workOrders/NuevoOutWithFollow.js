@@ -105,7 +105,7 @@ const NuevoOutWithFollow = props => {
         <div>
              <Popup
                 width={1050}
-                height={695}
+                height={'90%'}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
                 visible={open}    

@@ -1,3 +1,4 @@
+using AtencionClinica.Extensions;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using AtencionClinica.ViewModel;
@@ -229,7 +230,12 @@ namespace AtencionClinica.Services
         }
 
 
-        public int Delete(int id)
+        public ModelValidationSource<OutPutProduct> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ModelValidationSource<OutPutProduct> Delete(int id, AppUser user)
         {
             throw new NotImplementedException();
         }

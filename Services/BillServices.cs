@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AtencionClinica.Extensions;
 using AtencionClinica.Models;
 
 namespace AtencionClinica.Services
@@ -41,7 +42,12 @@ namespace AtencionClinica.Services
 
         }
 
-        public int Delete(int id)
+        public ModelValidationSource<Bill> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ModelValidationSource<Bill> Delete(int id, AppUser user)
         {
             throw new NotImplementedException();
         }

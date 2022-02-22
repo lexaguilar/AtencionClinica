@@ -1,3 +1,4 @@
+using AtencionClinica.Extensions;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using AtencionClinica.ViewModel;
@@ -38,10 +39,12 @@ namespace AtencionClinica.Services
             _db.WorkOrders.Add(workOrder);
 
             //Crear salida          
-            var outPutProductServices = new OutPutProductServices(_db);
-            var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder, null);
-            if (!modelOnPutProducts.IsValid)
-                return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
+            if(workOrder.WorkOrderDetails.Any(x => !x.IsService)){
+                var outPutProductServices = new OutPutProductServices(_db);
+                var modelOnPutProducts =  outPutProductServices.CreateFrom(workOrder, null);
+                if (!modelOnPutProducts.IsValid)
+                    return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelOnPutProducts.Error);
+            }
 
             return model;
         }
@@ -138,9 +141,28 @@ namespace AtencionClinica.Services
 
         }
 
-        public int Delete(int id)
+        public ModelValidationSource<WorkOrder> Delete(int id)
         {
+
             throw new NotImplementedException();
+           
+        }
+
+        public ModelValidationSource<WorkOrder> Delete(int id, AppUser user)
+        {
+            var workOrder = _db.WorkOrders.Include(x => x.WorkOrderDetails).FirstOrDefault(x => x.Id == id);
+
+            if(!workOrder.Active)
+                return new ModelValidationSource<WorkOrder>(workOrder).AsError("No se puede eliminar una orden de trabajo que ya ha sido eliminada");
+
+            workOrder.Active = false;
+            //Crear entrada            
+            var inPutProductServices = new InPutProductServices(_db);
+            var modelInPutProducts = inPutProductServices.CreateFrom(workOrder, user);
+            if (!modelInPutProducts.IsValid)
+                return new ModelValidationSource<WorkOrder>(workOrder).AsError(modelInPutProducts.Error);
+
+            return new ModelValidationSource<WorkOrder>(workOrder).AsOk();
         }
 
         public WorkOrder GetById(int id)

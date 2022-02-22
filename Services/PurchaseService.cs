@@ -203,6 +203,7 @@ namespace AtencionClinica.Services
             p.Import = p.PurchaseDetails.Sum(x => x.Import);
             p.Iva = p.PurchaseDetails.Sum(x => x.Iva);
             p.Total = p.PurchaseDetails.Sum(x => x.Total);
+
         }
 
         private (bool IsSuccess, string Msg) Validate(Purchase p)
@@ -212,20 +213,20 @@ namespace AtencionClinica.Services
             modelValidation.model = p;
 
             if (p.Rate == 0)
-                return (false, $"No se encontr� la tasa de cambio para la fecha {p.Date}");
+                return (false, $"No se encontró la tasa de cambio para la fecha {p.Date}");
 
             var area = _db.Areas.FirstOrDefault(x => x.Id == p.AreaId);
 
             if (area == null)
-                return (false, $"No se encontr� el area");
+                return (false, $"No se encontró el area");
 
             if (!area.Active)
                 return (false, $"El area {area.Name} no esta activa");
 
             var app = _db.Apps.FirstOrDefault();
 
-            if (area.Id != app.AreaMainId)
-                return (false, $"El area {area.Name} no esta habilitada para ingreso de compras");
+            // if (area.Id != app.AreaMainId)
+            //     return (false, $"El area {area.Name} no esta habilitada para ingreso de compras");
 
             var totalItems = p.PurchaseDetails.Select(x => x.ProductId).Distinct().Count();
             if (totalItems != p.PurchaseDetails.Select(x => x.ProductId).Count())
@@ -253,7 +254,6 @@ namespace AtencionClinica.Services
 
                 if (app.ValidatePriceGreaterCost && item.Price <= item.Cost)
                     return (false, $"El precio del producto {product.Name} es menor al costo");
-
 
             }
 

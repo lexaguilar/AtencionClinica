@@ -37,6 +37,8 @@ const Nuevo = props => {
 
     let refForm = useRef();
     let validate = [];
+    console.log(id)
+    const canEdit = id == 0;
 
     const isFarmacia = areaRestrict.farmacia == user.areaId;
 
@@ -56,7 +58,7 @@ const Nuevo = props => {
         if (followId > 0) {
             //verificar si trae productos preregistrados
             http(`follows/${followId}/getWorkPreOrders`).asGet().then(resp => {
-                console.log(resp);
+
                 if (resp) {
                     const { doctorId, } = resp;
                     setWorkOrder({ ...workOrder, doctorId });
@@ -71,6 +73,23 @@ const Nuevo = props => {
                 }
             });
         }
+
+        if(id > 0){
+
+            http(uri.workOrders.getById(id)).asGet().then(resp => {
+
+            const { workOrderDetails: detalles, ...rest } = resp;
+
+            setWorkOrder({ ...workOrder, ...rest });
+            setDetails(detalles);
+
+            });
+
+        }
+
+        setIsClosing(false);
+
+
     }, [open]);
 
     const dispatch = useDispatch();
@@ -79,7 +98,7 @@ const Nuevo = props => {
 
         refForm.current.instance.resetValues();
 
-        dispatch(dialogWorkOrder({ open: false }));
+        dispatch(dialogWorkOrder({ open: false, id: 0 }));
         setIsClosing(true);
 
         if (load) {
@@ -131,7 +150,7 @@ const Nuevo = props => {
         <div>
             <Popup
                 width={880}
-                height={670}
+                height={'90%'}
                 title={`Nueva orden de trabajo`}
                 onHiding={onHiding}
                 visible={open}
@@ -209,15 +228,10 @@ const Nuevo = props => {
                                     }
                                 </TabPanel>
                             </Tabs>
-                        </GroupItem>
-                        <GroupItem>
-
-                        </GroupItem>
-                        <GroupItem>
-
-
-                        </GroupItem>
-
+                        </GroupItem>    
+                        <GroupItem>                       
+                        
+                        </GroupItem>    
                     </Form>
                     <Button
                         text={`${saving ? 'Guardando...' : text}`}
@@ -225,10 +239,12 @@ const Nuevo = props => {
                         icon="save"
                         stylingMode="contained"
                         className="m-1"
-                        disabled={saving}
+                        disabled={saving || !canEdit }
                         onClick={crearOrdenTrabajo}
-                    />
+                    />                   
+
                 </ScrollView>
+               
             </Popup>
         </div>
     );

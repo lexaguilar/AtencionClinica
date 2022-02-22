@@ -11,18 +11,19 @@ import DataGrid, {
     Lookup,
     Pager,
     Paging,
+    Button as ButtonGrid,
   } from 'devextreme-react/data-grid';
 import {  createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-import { areaRestrict, formatDate, formatDateTime } from '../../data/app';
+import { formatDate, formatDateTime } from '../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
 import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
-import { openDialogServiceTest } from '../../store/servicetest/serviceTestDialogReducer';
-import PopupServiceTest from '../../components/workOrder/PopupServiceTest';
-
+import http from '../../utils/http';
+import notify from 'devextreme/ui/notify';
+import { confirm } from 'devextreme/ui/dialog';
 
 const WorkOrders = (props) => {
 
@@ -35,28 +36,61 @@ const WorkOrders = (props) => {
     
    // const isLaboratorio = areaRestrict.laboratorio == areaId;
 
-    // const addMenuItems =(e) => {
+    const addMenuItems =(e) => {
 
-    //     if (e.target == "content") {
-    //         if (!e.items) e.items = [];
+        if (e.target == "content") {
+            if (!e.items) e.items = [];
             
-    //         if(e.row?.data){ 
-    //             if(isLaboratorio){
+            if(e.row?.data){                 
 
-    //                 e.items.push({
-    //                     text: 'Registrar resultados',
-    //                     icon : 'fas fa-flask',
-    //                     onItemClick: () => {
-                            
-    //                         let { id } = e.row.data;
-    //                         dispatch(openDialogServiceTest({ id, beneficiaryId}));
-                            
-    //                     }
-    //                 });
-    //             }
-    //         }
-    //     }
-    // }
+                e.items.push({
+                    text: 'Ver registro',
+                    icon : 'info',
+                    onItemClick: () => {
+                        
+                        let { id } = e.row.data;
+                        viewInfo( id );
+                        
+                    }
+                });
+
+                e.items.push({
+                    text: 'Anular registro',
+                    icon : 'remove',
+                    onItemClick: () => {
+                        
+                        let { id } = e.row.data;
+                        deleteInfo( id );
+                        
+                    }
+                });
+                
+            }
+        }
+    }
+
+    const viewInfo = id => {
+
+        console.log(id)
+
+        dispatch(dialogWorkOrder({open : true, id }));
+
+    }
+
+    const deleteInfo = id => {
+
+        let result = confirm(`<i>Estás seguro de anular el registro <b>${id}</b>?</i>`, "Confirmar");
+        result.then(dialogResult => {
+            if(dialogResult){
+                http(uri.workOrders.remove(id)).asGet()
+                .then(() => reload()).catch(err => notify(err, 'error', 5000));
+            }
+            
+        });
+
+        
+
+    }
     
 
     const title = `Ordenes de trabajo movimiento ${followId}`;
@@ -70,7 +104,7 @@ const WorkOrders = (props) => {
                 <CustomButton                                       
                     text='Nueva orden'
                     icon='plus'
-                    onClick={()=>dispatch(dialogWorkOrder({open : true, followId}))}
+                    onClick={()=>dispatch(dialogWorkOrder({id: 0, open : true}))}
                 />
             </BlockHeader>
 
@@ -85,7 +119,7 @@ const WorkOrders = (props) => {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 hoverStateEnabled={true}
-                //onContextMenuPreparing={addMenuItems}
+                onContextMenuPreparing={addMenuItems}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -108,14 +142,20 @@ const WorkOrders = (props) => {
                     <Lookup disabled={true} dataSource={createStoreLocal({name: 'Doctor'})} valueExpr="id" displayExpr="name" />
                 </Column>               
                 <Column dataField="observation" caption='Observacion' />
+                <Column dataField="active" caption='Activo?' dataType='boolean' width={80} />
                 <Column dataField="createAt" caption='Creando el' dataType='date' format={formatDateTime} width={180}/>
                 <Column dataField="createBy" caption='Creado Por'width={130}/>
+                {/* <Column type="buttons" width={60}>
+                    <ButtonGrid name="edit" onClick={e => viewInfo(e.row.data.id)}/>
+                    <ButtonGrid name="delete" onClick={e => deleteInfo(e.row.data.id)}/>
+                </Column>
                 <Editing
                     mode="popup"
+                    allowUpdating={true}
                     allowDeleting={true}
                     useIcons={true}
                 >
-                </Editing>
+                </Editing> */}
             </DataGrid>
         </div>
     );

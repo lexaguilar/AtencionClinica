@@ -112,7 +112,7 @@ const Facultativo = props => {
         <Popup
             fullScreen={false}
             width={400} 
-            height={320}
+            height={350}
             onHiding={onHiding}
             title={title}
             visible={open}
@@ -143,13 +143,21 @@ const Facultativo = props => {
                         <AsyncRule message="Ingrese la cantidad a convertir" validationCallback={validationCallback}></AsyncRule>
                     </SimpleItem>
                     <SimpleItem dataField="customerStatusId"  colSpan={2} editorType="dxSelectBox"
-                            editorOptions={{                                
-                                dataSource: createStoreLocal({ name: 'CustomerStatus'}),
-                                ...editorOptionsSelect
-                            }} >
-                            <Label text="Estado" />
-                            <RequiredRule message="Seleccione el estado" />
-                        </SimpleItem>
+                        editorOptions={{                                
+                            dataSource: createStoreLocal({ name: 'CustomerStatus'}),
+                            ...editorOptionsSelect
+                        }} >
+                        <Label text="Estado" />
+                        <RequiredRule message="Seleccione el estado" />
+                    </SimpleItem>
+                    <SimpleItem dataField="customerTypeId"  colSpan={2} editorType="dxSelectBox"
+                        editorOptions={{                                
+                            dataSource: createStoreLocal({ name: 'CustomerType'}),
+                            ...editorOptionsSelect
+                        }} >
+                        <Label text="Tipo" />
+                        <RequiredRule message="Seleccione el tipo" />
+                    </SimpleItem>
                 </GroupItem> 
             </Form>
             <br />

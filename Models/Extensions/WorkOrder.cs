@@ -31,7 +31,16 @@ namespace AtencionClinica.Models{
 
             if(validateAll){
 
-                var follow = _db.Follows.FirstOrDefault(x => x.Id == this.FollowId);
+                var admissionId = 0;
+                if(this.Follow != null)
+                    admissionId = this.Follow.AdmissionId;   
+
+                Follow follow = null;      
+                if(this.Follow != null)
+                    follow = this.Follow;
+                else 
+                    follow = _db.Follows.FirstOrDefault(x => x.Id == this.FollowId);
+                    
                 admision = _db.Admissions.FirstOrDefault(x => x.Id == follow.AdmissionId);
 
                 if(!admision.Active)

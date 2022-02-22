@@ -25,6 +25,16 @@ namespace AtencionClinica.Controllers
             _service = service;
         }
 
+        [Route("api/workOrders/get/{id}")]
+        public IActionResult Get(int id)
+        {
+            var workOrder = _db.WorkOrders.Include(x => x.WorkOrderDetails)
+            .FirstOrDefault(x => x.Id == id);
+
+            return Json(workOrder);
+
+        }
+
         [Route("api/workOrders/get")]
         public IActionResult Get(int followId, int skip, int take)
         {
@@ -115,6 +125,8 @@ namespace AtencionClinica.Controllers
             _db.Follows.Add(newFollow);
             _db.SaveChanges();
 
+
+            //workOrder.Follow = newFollow;
             if (workOrder.Id == 0)
             {
 
@@ -126,9 +138,9 @@ namespace AtencionClinica.Controllers
                 if (!result.IsValid)
                 {
 
-                    _db.WorkOrders.Remove(result.model);
-                    _db.Follows.Remove(newFollow);
-                    _db.SaveChanges();
+                    //_db.WorkOrders.Remove(result.model);
+                    //_db.Follows.Remove(newFollow);
+                    //_db.SaveChanges();
                     return BadRequest(result.Error);
 
                 }
@@ -183,6 +195,22 @@ namespace AtencionClinica.Controllers
 
             _db.SaveChanges();
 
+        }
+
+        [Route("api/workOrders/{id}/delete")]
+        public IActionResult Delete(int id)
+        {
+
+            var user = this.GetAppUser(_db);
+
+            var result = _service.Delete(id, user);
+
+            if(!result.IsValid)
+                return BadRequest(result.Error);
+
+           _db.SaveChanges();
+
+            return Json(new { id });
         }
     }
 }

@@ -21,6 +21,7 @@ const GridListaMedicamentoPte = ({ beneficiaryId = 0, customerId = 0 }) => {
         <div className="mr-10">
             <BlockHeader title={title} />
             <DataGrid id="gridContainer"
+                height={200}
                 selection={{ mode: 'single' }}
                 dataSource={localStore}
                 showBorders={true}

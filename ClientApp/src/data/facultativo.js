@@ -5,4 +5,5 @@ export const facultativoDefault = {
     patronalId:0,
     identification: "",
     customerStatusId: null,
+    customerTypeId: null,
 }

@@ -1,3 +1,4 @@
+using AtencionClinica.Extensions;
 using AtencionClinica.Factory;
 using AtencionClinica.Models;
 using AtencionClinica.ViewModel;
@@ -50,7 +51,12 @@ namespace AtencionClinica.Services
             return model;
         }
 
-        public int Delete(int id)
+        public ModelValidationSource<PrivateWorkOrder> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ModelValidationSource<PrivateWorkOrder> Delete(int id, AppUser user)
         {
             throw new NotImplementedException();
         }
