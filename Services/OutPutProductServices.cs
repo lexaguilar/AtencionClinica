@@ -57,7 +57,7 @@ namespace AtencionClinica.Services
         public ModelValidationSource<OutPutProduct> CreateFrom(Traslate traslate)
         {
             var items = new List<OutPutProductDetail>();
-            foreach (var item in traslate.TraslateDetails)
+            foreach (var item in traslate.TraslateDetails.Where(x => x.QuantityResponse > 0))
             {
                 items.Add(new OutPutProductDetail{
                     ProductId = item.ProductId,
