@@ -130,8 +130,8 @@ namespace AtencionClinica.Models
             {
                 var product = _db.Products.FirstOrDefault(x => x.Id == item.ProductId);
 
-                if (item.QuantityResponse < 0)
-                    return modelValidation.AsError($"La cantidad despachada del item {product.Name} no debe ser menor a 0");
+                // if (item.QuantityResponse < 0)
+                //     return modelValidation.AsError($"La cantidad despachada del item {product.Name} no debe ser menor a 0");
 
             }
 
