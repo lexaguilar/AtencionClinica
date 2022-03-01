@@ -90,7 +90,8 @@ namespace AtencionClinica.Controllers
                 x.CreateAt,
                 x.CreateBy,
                 x.Active,
-                x.Identification
+                x.Identification,
+                x.Observation
             });
 
             return Json(new

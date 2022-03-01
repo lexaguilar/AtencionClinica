@@ -141,6 +141,7 @@ const Appointments = props => {
                     <Lookup disabled={true} dataSource={createStore({name: 'specialty'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="dateAppointment" caption='Cita' dataType='date' format={formatDateTime} width={160} />
+                <Column dataField="observation" allowFiltering={false} visible={false}/>
                 <Column dataField="createBy" caption='Creado por' width={80} visible={false} />
                 <Column dataField="createAt" caption='Creado el' dataType='date' visible={false} format={formatDateTime} width={150} />
                 <Editing
