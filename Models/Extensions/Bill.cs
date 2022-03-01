@@ -59,7 +59,7 @@ namespace AtencionClinica.Models
             if ((totalProducts + totalServices) != this.BillDetails.Select(x => x.Id).Count())
                 return modelValidation.AsError($"No se permite items duplicados");
 
-            var lastInPutProduct = _db.InPutProducts.Where(x => AreaId == this.AreaId).OrderByDescending(x => x.Id).FirstOrDefault();
+            var lastInPutProduct = _db.InPutProducts.Where(x => x.AreaId == this.AreaId).OrderByDescending(x => x.Id).FirstOrDefault();
             if (lastInPutProduct != null)
                 if (lastInPutProduct.Date > this.CreateAt)
                     return modelValidation.AsError($"No se puede crear una entrada de inventario con fecha menor a {lastInPutProduct.Date}");
