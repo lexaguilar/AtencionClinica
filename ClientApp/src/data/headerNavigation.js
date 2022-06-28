@@ -18,7 +18,8 @@ const menu = [{
                 url: ``,
                 submenu : [
                     { title: 'Nefrologia', url: `${_path.CLINICA}/facturas/nefrologia` },
-                    { title: 'Reporte 2', url: `${_path.CLINICA}/admision/reportes/2` },
+                    { title: 'Facturas Diarias', url: `${_path.CLINICA}/facturas/daily/` },
+                    { title: 'Facturas Diarias Detalle', url: `${_path.CLINICA}/facturas/daily/details` },
                 ]
             },   
         ],
@@ -133,6 +134,7 @@ const menu = [{
                         { title: 'Kardex', url: `${_path.CLINICA}/inventario/reportes/kardex` },
                         { title: 'Existencias', url: `${_path.CLINICA}/inventario/reportes/existencias` },
                         { title: 'Stock', url: `${_path.CLINICA}/inventario/reportes/stock` },
+                        { title: 'Descargues', url: `${_path.CLINICA}/inventario/reportes/donwload` },
                     ],
                 },]
             }]

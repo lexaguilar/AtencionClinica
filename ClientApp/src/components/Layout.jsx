@@ -69,6 +69,9 @@ import BeneficiariosAll from '../views/beneficiarios/BeneficiariosAll';
 import Autorizes from '../views/movimientos/traslates/Autorizes';
 import Nefrologia from '../views/reports/hemo/Nefrologia';
 import Purchases from '../views/purchases';
+import DownloadProducts from '../views/reports/stocks/DownloadProducts';
+import DealySales from '../views/reports/stocks/DealySales';
+import DealySalesDetail from '../views/reports/stocks/DealySalesDetail';
 
 function Layout(props) {
     const { headerLayout } = props;
@@ -124,6 +127,7 @@ function Layout(props) {
         ,builRoute('inventario/reportes/kardex', Kardex)
         ,builRoute('inventario/reportes/existencias', Existencias)
         ,builRoute('inventario/reportes/stock', Stock)
+        ,builRoute('inventario/reportes/donwload', DownloadProducts)
         ,builRoute('navig', Navig)
 
         ,builRoute('grupos', GroupsCatalos)
@@ -138,6 +142,8 @@ function Layout(props) {
         ,builRoute('servicios/expediente-privado', ExpedienteClinicoPrivado)
         
         ,builRoute('facturas/nefrologia', Nefrologia)
+        ,builRoute('facturas/daily', DealySales)
+        ,builRoute('facturas/daily/details', DealySalesDetail)
 
 
 

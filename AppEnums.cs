@@ -11,6 +11,7 @@ namespace AtencionClinica
     public enum AreaTypes { Ninguna = 1, Admision = 2, PuestoMedico = 3 }
     public enum Roles { None, Administrador }
     public enum ClientType { Private = 1, Contract = 2 }
+    public enum Currencies { Cordobas = 1, Dolares = 2 }
     public enum AdmisionTypes { Consulta = 1, IngresoHops = 2 }
     public enum BillTypes { FacturaIngreso = 1, Expontanea = 2 }
     public enum CustomerTypes { Inss = 1, Facultativo = 4 }

@@ -15,7 +15,6 @@ const useAreas = () => {
         setIsLoading(false);
 
     }
-
     
     useEffect(() => {
         callApi();

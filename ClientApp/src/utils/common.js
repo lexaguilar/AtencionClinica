@@ -32,6 +32,8 @@ export const dataFormatId = data => formatId(data.value);
 
 export const formatToMoney = (value, currencyId) =>`${currency[currencyId || 1]} ${numeral(value).format('0,0.00')}`;
 
+export const formatToMoneySymoboless = value =>`${numeral(value).format('0,0.00')}`;
+
 export const customizeTextAsPercent = data => `${data.value || 0} %`
 
 export const cellAsBold = value => <b>{value}</b>;

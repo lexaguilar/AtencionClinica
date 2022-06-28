@@ -1,29 +1,26 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import DataGrid, { Column, Editing, Lookup, Selection, Paging, FilterRow, Scrolling, Summary, TotalItem } from 'devextreme-react/data-grid';
 import DropDownBox from 'devextreme-react/drop-down-box';
-import useDoctors from '../../hooks/useDoctors';
-import { createStore } from '../../utils/proxy';
 import {
     Validator,
     RequiredRule
 } from 'devextreme-react/validator';
+import useProducts from '../../hooks/useProducts';
 
-const DropDownDoctors = ({ changeHandler }) => {
+const DropDownProducts = ({ changeHandler, areaId = 0}) => {
 
     const dropDownBoxRef = useRef();
 
-    const { doctors } = useDoctors();
+    const {products} = useProducts({ areaId });
 
     const [gridBoxValue, setGridBoxValue] = useState(null);
 
-    const dataGridRender = () => {
+    const dataGridRender = () => {  
         return (
             <DataGrid
                 allowColumnResizing={true}
-                dataSource={doctors}
-                selection={{ mode: 'single' }}
-  
-                
+                dataSource={products}
+                selection={{ mode: 'single' }} 
                 hoverStateEnabled={true}
                 selectedRowKeys={gridBoxValue}
                 onSelectionChanged={dataGrid_onSelectionChanged}
@@ -33,11 +30,10 @@ const DropDownDoctors = ({ changeHandler }) => {
                 <Paging enabled={true} pageSize={10} />
                 <FilterRow visible={true} />
                 
-                <Column dataField="minsaCode" caption='Cod Minsa' width={100} />
-                <Column dataField="name" caption='Nombre' />
-                <Column dataField="specialtyId" width={150} caption="Especialidad">
-                    <Lookup disabled={true} dataSource={createStore({name : 'specialty'})} valueExpr="id" displayExpr="name" />
-                </Column> 
+                <Column dataField="id" caption="Codigo" width={80}/>
+                <Column dataField="name" caption="Nombre" />
+                <Column dataField="presentation" caption="Laboratorio" width={100}/>
+                <Column dataField="um" caption="UM" width={80}/>
             </DataGrid>
         );
     }
@@ -54,9 +50,9 @@ const DropDownDoctors = ({ changeHandler }) => {
         <DropDownBox
             ref={dropDownBoxRef}
             dropDownOptions={{ width: 700 }}
-            dataSource={doctors}
+            dataSource={products}
             key="id"
-            placeholder="Selecciona un doctor"
+            placeholder="Selecciona un producto"
             showClearButton={true}
             valueExpr="id"
             displayExpr={item => item ? `${item.id} - ${item.name}` : ''}
@@ -65,8 +61,9 @@ const DropDownDoctors = ({ changeHandler }) => {
             contentRender={dataGridRender}
             
         >
+           
         </DropDownBox>
     );
 }
 
-export default DropDownDoctors;
+export default DropDownProducts;

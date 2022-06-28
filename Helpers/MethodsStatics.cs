@@ -28,6 +28,28 @@ namespace AtencionClinica
             return Convert.ToBase64String(buffer).Substring(0, 8);
         }
 
+        internal static decimal GeyTotalC(decimal Amount, decimal rate, int currency){
+
+            if(currency == (int)Currencies.Cordobas){
+                return Amount;
+            }else{
+                return Amount * rate;
+            }
+
+        }
+
+        internal static decimal GeyTotalD(decimal Amount, decimal rate, int currency){
+
+            if(currency == (int)Currencies.Cordobas){
+                return Amount / rate;
+            }else{
+                return Amount;
+            }
+
+        }
+      
+      
+
         internal  static int CalculateEdad(DateTime birthDate)
         {
             return ((int.Parse(DateTime.Now.ToString("yyyyMMdd")) - int.Parse(birthDate.ToString("yyyyMMdd"))) / 10000);

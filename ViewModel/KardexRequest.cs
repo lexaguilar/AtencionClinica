@@ -18,5 +18,13 @@ namespace AtencionClinica.ViewModel
         public bool WithStock { get; set; }
     }
 
+    public class ReportRequest{
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+         public int AreaId { get; set; }
+        public int? ProductId { get; set; }
+        public int? DoctorId { get; set; }
+    }
+
 
 }
