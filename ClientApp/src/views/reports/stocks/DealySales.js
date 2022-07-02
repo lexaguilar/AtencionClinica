@@ -75,12 +75,12 @@ const DealySales = () => {
                         showInfo={true} />
                     <GroupPanel visible={true} />          
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                    <Column dataField="id" caption='No Factura' width={70}/>
-                    <Column dataField="date" caption="Fecha"  dataType="date" format={formatDate}  width={100}/> 
-                    <Column dataField="totalC" caption="Total en C$" cellRender={cellRender()}/>
-                    <Column dataField="totalD" caption="Total en$" cellRender={cellRender()}/>
+                    <Column dataField="id" caption='No Factura' width={80}/>
+                    <Column dataField="createAt" caption="Fecha"  dataType="date" format={formatDate}  width={100}/> 
+                    <Column dataField="totalC" caption="Total en C$" cellRender={cellRender(1)}/>
+                    <Column dataField="totalD" caption="Total en $" cellRender={cellRender(2)}/>
                     <Column dataField="createBy" caption="Creado Por" />
-                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={120}/> 
+                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={130}/> 
                     <Summary>                       
                         <TotalItem
                             column="totalC"

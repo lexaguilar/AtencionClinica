@@ -98,13 +98,13 @@ const DealySalesDetail = () => {
 
                     <Column dataField="date" caption="Fecha"  dataType="date" format={formatDate}  width={100} groupIndex={0}/> 
                    
-                    <Column dataField="createBy" caption="Creado Por" />
-                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={120}/> 
+                    <Column dataField="createBy" caption="Creado Por"  width={120}/>
+                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={130}/> 
 
                     <Column dataField="name" caption="Producto"/>
-                    <Column dataField="price" caption="Precio" cellRender={cellRender()}/>
-                    <Column dataField="quantity" caption="Cant"/>
-                    <Column dataField="total" caption="Total" cellRender={cellRender()}/>
+                    <Column dataField="price" caption="Precio" cellRender={cellRender()} width={120}/>
+                    <Column dataField="quantity" caption="Cant" width={120}/>
+                    <Column dataField="total" caption="Total" cellRender={cellRender()} width={120}/>
 
                     <Summary>                       
                         <TotalItem
