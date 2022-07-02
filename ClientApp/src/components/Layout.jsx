@@ -72,6 +72,8 @@ import Purchases from '../views/purchases';
 import DownloadProducts from '../views/reports/stocks/DownloadProducts';
 import DealySales from '../views/reports/stocks/DealySales';
 import DealySalesDetail from '../views/reports/stocks/DealySalesDetail';
+import CountPhisycal from '../views/reports/stocks/CountPhisycal';
+import Comprobante from '../views/reports/stocks/Comprobante';
 
 function Layout(props) {
     const { headerLayout } = props;
@@ -128,6 +130,8 @@ function Layout(props) {
         ,builRoute('inventario/reportes/existencias', Existencias)
         ,builRoute('inventario/reportes/stock', Stock)
         ,builRoute('inventario/reportes/donwload', DownloadProducts)
+        ,builRoute('inventario/reportes/counting', CountPhisycal)
+        ,builRoute('inventario/reportes/comprobantes', Comprobante)
         ,builRoute('navig', Navig)
 
         ,builRoute('grupos', GroupsCatalos)

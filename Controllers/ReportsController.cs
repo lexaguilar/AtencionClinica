@@ -47,6 +47,71 @@ namespace AtencionClinica.Controllers
 
             return Json(new { result, saldoAnterior });
         }
+
+        [HttpPost("api/reports/countPhisycal")]
+        public IActionResult CountPhisycal([FromBody] ReportRequest request)
+        {
+         
+            var result = from p in _db.Products
+                        join um in _db.UnitOfMeasures on p.UnitOfMeasureId equals um.Id
+                        select new {
+                            p.Id,
+                            Product = p.Name,
+                            UM = um.Name,
+
+                            SaldoAnterior = (from ip in _db.InPutProducts
+                                join ipd in _db.InPutProductDetails on ip.Id equals ipd.InPutProductId
+                                where ip.AreaId == request.AreaId && ipd.ProductId == p.Id && ip.StateId == 1 && ip.Date < request.From.Date
+                                select ipd).Sum(x => x.Quantity) 
+                                - 
+                                (from op in _db.OutPutProducts
+                                join opd in _db.OutPutProductDetails on op.Id equals opd.OutPutProductId
+                                where op.AreaId == request.AreaId && opd.ProductId == p.Id && op.StateId == 1 && op.Date < request.From.Date
+                                select opd).Sum(x => x.Quantity),
+
+                            Entradas = (from ip in _db.InPutProducts
+                                join ipd in _db.InPutProductDetails on ip.Id equals ipd.InPutProductId
+                                where ip.AreaId == request.AreaId && ipd.ProductId == p.Id && ip.StateId == 1 && ip.Date >= request.From.Date && ip.Date <= request.To.Date
+                                select ipd).Sum(x => x.Quantity),
+
+                            Salidas =  (from op in _db.OutPutProducts
+                                join opd in _db.OutPutProductDetails on op.Id equals opd.OutPutProductId
+                                where op.AreaId == request.AreaId && opd.ProductId == p.Id && op.StateId == 1 && op.Date >= request.From.Date && op.Date <= request.To.Date
+                                select opd).Sum(x => x.Quantity)
+                        };
+                        
+
+            result = result.Where(x => x.SaldoAnterior + x.Entradas - x.Salidas > 0);
+
+            return Json(result);
+        }
+
+        [HttpPost("api/reports/comprobantes")]
+        public IActionResult Comprobantes([FromBody] ReportRequest request)
+        {
+         
+            var result = from p in _db.Products
+                        select new {
+                            p.Id,
+                            Product = p.Name,
+
+                            Debe = (from ip in _db.InPutProducts
+                                join ipd in _db.InPutProductDetails on ip.Id equals ipd.InPutProductId
+                                where ip.AreaId == request.AreaId && ipd.ProductId == p.Id && ip.StateId == 1 && ip.Date >= request.From.Date && ip.Date <= request.To.Date
+                                select ipd).Sum(x => x.Total),
+
+                            Haber =  (from op in _db.OutPutProducts
+                                join opd in _db.OutPutProductDetails on op.Id equals opd.OutPutProductId
+                                where op.AreaId == request.AreaId && opd.ProductId == p.Id && op.StateId == 1 && op.Date >= request.From.Date && op.Date <= request.To.Date
+                                select opd).Sum(x => x.Total)
+                        };
+                        
+
+            result = result.Where(x => x.Debe != 0 || x.Haber != 0);
+
+            return Json(result);
+        }
+
         [HttpPost("api/reports/downloaded")]
         public IActionResult Downloaded([FromBody] ReportRequest request)
         {

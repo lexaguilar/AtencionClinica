@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 
 import { DataGrid } from "devextreme-react";
 import moment from 'moment';
-import { Column, Export, GroupPanel, Pager, Paging, Summary, TotalItem  } from "devextreme-react/data-grid";
+import { Column, Export, GroupPanel, Pager, Paging } from "devextreme-react/data-grid";
 
-import { formatDate, formatDateTime } from '../../../data/app';
 import Title from '../../../components/shared/Title';
 import BlockHeader from '../../../components/shared/BlockHeader';
 import useParameters from '../../../hooks/useParameters';
 import http from '../../../utils/http';
-import { cellRender,  formatToMoneySymoboless } from '../../../utils/common';
 import HeaderReport from '../../../components/form/HeaderReport';
 
-//PUNTO 30
-const DealySales = () => {
+//Punto 9
+const CountPhisycal = () => {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -30,10 +28,18 @@ const DealySales = () => {
         const { areaId } = param;
        
         setLoading(true);
-        const resp = await http('reports/salesed').asPost({ from, to, areaId });
+        const resp = await http('reports/countPhisycal').asPost({ from, to, areaId });
         setLoading(false);
 
-        setData(resp);
+        const newData = resp.map(item => {
+
+            item.total = item.entradas - item.salidas + item.saldoAnterior;
+
+            return item;
+
+        })
+
+        setData(newData);
 
     }
 
@@ -43,9 +49,9 @@ const DealySales = () => {
     const toChanged = e => changeData({ target:'to', value: e.value});
     const areaChanged = e => changeData({ target:'areaId', value: e.value});
 
-    const title = 'Reporte de ventas diarias';
+    const title = 'Reporte Conteo Físico';
 
-    const allowedPageSizes = [20, 50, 'all'];
+    const allowedPageSizes = [20, 50];
 
     return (
         <div className='container medium mt-20'>
@@ -72,35 +78,21 @@ const DealySales = () => {
                         visible={true}
                         allowedPageSizes={allowedPageSizes}
                         showPageSizeSelector={true}
-                        showInfo={true} />
-                    <GroupPanel visible={true} />          
+                        showInfo={true} />       
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                    <Column dataField="id" caption='No Factura' width={70}/>
-                    <Column dataField="date" caption="Fecha"  dataType="date" format={formatDate}  width={100}/> 
-                    <Column dataField="totalC" caption="Total en C$" cellRender={cellRender()}/>
-                    <Column dataField="totalD" caption="Total en$" cellRender={cellRender()}/>
-                    <Column dataField="createBy" caption="Creado Por" />
-                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={120}/> 
-                    <Summary>                       
-                        <TotalItem
-                            column="totalC"
-                            summaryType="sum"
-                            showInGroupFooter={false} 
-                            alignByColumn={true}
-                            customizeText={data => `Total: ${formatToMoneySymoboless(data.value)}`}
-                        />
-                        <TotalItem
-                            column="totalD"
-                            summaryType="sum"
-                            showInGroupFooter={false} 
-                            alignByColumn={true}
-                            customizeText={data => `Total: ${formatToMoneySymoboless(data.value)}`}
-                        />
-                    </Summary>                   
+                    <Column dataField="id" caption='Código' width={70}/>
+                    <Column dataField="product" caption="Producto" /> 
+                    <Column dataField="um" caption="UM" width={100} /> 
+                    <Column dataField="saldoAnterior" caption='Cant Inicial' width={100}/>
+                    <Column dataField="entradas" caption='Cant Entradas' width={100}/>
+                    <Column dataField="salidas" caption='Cant Salidas' width={100}/> 
+                    <Column dataField="total" caption='Existencias' width={100}/> 
+                               
                 </DataGrid>
             </div>
         </div>
     );
-}
+};
 
-export default DealySales;
+
+export default CountPhisycal;
