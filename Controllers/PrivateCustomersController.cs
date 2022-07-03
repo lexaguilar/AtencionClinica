@@ -141,12 +141,11 @@ namespace AtencionClinica.Controllers
         [Route("api/privateCustomers/get/single")]
         public IActionResult GetCatalogSingle() 
         {
-             IQueryable<PrivateCustomer> privates = _db.PrivateCustomers
-             .Include(x => x.Sex)
-             .Include(x => x.Contract)
-             .Include(x => x.Type) ;
 
-            
+            IQueryable<PrivateCustomer> privates = _db.PrivateCustomers
+            .Include(x => x.Sex)
+            .Include(x => x.Contract)
+            .Include(x => x.Type);            
 
             var items = _db.PrivateCustomers.Select(x => new {
                 Id = x.Id,
@@ -155,9 +154,11 @@ namespace AtencionClinica.Controllers
                 Sex = x.Sex.Name,
                 Contract = x.Contract.Name,
                 Type = x.Type.Name,
+                Inss = x.Inss
             });
 
             return Json(items);
+
         }
 
 

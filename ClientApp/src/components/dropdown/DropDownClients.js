@@ -27,6 +27,7 @@ const DropDownClients = ({ dropDownBoxRef, changeHandler }) => {
                 <Paging enabled={true} pageSize={10} />
                 <FilterRow visible={true} />
                 <Column visible={false} dataField="id" caption="Codigo" width={80} cellRender={dataFormatId} />
+                <Column dataField="inss" width={80} />
                 <Column dataField="type" caption="Tipo" width={80} allowFiltering={false} />
                 <Column dataField="contract" caption="Convenio" width={150} allowFiltering={false} />
                 <Column dataField="identification" caption="Identificacion" width={130} />

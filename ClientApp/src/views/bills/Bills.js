@@ -4,7 +4,6 @@ import {
     Paging, 
     Pager, 
     FilterRow, 
-    HeaderFilter, 
     ColumnChooser, 
     Column, 
     Lookup,
@@ -117,9 +116,9 @@ const Bills = props => {
                 <FilterRow visible={true} />
                 <ColumnChooser enabled={true} />
                 <Export enabled={true} fileName={title} allowExportSelectedData={true} />
-                <Column dataField="id"  width={100} />          
+                <Column dataField="id"  width={80} />          
                 <Column dataField="nombre" />
-                <Column dataField="areaId" width={170} caption="Area">
+                <Column dataField="areaId" width={150} caption="Area">
                     <Lookup disabled={true} dataSource={createStoreLocal({name : 'area'})} valueExpr="id" displayExpr="name" />
                 </Column> 
                 <Column dataField="billTypeId" width={170} caption="Tipo Ingreso">
@@ -128,9 +127,10 @@ const Bills = props => {
                 <Column dataField="currencyId" caption="Moneda" width={100}>
                     <Lookup disabled={true} dataSource={createStoreLocal({name: 'currency'})} valueExpr="id" displayExpr="name" />
                 </Column>
-                <Column dataField="total" width={100} cellRender={cellRender()} />
+                <Column dataField="total" width={90} cellRender={cellRender()} />
+                <Column dataField="isCredit" caption='Es Credito?' width={100} />
                 <Column dataField="createBy" caption='Creado por' width={100} />
-                <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={180} />
+                <Column dataField="createAt" caption='Creado el' dataType='date'  format={formatDateTime} width={150} />
                 <Editing
                     mode="popup"                 
                     allowDeleting={true}

@@ -20,7 +20,9 @@ import {
     Validator,
     RequiredRule
 } from 'devextreme-react/validator';
-import { DropDownBox, SelectBox, TextArea } from 'devextreme-react';
+import { CheckBox, DropDownBox, SelectBox, TextArea } from 'devextreme-react';
+import Box, {  Item } from 'devextreme-react/box';
+
 import { DivForm } from '../../utils/divHelpers';
 import DropDownDoctors from '../../components/dropdown/DropDownDoctors';
 
@@ -153,6 +155,7 @@ const Nuevo = props => {
             </BlockHeader>
             <form onSubmit={onFormSubmit}>
                 <div className="dx-fieldset">
+                
                     <DivForm title='Asegurado' required>
                         <DropDownClients dropDownBoxRef={dropDownBoxRef} changeHandler={changeHandler} />
                     </DivForm>
@@ -192,7 +195,6 @@ const Nuevo = props => {
                     <DivForm title='Doctor' required>
                         <DropDownDoctors dropDownBoxRef={dropDownBoxDoctorRef} changeHandler={doctorChangeHandler} />
                     </DivForm>
-
                     <DivForm title='Moneda' required>
                         <SelectBox
                             defaultValue={bill.currencyId}
@@ -209,7 +211,25 @@ const Nuevo = props => {
                             </Validator>
                         </SelectBox>
                     </DivForm>
-                    <DivForm title='Observacion' >
+                    <Box direction="row"
+                        width="100%"
+                        height={75}>
+                            
+                            <Item ratio={1}>
+                                <DivForm title='Es de Credito?'>
+                                    <CheckBox
+                                        value={bill.isCredit}
+                                        onValueChanged={e => {
+                                            setBill({ ...bill, isCredit: e.value })
+                                        }}
+                                    >
+                                    </CheckBox>
+                                </DivForm>
+                            </Item>
+                            <Item ratio={2}></Item>
+                    </Box>                   
+                    
+                    <DivForm title='Observación' >
                         <TextArea
                          defaultValue={bill.observaction}
                          value={bill.observaction}

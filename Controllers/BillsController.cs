@@ -56,6 +56,12 @@ namespace AtencionClinica.Controllers
                 bills = bills.Where(x => x.CreateAt > createAt && x.CreateAt < createAt.AddDays(1));
             }
 
+            if(values.ContainsKey("isCredit"))
+            {
+                var isCredit = Convert.ToBoolean(values["isCredit"]);
+                bills = bills.Where(x => (x.IsCredit??false) == isCredit);
+            }
+
             var items = bills.Skip(skip).Take(take).Select(x => new
             {
                 x.Id,
@@ -66,7 +72,8 @@ namespace AtencionClinica.Controllers
                 x.CreateBy,
                 x.Active,
                 x.Total,
-                x.CurrencyId
+                x.CurrencyId,
+                IsCredit = x.IsCredit?? false
             });
 
             return Json(new

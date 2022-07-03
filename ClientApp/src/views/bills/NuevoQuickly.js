@@ -20,7 +20,8 @@ import {
     Validator,
     RequiredRule
 } from 'devextreme-react/validator';
-import { DropDownBox, SelectBox, TextArea, TextBox } from 'devextreme-react';
+import { CheckBox, SelectBox, TextArea, TextBox } from 'devextreme-react';
+import Box, {  Item } from 'devextreme-react/box';
 import { DivForm } from '../../utils/divHelpers';
 import GridMedicamentos from '../workOrders/GridMedicamentos';
 import { useSelector } from 'react-redux';
@@ -152,6 +153,23 @@ const NuevoQuickly = props => {
                             </Validator>
                         </SelectBox>
                     </DivForm>
+                    <Box direction="row"
+                        width="100%"
+                        height={75}>
+                            
+                            <Item ratio={1}>
+                                <DivForm title='Es de Credito?'>
+                                    <CheckBox
+                                        value={bill.isCredit}
+                                        onValueChanged={e => {
+                                            setBill({ ...bill, isCredit: e.value })
+                                        }}
+                                    >
+                                    </CheckBox>
+                                </DivForm>
+                            </Item>
+                            <Item ratio={2}></Item>
+                    </Box>  
                     <DivForm title='Observacion' >
                         <TextArea
                             defaultValue={bill.observaction}

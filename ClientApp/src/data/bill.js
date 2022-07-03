@@ -6,7 +6,8 @@ export const billDefault = {
     observaction: '',
     currencyId: 1,
     rate : 0,
-    nameCustomer:''
+    nameCustomer:'',
+    isCredit: false,
 
 }
 
