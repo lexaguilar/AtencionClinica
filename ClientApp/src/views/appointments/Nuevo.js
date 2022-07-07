@@ -19,6 +19,8 @@ import List from 'devextreme-react/list';
 import moment from 'moment';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
+import { confirm } from 'devextreme/ui/dialog';
+import 'moment/locale/es'
 
 const Nuevo = () => {
 
@@ -31,6 +33,7 @@ const Nuevo = () => {
     const [loading, setLoading] = useState(false);
     const [appointment, setAppointment] = useState({...appointmentDefault});
     const [citas, setCitas] = useState([]);
+    const [citasFuture, setCitasFuture] = useState([]);
     const [time, setTime] = useState({
         countBeneficiarios: 0,
         days: "",
@@ -167,12 +170,6 @@ const Nuevo = () => {
 
     }
 
-    const onOptionChanged = (e) => {
-
-        // if(e.name == 'currentDate')
-        //     dayInLastWeek = getDayInLastWeek(e.value, 1);
-    }
-
     const isWeekend = (date) => {
         console.log(date);
         const _day = date.getDay();
@@ -239,7 +236,53 @@ const Nuevo = () => {
             hour = null;
     }
 
+    const onBeneficiaryChanced = async(e) => {
+
+        const resp = await http(`appointments/get/${e.value}/last/10?onlyFuture=1`).asGet();
+
+        const _temp = resp.map(item => {
+
+            const customDate = moment(item.dateAppointment);
+            moment.locale('es')
+
+            return { 
+                id: item.id, 
+                doctor : item.doctor,
+                customDate: customDate.format('ddd DD/MM/YYYY h:mm a')};
+
+        });
+
+        setCitasFuture(_temp);        
+
+    }
+
+    const onItemDeleting = (e) => {
+
+        e.cancel = true;
+
+        console.log(e);
+
+        let result = confirm("<i>Seguro de eliminar la cita?</i>", "Eliminar cita");
+        result.then((dialogResult) => {
+
+            if(dialogResult){
+                http(uri.appointments.remove(e.itemData.id)).asGet().then(resp => {
+                    if(resp){
+                        notify('Cita eliminada correctamente');
+                        onBeneficiaryChanced({ value : appointment.beneficiaryId });
+                    }
+                }).catch(err => {
+                    notify(err, 'error');
+                });
+            }                
+
+        });
+
+    }
+    
     const title = 'Citas';
+
+
 
     return authorized(
         <div className="container">
@@ -256,7 +299,8 @@ const Nuevo = () => {
                             valueExpr: "id",
                             displayExpr: item => item ? `${item.relationship} - ${item.name}` : '',
                             searchEnabled: true,
-                            noDataText : customer.inss == ''? 'Busque un asegurado primero' : 'No hay beneficiarios agregado'
+                            noDataText : customer.inss == ''? 'Busque un asegurado primero' : 'No hay beneficiarios agregado',
+                            onValueChanged: onBeneficiaryChanced,
                         }} >
                         <Label text="Beneficiario" />
                         <RequiredRule message="Seleccione el beneficiario" />
@@ -282,28 +326,30 @@ const Nuevo = () => {
                     <SimpleItem dataField="observation" colSpan={2}>
                         <StringLengthRule max={250} message="Maximo 250 caracteres" />
                         <Label text="Observacion" />
-                    </SimpleItem>                  
-                    {/* <GroupItem cssClass="second-group" colSpan={2} caption="Calendario">       
-                        <CustomCalendar 
-                            value={appointment.dateAppointment}
-                            onValueChanged = {onValueChangedDateAppointment} 
-                            min = {minDateValue} 
-                            disabledDates = {disabledDates}
-                            doctorId={appointment.doctorId}
-                            specialtyId={appointment.specialtyId}
-                            />
-                    </GroupItem>  */}
-                    <SimpleItem dataField="dateAppointment" colSpan={2} editorType="dxCalendar" 
-                        editorOptions={{
-                            onValueChanged : onValueChangedDateAppointment,      
-                            min : minDateValue,
-                            //disabledDates : disabledDates,
-                            //onOptionChanged : onOptionChanged,
-                            disabled : !appointment.doctorId || !appointment.specialtyId
-                        }} >
-                        <Label text="Calendario" />
-                    </SimpleItem>
-                    <GroupItem cssClass="second-group" colSpan={2} caption="Horario">                        
+                    </SimpleItem>  
+                    <GroupItem cssClass="second-group" colSpan={2} colCount={4} caption="Horario">    
+                        <SimpleItem dataField="dateAppointment" colSpan={2} editorType="dxCalendar" 
+                            editorOptions={{
+                                onValueChanged : onValueChangedDateAppointment,      
+                                min : minDateValue,
+                                disabled : !appointment.doctorId || !appointment.specialtyId
+                            }} >
+                            <Label text="Hora" />
+                        </SimpleItem>
+                        <GroupItem colSpan={2} caption='Citas programadas'>
+                            <List                            
+                                dataSource={citasFuture}
+                                height={400}
+                                selectionMode='single'
+                                allowItemDeleting={true}
+                                itemDeleteMode='toggle'
+                                onItemDeleting={onItemDeleting}
+                                displayExpr={e => e ? `${e.customDate} - ${e.doctor}` : ''}
+                                >
+                            </List>     
+                        </GroupItem>
+                    </GroupItem>                    
+                    <GroupItem cssClass="second-group" colSpan={2} caption="Horario"> 
                         <List                            
                             dataSource={citas}
                             height={400}
@@ -312,10 +358,10 @@ const Nuevo = () => {
                             itemRender={itemRender}
                             onSelectionChanged={onOptionChangedHour}
                             >
-                        </List>                        
+                        </List>                                     
                     </GroupItem>
                 </GroupItem>
-            </Form>     
+            </Form> 
             <Button
                 width={180}
                 text={loading ? 'Guardando...' : 'Guardar cita'}
@@ -323,8 +369,7 @@ const Nuevo = () => {
                 icon='save'
                 disabled={!customer.status || loading}
                 onClick={guardaCita}
-            />
-            
+            />             
         </div>
     );
 }

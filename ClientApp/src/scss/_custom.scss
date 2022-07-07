@@ -570,3 +570,15 @@ html[dir=ltr] .nav-links__item--with-submenu>a svg {
     border-radius: 7px;
     background: white;
 }
+
+footer {
+    position: static;
+    bottom: 0;
+    width: 100%;
+}
+
+.site__footer {
+    position: static;
+    bottom: 0;
+    width: 100%;
+}

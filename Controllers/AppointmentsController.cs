@@ -194,13 +194,16 @@ namespace AtencionClinica.Controllers
         } 
 
         [Route("api/appointments/get/{beneficiaryId}/last/{top}")]
-        public IActionResult Get(int beneficiaryId, int top) 
+        public IActionResult Get(int beneficiaryId, int top,[FromQuery] int onlyFuture) 
         {
             IQueryable<Appointment> appointments = _db.Appointments
             .Include(x => x.Doctor)
             .Include(x => x.Specialty)
             .Where(x => x.BeneficiaryId == beneficiaryId && x.Active)
             .OrderByDescending(x => x.DateAppointment);
+
+            if(onlyFuture == 1)
+                appointments = appointments.Where(x => x.DateAppointment > DateTime.Today);
 
             var items = appointments.Take(top).Select(x => new {
                 x.Id,

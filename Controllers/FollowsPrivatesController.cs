@@ -30,6 +30,25 @@ namespace AtencionClinica.Controllers
             IQueryable<VwFollowsPrivate> follows = _db.VwFollowsPrivates.Where(x => x.AreaTargetId == areaId)
             .OrderByDescending(x => x.Id);
 
+            if (values.ContainsKey("inss"))
+            {
+                var inss = Convert.ToInt32(values["inss"]);
+                follows = follows.Where(x => x.Inss== inss);
+            }
+
+            if (values.ContainsKey("firstName"))
+            {
+                var firstName = values["firstName"];
+                follows = follows.Where(x => x.FirstName.Contains(firstName));
+            }
+
+            if (values.ContainsKey("lastName"))
+            {
+                var lastName = values["lastName"];
+                follows = follows.Where(x => x.LastName.Contains(lastName));
+            }
+
+
             if (values.ContainsKey("id"))
             {
                 var id = Convert.ToInt32(values["id"]);

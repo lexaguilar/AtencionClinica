@@ -196,6 +196,7 @@ namespace AtencionClinica.Controllers
 
                     x.CreateAt,
                     x.CreateBy,
+                    x.IsCredit,
                     TotalC = UserHelpers.GeyTotalC(x.Total, x.Rate, x.CurrencyId),
                     TotalD = UserHelpers.GeyTotalD(x.Total, x.Rate, x.CurrencyId),                    
                     x.Id
@@ -220,11 +221,13 @@ namespace AtencionClinica.Controllers
 
                             b.Id,
                             p.Name,
+                            b.IsCredit,
                             b.CreateAt,
                             b.CreateBy,
                             bd.Quantity,
                             bd.Price,
                             bd.Total,
+                            
                             Date = b.CreateAt.Date
 
                         };

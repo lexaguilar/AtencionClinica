@@ -42,7 +42,7 @@ namespace AtencionClinica.Controllers
                 var inss = Convert.ToInt32(values["inss"]);
                 follows = follows.Where(x => x.Inss == inss);
             }
-
+          
             if (values.ContainsKey("admissionId"))
             {
                 var admissionId = Convert.ToInt32(values["admissionId"]);
