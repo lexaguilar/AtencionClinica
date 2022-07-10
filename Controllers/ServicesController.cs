@@ -54,12 +54,20 @@ namespace AtencionClinica.Controllers
                 services = services.Where(x => x.CurrencyId == currencyId);
             }
 
-            var items = services.Skip(skip).Take(take);
+            var totalCount = services.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                        services = services.Skip(skip).Take(take);                
+                }
+            }
 
             return Json(new
             {
-                items,
-                totalCount = services.Count()
+                items = services,
+                totalCount
             });
 
         }

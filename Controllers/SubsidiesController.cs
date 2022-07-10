@@ -71,7 +71,17 @@ namespace AtencionClinica.Controllers
                 subsidies = subsidies.Where(x => x.CreateAt > createAt && x.CreateAt < createAt.AddDays(1));
             }
 
-            var items = subsidies.Skip(skip).Take(take).Select(x => new {
+            var totalCount = subsidies.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                        subsidies = subsidies.Skip(skip).Take(take);                
+                }
+            }
+
+            var items = subsidies.Select(x => new {
                 x.Id,
                 x.Reference,
                 x.Inss,
@@ -93,7 +103,7 @@ namespace AtencionClinica.Controllers
             return Json(new
             {
                 items,
-                totalCount = subsidies.Count()
+                totalCount
             });
 
         }      

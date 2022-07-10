@@ -55,12 +55,38 @@ namespace AtencionClinica.Controllers
                 inPutProducts = inPutProducts.Where(x => x.Reference == reference);
             }
 
-            var items = inPutProducts.Skip(skip).Take(take);
+            if (values.ContainsKey("id"))
+            {
+                var id = Convert.ToInt32(values["id"]);
+                inPutProducts = inPutProducts.Where(x => x.Id == id);
+            }
+
+            if (values.ContainsKey("date"))
+            {
+                var createAt = Convert.ToDateTime(values["date"]);
+                var createAtEnd = Convert.ToDateTime(values["dateEnd"]);
+                inPutProducts = inPutProducts.Where(x => x.Date >= createAt && x.Date <= createAtEnd);
+            }
+
+            if(values.ContainsKey("areaId")){
+                var areaId = Convert.ToInt32(values["areaId"]);
+                inPutProducts = inPutProducts.Where(x => x.AreaId == areaId);
+            }
+
+            var totalCount = inPutProducts.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                        inPutProducts = inPutProducts.Skip(skip).Take(take);                
+                }
+            }
 
             return Json(new
             {
-                items,
-                totalCount = inPutProducts.Count()
+                items = inPutProducts,
+                totalCount
             });
 
         }

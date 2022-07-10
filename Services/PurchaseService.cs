@@ -129,7 +129,7 @@ namespace AtencionClinica.Services
 
             foreach (var item in purchase.PurchaseDetails)
             {
-                inPutProduct.InPutProductDetails.Add(new InPutProductDetail
+                var pd = new InPutProductDetail
                 {
                     ProductId = item.ProductId,
                     Quantity = item.Quantity + item.Royalty,
@@ -142,9 +142,14 @@ namespace AtencionClinica.Services
                     Total = item.Total,
                     CostAvg = item.CostAvg,
                     Stocks = item.Stocks
-                });
+                };
 
                 ComputeAreStock(item);
+
+                pd.Stocks = item.Stocks;
+                pd.CostAvg = item.CostAvg;
+
+                inPutProduct.InPutProductDetails.Add(pd);
             }
             purchase.StatusId=(int)PurchaseStatuses.Procesado;
             _db.InPutProducts.Add(inPutProduct);

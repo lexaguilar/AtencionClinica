@@ -136,6 +136,7 @@ const menu = [{
                         { title: 'Stock', url: `${_path.CLINICA}/inventario/reportes/stock` },
                         { title: 'Descargues', url: `${_path.CLINICA}/inventario/reportes/donwload` },
                         { title: 'Conteo Fisico', url: `${_path.CLINICA}/inventario/reportes/counting` },
+                        { title: 'Conteo Por Valor', url: `${_path.CLINICA}/inventario/reportes/counting-value` },
                         { title: 'Comprobantes', url: `${_path.CLINICA}/inventario/reportes/comprobantes` },
                     ],
                 },]

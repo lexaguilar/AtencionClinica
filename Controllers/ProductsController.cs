@@ -68,45 +68,53 @@ namespace AtencionClinica.Controllers
         [Route("api/products/get")]
         public IActionResult Get(int skip, int take, IDictionary<string, string> values)
         {
-            IQueryable<Product> Products = _db.Products
+            IQueryable<Product> products = _db.Products
            .OrderBy(x => x.Name);
 
             if (values.ContainsKey("id"))
             {
                 var id = Convert.ToInt32(values["id"]);
-                Products = Products.Where(x => x.Id == id);
+                products = products.Where(x => x.Id == id);
             }
 
             if (values.ContainsKey("name"))
             {
                 var name = Convert.ToString(values["name"]);
-                Products = Products.Where(x => x.Name.StartsWith(name));
+                products = products.Where(x => x.Name.StartsWith(name));
             }
 
             if (values.ContainsKey("familyId"))
             {
                 var familyId = Convert.ToInt32(values["familyId"]);
-                Products = Products.Where(x => x.FamilyId == familyId);
+                products = products.Where(x => x.FamilyId == familyId);
             }
 
             if (values.ContainsKey("presentationId"))
             {
                 var presentationId = Convert.ToInt32(values["presentationId"]);
-                Products = Products.Where(x => x.PresentationId == presentationId);
+                products = products.Where(x => x.PresentationId == presentationId);
             }
 
             if (values.ContainsKey("stateId"))
             {
                 var stateId = Convert.ToInt32(values["stateId"]);
-                Products = Products.Where(x => x.StateId == stateId);
+                products = products.Where(x => x.StateId == stateId);
             }
 
-            var items = Products.Skip(skip).Take(take);
+            var totalCount = products.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    products = products.Skip(skip).Take(take);                
+                }
+            }
 
             return Json(new
             {
-                items,
-                totalCount = Products.Count()
+                items = products,
+                totalCount
             });
 
         }

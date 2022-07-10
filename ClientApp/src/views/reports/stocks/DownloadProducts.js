@@ -111,14 +111,15 @@ const DownloadProducts = () => {
                     <Column dataField="id" width={70} groupIndex={1}/>
                     <Column dataField="followId" width={80} groupIndex={0}/>
                     <Column dataField="date" dataType="date" caption="Fecha" format={formatDate}  width={100} />
-                    <Column dataField="reference" caption="Referencia"  width={150}/>
-                    <Column dataField="identity" caption="Inss" width={150}/>
+                    <Column dataField="reference" caption="Referencia"  width={90}/>
+                    <Column dataField="identity" caption="Inss" width={80}/>
                     <Column dataField="beneficiary" caption="Paciente" />
                     <Column dataField="producto" caption="Producto" />
-                    <Column dataField="quantity" caption="Cant"/>
+                    <Column dataField="quantity" caption="Cant" width={80}/>
                     <Column dataField="price" caption="Costo" width={80}/>
+                    <Column dataField="total" width={80}/>
                     <Column dataField="name" caption="Doctor" width={100}/>
-                    <Column dataField="createBy" caption="Creado Por" />
+                    <Column dataField="createBy" caption="Creado Por" width={100}/>
                     <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={100}/> 
                     <Summary>                       
                         <GroupItem

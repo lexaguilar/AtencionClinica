@@ -62,7 +62,17 @@ namespace AtencionClinica.Controllers
                 bills = bills.Where(x => (x.IsCredit??false) == isCredit);
             }
 
-            var items = bills.Skip(skip).Take(take).Select(x => new
+            var totalCount = bills.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                        bills = bills.Skip(skip).Take(take);                
+                }
+            }
+
+            var items = bills.Select(x => new
             {
                 x.Id,
                 Nombre = x.PrivateCustomer.GetFullName(),
@@ -79,7 +89,7 @@ namespace AtencionClinica.Controllers
             return Json(new
             {
                 items,
-                totalCount = bills.Count()
+                totalCount
             });
 
         }

@@ -10,7 +10,7 @@ import useParameters from '../../../hooks/useParameters';
 import http from '../../../utils/http';
 import HeaderReport from '../../../components/form/HeaderReport';
 
-//Punto 9
+//Punto 9 1
 const CountPhisycal = () => {
 
     const [data, setData] = useState([]);

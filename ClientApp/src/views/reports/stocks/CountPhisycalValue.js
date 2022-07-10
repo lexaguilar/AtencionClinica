@@ -9,9 +9,10 @@ import BlockHeader from '../../../components/shared/BlockHeader';
 import useParameters from '../../../hooks/useParameters';
 import http from '../../../utils/http';
 import HeaderReport from '../../../components/form/HeaderReport';
+import { cellRender, formatToMoneySymoboless } from '../../../utils/common';
 
-//Punto 9 3
-const Comprobante = () => {
+//Punto 9 2
+const CountPhisycalValue = () => {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -28,10 +29,18 @@ const Comprobante = () => {
         const { areaId } = param;
        
         setLoading(true);
-        const resp = await http('reports/comprobantes').asPost({ from, to, areaId });
-        setLoading(false);        
+        const resp = await http('reports/countPhisycalValue').asPost({ from, to, areaId });
+        setLoading(false);
 
-        setData(resp);
+        const newData = resp.map(item => {
+
+            item.total = item.entradas - item.salidas + item.saldoAnterior;
+
+            return item;
+
+        })
+
+        setData(newData);
 
     }
 
@@ -41,7 +50,7 @@ const Comprobante = () => {
     const toChanged = e => changeData({ target:'to', value: e.value});
     const areaChanged = e => changeData({ target:'areaId', value: e.value});
 
-    const title = 'Comprobante de inventarios';
+    const title = 'Reporte Inventario Valor ';
 
     const allowedPageSizes = [20, 50];
 
@@ -70,12 +79,15 @@ const Comprobante = () => {
                         visible={true}
                         allowedPageSizes={allowedPageSizes}
                         showPageSizeSelector={true}
-                        showInfo={true} />        
+                        showInfo={true} />       
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                     <Column dataField="id" caption='Código' width={70}/>
                     <Column dataField="product" caption="Producto" /> 
-                    <Column dataField="debe" width={140}/>
-                    <Column dataField="haber" width={140}/> 
+                    <Column dataField="um" caption="UM" width={100} /> 
+                    <Column dataField="saldoAnterior" caption='Valor Inicial' width={100} cellRender={e => formatToMoneySymoboless(e.value)}/>
+                    <Column dataField="entradas" caption='Valor Entradas' width={100} cellRender={e => formatToMoneySymoboless(e.value)}/>
+                    <Column dataField="salidas" caption='Valor Salidas' width={100} cellRender={e => formatToMoneySymoboless(e.value)}/> 
+                    <Column dataField="total" caption='Valor Existente' width={100} cellRender={e => formatToMoneySymoboless(e.value)}/> 
                                
                 </DataGrid>
             </div>
@@ -84,4 +96,4 @@ const Comprobante = () => {
 };
 
 
-export default Comprobante;
+export default CountPhisycalValue;

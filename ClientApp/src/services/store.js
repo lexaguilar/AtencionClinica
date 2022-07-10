@@ -34,6 +34,8 @@ const store =
                 params.skip = loadOptions.skip || 0;
                 params.take = loadOptions.take || 10;
 
+                params.requireTotalCount = loadOptions.requireTotalCount || false;
+
                 if(model?.extraParameter?.length){
                     for (let index = 0; index < model.extraParameter.length; index++) {
                         const element = model.extraParameter[index];

@@ -73,11 +73,19 @@ namespace AtencionClinica.Controllers
                 follows = follows.Where(x => x.PrivateCustomerTypeId == privateCustomerTypeId);
             }
 
-            var items = follows.Skip(skip).Take(take);
+            var totalCount = follows.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    follows = follows.Skip(skip).Take(take);  
+                }
+            }
 
             return Json(new
             {
-                items,
+                items = follows,
                 totalCount = follows.Count()
             });
 

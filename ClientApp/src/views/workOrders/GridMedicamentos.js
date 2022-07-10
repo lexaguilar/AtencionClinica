@@ -217,7 +217,7 @@ const GridMedicamentos = ({useStandar = false, validate = [], detailsServices=[]
                 setCellValue={setCellValue.bind(null, "quantity")}>
                 <RuleRequired />
             </Column>
-            <Column dataField="cost" caption="Costo" dataType="number" width={100} allowEditing={false} visible={!showPrice} cellRender={cellRender(currencyId)} >
+            <Column dataField="costo" caption="Costo" dataType="number" width={100} allowEditing={false} visible={!showPrice} cellRender={cellRender(currencyId)} >
                 <RuleRequired />
             </Column>
             <Column dataField="price" caption="Precio" dataType="number" width={100} allowEditing={false} visible={showPrice} cellRender={cellRender(currencyId)} >

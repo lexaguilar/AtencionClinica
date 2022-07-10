@@ -34,7 +34,18 @@ namespace AtencionClinica.Services
             var model = workOrder.Validate(_db);
             
             if (!model.IsValid)
-                return model;
+                return model;   
+
+            var follow = _db.Follows.FirstOrDefault(x => x.Id == workOrder.FollowId); 
+
+            foreach (var item in workOrder.WorkOrderDetails.Where(x => !x.IsService))
+            {
+
+                var areaProducto = _db.AreaProductStocks.FirstOrDefault(x => x.AreaId == follow.AreaTargetId && x.ProductId == item.ProductId);
+
+                item.Costo = areaProducto.CostAvg;
+
+            }       
 
             _db.WorkOrders.Add(workOrder);
 

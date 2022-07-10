@@ -8,6 +8,7 @@ namespace AtencionClinica.Models
     public partial class VwKardex
     {
         public DateTime Date { get; set; }
+        public DateTime CreateAt { get; set; }
         public string Type { get; set; }
         public double QuantityIn { get; set; }
         public decimal? CostIn { get; set; }

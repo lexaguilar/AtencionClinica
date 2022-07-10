@@ -79,7 +79,17 @@ namespace AtencionClinica.Controllers
                 appointments = appointments.Where(x => x.CreateAt > createAt && x.CreateAt < createAt.AddDays(1));
             }
 
-            var items = appointments.Skip(skip).Take(take).Select(x => new {
+            var totalCount = appointments.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    appointments = appointments.Skip(skip).Take(take);  
+                }
+            }
+
+            var items = appointments.Select(x => new {
                 x.Id,
                 x.Inss,
                 Nombre = x.Beneficiary.GetFullName(),
@@ -97,7 +107,7 @@ namespace AtencionClinica.Controllers
             return Json(new
             {
                 items,
-                totalCount = appointments.Count()
+                totalCount
             });
         }    
 

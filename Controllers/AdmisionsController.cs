@@ -92,7 +92,17 @@ namespace AtencionClinica.Controllers
                 admissions = admissions.Where(x => x.CreateBy == createBy);
             }
 
-            var items = admissions.Skip(skip).Take(take).Select(x => new {
+            var totalCount = admissions.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    admissions = admissions.Skip(skip).Take(take);                
+                }
+            }
+
+            var items = admissions.Select(x => new {
                 x.Id,
                 x.NumberOfDay,
                 x.Inss,
@@ -111,7 +121,7 @@ namespace AtencionClinica.Controllers
             return Json(new
             {
                 items,
-                totalCount = admissions.Count()
+                totalCount
             });
 
         }      
@@ -185,7 +195,15 @@ namespace AtencionClinica.Controllers
                 admissions = admissions.Where(x => x.CreateAt >= onlyNow);
             }
 
-            var items = admissions.Skip(skip).Take(take).Select(x => new {
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    admissions = admissions.Skip(skip).Take(take);                
+                }
+            }
+
+            var items = admissions.Select(x => new {
                 x.Id,
                 x.NumberOfDay,
                 x.Inss,

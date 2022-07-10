@@ -86,12 +86,22 @@ namespace AtencionClinica.Controllers
                 follows = follows.Where(x => x.CreateAt > createAt && x.CreateAt < createAtEnd);
             }
 
-            var items = follows.Skip(skip).Take(take);
+            var totalCount = follows.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    follows = follows.Skip(skip).Take(take);  
+                }
+            }
+
+            var items = follows;
 
             return Json(new
             {
                 items,
-                totalCount = follows.Count()
+                totalCount
             });
 
         }

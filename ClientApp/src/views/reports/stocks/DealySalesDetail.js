@@ -97,7 +97,7 @@ const DealySalesDetail = () => {
                     <Column dataField="id" caption='No Factura' width={70} groupIndex={1}/>
 
                     <Column dataField="date" caption="Fecha"  dataType="date" format={formatDate}  width={100} groupIndex={0}/> 
-                   
+                    <Column dataField="isCredit" caption='Es Credito?' width={100} />
                     <Column dataField="createBy" caption="Creado Por"  width={120}/>
                     <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={130}/> 
 
