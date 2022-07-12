@@ -57,7 +57,7 @@ const GridMedicamentos = ({useStandar = false, validate = [], detailsServices=[]
                                 product['productId'] = x.productId;
                                 product['presentation'] = info.presentation;
                                 product['um'] = info.um
-                                product['cost'] = info.cost;
+                                product['costo'] = info.cost;
                                 product['price'] = price;
                                 product['quantity'] = x.quantity;
                                 product['serviceId'] = null;
@@ -150,7 +150,7 @@ const GridMedicamentos = ({useStandar = false, validate = [], detailsServices=[]
 
             newData['presentation'] = info.presentation;
             newData['um'] = info.um
-            newData['cost'] = info.cost;
+            newData['costo'] = info.cost;
             newData['price'] = price;
             newData['quantity'] = 1;
             newData['serviceId'] = null;
@@ -167,7 +167,7 @@ const GridMedicamentos = ({useStandar = false, validate = [], detailsServices=[]
             if(showPrice)
                 newData['total'] = currentRowData['price'] * value;
             else
-                newData['total'] = currentRowData['cost'] * value;
+                newData['total'] = currentRowData['costo'] * value;
 
     }  
 

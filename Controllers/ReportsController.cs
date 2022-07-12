@@ -81,7 +81,7 @@ namespace AtencionClinica.Controllers
                         };
                         
 
-            result = result.Where(x => x.SaldoAnterior + x.Entradas - x.Salidas > 0);
+            //result = result.Where(x => x.SaldoAnterior + x.Entradas - x.Salidas > 0);
 
             return Json(result);
         }
@@ -119,7 +119,7 @@ namespace AtencionClinica.Controllers
                         };
                         
 
-            result = result.Where(x => x.SaldoAnterior + x.Entradas - x.Salidas > 0);
+            //result = result.Where(x => x.SaldoAnterior + x.Entradas - x.Salidas > 0);
 
             return Json(result);
         }

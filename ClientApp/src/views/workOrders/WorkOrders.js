@@ -16,7 +16,7 @@ import DataGrid, {
 import {  createStoreLocal } from '../../utils/proxy';
 import uri from '../../utils/uri';
 import { store } from '../../services/store';
-import { formatDate, formatDateTime } from '../../data/app';
+import { dataAccess, formatDate, formatDateTime, resources } from '../../data/app';
 import Nuevo from './Nuevo';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useDispatch } from 'react-redux'
@@ -24,8 +24,11 @@ import { dialogWorkOrder } from '../../store/workOrder/workOrderDialogReducer';
 import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 import { confirm } from 'devextreme/ui/dialog';
+import useAuthorization from '../../hooks/useAuthorization';
 
 const WorkOrders = (props) => {
+
+    const { isAuthorization  } = useAuthorization([resources.servicios, dataAccess.delete ]);  
 
     const { followId, beneficiaryId, areaId } = props;
 
@@ -54,24 +57,23 @@ const WorkOrders = (props) => {
                     }
                 });
 
-                e.items.push({
-                    text: 'Anular registro',
-                    icon : 'remove',
-                    onItemClick: () => {
-                        
-                        let { id } = e.row.data;
-                        deleteInfo( id );
-                        
-                    }
-                });
+                if(isAuthorization)
+                    e.items.push({
+                        text: 'Anular registro',
+                        icon : 'remove',
+                        onItemClick: () => {
+                            
+                            let { id } = e.row.data;
+                            deleteInfo( id );
+                            
+                        }
+                    });
                 
             }
         }
     }
 
     const viewInfo = id => {
-
-        console.log(id)
 
         dispatch(dialogWorkOrder({open : true, id }));
 

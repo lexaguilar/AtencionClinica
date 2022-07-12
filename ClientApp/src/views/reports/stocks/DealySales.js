@@ -43,7 +43,7 @@ const DealySales = () => {
     const toChanged = e => changeData({ target:'to', value: e.value});
     const areaChanged = e => changeData({ target:'areaId', value: e.value});
 
-    const title = 'Reporte de ventas diarias';
+    const title = 'Reporte de ventas diarias.';
 
     const allowedPageSizes = [20, 50, 'all'];
 
