@@ -195,6 +195,8 @@ namespace AtencionClinica.Controllers
                 admissions = admissions.Where(x => x.CreateAt >= onlyNow);
             }
 
+            var totalCount = admissions.Count();
+
             if (values.ContainsKey("requireTotalCount"))
             {
                var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
@@ -223,7 +225,7 @@ namespace AtencionClinica.Controllers
             return Json(new
             {
                 items,
-                totalCount = admissions.Count()
+                totalCount
             });
 
         }      

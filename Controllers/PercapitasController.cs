@@ -58,12 +58,22 @@ namespace AtencionClinica.Controllers
                 result = result.Where(x => x.Identification == identification);
             }
 
+            var totalCount = result.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    result = result.Skip(skip).Take(take);  
+                }
+            }
+
             var items = result.Skip(skip).Take(take);
 
             return Json(new
             {
-                items,
-                totalCount = result.Count()
+                items = result,
+                totalCount
             });
         }
 

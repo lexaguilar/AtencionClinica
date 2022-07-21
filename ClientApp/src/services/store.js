@@ -34,7 +34,9 @@ const store =
                 params.skip = loadOptions.skip || 0;
                 params.take = loadOptions.take || 10;
 
-                params.requireTotalCount = loadOptions.requireTotalCount || false;
+                const requireTotalCount = Boolean(localStorage.getItem('requireTotalCount') === 'false');
+                params.requireTotalCount = !(requireTotalCount === true);
+                localStorage.removeItem('requireTotalCount');
 
                 if(model?.extraParameter?.length){
                     for (let index = 0; index < model.extraParameter.length; index++) {

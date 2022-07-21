@@ -21,6 +21,7 @@ import useAuthorization from '../../hooks/useAuthorization';
 import { useDispatch } from 'react-redux';
 import NuevoOutWithFollow from '../workOrders/NuevoOutWithFollow';
 import { dialogWorkOrderOutFollow } from '../../store/workOrderOutFollow/workOrderOutFollowDialogReducer';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const AdmisionesHoy = props => {
 
@@ -73,6 +74,16 @@ const AdmisionesHoy = props => {
 
                 }
             }
+        },{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
         });
         
     }  
@@ -117,7 +128,6 @@ const AdmisionesHoy = props => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true}  />
                 <Column dataField="id"  width={80} allowHeaderFiltering={false} />
                 <Column dataField="numberOfDay" width={80} caption='Numero' allowFiltering={false} allowHeaderFiltering={false}/>
                 <Column dataField="inss"  width={100}  allowHeaderFiltering={false}/>

@@ -30,6 +30,7 @@ import notify from 'devextreme/ui/notify';
 import { createStoreLocal } from '../../utils/proxy';
 import PopupServiceTest from '../../components/workOrder/PopupServiceTest';
 import TransferWithService from '../../components/workOrder/TransferWithService';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const Follows = () => {
 
@@ -191,6 +192,16 @@ const Follows = () => {
                     }
                 }
             }
+        },{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
         });
         
     }  
@@ -250,7 +261,6 @@ const Follows = () => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" width={100} />
                 <Column dataField="admissionId" width={100} caption='Admision' />
                 <Column dataField="inss" width={100} />

@@ -18,6 +18,7 @@ import { createStoreLocal } from '../../utils/proxy';
 import CustomButton from '../../components/buttons/CustomButton';
 import { dataAccess, formatDateTime, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const PuetosMedicos = props => {
 
@@ -49,6 +50,20 @@ const PuetosMedicos = props => {
 
     const title = 'Puesto Medicos';
 
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    }  
+
     return authorized(
         <div className="container">
             <Title title={title}/>
@@ -70,7 +85,7 @@ const PuetosMedicos = props => {
                 hoverStateEnabled={true}
                 onRowPrepared={onRowPrepared}
                 onCellPrepared={onCellPrepared}
-                
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -85,7 +100,6 @@ const PuetosMedicos = props => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true}  />
                 <Column dataField="id"  width={80} allowHeaderFiltering={false} />
                 <Column dataField="inss"  width={100}  allowHeaderFiltering={false}/>
                 <Column dataField="tipo"  width={110} allowFiltering={false}/>

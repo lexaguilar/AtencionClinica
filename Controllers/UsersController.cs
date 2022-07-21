@@ -28,20 +28,23 @@ namespace AtencionClinica.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult Get(int skip, int take, string username)
+        public IActionResult Get(int skip, int take, string username, bool requireTotalCount)
         {
 
             var users = _db.Users.Select(x => new { x.Username, x.Email, x.FullName, x.RolId, x.AreaId, x.Active });
 
             if (!string.IsNullOrEmpty(username))            
-                users = users.Where(x => x.Username == username);            
+                users = users.Where(x => x.Username == username);   
 
-            var items = users.Skip(skip).Take(take != 0 ? take : 10).ToArray();
+            var totalCount = users.Count();
+
+            if (requireTotalCount)
+                users = users.Skip(skip).Take(take != 0 ? take : 10);  
 
             return new JsonResult(new
             {
-                items,
-                totalCount = users.Count()
+                items = users,
+                totalCount
             });
         }
         

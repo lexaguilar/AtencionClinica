@@ -19,4 +19,17 @@ const gridsHelper = (gridRef, options) => {
     return onToolbarPreparing;
 }
 
+const exportToExcel = (grid) => {
+
+    localStorage.setItem('requireTotalCount', 'false');
+    try {
+        grid.current.instance.exportToExcel(false);        
+    } catch (error) {
+        localStorage.removeItem('requireTotalCount');
+    }
+
+}
+
+export { exportToExcel };
+
 export default gridsHelper;

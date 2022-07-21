@@ -30,6 +30,7 @@ import http from '../../utils/http';
 import notify from 'devextreme/ui/notify';
 import { dataFormatId, formatId } from '../../utils/common';
 import { billTypes } from '../../data/bill';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const FollowsPrivate = () => {
 
@@ -215,6 +216,16 @@ const FollowsPrivate = () => {
                         dispatch(dialogTransfer({ open: true, id: admissionId }));
                     }
                 }
+            }
+        },{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
             }
         });
     }  

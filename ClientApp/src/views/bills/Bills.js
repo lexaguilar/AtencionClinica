@@ -21,6 +21,7 @@ import { cellRender } from '../../utils/common';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
 import { billTypes } from '../../data/bill';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const Bills = props => {
 
@@ -78,6 +79,20 @@ const Bills = props => {
         }
     }
 
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    }  
+
     const title = 'Facturas';
     const active = true;
     return authorized(
@@ -101,7 +116,7 @@ const Bills = props => {
                 hoverStateEnabled={true}
                 onContextMenuPreparing={addMenuItems}
                 onRowPrepared={onRowPrepared}
-                
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -115,7 +130,6 @@ const Bills = props => {
                 />
                 <FilterRow visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id"  width={80} />          
                 <Column dataField="nombre" />
                 <Column dataField="areaId" width={150} caption="Area">

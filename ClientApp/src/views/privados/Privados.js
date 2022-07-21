@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DataGrid } from 'devextreme-react';
 import { 
     Paging, 
@@ -21,14 +21,14 @@ import Title from '../../components/shared/Title';
 import { dataAccess, formatDate, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
 import { EmailRule } from 'devextreme-react/validator';
-
+import { exportToExcel } from '../../utils/gridsHelper';
 
 
 const Privados = () => {
 
     const { authorized } = useAuthorization([resources.administracion, dataAccess.access ]);
 
-    let dataGrid = React.createRef();    
+    let dataGrid = useRef();    
     
     const onToolbarPreparing = (e) => {
         e.toolbarOptions.items.unshift({
@@ -40,6 +40,16 @@ const Privados = () => {
                 type:'default',
                 stylingMode:"outlined",
                 onClick: () =>  dataGrid.instance.addRow()
+            }
+        },{
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
             }
         });
     }

@@ -21,6 +21,7 @@ import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
 import { estadoAdmision, typeAdmision } from '../../data/catalogos';
 import http from '../../utils/http';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 
 const Admisiones = props => {
@@ -91,6 +92,20 @@ const Admisiones = props => {
 
     }
 
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    }  
+
     const title = 'Admisiones';
 
     return authorized(
@@ -115,13 +130,13 @@ const Admisiones = props => {
                 onContextMenuPreparing={addMenuItems}
                 onRowPrepared={onRowPrepared}
                 onCellPrepared={onCellPrepared}
-                
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
                 }}
             >
-                <Paging defaultPageSize={20} />
+                <Paging defaultPageSize={10} />
                 <Pager
                     showInfo={true}
                     showPageSizeSelector={true}
@@ -130,7 +145,6 @@ const Admisiones = props => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true}  />
                 <Column dataField="id"  width={80} allowHeaderFiltering={false} />
                 <Column dataField="numberOfDay" width={80} caption='Numero' allowFiltering={false} allowHeaderFiltering={false}/>
                 <Column dataField="inss"  width={100}  allowHeaderFiltering={false}/>

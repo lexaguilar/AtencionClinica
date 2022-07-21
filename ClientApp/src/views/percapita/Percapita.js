@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Nuevo from './Nuevo';
 import { DataGrid } from 'devextreme-react';
 import {
@@ -18,6 +18,7 @@ import Delete from './Delete';
 import { dataAccess, formatDate, resources } from '../../data/app';
 import { store } from '../../services/store';
 import useAuthorization from '../../hooks/useAuthorization';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const Percapita = () => {
 
@@ -29,11 +30,25 @@ const Percapita = () => {
         setDate(e.value)
     }
    
-    let dataGrid = null;
+    let dataGrid = useRef();
 
     const reload = function () {
-        dataGrid.instance.refresh();
+        dataGrid.current.instance.refresh();
     }
+
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    } 
 
     return authorized(        
         <div className="container">
@@ -64,7 +79,7 @@ const Percapita = () => {
             </Box>
             <DataGrid id="gridContainer"
                     
-                ref={(ref) => dataGrid = ref}
+                ref={dataGrid}
                 selection={{ mode: 'single' }}
                 //dataSource={customStore}
                 dataSource={store({ uri : 
@@ -73,6 +88,7 @@ const Percapita = () => {
                     }, 
                     remoteOperations : true 
                 })}
+                onToolbarPreparing={onToolbarPreparing}
                 hoverStateEnabled={true}
                 showBorders={true}
                 showRowLines={true}
@@ -92,7 +108,6 @@ const Percapita = () => {
                 />
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
-                <Export enabled={true} fileName="Percapita" allowExportSelectedData={true} />
                 {/* <GroupPanel visible={true} />
                 <Column dataField="year" caption='Año' groupIndex={0}/>
                 <Column dataField="month" caption='Mes' groupIndex={1}  customizeText={customizeText}/> */}

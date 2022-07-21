@@ -22,6 +22,7 @@ import { updateSubsidio } from '../../store/subsidio/subsidioActions';
 import onExporting from '../../components/grids/Importer';
 import { dataAccess, resources } from '../../data/app';
 import useAuthorization from '../../hooks/useAuthorization';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 
 const Subsidies = () => {
@@ -89,7 +90,7 @@ const Subsidies = () => {
                 icon:'xlsxfile',
                 type:'success',
                 stylingMode:"outlined",
-                onClick: () =>  dataGrid.instance.exportToExcel(false)
+                onClick: () =>  exportToExcel(dataGrid)
             }
         });
     }  
@@ -108,7 +109,7 @@ const Subsidies = () => {
             </BlockHeader>
             <Nuevo onSave={reload}  />
             <DataGrid id="gridContainer"
-                ref={(ref) => dataGrid = ref}
+                ref={dataGrid}
                 selection={{ mode: 'single' }}
                 dataSource={store({ uri: uri.subsidies, remoteOperations: true })}
                 showBorders={true}

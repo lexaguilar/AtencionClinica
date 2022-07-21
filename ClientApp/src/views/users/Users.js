@@ -28,6 +28,7 @@ import http from "../../utils/http";
 import notify from "devextreme/ui/notify";
 import { dataAccess, resources } from "../../data/app";
 import useAuthorization from "../../hooks/useAuthorization";
+import { exportToExcel } from "../../utils/gridsHelper";
 
 const Users = () => {
 
@@ -95,7 +96,7 @@ const Users = () => {
                 icon: 'xlsxfile',
                 type: 'success',
                 stylingMode: "outlined",
-                onClick: () => dataGrid.current.instance.exportToExcel(false)
+                onClick: () => exportToExcel(dataGrid)
             }
         });
     }
@@ -135,8 +136,7 @@ const Users = () => {
                     <Pager allowedPageSizes={[10, 15, 30, 50]} showPageSizeSelector={true} showInfo={true} />
                     <Paging defaultPageSize={15} />
                     <SearchPanel visible={true} width={250} />
-                    <FilterRow visible={true} />                 
-                    <Export enabled={true} fileName={title} allowExportSelectedData={true} />
+                    <FilterRow visible={true} />
                     <Column dataField="username" width={140} allowEditing={false}/>
                     <Column dataField="fullName" caption="Nombre" />
                     <Column dataField="email" allowFiltering={false} />

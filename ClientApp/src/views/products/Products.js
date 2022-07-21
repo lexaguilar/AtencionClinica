@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Title from '../../components/shared/Title';
 import DataGrid, {
     Column,
@@ -23,13 +23,14 @@ import Nuevo from './Nuevo';
 import useAuthorization from '../../hooks/useAuthorization';
 import { dataAccess, resources } from '../../data/app';
 import FromExcel from './FromExcel';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 
 const Products = () => {
 
     const { authorized } = useAuthorization([resources.inventarios, dataAccess.access ]);
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
     const dispatch = useDispatch();
 
     const reload = (params) => {
@@ -40,6 +41,20 @@ const Products = () => {
 
     const title = "Inventario";
     const active = true;
+
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    } 
 
     return authorized(
         <div className="container">
@@ -62,6 +77,7 @@ const Products = () => {
                 allowColumnResizing={true}
                 allowColumnReordering={true}
                 hoverStateEnabled={true}
+                onToolbarPreparing={onToolbarPreparing}
                 remoteOperations={{
                     paging: true,
                     filtering: true
@@ -76,7 +92,6 @@ const Products = () => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" caption='Codigo' width={80}/>
                 <Column dataField="name" caption='Nombre' />
                 <Column dataField="description" caption='Descripcion' />

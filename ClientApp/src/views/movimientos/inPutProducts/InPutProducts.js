@@ -26,6 +26,7 @@ import { dataFormatId } from '../../../utils/common';
 import { addMenu } from '../../../components/grids/Menu';
 import { onToolbar } from '../../../components/grids/ToolBar';
 import urlReport from '../../../services/reportServices';
+import { exportToExcel } from '../../../utils/gridsHelper';
 
 const InPutProducts = (    
     { 
@@ -75,7 +76,19 @@ const InPutProducts = (
         }])
     }
 
-    const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    }
 
     return authorized(
         <div className="container">

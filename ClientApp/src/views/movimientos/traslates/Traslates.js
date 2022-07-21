@@ -28,6 +28,7 @@ import { onToolbar } from '../../../components/grids/ToolBar';
 import { dialogTraslate } from '../../../store/traslate/traslateDialogReducer';
 import urlReport from '../../../services/reportServices';
 import { addMenu } from '../../../components/grids/Menu';
+import { exportToExcel } from '../../../utils/gridsHelper';
 
 const Traslates = (props) => {
 
@@ -80,7 +81,19 @@ const Traslates = (props) => {
     const showDialog = (id, editing= false) => dispatch(dialogTraslate({ open: true, id, editing }))
 
     const isEditVisible = e => type == typeTraslate.create && e.row.data.stageId == stagesTraslate.pendiente;
-    const onToolbarPreparing = onToolbar({ export : true } , dataGrid);
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(dataGrid)
+            }
+        });
+    }  
 
     const report = urlReport();
 
@@ -143,7 +156,6 @@ const Traslates = (props) => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column type="buttons">
                     <Button hint="Ver" icon="find"onClick={e => showDialog(e.row.data.id, false)} />                  
                 </Column>

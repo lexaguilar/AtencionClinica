@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DataGrid } from 'devextreme-react';
 import { 
     Paging, 
     Pager, 
     FilterRow, 
-    HeaderFilter, 
     ColumnChooser, 
     Column, 
     Lookup,
@@ -19,12 +18,13 @@ import { _path } from "../../data/headerNavigation";
 import { dataAccess, formatDateTime, resources } from '../../data/app';
 import urlReport from '../../services/reportServices';
 import useAuthorization from '../../hooks/useAuthorization';
+import { exportToExcel } from '../../utils/gridsHelper';
 
 const Appointments = props => {
 
     const { authorized } = useAuthorization([ resources.citas, dataAccess.access ]);
 
-    let dataGrid = React.createRef();
+    let dataGrid = useRef();
 
     const addMenuItems =(e) => {
         
@@ -48,7 +48,7 @@ const Appointments = props => {
 
                     text: 'Anular cita',
                     icon : 'remove',
-                    onItemClick: () => dataGrid.instance.deleteRow(e.rowIndex),
+                    onItemClick: () => dataGrid.current.instance.deleteRow(e.rowIndex),
                     color : 'red'
                 });
         }
@@ -76,6 +76,8 @@ const Appointments = props => {
 
     }
 
+    
+
     const onToolbarPreparing = (e) => {  
         e.toolbarOptions.items.unshift({
             location: 'before',
@@ -85,7 +87,7 @@ const Appointments = props => {
                 icon:'xlsxfile',
                 type:'success',
                 stylingMode:"outlined",
-                onClick: () =>  dataGrid.instance.exportToExcel(false)
+                onClick: () =>  exportToExcel(dataGrid)
             }
         });
     }  
@@ -102,7 +104,7 @@ const Appointments = props => {
                 />
             </BlockHeader>
             <DataGrid id="gridContainer"
-                ref={(ref) => dataGrid = ref}
+                ref={dataGrid}
                 selection={{ mode: 'single' }}
                 dataSource={store({uri : uri.appointments, remoteOperations: true})}
                 showBorders={true}
@@ -120,15 +122,14 @@ const Appointments = props => {
                     filtering: true
                 }}
             >
-                <Paging defaultPageSize={5} />
+                <Paging defaultPageSize={15} />
                 <Pager
                     showInfo={true}
                     showPageSizeSelector={true}
-                    allowedPageSizes={[5, 10, 20, 50, 100, 300, 1000]}
+                    allowedPageSizes={[15, 30, 50, 100]}
                 />
                 <FilterRow visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={false} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id"  width={100} />
                 <Column dataField="inss"  width={110} />
                 <Column dataField="tipo"  width={110} />

@@ -27,6 +27,7 @@ import { dataFormatId, formatId } from '../../../utils/common';
 import { onToolbar } from '../../../components/grids/ToolBar';
 import urlReport from '../../../services/reportServices';
 import { addMenu } from '../../../components/grids/Menu';
+import { exportToExcel } from '../../../utils/gridsHelper';
 
 const OutPutProducts = () => {
 
@@ -48,7 +49,19 @@ const OutPutProducts = () => {
 
     const showDialog = id =>  dispatch(dialogOutputProduct({ open: true, id }))
 
-    const onToolbarPreparing = onToolbar({ export : true } , refGrid);
+    const onToolbarPreparing = (e) => {  
+        e.toolbarOptions.items.unshift({
+            location: 'before',
+            widget: 'dxButton',
+            options: {
+                text: 'Exportar a excel',
+                icon:'xlsxfile',
+                type:'success',
+                stylingMode:"outlined",
+                onClick: () =>  exportToExcel(refGrid)
+            }
+        });
+    }
 
     const report = urlReport();
 
@@ -107,7 +120,6 @@ const OutPutProducts = () => {
                 <FilterRow visible={true} />
                 <HeaderFilter visible={true} />
                 <ColumnChooser enabled={true} />
-                <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                 <Column dataField="id" caption='Numero' width={100}  cellRender={dataFormatId}/>
                 <Column dataField="date" caption='Fecha' dataType='date' format={formatDate} width={150} />
                 <Column dataField="areaId" caption="Area" width={200}>

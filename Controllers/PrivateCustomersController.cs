@@ -73,12 +73,22 @@ namespace AtencionClinica.Controllers
                 privates = privates.Where(x => x.CreateAt > createAt && x.CreateAt < createAt.AddDays(1));
             }
 
+            var totalCount = privates.Count();
+
+            if (values.ContainsKey("requireTotalCount"))
+            {
+               var requireTotalCount = Convert.ToBoolean(values["requireTotalCount"]);
+                if (requireTotalCount){
+                    privates = privates.Skip(skip).Take(take);  
+                }
+            }
+
             var items = privates.Skip(skip).Take(take);
 
             return Json(new
             {
-                items,
-                totalCount = privates.Count()
+                items = privates,
+                totalCount
             });
         }
 
