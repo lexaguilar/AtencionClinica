@@ -86,7 +86,7 @@ namespace AtencionClinica.Controllers
             return Json(new
             {
                 items = follows,
-                totalCount = follows.Count()
+                totalCount
             });
 
         }      

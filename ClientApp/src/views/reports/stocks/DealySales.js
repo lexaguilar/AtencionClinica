@@ -48,7 +48,7 @@ const DealySales = () => {
     const allowedPageSizes = [20, 50, 'all'];
 
     return (
-        <div className='container medium mt-20'>
+        <div className='container medium mt-10'>
             <Title title={title} />
             <BlockHeader title={title} />
             <div className="reporte">
@@ -76,12 +76,13 @@ const DealySales = () => {
                     <GroupPanel visible={true} />          
                     <Export enabled={true} fileName={title} allowExportSelectedData={true} />
                     <Column dataField="id" caption='No Factura' width={80}/>
-                    <Column dataField="date" caption="Fecha"  dataType="date" format={formatDate}  width={100}/> 
-                    <Column dataField="isCredit" caption='Es Credito?' width={100} />
-                    <Column dataField="totalC" caption="Total en C$" cellRender={cellRender(1)}/>
-                    <Column dataField="totalD" caption="Total en $" cellRender={cellRender(2)}/>
-                    <Column dataField="createBy" caption="Creado Por" />
-                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={130}/> 
+                    <Column dataField="date" caption="Fecha"  dataType="date" format={formatDate}  width={90}/> 
+                    <Column dataField="client" caption='Cliente'/>
+                    <Column dataField="isCredit" caption='Es Credito?' width={90} />
+                    <Column dataField="totalC" caption="Total en C$" cellRender={cellRender(1)} width={120}/>
+                    <Column dataField="totalD" caption="Total en $" cellRender={cellRender(2)}  width={120}/>
+                    <Column dataField="createBy" caption="Creado Por" width={100}/>
+                    <Column dataField="createAt" caption="Creado el"  dataType="date" format={formatDateTime}  width={140}/> 
                     <Summary>                       
                         <TotalItem
                             column="totalC"

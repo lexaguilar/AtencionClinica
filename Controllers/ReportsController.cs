@@ -154,8 +154,6 @@ namespace AtencionClinica.Controllers
         public IActionResult Downloaded([FromBody] ReportRequest request)
         {
 
-            
-
             var salidasInss = (from wo in _db.WorkOrders
                            join wod in _db.WorkOrderDetails on wo.Id equals wod.WorkOrderId
                            join p in _db.Products on wod.ProductId equals p.Id
@@ -230,10 +228,10 @@ namespace AtencionClinica.Controllers
         public IActionResult Salesed([FromBody] ReportRequest request)
         {
 
-            var sales = _db.Bills.Where(x => x.Active && x.AreaId == request.AreaId
+            var sales = _db.Bills.Include(x => x.PrivateCustomer).Where(x => x.Active && x.AreaId == request.AreaId
                 && x.CreateAt.Date >= request.From.Date 
                 && x.CreateAt.Date <= request.To.Date).Select(x => new {
-
+                    client = x.PrivateCustomerId == 1 ? x.NameCustomer : x.PrivateCustomer.FirstName + " " + x.PrivateCustomer.LastName,
                     x.CreateAt,
                     Date = x.CreateAt.Date,
                     x.CreateBy,
@@ -242,7 +240,7 @@ namespace AtencionClinica.Controllers
                     TotalD = UserHelpers.GeyTotalD(x.Total, x.Rate, x.CurrencyId),                    
                     x.Id,
 
-                });      
+                });
 
             return Json(sales);
         }
